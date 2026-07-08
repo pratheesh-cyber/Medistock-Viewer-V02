@@ -3,6 +3,7 @@
 <head>
     
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medistock Viewer Master - Premium V15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -540,6 +541,7 @@
 <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
+    
     <div id="errorMessage"></div>
     <div id="modalOverlay" onclick="closeModal()"></div>
     
@@ -594,7 +596,7 @@
         <i class="fa-solid fa-boxes-stacked" style="font-size: 100px; margin-bottom: 20px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
         <h1 style="font-size: 45px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">ഉറപ്പാണോ ?</h1>
         <p id="subStockConfirmText" style="font-size: 24px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #f39c12;">
-            നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് OP SUB STOCK ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?
+             ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് OP SUB STOCK ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?
         </p>
         <div style="display: flex; gap: 30px;">
             <button id="subStockYesBtn" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">YES, CONFIRM</button>
@@ -838,28 +840,64 @@
 
             <script>
               // താങ്കൾ ഗൂഗിൾ ക്ലൗഡ് കൺസോളിൽ നിന്നും എടുക്കേണ്ട ക്ലയന്റ് ഐഡി
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com';
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
-const SCOPES = 'https://www.googleapis.com/auth/drive.file'; // ഈ ആപ്പ് ഉണ്ടാക്കുന്ന ഫയലുകൾ മാത്രം ആക്സസ് ചെയ്യാൻ
-
+const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 let tokenClient;
 let accessToken = null;
 
-// സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു
+// സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 window.onload = function() {
+    let loginPg = document.getElementById('loginStartPage');
+    if(loginPg) loginPg.style.display = 'flex';
+
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: GOOGLE_CLIENT_ID,
         scope: SCOPES,
-        callback: (tokenResponse) => {
+        callback: async (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
                 accessToken = tokenResponse.access_token;
-                document.getElementById('loginBtn').innerText = "Logged In Successfully";
-                loadDataFromDrive(); // ലോഗിൻ ചെയ്ത ഉടൻ ഡ്രൈവിൽ നിന്നും പഴയ ഡാറ്റ എടുക്കുന്നു
+                
+                let loginBtn = document.getElementById('loginBtn');
+                if(loginBtn) loginBtn.innerText = "Logged In Successfully";
+                
+                // 1. ഡ്രൈവിൽ നിന്നും ഡാറ്റ ബാക്ക്ഗ്രൗണ്ടിൽ തനിയെ എടുക്കുന്നു
+                await restoreDataFromDriveSilent(); 
+                
+                // 2. പകുതിക്ക് വെച്ച് നിർത്തിയ ഡ്രാഫ്റ്റ് ഉണ്ടെങ്കിൽ അതും തിരികെ കൊണ്ടുവരുന്നു
+                if(typeof restoreLocalDraft === 'function') {
+                    setTimeout(restoreLocalDraft, 1000); 
+                }
+                
+                if(loginPg) loginPg.style.display = 'none';
+                if (typeof showHomePage === 'function') showHomePage();
             }
         },
     });
 };
 
+// ബാക്ക്ഗ്രൗണ്ടിൽ ഗൂഗിൾ ഡ്രൈവ് ലോഡ് ചെയ്യാനുള്ള പുതിയ ഫംഗ്ഷൻ (ഇതും കൂടെ നൽകണം)
+async function restoreDataFromDriveSilent() {
+    try {
+        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
+            headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        let searchData = await searchRes.json();
+        if (searchData.files && searchData.files.length > 0) {
+            let fileId = searchData.files[0].id;
+            let dlRes = await fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media', {
+                headers: { 'Authorization': 'Bearer ' + accessToken }
+            });
+            let data = await dlRes.json();
+            
+            for (let key in data) { localStorage.setItem(key, data[key]); }
+            console.log("☁️ Auto-Restore from Drive Successful!");
+            
+            // ടേബിളുകൾ ഉണ്ടെങ്കിൽ റീലോഡ് ചെയ്യുക
+            if(typeof renderDetailsTable === 'function') renderDetailsTable();
+        }
+    } catch(e) { console.error("Restore Error:", e); }
+}
 // ലോഗിൻ ബട്ടൺ അമർത്തുമ്പോൾ
 function handleAuthClick() {
     if (tokenClient) {
@@ -2177,7 +2215,7 @@ async function saveToGoogleDrive(jsonData) {
             ഏറ്റവും വേഗത്തിൽ ഔഷധങ്ങൾ ചേർക്കുന്നതിന് HAND BOOK വഴി കൃത്യമായി മനസിലാക്കി മാത്രം ഉപയോഗിക്കുക. മുകളിലുള്ള HELP DESK ബട്ടൺ ക്ലിക്ക് ചെയ്താൽ ലഭിക്കുന്ന വീൻഡോയിൽ നിന്നും HAND BOOK ലഭിക്കും.
         </div>
         
-<div class="master-container">
+<div id="addMedicinePanel" class="master-container">
             <div class="row-top" style="background:greenyellow ; border: 1px solid #a5d6a7;">
                <div class="input-group">
                   <label>STOCK TYPE</label>
@@ -4035,6 +4073,17 @@ function confirmAddAllToStock() {
     document.getElementById('sumteckConfirmYes').onclick = function() {
         winConfirm.style.display = 'none'; 
         proceedToStockConfirm(st); 
+        
+        // ==============================================================================
+        // 🌟 EXPERT INTEGRATION: ഡാറ്റ വിജയകരമായി സേവ് ചെയ്ത ശേഷം മാത്രം പ്രവർത്തിക്കാൻ 🌟
+        // ==============================================================================
+        if(typeof clearLocalDraft === 'function') {
+            clearLocalDraft(); // 1. സ്റ്റോക്കിൽ കയറിയ സ്ഥിതിക്ക് ഇനി പഴയ ഡ്രാഫ്റ്റിന്റെ ആവശ്യമില്ല, അത് മായ്ക്കുന്നു.
+        }
+        if(typeof smartAutoBackup === 'function') {
+            smartAutoBackup(); // 2. പുതിയ മാറ്റങ്ങൾ ഗൂഗിൾ ഡ്രൈവിലേക്ക് തനിയെ ബാക്കപ്പ് ചെയ്യുന്നു.
+        }
+        // ==============================================================================
     };
     
     document.getElementById('sumteckConfirmNo').onclick = function() {
@@ -5734,7 +5783,7 @@ function checkSubStockConfirmation() {
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
     // ഫുൾ സ്ക്രീനിലെ മെസ്സേജ് ടെക്സ്റ്റ് മാറ്റുന്നു
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; // ഫുൾ സ്ക്രീൻ വിൻഡോ വരുന്നു
@@ -11360,7 +11409,7 @@ window.checkSubStockConfirmation = function() {
     let subStock = document.getElementById('indSubStock').value;
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
@@ -11442,7 +11491,7 @@ function checkSubStockConfirmation() {
     let subStock = document.getElementById('indSubStock').value;
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
@@ -11847,7 +11896,7 @@ window.checkSubStockConfirmation_NEW = function() {
     let subStock = document.getElementById('indSubStock').value;
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
     
@@ -12397,7 +12446,7 @@ window.checkSubStockConfirmation = function() {
     let subStock = document.getElementById('indSubStock').value;
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
     
@@ -12424,7 +12473,7 @@ window.checkSubStockConfirmation = function() {
     let subStock = document.getElementById('indSubStock').value;
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
     
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
@@ -12736,7 +12785,7 @@ window.confirmProcessIndent = function() {
     }
 
     let stockName = subStock === "Sub Stock OP" ? "OP SUB STOCK" : "IP SUB STOCK";
-    document.getElementById('subStockConfirmText').innerText = `നമ്മൾക്ക് ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
+    document.getElementById('subStockConfirmText').innerText = `ഔഷധങ്ങൾ INDENT ചെയ്യേണ്ടത് ${stockName} ലേക്ക് തന്നെ ആണെന്ന് ഉറപ്പാണോ?`;
     
     let modal = document.getElementById('subStockConfirmModal');
     modal.style.display = 'flex'; 
@@ -14476,6 +14525,14 @@ window.executeIndentProcessCore = window.processIndent = function() {
     }
     // പ്രോസസ്സ് കഴിഞ്ഞാൽ മെമ്മറി ക്ലിയർ ചെയ്യുന്നു
     window.tempIndentQuantities = {};
+    
+    // ==============================================================================
+    // 🌟 EXPERT INTEGRATION: ഇൻഡന്റ് ഡാറ്റ വിജയകരമായി സേവ് ചെയ്ത ശേഷം തനിയെ ബാക്കപ്പ് ചെയ്യുന്നു 🌟
+    // ==============================================================================
+    if(typeof smartAutoBackup === 'function') {
+        smartAutoBackup(); 
+    }
+    // ==============================================================================
     
     // 🌟 ഇൻഡന്റ് ജനറേഷൻ പൂർത്തിയായ ശേഷം തനിയെ 'INDENT @ MEDICINE ITEM' പേജ് ഓപ്പൺ ചെയ്യാൻ 🌟
     setTimeout(() => {
@@ -16525,7 +16582,104 @@ window.loadScannedDataToExcelGrid = function() {
         console.error("Data loading error:", e);
     }
 };
+// =====================================================================
+// 🌟 1. SMART AUTO-BACKUP CORE 🌟
+// =====================================================================
 
+// ബാക്കപ്പ് എടുക്കാനുള്ള പ്രധാന ഫംഗ്ഷൻ
+window.smartAutoBackup = async function() {
+    if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ പ്രവർത്തിക്കില്ല
+    
+    console.log("☁️ Smart Sync: Backing up data to Google Drive...");
+    const fileContent = JSON.stringify(localStorage);
+    const fileMetadata = { 'name': 'medistock_backup_data.json', 'mimeType': 'application/json' };
+    
+    try {
+        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
+            headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        let searchData = await searchRes.json();
+        
+        let method = 'POST';
+        let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+        
+        if (searchData.files && searchData.files.length > 0) {
+            method = 'PATCH';
+            url = 'https://www.googleapis.com/upload/drive/v3/files/' + searchData.files[0].id + '?uploadType=multipart';
+        }
+        
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
+        form.append('file', new Blob([fileContent], { type: 'application/json' }));
+        
+        await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + accessToken }, body: form });
+        console.log("✅ Smart Sync: Backup Successful!");
+    } catch(e) {
+        console.error("Backup Error:", e);
+    }
+};
+
+// 🌟 സോഫ്റ്റ്‌വെയർ ക്ലോസ് ചെയ്യുമ്പോൾ (അല്ലെങ്കിൽ ടാബ് മാറുമ്പോൾ) തനിയെ സേവ് ആകാൻ 🌟
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden' && accessToken) {
+        smartAutoBackup(); // കമ്പ്യൂട്ടർ സ്ലീപ്പിലായാലും ടാബ് ക്ലോസ് ചെയ്താലും ഇത് തനിയെ ബാക്കപ്പ് എടുക്കും
+    }
+});
+// =====================================================================
+// 🌟 2. LOCAL DRAFT AUTO-SAVE (DEBOUNCED) 🌟
+// =====================================================================
+
+let draftTimer;
+const DRAFT_KEY = 'medistock_medicine_draft';
+
+// 1.5 സെക്കൻഡ് ഇടവേളയിൽ (Debounce) ഡാറ്റ തനിയെ സേവ് ആകുന്നു
+document.addEventListener('input', function(e) {
+    // മരുന്ന് ആഡ് ചെയ്യുന്ന വിൻഡോയിലെ ബോക്സുകൾക്ക് മാത്രം ഇത് പ്രവർത്തിക്കാൻ
+    if(e.target.closest('#addMedicinePanel')) { 
+        clearTimeout(draftTimer);
+        draftTimer = setTimeout(() => {
+            saveLocalDraft();
+        }, 1500); // ടൈപ്പിംഗ് നിർത്തി 1.5 സെക്കൻഡിന് ശേഷം സേവ് ആകുന്നു
+    }
+});
+
+window.saveLocalDraft = function() {
+    let draftArea = document.getElementById('addMedicinePanel');
+    if(!draftArea) return;
+    
+    let inputs = draftArea.querySelectorAll('input, select, textarea');
+    let draftData = {};
+    inputs.forEach((input, index) => {
+        let key = input.id || 'draft_input_' + index;
+        draftData[key] = input.type === 'checkbox' ? input.checked : input.value;
+    });
+    
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+    console.log("📝 Local Draft Saved Securely!");
+};
+
+window.restoreLocalDraft = function() {
+    let draftString = localStorage.getItem(DRAFT_KEY);
+    if(!draftString) return;
+    
+    let draftData = JSON.parse(draftString);
+    let draftArea = document.getElementById('addMedicinePanel');
+    if(!draftArea) return;
+    
+    let inputs = draftArea.querySelectorAll('input, select, textarea');
+    inputs.forEach((input, index) => {
+        let key = input.id || 'draft_input_' + index;
+        if(draftData[key] !== undefined) {
+            if(input.type === 'checkbox') input.checked = draftData[key];
+            else input.value = draftData[key];
+        }
+    });
+    console.log("♻️ Unsaved Draft Restored Successfully!");
+};
+
+window.clearLocalDraft = function() {
+    localStorage.removeItem(DRAFT_KEY); // പൂർണ്ണമായി സേവ് ചെയ്ത് കഴിഞ്ഞാൽ ഡ്രാഫ്റ്റ് കളയുന്നു
+};
 </script>
 <div id="addIndexWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(44, 62, 80, 0.95); z-index:10080; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); overflow-y: auto; padding: 20px; box-sizing: border-box;">
         
