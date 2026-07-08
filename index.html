@@ -2,8 +2,7 @@
 <html lang="ml">
 <head>
     
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"
     <title>Medistock Viewer Master - Premium V15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -541,7 +540,33 @@
 <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
-    
+    <div id="loginStartPage" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f5f6fa; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%;">
+            
+            <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
+
+            <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;">ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും ദയവായി ലോഗിൻ ചെയ്യുക.</p>
+            
+            <button onclick="handleAuthClick()" style="background: #4285F4; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px; width: 100%; transition: 0.2s; box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3); margin-bottom: 20px;">
+                <i class="fa-brands fa-google"></i> Sign in with Google
+            </button>
+            
+            <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
+                <a href="https://drive.google.com/file/d/1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX/view?usp=sharing" target="_blank" style="color: #2980b9; text-decoration: none; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.color='#1abc9c'" onmouseout="this.style.color='#2980b9'">
+                    <i class="fa-solid fa-book-open"></i> Medistock Viewer എന്താണെന്ന് പൂർണ്ണമായി മനസ്സിലാക്കാൻ Hand Book Download ചെയ്യുക
+                </a>
+            </div>
+            </div>
+    </div>
+    ```
+
+**ശ്രദ്ധിക്കേണ്ട കാര്യങ്ങൾ:**
+1. കോഡിലെ **`YOUR_HANDBOOK_LINK_HERE`** എന്ന് എഴുതിയിരിക്കുന്ന ഭാഗം മായ്ച്ച്, താങ്കളുടെ Hand Book-ന്റെ യഥാർത്ഥ ലിങ്ക് അവിടെ നൽകുക (അതൊരു ഗൂഗിൾ ഡ്രൈവ് PDF ലിങ്കോ അല്ലെങ്കിൽ മറ്റൊരു വെബ്സൈറ്റ് ലിങ്കോ ആവാം).
+2. `target="_blank"` എന്ന് കോഡിൽ നൽകിയിട്ടുള്ളതുകൊണ്ട്, യൂസർ ആ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ സോഫ്റ്റ്‌വെയർ ക്ലോസ് ആവാതെ പുതിയൊരു ടാബിൽ ആയിരിക്കും Hand Book തുറന്നു വരിക. ഇത് യൂസർമാർക്ക് വളരെ സൗകര്യപ്രദമാണ്.
+
+ഇത് കോപ്പി ചെയ്ത് സേവ് ചെയ്ത് നോക്കൂ. ഇപ്പോൾ ലോഗിൻ ബട്ടണിന് താഴെയായി ഒരു വരയും അതിനുതാഴെ മനോഹരമായ ഒരു പുസ്തകത്തിന്റെ ഐക്കണോടു കൂടിയ Hand Book ലിങ്കും കാണാൻ സാധിക്കും!
     <div id="errorMessage"></div>
     <div id="modalOverlay" onclick="closeModal()"></div>
     
