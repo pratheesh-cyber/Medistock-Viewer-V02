@@ -263,9 +263,9 @@ img#previewImage {
 
 <script>
     // ---------------------------------------------------------
-    // നിങ്ങളുടെ API Key താഴെ നൽകുക (കൊട്ടേഷൻ മാർക്കുകൾക്കുള്ളിൽ തന്നെ)
-    const API_KEY = " "; 
-    // ---------------------------------------------------------
+    // താഴെ നിങ്ങളുടെ ഗൂഗിൾ ആപ്പ്സ് സ്ക്രിപ്റ്റ് Web App URL നൽകുക
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFqhSiU0HUABnTwQ0zZqBJIqZUMWxlt4Lcnn1b4xlpxrQA3f9fi0mWnhwbwX1Shl_0rg/exec"; 
+    // ------------------------------------------------------------------------------------------------------------------
 
     function goBack() { window.history.back(); }
     function goHome() { window.location.href = "index.html"; }
@@ -340,58 +340,73 @@ function previewSelectedImage() {
         const statusMessage = document.getElementById('statusMessage');
         const resultArea = document.getElementById('resultArea');
         const scanBtn = document.querySelector('.btn-scan');
-// പഴയതിന് പകരം ഇത് നൽകുക
-const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" + API_KEY.trim();
-        
-const requestBody = {
-    contents: [{
-        parts: [
-            { text: "Analyze this pharmacy bill carefully. For each medicine, look for the handwritten red numbers written near it. Extract this handwritten number as 'Page No'. Also extract Medicine Name, Batch No, Expiry Date, and Qty. Strictly format the output ONLY as a table with columns in this exact order: Page No | Medicine Name | Batch No | Expiry Date | Qty. Ensure each handwritten Page No is correctly matched with its corresponding medicine." },
-            { inline_data: { mime_type: "image/jpeg", data: base64Image } }
-        ]
-    }]
-};
+
+        // യൂസറുടെ പേര് സിസ്റ്റത്തിൽ സേവ് ചെയ്തു വെക്കാനുള്ള പ്രൊഫഷണൽ രീതി
+        let userIdentifier = localStorage.getItem("medistock_user_id");
+        if (!userIdentifier) {
+            userIdentifier = prompt("ദയവായി നിങ്ങളുടെ ഇമെയിൽ ഐഡി അല്ലെങ്കിൽ സ്ഥാപനത്തിന്റെ പേര് നൽകുക:");
+            if (userIdentifier && userIdentifier.trim() !== "") {
+                localStorage.setItem("medistock_user_id", userIdentifier.trim());
+            } else {
+                userIdentifier = "Anonymous User"; 
+            }
+        }
 
         try {
-            const response = await fetch(url, {
+            // CORS പ്രശ്നം ഒഴിവാക്കാനുള്ള അഡ്വാൻസ്ഡ് Fetch കോൺഫിഗറേഷൻ
+            const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
+                redirect: 'follow', // ഗൂഗിൾ ആപ്പ്സ് സ്ക്രിപ്റ്റിന്റെ റീഡയറക്റ്റ് സപ്പോർട്ട് ചെയ്യാൻ ഇത് നിർബന്ധമാണ്
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8' 
+                },
+                body: JSON.stringify({ 
+                    image: base64Image, 
+                    email: userIdentifier 
+                })
+            };
 
-            if (response.status === 429 || response.status === 503) {
-                startQueueTimer(base64Image);
-                return; // ക്യൂവിൽ കിടക്കുമ്പോൾ ബട്ടൺ ലോക്ക് ആയിത്തന്നെ തുടരും
-            }
+            const response = await fetch(GAS_WEB_APP_URL, requestOptions);
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                const errMsg = errorData.error?.message || `Error status: ${response.status}`;
-                throw new Error(errMsg);
+                throw new Error(`സെർവർ തടസ്സം (Status: ${response.status}). ദയവായി അല്പസമയം കഴിഞ്ഞ് ശ്രമിക്കുക.`);
+            }
+            
+            const data = await response.json();
+            
+            // ബാക്കെൻഡിൽ നിന്നുള്ള എററുകൾ (ഉദാ: സ്കാനിംഗ് ലിമിറ്റ് കഴിഞ്ഞാൽ)
+            if (data.error) {
+                throw new Error(data.error.message || "അജ്ഞാതമായ തടസ്സം നേരിട്ടു!");
             }
 
-            const data = await response.json();
-            const extractedText = data.candidates[0].content.parts[0].text;
-
-            resultArea.innerHTML = convertToDataEntryForm(extractedText);
-            statusMessage.innerHTML = "✅ സ്കാനിംഗ് വിജയകരം! ഡാറ്റ പരിശോധിക്കുക.";
-            statusMessage.style.color = "green";
-
-            // സ്കാനിംഗ് വിജയകരമായി പൂർത്തിയാകുമ്പോൾ ബട്ടൺ അൺലോക്ക് ചെയ്യുന്നു
-            scanBtn.disabled = false;
-            scanBtn.style.cursor = "pointer";
-            scanBtn.style.opacity = "1";
-            stopCPRProgress(); // <-- സ്കാനിംഗ് വിജയിക്കുമ്പോൾ ഇവിടെ കൊടുക്കുക
+            // API ഡാറ്റ കൃത്യമാണോ എന്ന് പരിശോധിച്ച ശേഷം മാത്രം റിസൾട്ട് കാണിക്കുന്നു
+            if (data.candidates && data.candidates.length > 0) {
+                const extractedText = data.candidates[0].content.parts[0].text;
+                resultArea.innerHTML = convertToDataEntryForm(extractedText);
+                
+                statusMessage.innerHTML = "✅ സ്കാനിംഗ് വിജയകരം! ഡാറ്റ പരിശോധിക്കുക.";
+                statusMessage.style.color = "green";
+            } else {
+                throw new Error("ബില്ലിൽ നിന്നും ഡാറ്റ ലഭിച്ചില്ല. കൂടുതൽ വ്യക്തതയുള്ള ഫോട്ടോ നൽകുക.");
+            }
 
         } catch (error) {
-            statusMessage.innerHTML = "❌ പരാജയപ്പെട്ടു: " + error.message;
+            console.error("Scanning Error:", error);
+            
+            // ഡെവലപ്പർക്ക് എളുപ്പം മനസ്സിലാകാൻ CORS എറർ മെസ്സേജ് കസ്റ്റമൈസ് ചെയ്യുന്നു
+            if(error.message === "Failed to fetch") {
+                statusMessage.innerHTML = "❌ വെബ് ആപ്പ് ലിങ്ക് ബ്ലോക്ക് ചെയ്യപ്പെട്ടു! (ഗൂഗിൾ ആപ്പ്സ് സ്ക്രിപ്റ്റ് Deploy ചെയ്യുമ്പോൾ 'Who has access: Anyone' എന്ന് നൽകാൻ ശ്രദ്ധിക്കുക).";
+            } else {
+                statusMessage.innerHTML = "❌ പരാജയപ്പെട്ടു: " + error.message;
+            }
             statusMessage.style.color = "red";
             
-            // സ്കാനിംഗ് പരാജയപ്പെട്ടാലും ബട്ടൺ അൺലോക്ക് ചെയ്യുന്നു
+        } finally {
+            // സ്കാനിംഗ് കഴിഞ്ഞാൽ വീണ്ടും ബട്ടൺ ആക്റ്റീവ് ആക്കുന്നു
             scanBtn.disabled = false;
             scanBtn.style.cursor = "pointer";
             scanBtn.style.opacity = "1";
-            stopCPRProgress(); // <-- സ്കാനിംഗ് പരാജയപ്പെട്ടാലും നിർത്താൻ ഇവിടെ കൊടുക്കുക
+            stopCPRProgress();
         }
     }
 
