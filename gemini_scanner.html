@@ -704,22 +704,5 @@ function stopCPRProgress() {
     }, 800);
 }
 </script>
-<script>
-    // ഗൂഗിൾ ലോഗിൻ വിജയകരമായാൽ ഈ ഫംഗ്ഷൻ വർക്ക് ചെയ്യും
-    function handleCredentialResponse(response) {
-        if(response.credential) {
-            // ലോഗിൻ സ്ക്രീൻ (loginStartPage) മറയ്ക്കുന്നു
-            var loginPage = document.getElementById('loginStartPage');
-            if(loginPage) {
-                loginPage.style.display = 'none';
-            }
-            
-            // ലോഗിൻ പൂർത്തിയായി എന്ന് കൺസോളിൽ കാണിക്കാൻ
-            console.log("Google Login Successful!");
-            
-            // (വേണമെങ്കിൽ ഇവിടെ താങ്കളുടെ മറ്റ് കോർ ഫംഗ്ഷനുകൾ വിളിക്കാം)
-        }
-    }
-</script>
 </body>
 </html>

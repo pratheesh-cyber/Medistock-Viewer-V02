@@ -16782,5 +16782,21 @@ window.clearLocalDraft = function() {
         </div>
     </div>
 </div>
+<script>
+    function handleCredentialResponse(response) {
+        // ലോഗിൻ വിജയകരമായാൽ ആദ്യം ഈ മെസ്സേജ് സ്ക്രീനിൽ വരും
+        alert("Login Successful! മെഡിസ്റ്റോക്ക് വ്യൂവറിലേക്ക് സ്വാഗതം..."); 
+        
+        if(response.credential) {
+            // ലോഗിൻ സ്ക്രീൻ (loginStartPage) മറയ്ക്കുന്നു
+            var loginPage = document.getElementById('loginStartPage');
+            if(loginPage) {
+                loginPage.style.display = 'none';
+            } else {
+                alert("Error: loginStartPage എന്ന ഐഡി കണ്ടെത്താൻ കഴിഞ്ഞില്ല!");
+            }
+        }
+    }
+</script>
 </body>
 </html>
