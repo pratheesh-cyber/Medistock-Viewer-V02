@@ -548,7 +548,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 2ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 3ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -12044,6 +12044,14 @@ window.executeIndentProcessCore = function() {
     localStorage.setItem('medistock_last_indent_date', formattedDate);
     localStorage.setItem('medistock_last_indent_time', formattedTime);
 
+    // 🌟 പുതിയ ബാച്ച് ചേർക്കുന്നതിന് മുൻപ്, ഈ Sub Stock-ലേക്ക് മുൻപ് ഇൻഡന്റ് ചെയ്ത ഡാറ്റയുടെ
+    // 'Last Added' ഫ്ലാഗ് മാറ്റുന്നു — ഇത് "Details of Last Added Medicines" ടേബിളിൽ
+    // പഴയവ പൂർണ്ണമായി ഡിലീറ്റ് ആയതിന് ശേഷം പുതിയവ മാത്രം കാണിക്കാൻ വേണ്ടിയാണ് 🌟
+    stockItems.forEach(item => {
+        if (subStock === "Sub Stock OP") item.isLastAddedOP = false;
+        if (subStock === "Sub Stock IP") item.isLastAddedIP = false;
+    });
+
     let printDataRows = [];
     let leftTableItems = JSON.parse(JSON.stringify(stockItems.filter(i => i.type === "Main Stock" && i.fund === fund)));
 
@@ -12059,6 +12067,11 @@ window.executeIndentProcessCore = function() {
             newItem.qty = processItem.qtyIndented;
             newItem.invoice = indentNo;
             newItem.invoiceDate = formattedDate;
+
+            // 🌟 മാന്ത്രിക ഫ്ലാഗ് (ഇത് വെച്ചാണ് renderLastAddedOPTable/IPTable ഈ ബാച്ചിനെ
+            // മാത്രം "Last Added" ആയി കണ്ടെത്തുന്നത്, ADD TO STOCK ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ വരുന്നത് പോലെ) 🌟
+            if (subStock === "Sub Stock OP") newItem.isLastAddedOP = true;
+            if (subStock === "Sub Stock IP") newItem.isLastAddedIP = true;
 
             // സബ് സ്റ്റോക്കിലെ പഴയ ഡ്യൂപ്ലിക്കേറ്റ് ഡാറ്റകളെ ഒഴിവാക്കുന്നു
             stockItems = stockItems.filter(existing => !(
