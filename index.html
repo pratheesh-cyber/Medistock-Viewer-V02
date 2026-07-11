@@ -539,6 +539,169 @@
     </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        /* ============================================================= */
+        /* 🌟 MEDISTOCK SMART SCANNER PAGE STYLES (#smartScannerPage-ൽ    */
+        /*    മാത്രം സ്കോപ്പ് ചെയ്തിരിക്കുന്നു, ബാക്കിയുള്ള ആപ്പിനെ ബാധിക്കില്ല) 🌟 */
+        /* ============================================================= */
+        #smartScannerPage {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        #smartScannerPage .btn { transition: 0.3s; }
+        #smartScannerPage .btn:hover { opacity: 0.8; }
+        #smartScannerPage .btn-blue { background-color: #3498db; }
+        #smartScannerPage .btn-green { background-color: #27ae60; }
+        #smartScannerPage .btn-red { background-color: #e74c3c; margin-left: auto; }
+
+        #smartScannerPage .top-bar {
+            background-color: #2c3e50;
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+            position: relative;
+            gap: 15px;
+        }
+        #smartScannerPage .title-text {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        #smartScannerPage .main-content {
+            display: flex;
+            height: calc(100vh - 140px); /* Adjusted for top bar height */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #smartScannerPage .left-panel {
+            flex: 1;
+            background: #ecf0f1;
+            border-right: 2px solid #bdc3c7;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            height: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #smartScannerPage .right-panel {
+            flex: 1.2;
+            padding: 20px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* സ്ക്രോൾ ബാർ സെറ്റിങ്സ് */
+        #smartScannerPage .image-preview-container {
+            flex: 1;
+            width: 100%;
+            overflow: auto !important; /* Forces scrollbar when zoomed */
+            position: relative;
+            background: #34495e;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #smartScannerPage #resultArea {
+            flex: 1;
+            width: 100%;
+            overflow: auto !important; /* Forces scrollbar for table */
+            background: #fff;
+            padding-bottom: 20px;
+        }
+
+        #smartScannerPage #imageWrapper {
+            position: relative;
+            display: inline-block;
+            transform-origin: center center;
+            transition: transform 0.25s ease;
+        }
+
+        #smartScannerPage #previewImage {
+            display: block;
+            max-width: none !important;
+            filter: grayscale(100%) contrast(160%) brightness(110%);
+        }
+
+        #smartScannerPage .no-image-text { color: #7f8c8d; font-size: 16px; position: absolute; }
+
+        #smartScannerPage .scan-controls { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; }
+        #smartScannerPage input[type="file"] { margin-bottom: 10px; font-size: 15px; }
+        #smartScannerPage .btn-scan { background-color: #f39c12; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        #smartScannerPage .btn-scan:hover { background-color: #e67e22; }
+
+        #smartScannerPage #statusMessage { margin-top: 10px; font-weight: bold; text-align: center; }
+
+        /* Crop Box */
+        #smartScannerPage #cropBox {
+            position: absolute;
+            box-sizing: border-box;
+            border: 2px dashed #f39c12;
+            background: rgba(243, 156, 18, 0.15);
+            cursor: move;
+            touch-action: none;
+            display: none;
+        }
+        #smartScannerPage .crop-handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #f39c12;
+            border: 2px solid white;
+            border-radius: 50%;
+            touch-action: none;
+        }
+        #smartScannerPage .crop-handle[data-dir="nw"] { left: -9px; top: -9px; cursor: nwse-resize; }
+        #smartScannerPage .crop-handle[data-dir="ne"] { right: -9px; top: -9px; cursor: nesw-resize; }
+        #smartScannerPage .crop-handle[data-dir="sw"] { left: -9px; bottom: -9px; cursor: nesw-resize; }
+        #smartScannerPage .crop-handle[data-dir="se"] { right: -9px; bottom: -9px; cursor: nwse-resize; }
+
+        #smartScannerPage #cropStatus { text-align: center; font-size: 13px; margin-top: 4px; margin-bottom: 4px; min-height: 16px; color: #7f8c8d; font-weight: bold;}
+
+        /* Table */
+        #smartScannerPage .medistock-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        #smartScannerPage .medistock-table th { background-color: #2c3e50; color: white; padding: 10px 5px; text-align: left; border: 1px solid #ddd; position: sticky; top: 0; z-index: 5;}
+        #smartScannerPage .medistock-table td { padding: 8px 5px; border: 1px solid #ddd; vertical-align: middle; }
+        #smartScannerPage .medistock-table input[type="text"] { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        #smartScannerPage .queue-alert { color: #c0392b; font-size: 16px; }
+
+        /* Loader */
+        #smartScannerPage #loadingOverlay, #smartScannerPage #cprLoader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #smartScannerPage .cpr-heart { font-size: 80px; display: inline-block; animation: cprCompress 0.6s infinite; }
+        @keyframes cprCompress { 0% { transform: scale(1); } 50% { transform: scale(0.75); text-shadow: 0 0 20px red; } 100% { transform: scale(1); } }
+        #smartScannerPage .progress-container { width: 40%; background-color: #ecf0f1; border-radius: 10px; margin-top: 25px; overflow: hidden; border: 2px solid #bdc3c7; }
+        #smartScannerPage .progress-bar { height: 25px; width: 0%; background-color: #27ae60; text-align: center; line-height: 25px; color: white; font-weight: bold; transition: width 0.4s ease; }
+    </style>
+
 </head>
 <body>
     <div id="loginStartPage" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f5f6fa; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -2231,6 +2394,75 @@ async function saveToGoogleDrive(jsonData) {
         </div>
     </div>
 </div>
+<div id="smartScannerPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 100%; padding: 0;">
+
+<div id="cprLoader">
+    <h2 style="color: #c0392b; margin-bottom: 20px;">❤️ ജീവൻ രക്ഷിക്കാം: CPR Steps</h2>
+    <div style="display: flex; gap: 30px; text-align: center; margin-bottom: 30px;">
+        <div class="cpr-step" id="step1" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🗣️</span><br><b>1. Check Response</b><br><small>തട്ടിവിളിക്കുക</small></div>
+        <div class="cpr-step" id="step2" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">📞</span><br><b>2. Call Help</b><br><small>ആംബുലൻസ് വിളിക്കുക</small></div>
+        <div class="cpr-step" id="step3" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🫀</span><br><b>3. Compress</b><br><small>30 തവണ നെഞ്ചിൽ അമർത്തുക</small></div>
+        <div class="cpr-step" id="step4" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🌬️</span><br><b>4. Breathe</b><br><small>2 തവണ ശ്വാസം നൽകുക</small></div>
+    </div>
+    <h4 style="color: #2c3e50;">ബില്ലിലെ വിവരങ്ങൾ വേർതിരിക്കുന്നു...</h4>
+    <div style="width: 50%; background: #ddd; border-radius: 10px; overflow: hidden; height: 25px;">
+        <div id="cprProgress" style="width: 0%; background: #27ae60; height: 100%; text-align: center; color: white; font-weight: bold; line-height: 25px; transition: 0.4s;">0%</div>
+    </div>
+</div>
+
+<div class="top-bar">
+    <div class="title-text">Medistock Smart Scanner</div>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px;">
+        <button class="btn" style="padding: 8px 15px; background: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="goBack()">BACK</button>
+        <button class="btn" style="padding: 8px 15px; background: #8e44ad; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="showHomePage()">HOME</button>
+        <button class="btn" style="padding: 8px 15px; background: #16a085; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="showExcelImportPage()">Load from Excel Sheet & Extract</button>
+        <button class="btn" style="padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="importScannerDataToExcelGrid()">IMPORT EXTRACTED DATA</button>
+        <button class="btn" style="padding: 8px 15px; background: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="showStockPage()">SHEET FOR ADDING MEDICINES TO STOCK</button>
+        <button class="btn" style="padding: 8px 15px; background: #c0392b; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="location.reload()">CLEAR ALL</button>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="left-panel">
+        <h3 style="margin: 0; color: #2c3e50; text-align: center;">Original Invoice</h3>
+        <div class="image-controls" style="display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <button class="btn" onclick="zoomIn()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom In (+)</button>
+            <button class="btn" onclick="zoomOut()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom Out (-)</button>
+            <button class="btn" onclick="rotateLeft()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Rotate (↺)</button>
+            <button class="btn" onclick="rotateRight()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Rotate (↻)</button>
+            <button class="btn" onclick="confirmCrop()" style="padding: 6px 12px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Crop Confirm ✅</button>
+            <button class="btn" onclick="resetCropToFull()" style="padding: 6px 12px; background: #7f8c8d; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset Crop</button>
+        </div>
+        <div id="cropStatus"></div>
+        <div class="image-preview-container">
+            <span class="no-image-text" id="noImageText">No Invoice Selected</span>
+            <div id="imageWrapper">
+                <img id="previewImage" alt="Invoice Preview" style="display:none;">
+                <div id="cropBox">
+                    <div class="crop-handle" data-dir="nw"></div>
+                    <div class="crop-handle" data-dir="ne"></div>
+                    <div class="crop-handle" data-dir="sw"></div>
+                    <div class="crop-handle" data-dir="se"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="scan-controls">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; width: 100%;">
+                <input type="file" id="fileInput" accept="image/*" class="form-control" style="max-width: 60%;" onchange="previewSelectedImage()">    
+                <button class="btn" style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="clearPageNoColumn()">Clear All Page No</button>
+            </div>
+            <button class="btn-scan" onclick="processImage()">ബിൽ സ്കാൻ ചെയ്യുക</button>
+            <div id="statusMessage"></div>
+        </div>
+        <div id="resultArea"></div>
+    </div>
+</div>
+
+</div>
+
     <!-- ADD STOCK PAGE -->
  <div id="stockPage" class="index-page-wrapper full-width-wrapper" style="display: none;">
     <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
@@ -3332,7 +3564,8 @@ function hideAllPages() {
         'mainChargeListPage', 'mainRackDetailsPage', 
         'lastAddedOPStockPage', 'lastAddedIPStockPage',
         'preIndentSummaryPage',
-        'indentedMedicinesMainPage' // 🌟 പുതിയതായി നിർമ്മിച്ച വിൻഡോ ഇതിൽ ചേർത്തിട്ടുണ്ട് 🌟
+        'indentedMedicinesMainPage', // 🌟 പുതിയതായി നിർമ്മിച്ച വിൻഡോ ഇതിൽ ചേർത്തിട്ടുണ്ട് 🌟
+        'smartScannerPage' // 🌟 Medistock Smart Scanner പേജ് 🌟
     ];
     
     allPages.forEach(function(pageId) {
@@ -7621,19 +7854,15 @@ function renderIpChargeListTable() {
 }
 
 
-// സ്മാർട്ട് സ്കാനർ പുതിയൊരു വിൻഡോയിൽ തുറക്കാനുള്ള ഫങ്ഷൻ
-        function openSmartScanner() {
-            
-            let windowWidth = 1200;
-            let windowHeight = 800;
-            let leftPosition = (screen.width - windowWidth) / 2;
-            let topPosition = (screen.height - windowHeight) / 2;
+// സ്മാർട്ട് സ്കാനർ ഇതേ പേജിനുള്ളിൽ (SPA) തുറക്കാനുള്ള ഫംഗ്ഷൻ
+        function showSmartScannerPage() {
+            hideAllPages();
+            document.getElementById('smartScannerPage').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
 
-            let windowParams = `width=${windowWidth},height=${windowHeight},left=${leftPosition},top=${topPosition},` + 
-                               `scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no`;
-            
-            // ഇവിടെയാണ് മാറ്റം വരുത്തിയത് (scanner.html എന്നതിന് പകരം gemini_scanner.html എന്ന് നൽകി)
-            window.open('gemini_scanner.html', 'SmartScannerWindow', windowParams);
+        function openSmartScanner() {
+            showSmartScannerPage();
         }
         // ========================================================
 // MAIN STOCK STATEMENT / CHARGE LIST FUNCTIONS
@@ -17020,6 +17249,502 @@ window.autoSyncToDrive = async function() {
     }
 
 })();
+</script>
+<script>
+/* ==================================================================== */
+/* 🌟 MEDISTOCK SMART SCANNER PAGE — SCRIPT (gemini_scanner.html-ൽ നിന്നും  */
+/*    ലയിപ്പിച്ചത്, എല്ലാ ഫംഗ്ഷനുകളും അതേപടി നിലനിർത്തിയിരിക്കുന്നു) 🌟 */
+/* ==================================================================== */
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFqhSiU0HUABnTwQ0zZqBJIqZUMWxlt4Lcnn1b4xlpxrQA3f9fi0mWnhwbwX1Shl_0rg/exec"; 
+
+    let scale = 1; let angle = 0;
+    let naturalW = 0, naturalH = 0;
+    let cropRect = { left: 0, top: 0, width: 0, height: 0 };
+    let cropConfirmed = false;
+    let cprInterval;
+
+    function goBack() { window.history.back(); }
+
+    function previewSelectedImage() {
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const noImageText = document.getElementById('noImageText');
+        const container = document.querySelector('.image-preview-container');
+        const cropBox = document.getElementById('cropBox');
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.onload = function() {
+                    naturalW = previewImage.naturalWidth;
+                    naturalH = previewImage.naturalHeight;
+
+                    previewImage.style.display = 'block';
+                    if (noImageText) noImageText.style.display = 'none';
+
+                    // ഓട്ടോ ഫിറ്റ്: സ്ക്രീനിന്റെ അളവിനനുസരിച്ച് ഫോട്ടോ കൃത്യമായി ഫിറ്റ് ആക്കുന്നു
+                    const cw = container.clientWidth - 20; 
+                    const ch = container.clientHeight - 20;
+                    scale = Math.min(cw / naturalW, ch / naturalH); 
+                    angle = 0;
+
+                    applyImageSize();
+                    updateTransform();
+
+                    // തനിയെ ക്രോപ്പ് ബോക്സ് ടേബിൾ ഭാഗത്ത് (താഴെ) വരുന്നു
+                    cropRect = {
+                        left: naturalW * 0.05,
+                        top: naturalH * 0.35, 
+                        width: naturalW * 0.90,
+                        height: naturalH * 0.60
+                    };
+                    cropConfirmed = false;
+                    drawCropBox();
+                    cropBox.style.display = 'block';
+                    cropBox.style.borderColor = '#f39c12';
+                    setCropStatus("ടേബിൾ ഭാഗം കൃത്യമായി വരാൻ ക്രോപ്പ് ബോക്സ് ക്രമീകരിച്ച് 'Crop Confirm' അമർത്തുക", "#e67e22");
+                };
+                previewImage.src = e.target.result;
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
+    function applyImageSize() {
+        const previewImage = document.getElementById('previewImage');
+        const wrapper = document.getElementById('imageWrapper');
+        if (!previewImage || !wrapper || !naturalW || !naturalH) return;
+        
+        const dW = naturalW * scale;
+        const dH = naturalH * scale;
+        
+        previewImage.style.width = dW + 'px';
+        previewImage.style.height = dH + 'px';
+        wrapper.style.width = dW + 'px';
+        wrapper.style.height = dH + 'px';
+        drawCropBox();
+    }
+
+    function zoomBy(delta) {
+        if (!naturalW || !naturalH) return;
+        const container = document.querySelector('.image-preview-container');
+        const oldScale = scale;
+        const newScale = Math.max(0.1, Math.min(6, oldScale + delta));
+        if (newScale === oldScale) return;
+
+        // സെന്റർ അടിസ്ഥാനമാക്കി സ്ക്രോൾ നിലനിർത്തുന്നു
+        const cx = container.scrollLeft + container.clientWidth / 2;
+        const cy = container.scrollTop + container.clientHeight / 2;
+        const ratio = newScale / oldScale;
+
+        scale = newScale;
+        applyImageSize();
+
+        container.scrollLeft = cx * ratio - container.clientWidth / 2;
+        container.scrollTop = cy * ratio - container.clientHeight / 2;
+    }
+
+    function zoomIn() { zoomBy(0.2); }
+    function zoomOut() { zoomBy(-0.2); }
+    function rotateLeft() { angle -= 90; updateTransform(); }
+    function rotateRight() { angle += 90; updateTransform(); }
+    
+    function updateTransform() {
+        const wrapper = document.getElementById('imageWrapper');
+        if (!wrapper) return;
+        // നടുഭാഗം അടിസ്ഥാനമാക്കി റൊട്ടേറ്റ് ചെയ്യുന്നു
+        wrapper.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function drawCropBox() {
+        const cropBox = document.getElementById('cropBox');
+        if (!cropBox) return;
+        cropBox.style.left = (cropRect.left * scale) + 'px';
+        cropBox.style.top = (cropRect.top * scale) + 'px';
+        cropBox.style.width = (cropRect.width * scale) + 'px';
+        cropBox.style.height = (cropRect.height * scale) + 'px';
+    }
+
+    function setCropStatus(msg, color) {
+        const el = document.getElementById('cropStatus');
+        if (el) { el.innerText = msg; el.style.color = color; }
+    }
+
+    function confirmCrop() {
+        if (!naturalW || !naturalH) {
+            alert("ദയവായി ആദ്യം ഒരു ഇൻവോയ്സ് തിരഞ്ഞെടുക്കുക!");
+            return;
+        }
+        cropConfirmed = true;
+        const cropBox = document.getElementById('cropBox');
+        if (cropBox) cropBox.style.borderColor = '#27ae60';
+        setCropStatus("✅ ക്രോപ്പ് സ്ഥിരീകരിച്ചു! ഈ ബോക്സിന് ഉള്ളിലെ ഭാഗം മാത്രമേ സ്കാൻ ചെയ്യുകയുള്ളൂ.", "green");
+    }
+
+    function resetCropToFull() {
+        if (!naturalW || !naturalH) return;
+        cropRect = { left: 0, top: 0, width: naturalW, height: naturalH };
+        cropConfirmed = false;
+        const cropBox = document.getElementById('cropBox');
+        if (cropBox) cropBox.style.borderColor = '#f39c12';
+        drawCropBox();
+        setCropStatus("ക്രോപ്പ് ബോക്സ് പൂർണ്ണ ഫോട്ടോ ആയി റീസെറ്റ് ചെയ്തു.", "#7f8c8d");
+    }
+
+    function processImage() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length === 0) {
+            alert("ദയവായി സ്കാൻ ചെയ്യാൻ ഒരു ഇൻവോയ്സ് തിരഞ്ഞെടുക്കുക!");
+            return;
+        }
+        if (!cropConfirmed) {
+            alert("ദയവായി ആദ്യം 'Crop Confirm ✅' ബട്ടൺ അമർത്തുക! Crop Box-ന് ഉള്ളിലെ ഭാഗം മാത്രമേ സ്കാൻ ആകുകയുള്ളൂ.");
+            return;
+        }
+        showCropConfirmDialog();
+    }
+
+    function showCropConfirmDialog() {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0'; overlay.style.left = '0';
+        overlay.style.width = '100vw'; overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '10000';
+
+        const modal = document.createElement('div');
+        modal.style.backgroundColor = 'white';
+        modal.style.padding = '30px';
+        modal.style.borderRadius = '8px';
+        modal.style.textAlign = 'center';
+        modal.style.maxWidth = '420px';
+        modal.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+
+        modal.innerHTML = `
+            <h2 style="color: #2c3e50; margin-top: 0;">🔎 ഉറപ്പുവരുത്തുക</h2>
+            <p style="font-size: 17px; margin-bottom: 25px; font-weight: bold; color: #2c3e50;">
+                ഔഷധങ്ങളുടെ ടേബിൾ കൃത്യമായി Crop ചെയ്തിട്ടുണ്ട് എന്ന് ഉറപ്പാണോ?
+            </p>
+            <button id="scanYesBtn" style="background: #27ae60; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">Yes</button>
+            <button id="scanNoBtn" style="background: #7f8c8d; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">No</button>
+        `;
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        document.getElementById('scanYesBtn').onclick = function () { document.body.removeChild(overlay); doProcessImage(); };
+        document.getElementById('scanNoBtn').onclick = function () { document.body.removeChild(overlay); };
+    }
+
+    function doProcessImage() {
+        const scanBtn = document.querySelector('.btn-scan');
+        const previewImage = document.getElementById('previewImage');
+        const statusMessage = document.getElementById('statusMessage');
+        const resultArea = document.getElementById('resultArea');
+
+        scanBtn.disabled = true; 
+        scanBtn.style.cursor = "not-allowed";
+        scanBtn.style.opacity = "0.6";
+
+        statusMessage.innerHTML = "ബിൽ പരിശോധിക്കുന്നു... ദയവായി കാത്തിരിക്കുക ⏳";
+        statusMessage.style.color = "#e67e22";
+        resultArea.innerHTML = "";
+        startCPRProgress();
+
+        try {
+            const base64Data = getCroppedBase64(previewImage);
+            callGeminiAPI(base64Data);
+        } catch (err) {
+            stopCPRProgress();
+            statusMessage.innerHTML = "❌ ക്രോപ്പ് ചെയ്യുന്നതിൽ പിശക്: " + err.message;
+            statusMessage.style.color = "red";
+            scanBtn.disabled = false; scanBtn.style.cursor = "pointer"; scanBtn.style.opacity = "1";
+        }
+    }
+
+    function getCroppedBase64(imgEl) {
+        let rect = (cropRect && cropRect.width > 0 && cropRect.height > 0)
+            ? cropRect
+            : { left: 0, top: 0, width: naturalW || imgEl.naturalWidth, height: naturalH || imgEl.naturalHeight };
+
+        const rad = ((angle % 360) + 360) % 360; 
+        const canvas = document.createElement('canvas');
+
+        if (rad === 90 || rad === 270) {
+            canvas.width = rect.height;
+            canvas.height = rect.width;
+        } else {
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+        if (rad === 90) { ctx.translate(canvas.width, 0); ctx.rotate(Math.PI / 2); } 
+        else if (rad === 180) { ctx.translate(canvas.width, canvas.height); ctx.rotate(Math.PI); } 
+        else if (rad === 270) { ctx.translate(0, canvas.height); ctx.rotate(-Math.PI / 2); }
+
+        ctx.drawImage(imgEl, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
+        ctx.restore();
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        return dataUrl.split(',')[1];
+    }
+
+    async function callGeminiAPI(base64Image) {
+        const statusMessage = document.getElementById('statusMessage');
+        const resultArea = document.getElementById('resultArea');
+        const scanBtn = document.querySelector('.btn-scan');
+
+        let userIdentifier = localStorage.getItem("medistock_user_id");
+        if (!userIdentifier) {
+            userIdentifier = prompt("ദയവായി നിങ്ങളുടെ ഇമെയിൽ ഐഡി അല്ലെങ്കിൽ സ്ഥാപനത്തിന്റെ പേര് നൽകുക:");
+            if (userIdentifier && userIdentifier.trim() !== "") localStorage.setItem("medistock_user_id", userIdentifier.trim());
+            else userIdentifier = "Anonymous User"; 
+        }
+
+        try {
+            const response = await fetch(GAS_WEB_APP_URL, {
+                method: 'POST', redirect: 'follow', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ image: base64Image, email: userIdentifier })
+            });
+            if (!response.ok) throw new Error(`സെർവർ തടസ്സം (Status: ${response.status}).`);
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message || "അജ്ഞാതമായ തടസ്സം നേരിട്ടു!");
+
+            if (data.candidates && data.candidates.length > 0) {
+                const extractedText = data.candidates[0].content.parts[0].text;
+                resultArea.innerHTML = convertToDataEntryForm(extractedText);
+                statusMessage.innerHTML = "✅ സ്കാനിംഗ് വിജയകരം! ഡാറ്റ പരിശോധിക്കുക.";
+                statusMessage.style.color = "green";
+            } else throw new Error("ബില്ലിൽ നിന്നും ഡാറ്റ ലഭിച്ചില്ല.");
+        } catch (error) {
+            statusMessage.innerHTML = error.message === "Failed to fetch" ? "❌ വെബ് ആപ്പ് ലിങ്ക് ബ്ലോക്ക് ചെയ്യപ്പെട്ടു!" : "❌ പരാജയപ്പെട്ടു: " + error.message;
+            statusMessage.style.color = "red";
+        } finally {
+            scanBtn.disabled = false; scanBtn.style.cursor = "pointer"; scanBtn.style.opacity = "1";
+            stopCPRProgress();
+        }
+    }
+
+    function convertToDataEntryForm(markdownText) {
+        const lines = markdownText.split('\n').filter(line => line.trim().startsWith('|'));
+        if (lines.length <= 2) return "<p style='color:red;'>ബില്ലിൽ നിന്നും കൃത്യമായ ഡാറ്റ കണ്ടെത്താനായില്ല.</p>";
+        let html = `<table class="medistock-table" id="medistockTable">
+            <thead><tr><th style="width: 10%;">Page No</th><th style="width: 40%;">Name of Medicines</th><th style="width: 20%;">Batch</th><th style="width: 15%;">Exp.Dt.</th><th style="width: 15%;">Qty</th></tr></thead><tbody>`;
+        for (let i = 2; i < lines.length; i++) {
+            let cols = lines[i].split('|').map(col => col.trim()).filter(col => col !== '');
+            if (cols.length < 4) continue; 
+            let pageNo = cols.length >= 5 ? cols[0] : "";
+            let medName = cols.length >= 5 ? cols[1] : cols[0];
+            let batch = cols.length >= 5 ? cols[2] : cols[1];
+            let expiry = cols.length >= 5 ? cols[3] : cols[2];
+            let qty = cols.length >= 5 ? cols[4] : cols[3];
+            html += `<tr>
+                <td><input type="text" value="${pageNo}" class="cell-input"></td>
+                <td><input type="text" value="${medName}" class="cell-input"></td>
+                <td><input type="text" value="${batch}" class="cell-input"></td>
+                <td><input type="text" value="${expiry}" class="cell-input"></td>
+                <td><input type="text" value="${qty}" class="cell-input"></td>
+            </tr>`;
+        }
+        return html + `</tbody></table>`;
+    }
+
+    // Crop Box Dragging Logic
+    function screenDeltaToLocal(dxScreen, dyScreen) {
+        const rad = angle * Math.PI / 180;
+        const cos = Math.cos(rad), sin = Math.sin(rad);
+        const lx = (dxScreen * cos + dyScreen * sin) / scale;
+        const ly = (-dxScreen * sin + dyScreen * cos) / scale;
+        return { lx, ly };
+    }
+
+    let cropDragMode = null; 
+    let dragStartX = 0, dragStartY = 0;
+    let startRect = null;
+
+    function onCropPointerDown(e, mode) {
+        e.stopPropagation(); e.preventDefault();
+        cropDragMode = mode;
+        dragStartX = e.clientX; dragStartY = e.clientY;
+        startRect = Object.assign({}, cropRect);
+        document.addEventListener('pointermove', onCropPointerMove);
+        document.addEventListener('pointerup', onCropPointerUp);
+    }
+
+    function onCropPointerMove(e) {
+        if (!cropDragMode) return;
+        const dxScreen = e.clientX - dragStartX;
+        const dyScreen = e.clientY - dragStartY;
+        const { lx, ly } = screenDeltaToLocal(dxScreen, dyScreen);
+        const minSize = 20;
+        let r = Object.assign({}, startRect);
+
+        if (cropDragMode === 'move') { r.left = startRect.left + lx; r.top = startRect.top + ly; } 
+        else if (cropDragMode === 'nw') { r.left = startRect.left + lx; r.top = startRect.top + ly; r.width = startRect.width - lx; r.height = startRect.height - ly; } 
+        else if (cropDragMode === 'ne') { r.top = startRect.top + ly; r.width = startRect.width + lx; r.height = startRect.height - ly; } 
+        else if (cropDragMode === 'sw') { r.left = startRect.left + lx; r.width = startRect.width - lx; r.height = startRect.height + ly; } 
+        else if (cropDragMode === 'se') { r.width = startRect.width + lx; r.height = startRect.height + ly; }
+
+        if (r.width < minSize) r.width = minSize;
+        if (r.height < minSize) r.height = minSize;
+        if (r.left < 0) r.left = 0;
+        if (r.top < 0) r.top = 0;
+        if (naturalW && r.left + r.width > naturalW) { if (cropDragMode === 'move') r.left = naturalW - r.width; else r.width = naturalW - r.left; }
+        if (naturalH && r.top + r.height > naturalH) { if (cropDragMode === 'move') r.top = naturalH - r.height; else r.height = naturalH - r.top; }
+
+        cropRect = r; cropConfirmed = false;
+        const cropBox = document.getElementById('cropBox');
+        if (cropBox) cropBox.style.borderColor = '#f39c12';
+        drawCropBox();
+    }
+
+    function onCropPointerUp() {
+        cropDragMode = null;
+        document.removeEventListener('pointermove', onCropPointerMove);
+        document.removeEventListener('pointerup', onCropPointerUp);
+    }
+
+    (function setupCropBoxListeners() {
+        const cropBox = document.getElementById('cropBox');
+        if (!cropBox) return;
+        cropBox.addEventListener('pointerdown', function (e) { if (e.target.classList.contains('crop-handle')) return; onCropPointerDown(e, 'move'); });
+        cropBox.querySelectorAll('.crop-handle').forEach(function (h) { h.addEventListener('pointerdown', function (e) { onCropPointerDown(e, h.dataset.dir); }); });
+    })();
+
+    // Loader & Clear Actions
+    function startCPRProgress() {
+        let loader = document.getElementById('cprLoader');
+        if(loader) loader.style.display = 'flex';
+        let pBar = document.getElementById('cprProgress');
+        if(pBar) { pBar.style.width = '0%'; pBar.innerText = '0%'; }
+        for(let i=1; i<=4; i++) { let step = document.getElementById('step'+i); if(step) step.style.opacity = '0.3'; }
+        let width = 0;
+        cprInterval = setInterval(() => {
+            if (width >= 90) return;
+            width += Math.floor(Math.random() * 5) + 2;
+            if(width > 90) width = 90;
+            if(pBar) { pBar.style.width = width + '%'; pBar.innerText = width + '%'; }
+            if(width > 20 && document.getElementById('step1')) document.getElementById('step1').style.opacity = '1';
+            if(width > 40 && document.getElementById('step2')) document.getElementById('step2').style.opacity = '1';
+            if(width > 60 && document.getElementById('step3')) document.getElementById('step3').style.opacity = '1';
+            if(width > 80 && document.getElementById('step4')) document.getElementById('step4').style.opacity = '1';
+        }, 400);
+    }
+
+    function stopCPRProgress() {
+        if(cprInterval) clearInterval(cprInterval);
+        let pBar = document.getElementById('cprProgress');
+        if(pBar) { pBar.style.width = '100%'; pBar.innerText = '100%'; }
+        setTimeout(() => { 
+            let loader = document.getElementById('cprLoader');
+            if(loader) loader.style.display = 'none'; 
+        }, 800);
+    }
+
+    function clearPageNoColumn() {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed'; overlay.style.top = '0'; overlay.style.left = '0';
+        overlay.style.width = '100vw'; overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.7)'; overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center'; overlay.style.alignItems = 'center'; overlay.style.zIndex = '10000';
+        const modal = document.createElement('div');
+        modal.style.backgroundColor = 'white'; modal.style.padding = '30px'; modal.style.borderRadius = '8px'; modal.style.textAlign = 'center';
+        modal.innerHTML = `
+            <h2 style="color: #c0392b; margin-top: 0;">⚠️ മുന്നറിയിപ്പ്</h2>
+            <p style="font-size: 18px; margin-bottom: 25px; font-weight: bold; color: #2c3e50;">Page No കോളത്തിലുള്ള ഡേറ്റകൾ പൂർണ്ണമായും ഡിലീറ്റ് ആക്കണമോ?</p>
+            <button id="btnYes" style="background: #e74c3c; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">Yes</button>
+            <button id="btnNo" style="background: #7f8c8d; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">No</button>
+        `;
+        overlay.appendChild(modal); document.body.appendChild(overlay);
+        document.getElementById('btnYes').onclick = function() {
+            document.body.removeChild(overlay); 
+            var table = document.querySelector('#resultArea table');
+            if (!table) return;
+            var rows = table.querySelectorAll('tbody tr');
+            for (var j = 0; j < rows.length; j++) {
+                var cell = rows[j].querySelectorAll('td')[0];
+                if (cell) { var input = cell.querySelector('input'); if (input) input.value = ''; }
+            }
+        };
+        document.getElementById('btnNo').onclick = function() { document.body.removeChild(overlay); };
+    }
+
+    // =====================================================================================
+    // 🌟 പുതിയ ഫംഗ്ഷൻ: സ്കാൻ ചെയ്ത ഡാറ്റ "Load from Excel Sheet & Extract" പേജിലേക്ക് അയക്കുന്നു 🌟
+    // (excelImportPage-ലെ സ്വന്തം IMPORT EXTRACTED DATA ബട്ടൺ ഉപയോഗിക്കുന്ന
+    //  importExtractedData() എന്ന ഫംഗ്ഷനിൽ നിന്നും വേറിട്ട്, ഇത് സ്കാനർ പേജിന് മാത്രമായി)
+    // =====================================================================================
+    function importScannerDataToExcelGrid() {
+        // 1. സ്കാൻ ചെയ്ത ടേബിളിൽ നിന്നും ഡാറ്റ വായിക്കുന്നു
+        let scanTable = document.querySelector('#smartScannerPage #resultArea table');
+        if (!scanTable) {
+            alert("സ്കാൻ ചെയ്ത ഡാറ്റയൊന്നും കണ്ടെത്തിയില്ല! ദയവായി ആദ്യം ബിൽ സ്കാൻ ചെയ്യുക.");
+            return;
+        }
+        let scanRows = scanTable.querySelectorAll('tbody tr');
+
+        // 2. "Load from Excel Sheet & Extract" ഗ്രിഡിൽ ആദ്യത്തെ ശൂന്യമായ വരി കണ്ടെത്തുന്നു
+        //    (നിലവിലുള്ള ഡാറ്റയ്ക്ക് മുകളിൽ എഴുതി പോകാതിരിക്കാൻ)
+        let startRow = 1;
+        for (let i = 1; i <= 300; i++) {
+            let medEl = document.getElementById('xl_med_' + i);
+            let batEl = document.getElementById('xl_bat_' + i);
+            if (medEl && !medEl.value.trim() && batEl && !batEl.value.trim()) {
+                startRow = i;
+                break;
+            }
+        }
+
+        // 3. ഓരോ സ്കാൻ ചെയ്ത വരിയും ഗ്രിഡിലെ ശരിയായ കോളങ്ങളിലേക്ക് പകർത്തുന്നു
+        //    Page No -> xl_pag, Name of Medicines -> xl_med, Batch -> xl_bat, Exp.Dt. -> xl_exp, Qty -> xl_qty
+        let filledCount = 0;
+        scanRows.forEach(function(tr) {
+            let cells = tr.querySelectorAll('input.cell-input');
+            if (cells.length < 5) return;
+
+            let pageNo = cells[0].value.trim();
+            let medName = cells[1].value.trim();
+            let batch = cells[2].value.trim();
+            let expDt = cells[3].value.trim();
+            let qty = cells[4].value.trim();
+
+            if (!medName && !batch && !qty) return; // പൂർണ്ണമായി ശൂന്യമായ വരി ഒഴിവാക്കുന്നു
+
+            let row = startRow + filledCount;
+            if (row > 300) return;
+
+            let pagInput = document.getElementById('xl_pag_' + row);
+            let medInput = document.getElementById('xl_med_' + row);
+            let batInput = document.getElementById('xl_bat_' + row);
+            let expInput = document.getElementById('xl_exp_' + row);
+            let qtyInput = document.getElementById('xl_qty_' + row);
+
+            if (pagInput) pagInput.value = pageNo.toUpperCase();
+            if (medInput) medInput.value = medName;
+            if (batInput) batInput.value = batch.toUpperCase();
+            if (expInput) expInput.value = expDt.toUpperCase();
+            if (qtyInput) qtyInput.value = qty.replace(/[^0-9.]/g, '');
+
+            filledCount++;
+        });
+
+        if (filledCount === 0) {
+            alert("സ്കാൻ ചെയ്ത ടേബിളിൽ നിന്നും ഒരു വരി പോലും ഇംപോർട്ട് ചെയ്യാൻ കഴിഞ്ഞില്ല!");
+            return;
+        }
+
+        // 4. Medicine Item, SI No എന്നിവ (Name of Medicine അടിസ്ഥാനമാക്കി) തനിയെ കണ്ടെത്താൻ
+        if (typeof autoFillExcelColumns === 'function') autoFillExcelColumns();
+
+        // 5. "Load from Excel Sheet & Extract" പേജിലേക്ക് നാവിഗേറ്റ് ചെയ്യുന്നു
+        if (typeof showExcelImportPage === 'function') showExcelImportPage();
+    }
+
 </script>
 </body>
 </html>
