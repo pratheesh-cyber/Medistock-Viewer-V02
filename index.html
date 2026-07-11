@@ -548,7 +548,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 5ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 1ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -7393,9 +7393,20 @@ function confirmResetAllData() {
     );
 }
 
-function executeFinalReset() {
+async function executeFinalReset() {
     // അവസാനത്തെ വലിയ വാണിംഗിലും YES അമർത്തിയാൽ മാത്രം ഡിലീറ്റ് ചെയ്യുന്നു
     localStorage.clear();
+
+    // 🌟 റീസെറ്റ് ചെയ്ത (ഒഴിഞ്ഞ) അവസ്ഥ കൂടി ലോഗിൻ ചെയ്ത ഡ്രൈവിലേക്ക് ബാക്ക്ഗ്രൗണ്ടിൽ
+    // ബാക്കപ്പ് ചെയ്യുന്നു, അതിനുശേഷം മാത്രം പേജ് റീലോഡ് ചെയ്യുന്നു 🌟
+    try {
+        if (typeof window.smartAutoBackup === 'function' && window.accessToken) {
+            await window.smartAutoBackup();
+        }
+    } catch (e) {
+        console.error("Reset Backup Error:", e);
+    }
+
     location.reload();
 }
 

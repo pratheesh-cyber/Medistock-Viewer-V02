@@ -82,6 +82,7 @@
     flex-direction: column; 
     padding: 15px; 
     height: 100%;
+    min-height: 0;
     box-sizing: border-box;
     overflow: hidden; 
 }
@@ -93,6 +94,7 @@
     display: flex; 
     flex-direction: column; 
     height: 100%;
+    min-height: 0;
     box-sizing: border-box;
     overflow: hidden; 
 }
@@ -100,6 +102,7 @@
 /* ഫോട്ടോയ്ക്ക് കൃത്യമായ സ്ക്രോൾ ബാർ വരാൻ */
 .image-preview-container {
     flex: 1; 
+    min-height: 0;
     width: 100%; 
     overflow: auto !important; 
     position: relative;
@@ -144,6 +147,7 @@
 /* റിസൾട്ട് ടേബിളിന് കൃത്യമായ സ്ക്രോൾ ബാർ വരാൻ */
 #resultArea {
     flex: 1; 
+    min-height: 0;
     width: 100%;
     overflow: auto !important;
     background: #fff;
@@ -340,7 +344,6 @@ function previewSelectedImage() {
     const fileInput = document.getElementById('fileInput');
     const previewImage = document.getElementById('previewImage');
     const noImageText = document.getElementById('noImageText');
-    const wrapper = document.getElementById('imageWrapper');
     const container = document.querySelector('.image-preview-container');
     const cropBox = document.getElementById('cropBox');
 
@@ -351,11 +354,6 @@ function previewSelectedImage() {
                 naturalW = previewImage.naturalWidth;
                 naturalH = previewImage.naturalHeight;
 
-                // ഫോട്ടോ കൃത്യമായ (1:1) പിക്സൽ വലുപ്പത്തിൽ വെക്കുന്നു; സൂം/റൊട്ടേറ്റ് wrapper വഴി മാത്രം
-                previewImage.style.width = naturalW + 'px';
-                previewImage.style.height = naturalH + 'px';
-                wrapper.style.width = naturalW + 'px';
-                wrapper.style.height = naturalH + 'px';
                 previewImage.style.display = 'block';
                 if (noImageText) noImageText.style.display = 'none';
 
@@ -365,6 +363,10 @@ function previewSelectedImage() {
                 const fitScale = Math.min(cw / naturalW, ch / naturalH, 1);
                 scale = fitScale > 0 ? fitScale : 1;
                 angle = 0;
+
+                // ഇമേജിന്റെ യഥാർത്ഥ ഡിസ്പ്ലേ വലുപ്പം (scale അനുസരിച്ച്) നേരിട്ട് സെറ്റ് ചെയ്യുന്നു -
+                // ഇത് സ്ക്രോൾ ഏരിയ കൃത്യമായി ഇമേജിന്റെ കാണുന്ന വലുപ്പത്തിന് തുല്യമാക്കും (സ്ക്രോൾ ബഗ് പരിഹാരം)
+                applyImageSize();
                 updateTransform();
 
                 // ഡീഫോൾട്ട് ക്രോപ്പ് ബോക്സ്: ഇൻവോയ്സിന്റെ മുകൾ ഭാഗം (ഹെഡ്ഡർ) ഒഴിവാക്കി ടേബിൾ വരാൻ സാധ്യതയുള്ള ഭാഗം
@@ -379,6 +381,10 @@ function previewSelectedImage() {
                 cropBox.style.display = 'block';
                 cropBox.style.borderColor = '#f39c12';
                 setCropStatus("ടേബിൾ ഭാഗം കൃത്യമായി വരാൻ ക്രോപ്പ് ബോക്സ് വലിച്ചു ക്രമീകരിച്ച് 'Crop Confirm' അമർത്തുക", "#e67e22");
+
+                // ഇമേജിന്റെ ഏറ്റവും മുകൾ ഭാഗം കാണാൻ സ്ക്രോൾ ടോപ്പിലേക്ക് സെറ്റ് ചെയ്യുന്നു
+                container.scrollTop = 0;
+                container.scrollLeft = 0;
             };
             previewImage.src = e.target.result;
         }
@@ -387,6 +393,59 @@ function previewSelectedImage() {
 }
 
     function processImage() {
+        const fileInput = document.getElementById('fileInput');
+
+        if (fileInput.files.length === 0) {
+            alert("ദയവായി സ്കാൻ ചെയ്യാൻ ഒരു ഇൻവോയ്സ് തിരഞ്ഞെടുക്കുക!");
+            return;
+        }
+
+        showCropConfirmDialog();
+    }
+
+    // "ബിൽ സ്കാൻ ചെയ്യുക" അമർത്തുമ്പോൾ, ടേബിൾ ഭാഗം കൃത്യമായി Crop ചെയ്തിട്ടുണ്ടെന്ന്
+    // ഉറപ്പുവരുത്താൻ ഒരു സ്ഥിരീകരണ ബോക്സ് കാണിക്കുന്നു. Yes അമർത്തിയാൽ മാത്രമേ സ്കാൻ നടക്കൂ.
+    function showCropConfirmDialog() {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0'; overlay.style.left = '0';
+        overlay.style.width = '100vw'; overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '10000';
+
+        const modal = document.createElement('div');
+        modal.style.backgroundColor = 'white';
+        modal.style.padding = '30px';
+        modal.style.borderRadius = '8px';
+        modal.style.textAlign = 'center';
+        modal.style.maxWidth = '420px';
+        modal.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+
+        modal.innerHTML = `
+            <h2 style="color: #2c3e50; margin-top: 0;">🔎 ഉറപ്പുവരുത്തുക</h2>
+            <p style="font-size: 17px; margin-bottom: 25px; font-weight: bold; color: #2c3e50;">
+                ഔഷധങ്ങളുടെ ടേബിൾ കൃത്യമായി Crop ചെയ്തിട്ടുണ്ട് എന്ന് ഉറപ്പാണോ?
+            </p>
+            <button id="scanYesBtn" style="background: #27ae60; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">Yes</button>
+            <button id="scanNoBtn" style="background: #7f8c8d; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">No</button>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        document.getElementById('scanYesBtn').onclick = function () {
+            document.body.removeChild(overlay);
+            doProcessImage();
+        };
+        document.getElementById('scanNoBtn').onclick = function () {
+            document.body.removeChild(overlay);
+        };
+    }
+
+    function doProcessImage() {
         const fileInput = document.getElementById('fileInput');
         const statusMessage = document.getElementById('statusMessage');
         const resultArea = document.getElementById('resultArea');
@@ -688,31 +747,74 @@ var imageContainer = document.querySelector('.image-preview-container');
             document.getElementById('loadingOverlay').style.display = 'none';
         }, 600); 
     }
-    // --- Zoom & Rotate Functions (ഇനി #imageWrapper ആണ് ട്രാൻസ്ഫോം ചെയ്യുന്നത്, ഇമേജും ക്രോപ്പ് ബോക്സും ഒരുമിച്ച് നീങ്ങും) ---
+    // --- Zoom & Rotate Functions ---
+    // മുൻപ് #imageWrapper-ന്റെ യഥാർത്ഥ (natural) വലിപ്പം മാറ്റാതെ CSS transform:scale() മാത്രം
+    // ഉപയോഗിച്ചിരുന്നു. അതുകൊണ്ട് സ്ക്രോൾ ചെയ്യേണ്ട ഏരിയ എപ്പോഴും ഫോട്ടോയുടെ യഥാർത്ഥ (huge) വലിപ്പം
+    // ആയിരുന്നു - അതിനാൽ ഫോട്ടോയുടെ ഭൂരിഭാഗവും കാണാൻ സാധിക്കാതെ വന്നു (സ്ക്രോൾ ബഗ്).
+    // ഇപ്പോൾ zoom ചെയ്യുമ്പോൾ #imageWrapper/#previewImage-ന്റെ CSS width/height നേരിട്ട്
+    // (scale അനുസരിച്ച്) മാറ്റുന്നു - അതിനാൽ സ്ക്രോൾ ഏരിയ എപ്പോഴും കാണുന്ന ഫോട്ടോയുടെ
+    // യഥാർത്ഥ വലിപ്പത്തിന് തുല്യമായിരിക്കും.
 let scale = 1; let angle = 0;
 let naturalW = 0, naturalH = 0;
 let cropRect = { left: 0, top: 0, width: 0, height: 0 };
 let cropConfirmed = false;
 
-function zoomIn() { scale += 0.2; updateTransform(); }
-function zoomOut() { scale = Math.max(0.2, scale - 0.2); updateTransform(); }
+function applyImageSize() {
+    const previewImage = document.getElementById('previewImage');
+    const wrapper = document.getElementById('imageWrapper');
+    if (!previewImage || !wrapper || !naturalW || !naturalH) return;
+    const dW = naturalW * scale;
+    const dH = naturalH * scale;
+    previewImage.style.width = dW + 'px';
+    previewImage.style.height = dH + 'px';
+    wrapper.style.width = dW + 'px';
+    wrapper.style.height = dH + 'px';
+    drawCropBox();
+}
+
+function zoomBy(delta) {
+    if (!naturalW || !naturalH) return;
+    const container = document.querySelector('.image-preview-container');
+    const oldScale = scale;
+    const newScale = Math.max(0.2, Math.min(6, oldScale + delta));
+    if (newScale === oldScale) return;
+
+    // നിലവിൽ കാണുന്ന നടുവിലെ പോയിന്റ് കണ്ടെത്തി, zoom ചെയ്ത ശേഷം അതേ പോയിന്റ് വീണ്ടും
+    // നടുവിൽ വരാൻ സ്ക്രോൾ ക്രമീകരിക്കുന്നു (center അടിസ്ഥാനമാക്കിയുള്ള zoom)
+    const cx = container.scrollLeft + container.clientWidth / 2;
+    const cy = container.scrollTop + container.clientHeight / 2;
+    const ratio = newScale / oldScale;
+
+    scale = newScale;
+    applyImageSize();
+
+    container.scrollLeft = cx * ratio - container.clientWidth / 2;
+    container.scrollTop = cy * ratio - container.clientHeight / 2;
+}
+
+function zoomIn() { zoomBy(0.2); }
+function zoomOut() { zoomBy(-0.2); }
 function rotateLeft() { angle -= 90; updateTransform(); }
 function rotateRight() { angle += 90; updateTransform(); }
 function updateTransform() {
     const wrapper = document.getElementById('imageWrapper');
     if (!wrapper) return;
-    wrapper.style.transform = `scale(${scale}) rotate(${angle}deg)`;
+    // zoom, width/height വഴി നേരിട്ട് കൈകാര്യം ചെയ്യുന്നു; ഇവിടെ rotate മാത്രം,
+    // അതും ഇമേജിന്റെ സെന്റർ അടിസ്ഥാനമാക്കി തന്നെ
+    wrapper.style.transform = `rotate(${angle}deg)`;
     wrapper.style.transformOrigin = 'center center';
 }
 
 // --- Crop Box: draw, drag (move) & resize (4 corner handles) ---
+// cropRect എപ്പോഴും ഫോട്ടോയുടെ യഥാർത്ഥ (natural) പിക്സൽ കോർഡിനേറ്റിലാണ് സൂക്ഷിക്കുന്നത്;
+// സ്ക്രീനിൽ വരയ്ക്കുമ്പോൾ മാത്രം നിലവിലെ scale കൊണ്ട് ഗുണിക്കുന്നു
 function drawCropBox() {
     const cropBox = document.getElementById('cropBox');
     if (!cropBox) return;
-    cropBox.style.left = cropRect.left + 'px';
-    cropBox.style.top = cropRect.top + 'px';
-    cropBox.style.width = cropRect.width + 'px';
-    cropBox.style.height = cropRect.height + 'px';
+    cropBox.style.left = (cropRect.left * scale) + 'px';
+    cropBox.style.top = (cropRect.top * scale) + 'px';
+    cropBox.style.width = (cropRect.width * scale) + 'px';
+    cropBox.style.height = (cropRect.height * scale) + 'px';
 }
 
 function setCropStatus(msg, color) {
