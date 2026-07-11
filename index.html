@@ -4213,10 +4213,6 @@ function toggleAllLastAdded(masterCb, childClass) {
     });
 }
 
-// =====================================================================
-// 🌟 ADD TO STOCK FUNCTION (INDEX AUTO-UPDATE & OLD PAGE NO REMOVAL) 🌟
-// =====================================================================
-
 window.addAllToStock = function() {
     let rawSt = document.getElementById('stockTypeInput').value.trim().toUpperCase();
     let st = (rawSt === "MAIN STOCK") ? "Main Stock" : (rawSt === "SUB STOCK OP" ? "Sub Stock OP" : (rawSt === "SUB STOCK IP" ? "Sub Stock IP" : rawSt));
@@ -4232,15 +4228,19 @@ window.addAllToStock = function() {
     let finalFund = fund || cCode;
     if(!st || !finalFund || !inv || !invDate) return 0;
 
+    // 🌟 മാറ്റം 1: എല്ലാ സ്റ്റോക്കുകൾക്കും Transaction ID കൃത്യമായി നൽകുന്നു 🌟
     let currentTransactionId = Date.now().toString();
     if (st === "Main Stock") {
         localStorage.setItem('medistock_main_last_transaction', currentTransactionId);
+    } else if (st === "Sub Stock OP") {
+        localStorage.setItem('medistock_op_last_transaction', currentTransactionId);
+    } else if (st === "Sub Stock IP") {
+        localStorage.setItem('medistock_ip_last_transaction', currentTransactionId);
     }
 
     let tempValidItems = [];
     let rowsToClear = [];
 
-    // മാക്സിമം 300 വരികൾ വരെ പരിശോധിക്കുന്നു
     for(let i=1; i<=300; i++) {
         let medEl = document.getElementById('med_'+i);
         if(!medEl) break;
@@ -4266,7 +4266,7 @@ window.addAllToStock = function() {
                   exp: exp, qty: qty, page: page, rack: document.getElementById('rac_'+i).value.trim(), 
                   daysLeft: stData.diffDays, status: stData.status, statusClass: "status-cell " + stData.sClass, 
                   fund: finalFund, invoice: inv, invoiceDate: invDate,
-                  transactionId: currentTransactionId 
+                  transactionId: currentTransactionId // Transaction ID സേവ് ചെയ്യുന്നു
                });
           
           rowsToClear.push(i);
@@ -4281,13 +4281,11 @@ window.addAllToStock = function() {
             tempValidItems.forEach(newItem => {
                 stockItems = stockItems.filter(existingItem => {
                     if (existingItem.type === "Main Stock" && existingItem.name === newItem.name && existingItem.fund === newItem.fund) {
-                        // 🌟 പുതിയ മാറ്റം: പഴയ പേജ് നമ്പർ ഉള്ള ഇൻഡക്സ് ഡാറ്റ ഡിലീറ്റ് ചെയ്യാനും യഥാർത്ഥ സ്റ്റോക്കിന്റെ പേജ് നമ്പർ അപ്ഡേറ്റ് ചെയ്യാനും 🌟
                         if ((!existingItem.qty || existingItem.qty === "") && 
                             (!existingItem.batch || existingItem.batch === "") && 
                             (!existingItem.exp || existingItem.exp === "")) {
-                            return false; // Qty ഇല്ലാത്ത പഴയ ഇൻഡക്സ് എൻട്രി ഡിലീറ്റ് ചെയ്യുന്നു
+                            return false; 
                         } else {
-                            // യഥാർത്ഥ സ്റ്റോക്ക് (Qty ഉള്ളവ) ആണെങ്കിൽ അതിലെ പേജ് നമ്പർ പുതിയ പേജ് നമ്പർ ആക്കി അപ്ഡേറ്റ് ചെയ്യുന്നു (സ്റ്റോക്ക് ഡിലീറ്റ് ആകില്ല)
                             existingItem.page = newItem.page;
                             return true;
                         }
@@ -4340,10 +4338,17 @@ window.addAllToStock = function() {
         if(document.getElementById(dateId)) document.getElementById(dateId).innerText = formattedDate; 
         if(document.getElementById(timeId)) document.getElementById(timeId).innerText = formattedTime;
         
+        // 🌟 മാറ്റം 2: എല്ലാ സ്റ്റോക്കുകൾക്കും തീയതിയും സമയവും മെമ്മറിയിൽ സേവ് ചെയ്യുന്നു 🌟
         if (st === "Main Stock") {
             localStorage.setItem('medistock_main_last_added_date', formattedDate);
             localStorage.setItem('medistock_main_last_added_time', formattedTime);
-        } 
+        } else if (st === "Sub Stock OP") {
+            localStorage.setItem('medistock_op_last_added_date', formattedDate);
+            localStorage.setItem('medistock_op_last_added_time', formattedTime);
+        } else if (st === "Sub Stock IP") {
+            localStorage.setItem('medistock_ip_last_added_date', formattedDate);
+            localStorage.setItem('medistock_ip_last_added_time', formattedTime);
+        }
 
         window.currentMainViewData = tempValidItems; 
 
@@ -4434,37 +4439,54 @@ window.renderLastAddedTable = function() {
 };
 
 // 🌟 1. OP SUB STOCK-ലേക്കുള്ള ഫംഗ്ഷൻ 🌟
-function renderLastAddedOPTable() {
+window.renderLastAddedOPTable = function() {
     let allOP = stockItems.filter(i => i.type === "Sub Stock OP");
     let tbody = document.getElementById('lastAddedOPTableBody');
     if (!tbody) return;
     
     if(document.getElementById('masterCheckOP')) document.getElementById('masterCheckOP').checked = true;
     
-    if(allOP.length === 0) {
+    // 🌟 Invoice No-ന് പകരം Transaction ID ഉപയോഗിച്ച് കണ്ടെത്തുന്നു 🌟
+    let lastTxId = localStorage.getItem('medistock_op_last_transaction');
+    let lastItems = [];
+    
+    if (lastTxId) {
+        lastItems = allOP.filter(i => i.transactionId === lastTxId);
+    } else {
+        if(allOP.length > 0) {
+            let lastInvoice = allOP[allOP.length - 1].invoice;
+            lastItems = allOP.filter(i => i.invoice === lastInvoice);
+        }
+    }
+
+    if(lastItems.length === 0) {
         tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
         return;
     }
     
-    let lastInvoice = allOP[allOP.length - 1].invoice;
-    let lastItems = allOP.filter(i => i.invoice === lastInvoice);
-    
     window.currentMainViewData = lastItems; 
     
-    document.getElementById('lastAddOPInvNo').innerText = lastInvoice; 
+    document.getElementById('lastAddOPInvNo').innerText = lastItems[0].invoice || ""; 
     
-    // 🌟 INDENT ചെയ്യുന്ന ദിവസത്തെ തീയതി കൃത്യമായി വരാനുള്ള കോഡ് 🌟
     let indentDate = lastItems[0].invoiceDate || "";
     if (!indentDate) {
         let now = new Date();
         indentDate = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
     }
     document.getElementById('lastAddOPInvDate').innerText = indentDate; 
-    // 🌟 ----------------------------------------------------------- 🌟
 
-    let now = new Date(); 
-    document.getElementById('lastAddOPDate').innerText = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear(); 
-    document.getElementById('lastAddOPTime').innerText = now.toLocaleTimeString('en-US');
+    // മെമ്മറിയിൽ നിന്നും തീയതിയും സമയവും എടുക്കുന്നു
+    let savedDate = localStorage.getItem('medistock_op_last_added_date') || "";
+    let savedTime = localStorage.getItem('medistock_op_last_added_time') || "";
+    
+    if (!savedDate) {
+        let now = new Date(); 
+        savedDate = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear(); 
+        savedTime = now.toLocaleTimeString('en-US');
+    }
+    
+    document.getElementById('lastAddOPDate').innerText = savedDate; 
+    document.getElementById('lastAddOPTime').innerText = savedTime;
     
     let html = "";
     lastItems.forEach((s, idx) => {
@@ -4481,41 +4503,58 @@ function renderLastAddedOPTable() {
             </tr>`;
     });
     tbody.innerHTML = html;
-}
+};
 
 
 // 🌟 2. IP SUB STOCK-ലേക്കുള്ള ഫംഗ്ഷൻ 🌟
-function renderLastAddedIPTable() {
+window.renderLastAddedIPTable = function() {
     let allIP = stockItems.filter(i => i.type === "Sub Stock IP");
     let tbody = document.getElementById('lastAddedIPTableBody');
     if (!tbody) return;
     
     if(document.getElementById('masterCheckIP')) document.getElementById('masterCheckIP').checked = true;
     
-    if(allIP.length === 0) {
+    // 🌟 Invoice No-ന് പകരം Transaction ID ഉപയോഗിച്ച് കണ്ടെത്തുന്നു 🌟
+    let lastTxId = localStorage.getItem('medistock_ip_last_transaction');
+    let lastItems = [];
+    
+    if (lastTxId) {
+        lastItems = allIP.filter(i => i.transactionId === lastTxId);
+    } else {
+        if(allIP.length > 0) {
+            let lastInvoice = allIP[allIP.length - 1].invoice;
+            lastItems = allIP.filter(i => i.invoice === lastInvoice);
+        }
+    }
+
+    if(lastItems.length === 0) {
         tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
         return;
     }
     
-    let lastInvoice = allIP[allIP.length - 1].invoice;
-    let lastItems = allIP.filter(i => i.invoice === lastInvoice);
-    
     window.currentMainViewData = lastItems; 
     
-    document.getElementById('lastAddIPInvNo').innerText = lastInvoice; 
+    document.getElementById('lastAddIPInvNo').innerText = lastItems[0].invoice || ""; 
     
-    // 🌟 INDENT ചെയ്യുന്ന ദിവസത്തെ തീയതി കൃത്യമായി വരാനുള്ള കോഡ് 🌟
     let indentDate = lastItems[0].invoiceDate || "";
     if (!indentDate) {
         let now = new Date();
         indentDate = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
     }
     document.getElementById('lastAddIPInvDate').innerText = indentDate; 
-    // 🌟 ----------------------------------------------------------- 🌟
 
-    let now = new Date(); 
-    document.getElementById('lastAddIPDate').innerText = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear(); 
-    document.getElementById('lastAddIPTime').innerText = now.toLocaleTimeString('en-US');
+    // മെമ്മറിയിൽ നിന്നും തീയതിയും സമയവും എടുക്കുന്നു
+    let savedDate = localStorage.getItem('medistock_ip_last_added_date') || "";
+    let savedTime = localStorage.getItem('medistock_ip_last_added_time') || "";
+    
+    if (!savedDate) {
+        let now = new Date(); 
+        savedDate = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear(); 
+        savedTime = now.toLocaleTimeString('en-US');
+    }
+    
+    document.getElementById('lastAddIPDate').innerText = savedDate; 
+    document.getElementById('lastAddIPTime').innerText = savedTime;
     
     let html = "";
     lastItems.forEach((s, idx) => {
@@ -4532,7 +4571,7 @@ function renderLastAddedIPTable() {
             </tr>`;
     });
     tbody.innerHTML = html;
-}
+};
         function getFundColor(fundName) {
             let hash = 0;
             for (let i = 0; i < fundName.length; i++) hash = fundName.charCodeAt(i) + ((hash << 5) - hash);
