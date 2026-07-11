@@ -103,7 +103,43 @@
     width: 100%; 
     overflow: auto !important; 
     position: relative;
+    background: #34495e;
+    text-align: center;
 }
+
+/* Zoom/Rotate ചെയ്യുമ്പോൾ ഇമേജും ക്രോപ്പ് ബോക്സും ഒരുമിച്ച് നീങ്ങാൻ ഒരു wrapper */
+#imageWrapper {
+    position: relative;
+    display: inline-block;
+    transform-origin: center center;
+    transition: transform 0.25s ease;
+}
+
+/* ക്രോപ്പ് ബോക്സ് ഡിസൈൻ */
+#cropBox {
+    position: absolute;
+    box-sizing: border-box;
+    border: 2px dashed #f39c12;
+    background: rgba(243, 156, 18, 0.15);
+    cursor: move;
+    touch-action: none;
+    display: none;
+}
+.crop-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #f39c12;
+    border: 2px solid white;
+    border-radius: 50%;
+    touch-action: none;
+}
+.crop-handle[data-dir="nw"] { left: -9px; top: -9px; cursor: nwse-resize; }
+.crop-handle[data-dir="ne"] { right: -9px; top: -9px; cursor: nesw-resize; }
+.crop-handle[data-dir="sw"] { left: -9px; bottom: -9px; cursor: nesw-resize; }
+.crop-handle[data-dir="se"] { right: -9px; bottom: -9px; cursor: nwse-resize; }
+
+#cropStatus { text-align: center; font-size: 13px; margin-top: 4px; min-height: 16px; color: #7f8c8d; }
 
 /* റിസൾട്ട് ടേബിളിന് കൃത്യമായ സ്ക്രോൾ ബാർ വരാൻ */
 #resultArea {
@@ -125,8 +161,7 @@
         /* 1. Original Invoice ക്ലാരിറ്റി കൂട്ടാനുള്ള മാജിക് ഫിൽറ്റർ */
         #previewImage {
             filter: grayscale(100%) contrast(160%) brightness(110%);
-            transform-origin: top left !important; /* സൂം ചെയ്യുമ്പോൾ സ്ക്രോളിംഗ് ശരിയാകാൻ */
-            min-width: 100%;
+            display: block;
         }
 
         /* 2. CPR & Progress Bar ഡിസൈൻ */
@@ -172,10 +207,9 @@
             font-weight: bold;
             transition: width 0.4s ease;
         }
-        /* ഫോട്ടോ കൃത്യമായി നടുവിൽ നിന്ന് കറങ്ങാൻ */
+        /* ഫോട്ടോ കൃത്യമായ പിക്സൽ വലുപ്പത്തിൽ (1:1) വരാൻ - സൂം/റൊട്ടേറ്റ് ഇനി #imageWrapper ആണ് ചെയ്യുന്നത് */
 img#previewImage {
-    transform-origin: center center !important;
-    transition: transform 0.3s ease; /* കറങ്ങുമ്പോൾ ഒരു സ്മൂത്ത്നെസ്സ് കിട്ടാൻ */
+    display: block;
 }
 .image-preview-container img#previewImage {
     max-width: none !important; /* ഫോട്ടോ ചുരുങ്ങി പോകാതിരിക്കാൻ */
@@ -235,15 +269,26 @@ img#previewImage {
     <div class="main-content">
         <div class="left-panel">
             <h3 style="margin: 0; color: #2c3e50; text-align: center;">Original Invoice</h3>
-            <div class="image-controls" style="display: flex; justify-content: center; gap: 8px; margin-top: 10px;">
+            <div class="image-controls" style="display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
     <button onclick="zoomIn()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom In (+)</button>
     <button onclick="zoomOut()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom Out (-)</button>
     <button onclick="rotateLeft()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Rotate (↺)</button>
     <button onclick="rotateRight()" style="padding: 6px 12px; background: #34495e; color: white; border: none; border-radius: 4px; cursor: pointer;">Rotate (↻)</button>
+    <button onclick="confirmCrop()" style="padding: 6px 12px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Crop Confirm ✅</button>
+    <button onclick="resetCropToFull()" style="padding: 6px 12px; background: #7f8c8d; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset Crop</button>
 </div>
+            <div id="cropStatus"></div>
             <div class="image-preview-container">
                 <span class="no-image-text" id="noImageText">No Invoice Selected</span>
-                <img id="previewImage" alt="Invoice Preview">
+                <div id="imageWrapper">
+                    <img id="previewImage" alt="Invoice Preview" style="display:none;">
+                    <div id="cropBox">
+                        <div class="crop-handle" data-dir="nw"></div>
+                        <div class="crop-handle" data-dir="ne"></div>
+                        <div class="crop-handle" data-dir="sw"></div>
+                        <div class="crop-handle" data-dir="se"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -278,7 +323,12 @@ img#previewImage {
         document.getElementById('noImageText').style.display = 'block';
         document.getElementById('resultArea').innerHTML = '';
         document.getElementById('statusMessage').innerHTML = '';
-        
+        const cb = document.getElementById('cropBox');
+        if (cb) cb.style.display = 'none';
+        const cs = document.getElementById('cropStatus');
+        if (cs) cs.innerText = '';
+        naturalW = 0; naturalH = 0; scale = 1; angle = 0; cropConfirmed = false;
+
         // ബട്ടൺ സാധാരണ നിലയിലാക്കുന്നു
         const scanBtn = document.querySelector('.btn-scan');
         scanBtn.disabled = false;
@@ -290,13 +340,47 @@ function previewSelectedImage() {
     const fileInput = document.getElementById('fileInput');
     const previewImage = document.getElementById('previewImage');
     const noImageText = document.getElementById('noImageText');
+    const wrapper = document.getElementById('imageWrapper');
+    const container = document.querySelector('.image-preview-container');
+    const cropBox = document.getElementById('cropBox');
 
     if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
+            previewImage.onload = function() {
+                naturalW = previewImage.naturalWidth;
+                naturalH = previewImage.naturalHeight;
+
+                // ഫോട്ടോ കൃത്യമായ (1:1) പിക്സൽ വലുപ്പത്തിൽ വെക്കുന്നു; സൂം/റൊട്ടേറ്റ് wrapper വഴി മാത്രം
+                previewImage.style.width = naturalW + 'px';
+                previewImage.style.height = naturalH + 'px';
+                wrapper.style.width = naturalW + 'px';
+                wrapper.style.height = naturalH + 'px';
+                previewImage.style.display = 'block';
+                if (noImageText) noImageText.style.display = 'none';
+
+                // ഭാഗം ഫിറ്റ് ആയി വരാൻ ഉള്ള സ്കെയിൽ കണ്ടെത്തുന്നു (ചെറുതാക്കാൻ മാത്രം, വലുതാക്കില്ല)
+                const cw = container.clientWidth || naturalW;
+                const ch = container.clientHeight || naturalH;
+                const fitScale = Math.min(cw / naturalW, ch / naturalH, 1);
+                scale = fitScale > 0 ? fitScale : 1;
+                angle = 0;
+                updateTransform();
+
+                // ഡീഫോൾട്ട് ക്രോപ്പ് ബോക്സ്: ഇൻവോയ്സിന്റെ മുകൾ ഭാഗം (ഹെഡ്ഡർ) ഒഴിവാക്കി ടേബിൾ വരാൻ സാധ്യതയുള്ള ഭാഗം
+                cropRect = {
+                    left: naturalW * 0.03,
+                    top: naturalH * 0.15,
+                    width: naturalW * 0.94,
+                    height: naturalH * 0.80
+                };
+                cropConfirmed = false;
+                drawCropBox();
+                cropBox.style.display = 'block';
+                cropBox.style.borderColor = '#f39c12';
+                setCropStatus("ടേബിൾ ഭാഗം കൃത്യമായി വരാൻ ക്രോപ്പ് ബോക്സ് വലിച്ചു ക്രമീകരിച്ച് 'Crop Confirm' അമർത്തുക", "#e67e22");
+            };
             previewImage.src = e.target.result;
-            previewImage.style.display = 'block';
-            if(noImageText) noImageText.style.display = 'none';
         }
         reader.readAsDataURL(fileInput.files[0]);
     }
@@ -307,6 +391,7 @@ function previewSelectedImage() {
         const statusMessage = document.getElementById('statusMessage');
         const resultArea = document.getElementById('resultArea');
         const scanBtn = document.querySelector('.btn-scan');
+        const previewImage = document.getElementById('previewImage');
 
         if (fileInput.files.length === 0) {
             alert("ദയവായി സ്കാൻ ചെയ്യാൻ ഒരു ഇൻവോയ്സ് തിരഞ്ഞെടുക്കുക!");
@@ -318,22 +403,67 @@ function previewSelectedImage() {
         scanBtn.style.cursor = "not-allowed";
         scanBtn.style.opacity = "0.6";
 
-        const file = fileInput.files[0];
-        const reader = new FileReader();
+        statusMessage.innerHTML = "ബിൽ പരിശോധിക്കുന്നു... ദയവായി കാത്തിരിക്കുക ⏳";
+        statusMessage.style.color = "#e67e22";
+        resultArea.innerHTML = "";
 
-        reader.onloadend = function () {
-            const base64Data = reader.result.split(',')[1];
-            statusMessage.innerHTML = "ബിൽ പരിശോധിക്കുന്നു... ദയവായി കാത്തിരിക്കുക ⏳";
-            statusMessage.style.color = "#e67e22";
-            resultArea.innerHTML = "";
-            statusMessage.style.color = "#e67e22";
-            resultArea.innerHTML = "";
-            
-            startCPRProgress(); // <-- ഇത് ഇവിടെ പുതിയതായി ടൈപ്പ് ചെയ്തു കൊടുക്കുക
-            
+        startCPRProgress();
+
+        try {
+            // CROP BOX ന് ഉള്ളിൽ വന്ന ഭാഗം മാത്രം (ആവശ്യമെങ്കിൽ റൊട്ടേറ്റ് ചെയ്തതും) സ്കാൻ ചെയ്യുന്നു
+            const base64Data = getCroppedBase64(previewImage);
             callGeminiAPI(base64Data);
-        };
-        reader.readAsDataURL(file);
+        } catch (err) {
+            console.error("Crop Error:", err);
+            stopCPRProgress();
+            statusMessage.innerHTML = "❌ ക്രോപ്പ് ചെയ്യുന്നതിൽ പിശക്: " + err.message;
+            statusMessage.style.color = "red";
+            scanBtn.disabled = false;
+            scanBtn.style.cursor = "pointer";
+            scanBtn.style.opacity = "1";
+        }
+    }
+
+    // ക്രോപ്പ് ബോക്സിലെ ഭാഗം മാത്രം (നിലവിലെ റൊട്ടേഷൻ അനുസരിച്ച് നേരെയാക്കി) ഒരു Canvas ആയി എടുത്ത്
+    // base64 ആയി തിരികെ നൽകുന്ന ഫംഗ്ഷൻ. CROP BOX ന് ഉള്ളിൽ വന്നത് മാത്രമേ ഇവിടെ ഉൾപ്പെടൂ.
+    function getCroppedBase64(imgEl) {
+        let rect = (cropRect && cropRect.width > 0 && cropRect.height > 0)
+            ? cropRect
+            : { left: 0, top: 0, width: naturalW || imgEl.naturalWidth, height: naturalH || imgEl.naturalHeight };
+
+        const rad = ((angle % 360) + 360) % 360; // 0, 90, 180, 270
+        const canvas = document.createElement('canvas');
+
+        if (rad === 90 || rad === 270) {
+            canvas.width = rect.height;
+            canvas.height = rect.width;
+        } else {
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+        if (rad === 90) {
+            ctx.translate(canvas.width, 0);
+            ctx.rotate(Math.PI / 2);
+        } else if (rad === 180) {
+            ctx.translate(canvas.width, canvas.height);
+            ctx.rotate(Math.PI);
+        } else if (rad === 270) {
+            ctx.translate(0, canvas.height);
+            ctx.rotate(-Math.PI / 2);
+        }
+
+        ctx.drawImage(
+            imgEl,
+            rect.left, rect.top, rect.width, rect.height,
+            0, 0, rect.width, rect.height
+        );
+        ctx.restore();
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        return dataUrl.split(',')[1];
     }
 
     async function callGeminiAPI(base64Image) {
@@ -433,9 +563,9 @@ function convertToDataEntryForm(markdownText) {
         <thead>
             <tr>
                 <th style="width: 10%;">Page No</th>
-                <th style="width: 40%;">Medicine Name</th>
-                <th style="width: 20%;">Batch No</th>
-                <th style="width: 15%;">Expiry</th>
+                <th style="width: 40%;">Name of Medicines</th>
+                <th style="width: 20%;">Batch</th>
+                <th style="width: 15%;">Exp.Dt.</th>
                 <th style="width: 15%;">Qty</th>
             </tr>
         </thead>
@@ -445,14 +575,27 @@ function convertToDataEntryForm(markdownText) {
         let cols = lines[i].split('|').map(col => col.trim()).filter(col => col !== '');
         if (cols.length < 4) continue; 
 
-        let medName = cols.length === 5 ? cols[1] : cols[0];
-        let batch = cols.length === 5 ? cols[2] : cols[1];
-        let expiry = cols.length === 5 ? cols[3] : cols[2];
-        let qty = cols.length === 5 ? cols[4] : cols[3];
+        // ഇൻവോയ്സിന്റെ വലത് വശത്ത് കൈയക്ഷരത്തിൽ എഴുതിയ Page No കൂടി API 5 കോളമായി
+        // തിരികെ തന്നാൽ അത് ആദ്യ കോളമായി (cols[0]) ഇവിടെ വരും. അല്ലെങ്കിൽ Page No ശൂന്യമായി വിടുന്നു
+        // (ഉപയോക്താവിന് നേരിട്ട് ടൈപ്പ് ചെയ്യാം).
+        let pageNo, medName, batch, expiry, qty;
+        if (cols.length >= 5) {
+            pageNo = cols[0];
+            medName = cols[1];
+            batch = cols[2];
+            expiry = cols[3];
+            qty = cols[4];
+        } else {
+            pageNo = "";
+            medName = cols[0];
+            batch = cols[1];
+            expiry = cols[2];
+            qty = cols[3];
+        }
 
         html += `
             <tr>
-                <td><input type="text" value="1" class="cell-input"></td>
+                <td><input type="text" value="${pageNo}" class="cell-input"></td>
                 <td><input type="text" value="${medName}" class="cell-input"></td>
                 <td><input type="text" value="${batch}" class="cell-input"></td>
                 <td><input type="text" value="${expiry}" class="cell-input"></td>
@@ -545,17 +688,152 @@ var imageContainer = document.querySelector('.image-preview-container');
             document.getElementById('loadingOverlay').style.display = 'none';
         }, 600); 
     }
-    // --- Zoom & Rotate Functions ---
+    // --- Zoom & Rotate Functions (ഇനി #imageWrapper ആണ് ട്രാൻസ്ഫോം ചെയ്യുന്നത്, ഇമേജും ക്രോപ്പ് ബോക്സും ഒരുമിച്ച് നീങ്ങും) ---
 let scale = 1; let angle = 0;
+let naturalW = 0, naturalH = 0;
+let cropRect = { left: 0, top: 0, width: 0, height: 0 };
+let cropConfirmed = false;
+
 function zoomIn() { scale += 0.2; updateTransform(); }
 function zoomOut() { scale = Math.max(0.2, scale - 0.2); updateTransform(); }
 function rotateLeft() { angle -= 90; updateTransform(); }
 function rotateRight() { angle += 90; updateTransform(); }
 function updateTransform() {
-    const img = document.getElementById('previewImage');
-    img.style.transform = `scale(${scale}) rotate(${angle}deg)`;
-    img.style.transformOrigin = 'top left'; // സ്ക്രോൾ ചെയ്യാൻ എളുപ്പത്തിന്
+    const wrapper = document.getElementById('imageWrapper');
+    if (!wrapper) return;
+    wrapper.style.transform = `scale(${scale}) rotate(${angle}deg)`;
+    wrapper.style.transformOrigin = 'center center';
 }
+
+// --- Crop Box: draw, drag (move) & resize (4 corner handles) ---
+function drawCropBox() {
+    const cropBox = document.getElementById('cropBox');
+    if (!cropBox) return;
+    cropBox.style.left = cropRect.left + 'px';
+    cropBox.style.top = cropRect.top + 'px';
+    cropBox.style.width = cropRect.width + 'px';
+    cropBox.style.height = cropRect.height + 'px';
+}
+
+function setCropStatus(msg, color) {
+    const el = document.getElementById('cropStatus');
+    if (el) { el.innerText = msg; el.style.color = color; }
+}
+
+function confirmCrop() {
+    if (!naturalW || !naturalH) {
+        alert("ദയവായി ആദ്യം ഒരു ഇൻവോയ്സ് തിരഞ്ഞെടുക്കുക!");
+        return;
+    }
+    cropConfirmed = true;
+    const cropBox = document.getElementById('cropBox');
+    if (cropBox) cropBox.style.borderColor = '#27ae60';
+    setCropStatus("✅ ക്രോപ്പ് സ്ഥിരീകരിച്ചു! ഈ ബോക്സിന് ഉള്ളിലെ ഭാഗം മാത്രമേ സ്കാൻ ചെയ്യുകയുള്ളൂ.", "green");
+}
+
+function resetCropToFull() {
+    if (!naturalW || !naturalH) return;
+    cropRect = { left: 0, top: 0, width: naturalW, height: naturalH };
+    cropConfirmed = false;
+    const cropBox = document.getElementById('cropBox');
+    if (cropBox) cropBox.style.borderColor = '#f39c12';
+    drawCropBox();
+    setCropStatus("ക്രോപ്പ് ബോക്സ് പൂർണ്ണ ഫോട്ടോ ആയി റീസെറ്റ് ചെയ്തു.", "#7f8c8d");
+}
+
+// സ്ക്രീനിലെ (viewport) ചലനത്തെ, നിലവിലെ zoom/rotate കണക്കിലെടുത്ത്,
+// ഇമേജിന്റെ യഥാർത്ഥ (natural) പിക്സൽ കോർഡിനേറ്റിലേക്ക് മാറ്റുന്നു
+function screenDeltaToLocal(dxScreen, dyScreen) {
+    const rad = angle * Math.PI / 180;
+    const cos = Math.cos(rad), sin = Math.sin(rad);
+    const lx = (dxScreen * cos + dyScreen * sin) / scale;
+    const ly = (-dxScreen * sin + dyScreen * cos) / scale;
+    return { lx, ly };
+}
+
+let cropDragMode = null; // 'move' | 'nw' | 'ne' | 'sw' | 'se'
+let dragStartX = 0, dragStartY = 0;
+let startRect = null;
+
+function onCropPointerDown(e, mode) {
+    e.stopPropagation();
+    e.preventDefault();
+    cropDragMode = mode;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    startRect = Object.assign({}, cropRect);
+    document.addEventListener('pointermove', onCropPointerMove);
+    document.addEventListener('pointerup', onCropPointerUp);
+}
+
+function onCropPointerMove(e) {
+    if (!cropDragMode) return;
+    const dxScreen = e.clientX - dragStartX;
+    const dyScreen = e.clientY - dragStartY;
+    const { lx, ly } = screenDeltaToLocal(dxScreen, dyScreen);
+    const minSize = 20;
+    let r = Object.assign({}, startRect);
+
+    if (cropDragMode === 'move') {
+        r.left = startRect.left + lx;
+        r.top = startRect.top + ly;
+    } else if (cropDragMode === 'nw') {
+        r.left = startRect.left + lx;
+        r.top = startRect.top + ly;
+        r.width = startRect.width - lx;
+        r.height = startRect.height - ly;
+    } else if (cropDragMode === 'ne') {
+        r.top = startRect.top + ly;
+        r.width = startRect.width + lx;
+        r.height = startRect.height - ly;
+    } else if (cropDragMode === 'sw') {
+        r.left = startRect.left + lx;
+        r.width = startRect.width - lx;
+        r.height = startRect.height + ly;
+    } else if (cropDragMode === 'se') {
+        r.width = startRect.width + lx;
+        r.height = startRect.height + ly;
+    }
+
+    if (r.width < minSize) r.width = minSize;
+    if (r.height < minSize) r.height = minSize;
+    if (r.left < 0) r.left = 0;
+    if (r.top < 0) r.top = 0;
+    if (naturalW && r.left + r.width > naturalW) {
+        if (cropDragMode === 'move') r.left = naturalW - r.width;
+        else r.width = naturalW - r.left;
+    }
+    if (naturalH && r.top + r.height > naturalH) {
+        if (cropDragMode === 'move') r.top = naturalH - r.height;
+        else r.height = naturalH - r.top;
+    }
+
+    cropRect = r;
+    cropConfirmed = false;
+    const cropBox = document.getElementById('cropBox');
+    if (cropBox) cropBox.style.borderColor = '#f39c12';
+    drawCropBox();
+}
+
+function onCropPointerUp() {
+    cropDragMode = null;
+    document.removeEventListener('pointermove', onCropPointerMove);
+    document.removeEventListener('pointerup', onCropPointerUp);
+}
+
+(function setupCropBoxListeners() {
+    const cropBox = document.getElementById('cropBox');
+    if (!cropBox) return;
+    cropBox.addEventListener('pointerdown', function (e) {
+        if (e.target.classList.contains('crop-handle')) return;
+        onCropPointerDown(e, 'move');
+    });
+    cropBox.querySelectorAll('.crop-handle').forEach(function (h) {
+        h.addEventListener('pointerdown', function (e) {
+            onCropPointerDown(e, h.dataset.dir);
+        });
+    });
+})();
 
 // --- Advanced Mouse Scroll & Space Key Logic ---
 var imgContainer = document.querySelector('.image-preview-container');
