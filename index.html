@@ -4228,7 +4228,6 @@ window.addAllToStock = function() {
     let finalFund = fund || cCode;
     if(!st || !finalFund || !inv || !invDate) return 0;
 
-    // 🌟 മാറ്റം 1: എല്ലാ സ്റ്റോക്കുകൾക്കും Transaction ID കൃത്യമായി നൽകുന്നു 🌟
     let currentTransactionId = Date.now().toString();
     if (st === "Main Stock") {
         localStorage.setItem('medistock_main_last_transaction', currentTransactionId);
@@ -4266,7 +4265,7 @@ window.addAllToStock = function() {
                   exp: exp, qty: qty, page: page, rack: document.getElementById('rac_'+i).value.trim(), 
                   daysLeft: stData.diffDays, status: stData.status, statusClass: "status-cell " + stData.sClass, 
                   fund: finalFund, invoice: inv, invoiceDate: invDate,
-                  transactionId: currentTransactionId // Transaction ID സേവ് ചെയ്യുന്നു
+                  transactionId: currentTransactionId 
                });
           
           rowsToClear.push(i);
@@ -4276,7 +4275,6 @@ window.addAllToStock = function() {
     let addedCount = tempValidItems.length;
     
     if(addedCount > 0) {
-        
         if (st === "Main Stock") {
             tempValidItems.forEach(newItem => {
                 stockItems = stockItems.filter(existingItem => {
@@ -4308,7 +4306,10 @@ window.addAllToStock = function() {
             if(catBg) catBg.style.backgroundColor = "white";
         });
 
+        // 🌟 ഡാറ്റ കമ്പ്യൂട്ടറിലും ഗൂഗിൾ ഡ്രൈവിലും തനിയെ സേവ് ചെയ്യുന്നു 🌟
         if(typeof saveData === 'function') saveData(); 
+        if(typeof autoSyncToDrive === 'function') autoSyncToDrive();
+
         if(typeof renderTable === 'function') renderTable(); 
         if(typeof updateInvoiceLists === 'function') updateInvoiceLists(); 
         if(typeof renderOpeningStockTable === 'function') renderOpeningStockTable(); 
@@ -4338,7 +4339,6 @@ window.addAllToStock = function() {
         if(document.getElementById(dateId)) document.getElementById(dateId).innerText = formattedDate; 
         if(document.getElementById(timeId)) document.getElementById(timeId).innerText = formattedTime;
         
-        // 🌟 മാറ്റം 2: എല്ലാ സ്റ്റോക്കുകൾക്കും തീയതിയും സമയവും മെമ്മറിയിൽ സേവ് ചെയ്യുന്നു 🌟
         if (st === "Main Stock") {
             localStorage.setItem('medistock_main_last_added_date', formattedDate);
             localStorage.setItem('medistock_main_last_added_time', formattedTime);
@@ -4379,7 +4379,6 @@ window.addAllToStock = function() {
     }
     return addedCount; 
 };
-
 // 🌟 RENDER LAST ADDED TABLES (MAIN STOCK - TRANSACTION ID BASED) 🌟
 window.renderLastAddedTable = function() {
     let allMain = stockItems.filter(i => i.type === "Main Stock");
@@ -4438,7 +4437,7 @@ window.renderLastAddedTable = function() {
     tbody.innerHTML = html;
 };
 
-// 🌟 1. OP SUB STOCK-ലേക്കുള്ള ഫംഗ്ഷൻ 🌟
+// 🌟 OP SUB STOCK LAST ADDED TABLE 🌟
 window.renderLastAddedOPTable = function() {
     let allOP = stockItems.filter(i => i.type === "Sub Stock OP");
     let tbody = document.getElementById('lastAddedOPTableBody');
@@ -4446,12 +4445,11 @@ window.renderLastAddedOPTable = function() {
     
     if(document.getElementById('masterCheckOP')) document.getElementById('masterCheckOP').checked = true;
     
-    // 🌟 Invoice No-ന് പകരം Transaction ID ഉപയോഗിച്ച് കണ്ടെത്തുന്നു 🌟
     let lastTxId = localStorage.getItem('medistock_op_last_transaction');
     let lastItems = [];
     
     if (lastTxId) {
-        lastItems = allOP.filter(i => i.transactionId === lastTxId);
+        lastItems = allOP.filter(i => String(i.transactionId) === String(lastTxId));
     } else {
         if(allOP.length > 0) {
             let lastInvoice = allOP[allOP.length - 1].invoice;
@@ -4460,7 +4458,7 @@ window.renderLastAddedOPTable = function() {
     }
 
     if(lastItems.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ പുതിയ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
         return;
     }
     
@@ -4475,7 +4473,6 @@ window.renderLastAddedOPTable = function() {
     }
     document.getElementById('lastAddOPInvDate').innerText = indentDate; 
 
-    // മെമ്മറിയിൽ നിന്നും തീയതിയും സമയവും എടുക്കുന്നു
     let savedDate = localStorage.getItem('medistock_op_last_added_date') || "";
     let savedTime = localStorage.getItem('medistock_op_last_added_time') || "";
     
@@ -4505,20 +4502,19 @@ window.renderLastAddedOPTable = function() {
     tbody.innerHTML = html;
 };
 
-
-// 🌟 2. IP SUB STOCK-ലേക്കുള്ള ഫംഗ്ഷൻ 🌟
+// 🌟 IP SUB STOCK LAST ADDED TABLE 🌟
 window.renderLastAddedIPTable = function() {
     let allIP = stockItems.filter(i => i.type === "Sub Stock IP");
     let tbody = document.getElementById('lastAddedIPTableBody');
     if (!tbody) return;
+    
     if(document.getElementById('masterCheckIP')) document.getElementById('masterCheckIP').checked = true;
     
-    // 🌟 Invoice No-ന് പകരം Transaction ID ഉപയോഗിച്ച് കണ്ടെത്തുന്നു 🌟
     let lastTxId = localStorage.getItem('medistock_ip_last_transaction');
     let lastItems = [];
     
     if (lastTxId) {
-        lastItems = allIP.filter(i => i.transactionId === lastTxId);
+        lastItems = allIP.filter(i => String(i.transactionId) === String(lastTxId));
     } else {
         if(allIP.length > 0) {
             let lastInvoice = allIP[allIP.length - 1].invoice;
@@ -4527,7 +4523,7 @@ window.renderLastAddedIPTable = function() {
     }
 
     if(lastItems.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='10' style='padding:20px; color:red; font-weight:bold;'>സ്റ്റോക്കിൽ പുതിയ ഡാറ്റയൊന്നുമില്ല!</td></tr>";
         return;
     }
     
@@ -4542,7 +4538,6 @@ window.renderLastAddedIPTable = function() {
     }
     document.getElementById('lastAddIPInvDate').innerText = indentDate; 
 
-    // മെമ്മറിയിൽ നിന്നും തീയതിയും സമയവും എടുക്കുന്നു
     let savedDate = localStorage.getItem('medistock_ip_last_added_date') || "";
     let savedTime = localStorage.getItem('medistock_ip_last_added_time') || "";
     
@@ -16828,6 +16823,60 @@ window.clearLocalDraft = function() {
             }
         }
     }
+    // ഗൂഗിൾ ഡ്രൈവിലേക്ക് ഡാറ്റ തനിയെ ബാക്കപ്പ് ചെയ്യാനുള്ള സ്മാർട്ട് ഫംഗ്ഷൻ (Expert Mode)
+window.autoSyncToDrive = async function() {
+    if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ ബാക്കപ്പ് വർക്ക് ചെയ്യില്ല
+    
+    try {
+        let backupData = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            if (key && key.startsWith('medistock_')) {
+                backupData[key] = localStorage.getItem(key);
+            }
+        }
+
+        const fileContent = new Blob([JSON.stringify(backupData)], { type: 'application/json' });
+        const metadata = { 'name': 'medistock_backup_data.json', 'mimeType': 'application/json' };
+        
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', fileContent);
+
+        // പഴയ ബാക്കപ്പ് ഫയൽ ഡ്രൈവിൽ ഉണ്ടോയെന്ന് നോക്കുന്നു
+        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
+            headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        let searchData = await searchRes.json();
+        
+        let method = 'POST';
+        let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+        
+        if (searchData.files && searchData.files.length > 0) {
+            method = 'PATCH'; // പഴയ ഫയൽ ഉണ്ടെങ്കിൽ അത് തന്നെ അപ്ഡേറ്റ് ചെയ്യുന്നു
+            url = 'https://www.googleapis.com/upload/drive/v3/files/' + searchData.files[0].id + '?uploadType=multipart';
+        }
+
+        let response = await fetch(url, {
+            method: method,
+            headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+            body: form
+        });
+
+        if (response.ok) {
+            console.log("☁️ Auto Backup Success!");
+            // സ്ക്രീനിൽ സേവ് ആയെന്നുള്ള മെസ്സേജ് കാണിക്കാൻ
+            let msg = document.createElement('div');
+            msg.innerHTML = '<i class="fa-brands fa-google-drive"></i> Saved to Drive';
+            msg.style.cssText = "position:fixed; bottom:20px; left:20px; background:#27ae60; color:white; padding:10px 20px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:99999; transition: opacity 0.5s; display:flex; gap:8px; align-items:center;";
+            document.body.appendChild(msg);
+            setTimeout(() => msg.style.opacity = "0", 3000);
+            setTimeout(() => msg.remove(), 3500);
+        }
+    } catch (err) {
+        console.error("Drive Sync Error:", err);
+    }
+};
 </script>
 </body>
 </html>
