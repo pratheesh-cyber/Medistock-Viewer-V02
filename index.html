@@ -548,7 +548,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 1ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> 2ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായി ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -6521,14 +6521,18 @@ else if(cls.includes('bg-green')) { bgCol = "#00ff00"; }
 function openLastAddedOPStock() {
     hideAllPages();
     document.getElementById('lastAddedOPStockPage').style.display = 'block';
-    renderLastAddedOPTable();
+    // 🌟 ADD TO STOCK അടിക്കുമ്പോൾ തന്നെ ഡാറ്റ ഈ ടേബിളിൽ (lastAddedOPTableBody) നേരിട്ട് സേവ് ആകുന്നതിനാൽ,
+    // ഇവിടെ renderLastAddedOPTable() വിളിക്കേണ്ടതില്ല. ആ ഫംഗ്ഷൻ Indent (ഇഷ്യൂ) ഫീച്ചറിനു വേണ്ടിയുള്ളതാണ്,
+    // ഇത് വിളിച്ചാൽ പുതിയതായി ചേർത്ത മരുന്നുകൾക്ക് പകരം പഴയ Indent ഡാറ്റ കാണിക്കും.
 }
 
 // IP Sub Stock Last Added Window തുറക്കാൻ
 function openLastAddedIPStock() {
     hideAllPages();
     document.getElementById('lastAddedIPStockPage').style.display = 'block';
-    renderLastAddedIPTable();
+    // 🌟 ADD TO STOCK അടിക്കുമ്പോൾ തന്നെ ഡാറ്റ ഈ ടേബിളിൽ (lastAddedIPTableBody) നേരിട്ട് സേവ് ആകുന്നതിനാൽ,
+    // ഇവിടെ renderLastAddedIPTable() വിളിക്കേണ്ടതില്ല. ആ ഫംഗ്ഷൻ Indent (ഇഷ്യൂ) ഫീച്ചറിനു വേണ്ടിയുള്ളതാണ്,
+    // ഇത് വിളിച്ചാൽ പുതിയതായി ചേർത്ത മരുന്നുകൾക്ക് പകരം പഴയ Indent ഡാറ്റ കാണിക്കും.
 }
 // --- പുതിയ വിൻഡോകൾ ഓപ്പൺ ചെയ്യാനുള്ള നാവിഗേഷൻ ഫംഗ്ഷനുകൾ (ഇവിടെ നിന്നും കോപ്പി ചെയ്യുക) ---
 
@@ -8792,14 +8796,18 @@ function openLastAddedOPStock() {
     trackLastVisitedForLastAdded();
     hideAllPages();
     document.getElementById('lastAddedOPStockPage').style.display = 'block';
-    renderLastAddedOPTable();
+    // 🌟 ADD TO STOCK അടിക്കുമ്പോൾ തന്നെ ഡാറ്റ ഈ ടേബിളിൽ (lastAddedOPTableBody) നേരിട്ട് സേവ് ആകുന്നതിനാൽ,
+    // ഇവിടെ renderLastAddedOPTable() വിളിക്കേണ്ടതില്ല. ആ ഫംഗ്ഷൻ Indent (ഇഷ്യൂ) ഫീച്ചറിനു വേണ്ടിയുള്ളതാണ്,
+    // ഇത് വിളിച്ചാൽ പുതിയതായി ചേർത്ത മരുന്നുകൾക്ക് പകരം പഴയ Indent ഡാറ്റ കാണിക്കും (Main Stock പേജ് പോലെ).
 }
 
 function openLastAddedIPStock() {
     trackLastVisitedForLastAdded();
     hideAllPages();
     document.getElementById('lastAddedIPStockPage').style.display = 'block';
-    renderLastAddedIPTable();
+    // 🌟 ADD TO STOCK അടിക്കുമ്പോൾ തന്നെ ഡാറ്റ ഈ ടേബിളിൽ (lastAddedIPTableBody) നേരിട്ട് സേവ് ആകുന്നതിനാൽ,
+    // ഇവിടെ renderLastAddedIPTable() വിളിക്കേണ്ടതില്ല. ആ ഫംഗ്ഷൻ Indent (ഇഷ്യൂ) ഫീച്ചറിനു വേണ്ടിയുള്ളതാണ്,
+    // ഇത് വിളിച്ചാൽ പുതിയതായി ചേർത്ത മരുന്നുകൾക്ക് പകരം പഴയ Indent ഡാറ്റ കാണിക്കും (Main Stock പേജ് പോലെ).
 }
 
 function goBackFromLastAdded() {
