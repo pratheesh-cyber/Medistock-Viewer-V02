@@ -913,46 +913,52 @@
         </table>
 
         <div class="home-btn-container">
-            <button class="btn-large bg-orange4" onclick="showMainStockIndex()">
-                <i class="fa-solid fa-house-medical"></i>
-              <b>go to<br>MAIN STOCK INDEX</b>
-          </button>
-            <button class="btn-large bg-blue-main" onclick="showOpSubStockIndex()">
-                <i class="fa-solid fa-hospital-user"></i>
-              <b>go to<br>OP SUB STOCK INDEX</b>
-          </button>
-            <button class="btn-large bg-orange3" onclick="showIpSubStockIndex()">
-                <i class="fa-solid fa-bed-pulse"></i>
-              <b>go to<br>IP SUB STOCK INDEX</b>
-          </button>
-            <button class="btn-large bg-red-main" onclick="showStockPage()">
-                <i class="fa-solid fa-file-circle-plus"></i>
-              <b>Add Medicines to<br>MAIN STOCK / SUB STOCK</b>
-          </button>
-            
-<button class="btn-large bg-blue-light2" onclick="showMoreDetailsPage()">
-    <i class="fa-solid fa-circle-info"></i>
-    <b>MORE DETAILS</b>
-</button>            <button class="btn-large bg-blue-light" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i><b>HELP DESK</b></button>
-            <button class="btn-large bg-red-light" onclick="confirmResetAllData()">
-                <i class="fa-solid fa-trash-can" style="font-size: 22px; margin-bottom: -5px;"></i>
-                <b>RESET ALL<br>CURRENT DATA</b>
-            </button>
-<button class="btn-large bg-dark" onclick="showIndentGenPage()">
-                <i class="fa-solid fa-boxes-stacked"></i>
-                <div style="text-align: center; width: 100%;">
-                    <b style="font-size: 15px;">INDENT MAKERS</b><br>
-                    <span style="font-size: 14px; font-weight: bold;">(Developed by Ramakrishnan K)</span>
-                </div>
-            </button>
+    <button class="btn-large bg-orange4" onclick="if(checkMandatoryHomeInputs()) { showMainStockIndex(); }">
+        <i class="fa-solid fa-house-medical"></i>
+        <b>go to<br>MAIN STOCK INDEX</b>
+    </button>
+    <button class="btn-large bg-blue-main" onclick="if(checkMandatoryHomeInputs()) { showOpSubStockIndex(); }">
+        <i class="fa-solid fa-hospital-user"></i>
+        <b>go to<br>OP SUB STOCK INDEX</b>
+    </button>
+    <button class="btn-large bg-orange3" onclick="if(checkMandatoryHomeInputs()) { showIpSubStockIndex(); }">
+        <i class="fa-solid fa-bed-pulse"></i>
+        <b>go to<br>IP SUB STOCK INDEX</b>
+    </button>
+    <button class="btn-large bg-red-main" onclick="if(checkMandatoryHomeInputs()) { showStockPage(); }">
+        <i class="fa-solid fa-file-circle-plus"></i>
+        <b>Add Medicines to<br>MAIN STOCK / SUB STOCK</b>
+    </button>
+    
+    <button class="btn-large bg-blue-light2" onclick="if(checkMandatoryHomeInputs()) { showMoreDetailsPage(); }">
+        <i class="fa-solid fa-circle-info"></i><b>MORE DETAILS</b>
+    </button>
+    
+    <button class="btn-large bg-blue-light" onclick="if(checkMandatoryHomeInputs()) { showHelpDeskPage(); }">
+        <i class="fa-solid fa-headset"></i><b>HELP DESK</b>
+    </button>
+    
+    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { confirmResetAllData(); }">
+        <i class="fa-solid fa-trash-can" style="font-size: 22px; margin-bottom: -5px;"></i>
+        <b>RESET ALL<br>CURRENT DATA</b>
+    </button>
+    
+    <button class="btn-large bg-dark" onclick="if(checkMandatoryHomeInputs()) { showIndentGenPage(); }">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <div style="text-align: center; width: 100%;">
+            <b style="font-size: 15px;">INDENT MAKERS</b><br>
+            <span style="font-size: 14px; font-weight: bold;">(Developed by Ramakrishnan K)</span>
         </div>
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px;">
-    <button class="btn-3d" style="background: #497ff4; box-shadow: 0 6px #08027d;" onclick="window.open('https://www.rubundroid.com/', '_blank')">rubundroid.com</button>
-    <button class="btn-3d" style="background: #d2f205; box-shadow: 0 6px #4f9702;" onclick="window.open('https://drive.google.com/file/d/1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX/view?usp=sharing', '_blank')">MEDISTOCK VIEWER - HAND BOOK</button>
-    <button class="btn-3d" style="background: #f53bd3; box-shadow: 0 6px #6e015e;" onclick="window.open('https://drive.google.com/file/d/1j1r_B_CWIZm5MNP8cBwbvb4ned4SOs9p/view?usp=sharing', '_blank')">PHARMACY HELP FILE</button>
-    <button class="btn-3d" style="background: #4ff319; box-shadow: 0 6px #144802;" onclick="window.open('https://www.sumteck.in/', '_blank')">sumteck.in</button>
+    </button>
 </div>
-    </div>
+
+<!-- താഴെയുള്ള എക്സ്റ്റേണൽ ലിങ്ക് ബട്ടണുകൾക്കും ഈ നിയമം വേണമെങ്കിൽ ഇതും മാറ്റി നൽകാവുന്നതാണ് -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px;">
+    <button class="btn-3d" style="background: #497ff4; box-shadow: 0 6px #08027d;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.rubundroid.com/', '_blank'); }">rubundroid.com</button>
+    <button class="btn-3d" style="background: #d2f205; box-shadow: 0 6px #4f9702;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/file/d/1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX/view?usp=sharing', '_blank'); }">MEDISTOCK VIEWER - HAND BOOK</button>
+    <button class="btn-3d" style="background: #f53bd3; box-shadow: 0 6px #6e015e;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/file/d/1j1r_B_CWIZm5MNP8cBwbvb4ned4SOs9p/view?usp=sharing', '_blank'); }">PHARMACY HELP FILE</button>
+    <button class="btn-3d" style="background: #4ff319; box-shadow: 0 6px #144802;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.sumteck.in/', '_blank'); }">sumteck.in</button>
+</div>
 
     <div id="mainStockIndexPage" class="index-page-wrapper">
         <div class="no-print" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; width: 100%;">
@@ -17287,21 +17293,21 @@ window.clearLocalDraft = function() {
     </div>
 </div>
 <script>
-    // പഴയ alert() ന് പകരം കൃത്യമായി നടുവിൽ വരുന്ന കസ്റ്റം വിൻഡോ കോഡ്
-document.getElementById('sumteckAlertText').innerText = "Login Successful! മെഡിസ്റ്റോക്ക് വ്യൂവറിലേക്ക് സ്വാഗതം...";
-document.getElementById('modalOverlay').style.display = 'block';
-const winAlert = document.getElementById('sumteckAlertWindow');
-winAlert.style.display = 'block';
-
-document.getElementById('sumteckAlertOk').onclick = function() {
-    winAlert.style.display = 'none';
-    document.getElementById('modalOverlay').style.display = 'none';
-    
-    // ഇതിന് ശേഷം ലോഗിൻ പേജ് ഹൈഡ് ചെയ്യാനും ഹോം പേജിലേക്ക് പോകാനുമുള്ള കോഡ്
-    let loginPg = document.getElementById('loginStartPage');
-    if(loginPg) loginPg.style.display = 'none';
-    if (typeof showHomePage === 'function') showHomePage();
-};
+    function handleCredentialResponse(response) {
+        // ലോഗിൻ വിജയകരമായാൽ ആദ്യം ഈ മെസ്സേജ് സ്ക്രീനിൽ വരും
+        alert("Login Successful! Medistock Viewer V.02 ലേക്ക് സ്വാഗതം..."); 
+        
+        if(response.credential) {
+            // ലോഗിൻ സ്ക്രീൻ (loginStartPage) മറയ്ക്കുന്നു
+            var loginPage = document.getElementById('loginStartPage');
+            if(loginPage) {
+                loginPage.style.display = 'none';
+            } else {
+                alert("Error: loginStartPage എന്ന ഐഡി കണ്ടെത്താൻ കഴിഞ്ഞില്ല!");
+            }
+        }
+    }
+    // ഗൂഗിൾ ഡ്രൈവിലേക്ക് ഡാറ്റ തനിയെ ബാക്കപ്പ് ചെയ്യാനുള്ള സ്മാർട്ട് ഫംഗ്ഷൻ (Expert Mode)
 window.autoSyncToDrive = async function() {
     if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ ബാക്കപ്പ് വർക്ക് ചെയ്യില്ല
     
@@ -18441,6 +18447,44 @@ function processImportFile(event) {
 function showMoreDetailsPage() {
     hideAllPages();
     document.getElementById('moreDetailsPage').style.display = 'block';
+}
+// ========================================================
+// HOME PAGE MANDATORY FIELD VALIDATION
+// ========================================================
+function checkMandatoryHomeInputs() {
+    let instInput = document.getElementById('inp_inst');
+    let pharmInput = document.getElementById('inp_pharm');
+    
+    let instName = instInput ? instInput.value.trim() : "";
+    let pharmName = pharmInput ? pharmInput.value.trim() : "";
+
+    // ഏതെങ്കിലും ഒരു ബോക്സിൽ ഡാറ്റ ഇല്ലെങ്കിൽ
+    if (instName === "" || pharmName === "") {
+        
+        // കസ്റ്റം വാണിംഗ് മെസ്സേജ് സെറ്റ് ചെയ്യുന്നു
+        document.getElementById('sumteckAlertText').innerText = "NAME OF THE INSTITUTION, NAME OF PHARMACIST എന്നീ ബോക്സുകൾ നിർബന്ധമായും ഫിൽ ചെയ്ത ശേഷം മാത്രം ശ്രമിക്കുക!";
+        document.getElementById('modalOverlay').style.display = 'block';
+        
+        const winAlert = document.getElementById('sumteckAlertWindow');
+        winAlert.style.zIndex = "100000"; // എല്ലാത്തിനും മുകളിലായി കൃത്യം നടുവിൽ വരാൻ
+        winAlert.style.display = 'block';
+        
+        // OK ബട്ടൺ അമർത്തുമ്പോൾ സംഭവിക്കേണ്ട കാര്യങ്ങൾ
+        document.getElementById('sumteckAlertOk').onclick = function() {
+            winAlert.style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'none';
+            
+            // ഏതാണോ വിട്ടുപോയത്, ആ ബോക്സിലേക്ക് കർസർ തനിയെ പോയി നിൽക്കാൻ
+            if (instName === "") {
+                if (instInput) instInput.focus();
+            } else {
+                if (pharmInput) pharmInput.focus();
+            }
+        };
+        return false; // ഡാറ്റ ഇല്ലെങ്കിൽ ബട്ടണിന്റെ പ്രവർത്തനം ഇവിടെ വെച്ച് തടയുന്നു
+    }
+    
+    return true; // രണ്ട് ഡാറ്റയും ഉണ്ടെങ്കിൽ മാത്രം ബട്ടൺ പ്രവർത്തിക്കാൻ അനുവദിക്കുന്നു
 }
 </script>
 </body>
