@@ -928,8 +928,10 @@
               <b>Add Medicines to<br>MAIN STOCK / SUB STOCK</b>
           </button>
             
-            <button class="btn-large bg-blue-light2"><i class="fa-solid fa-circle-info"></i><b>MORE DETAILS</b></button>
-            <button class="btn-large bg-blue-light" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i><b>HELP DESK</b></button>
+<button class="btn-large bg-blue-light2" onclick="showMoreDetailsPage()">
+    <i class="fa-solid fa-circle-info"></i>
+    <b>MORE DETAILS</b>
+</button>            <button class="btn-large bg-blue-light" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i><b>HELP DESK</b></button>
             <button class="btn-large bg-red-light" onclick="confirmResetAllData()">
                 <i class="fa-solid fa-trash-can" style="font-size: 22px; margin-bottom: -5px;"></i>
                 <b>RESET ALL<br>CURRENT DATA</b>
@@ -2982,6 +2984,17 @@ async function saveToGoogleDrive(jsonData) {
         max-width: 115px !important;
         margin: 0 auto;
     }
+    /* ========================================= */
+/* --- MORE DETAILS PAGE CSS --- */
+/* ========================================= */
+.register-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-family: 'Anek Malayalam', sans-serif; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.register-table th { padding: 15px; border-bottom: 2px solid #ddd; }
+.register-table td { padding: 12px 15px; border-bottom: 1px dashed #eee; font-size: 22px; font-weight: 600; color: #c0392b; vertical-align: middle; }
+.register-table td:first-child { text-align: left; }
+.dl-pdf-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: white; border: none; padding: 8px 20px; border-radius: 4px; font-weight: bold; font-size: 13px; cursor: pointer; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s; font-style: italic; letter-spacing: 0.5px; }
+.dl-pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.dl-blue { background-color: #3b5998; }
+.dl-orange { background-color: #e67e22; }
 </style>
 
 <thead>
@@ -3249,6 +3262,91 @@ async function saveToGoogleDrive(jsonData) {
             </div>
         </div>
     </div>
+    <!-- ========================================= -->
+<!-- MORE DETAILS PAGE COMPONENT -->
+<!-- ========================================= -->
+<div id="moreDetailsPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
+    
+    <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+        <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT DATA</button>
+        <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
+        <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
+    </div>
+
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 30px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
+
+    <div class="master-container" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <table class="register-table">
+            <thead>
+                <tr>
+                    <th style="color: #27ae60; font-size: 24px; text-align: left;">ഔഷധങ്ങളുടെ രജിസ്റ്ററുകളുടെ മാതൃകകൾ</th>
+                    <th style="color: #00a8ff; font-size: 20px; font-style: italic; text-align: center;">DOWNLOAD @ ENGLISH</th>
+                    <th style="color: #e84393; font-size: 20px; font-style: italic; text-align: center;">DOWNLOAD @ MALAYALAM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (PM) മാതൃക-1</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (PM) മാതൃക-2</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (KC) മാതൃക-1</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (KC) മാതൃക-2</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>മെയിൻ സ്റ്റോക്ക് രജിസ്റ്റർ മാതൃക</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>പ്രതിദിന കഷായ രജിസ്റ്റർ മാതൃക</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>ഇൻഡൻ്റ് ബുക്ക് മാതൃക</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>സ്റ്റോക്ക് രജിസ്റ്റർ ഇൻഡക്സ് മാതൃക</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ========================================= -->
+<!-- IMPORT DATA WARNING MODAL -->
+<!-- ========================================= -->
+<div id="importWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(192, 57, 43, 0.95); z-index:10050; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px);">
+    <i class="fa-solid fa-triangle-exclamation" style="font-size: 120px; margin-bottom: 20px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+    <h1 style="font-size: 45px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">അവസാന മുന്നറിയിപ്പ് !</h1>
+    <p style="font-size: 22px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #e74c3c;">
+        നിങ്ങൾ പുതിയ JSON ഡാറ്റാ ഫയൽ ഇംപോർട്ട് ചെയ്യാൻ പോവുകയാണ്. ഇത് സ്ഥിരീകരിക്കുകയാണെങ്കിൽ Medistock Viewer-ലെ നിലവിലെ എല്ലാ ഡാറ്റകളും പൂർണ്ണമായും നഷ്ടപ്പെടുകയും പുതിയ ഡാറ്റ അതിലേക്ക് മാറുകയും ചെയ്യും. തീർച്ചയായും IMPORT ചെയ്യാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?
+    </p>
+    <div style="display: flex; gap: 30px;">
+        <button onclick="executeImportData()" style="background: #c0392b; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">YES, IMPORT</button>
+        <button onclick="document.getElementById('importWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">NO, CANCEL</button>
+    </div>
+</div>
 
 <div id="lastAddedMedicinesPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div class="no-print">
@@ -3662,7 +3760,7 @@ function hideAllPages() {
         'lastAddedOPStockPage', 'lastAddedIPStockPage',
         'preIndentSummaryPage',
         'indentedMedicinesMainPage', // 🌟 പുതിയതായി നിർമ്മിച്ച വിൻഡോ ഇതിൽ ചേർത്തിട്ടുണ്ട് 🌟
-        'smartScannerPage' // 🌟 Medistock Smart Scanner പേജ് 🌟
+        'scannerPage', 'pdfScannerPage', 'moreDetailsPage' // 🌟 Medistock Smart Scanner പേജ് 🌟
     ];
     
     allPages.forEach(function(pageId) {
@@ -18243,6 +18341,78 @@ function pdfScannerStopCPRProgress() {
     if(pdfCprInterval) clearInterval(pdfCprInterval);
     let pBar = document.getElementById('pdfCprProgress'); if(pBar) { pBar.style.width = '100%'; pBar.innerText = '100%'; }
     setTimeout(() => { let loader = document.getElementById('pdfCprLoader'); if(loader) loader.style.display = 'none'; }, 800);
+}
+// 1. JSON Export ഫംഗ്ഷൻ (ബാക്കപ്പ് എടുക്കാൻ)
+function exportDataToJSON() {
+    let backupData = {};
+    // Medistock Viewer മായി ബന്ധപ്പെട്ട എല്ലാ ഡാറ്റയും LocalStorage-ൽ നിന്നും വേർതിരിച്ചെടുക്കുന്നു
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        if (key && key.startsWith('medistock_')) {
+            backupData[key] = localStorage.getItem(key);
+        }
+    }
+    
+    const dataStr = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    
+    let dateStr = new Date().toISOString().split('T')[0];
+    a.download = `Medistock_Viewer_Backup_${dateStr}.json`;
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// 2. JSON Import വാണിംഗ് കാണിക്കാൻ
+function confirmImportData() {
+    document.getElementById('importWarningModal').style.display = 'flex';
+}
+
+// 3. വാണിംഗ് YES നൽകിയാൽ File Browser തുറക്കാൻ
+function executeImportData() {
+    document.getElementById('importWarningModal').style.display = 'none';
+    document.getElementById('importJsonFileInput').click(); 
+}
+
+// 4. File തിരഞ്ഞെടുത്തതിന് ശേഷം പഴയത് ഡിലീറ്റ് ചെയ്ത് പുതിയത് ഇൻസ്റ്റാൾ ആകാൻ
+function processImportFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const jsonData = JSON.parse(e.target.result);
+            
+            // പഴയ ഡാറ്റകൾ പൂർണ്ണമായും ഒഴിവാക്കുന്നു (Reset All Data)
+            let keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key && key.startsWith('medistock_')) keysToRemove.push(key);
+            }
+            keysToRemove.forEach(k => localStorage.removeItem(k));
+            
+            // പുതിയ ഡാറ്റകൾ ഇൻസ്റ്റാൾ ചെയ്യുന്നു
+            for (let key in jsonData) {
+                if(key.startsWith('medistock_')) {
+                    localStorage.setItem(key, jsonData[key]);
+                }
+            }
+            
+            alert("ഡാറ്റകൾ വിജയകരമായി സോഫ്റ്റ്‌വെയറിലേക്ക് മാറ്റിയിരിക്കുന്നു! ആപ്പ് ഇപ്പോൾ റീസ്റ്റാർട്ട് ആകുന്നതാണ്.");
+            location.reload(); // മാറ്റങ്ങൾ വരാൻ പേജ് റീലോഡ് ചെയ്യുന്നു
+            
+        } catch (err) {
+            alert("നിങ്ങൾ തിരഞ്ഞെടുത്തത് കൃത്യമായ JSON ഫയൽ അല്ല! ദയവായി പരിശോധിക്കുക.");
+        }
+        document.getElementById('importJsonFileInput').value = '';
+    };
+    reader.readAsText(file);
 }
 </script>
 </body>
