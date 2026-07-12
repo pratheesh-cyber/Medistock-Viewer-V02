@@ -535,7 +535,28 @@
 @media screen {
     .main-details-fixed-footer { display: none; }
 }
-    
+  /* ========================================= */
+/* --- MEDISTOCK SMART PDF SCANNER CSS --- */
+/* ========================================= */
+#pdfScannerPage { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f5f6fa; z-index: 100000; flex-direction: column; }
+.pdf-main-content { display: flex; height: calc(100vh - 140px); width: 100vw; box-sizing: border-box; }
+.pdf-left-panel { flex: 0.5; background: #ecf0f1; border-right: 2px solid #bdc3c7; display: flex; flex-direction: column; padding: 15px; height: 100%; box-sizing: border-box; overflow-y: auto; }
+.pdf-center-panel { flex: 1.5; background: #34495e; border-right: 2px solid #bdc3c7; position: relative; overflow: auto !important; display: flex; align-items: center; justify-content: center; flex-direction: column;}
+.pdf-right-panel { flex: 1; padding: 20px; background: white; display: flex; flex-direction: column; height: 100%; box-sizing: border-box; overflow: hidden; }
+
+.pdf-thumbnail { width: 100%; margin-bottom: 15px; cursor: pointer; border: 3px solid transparent; border-radius: 5px; transition: 0.2s; background: white;}
+.pdf-thumbnail.active { border-color: #e74c3c; box-shadow: 0 0 10px rgba(231, 76, 60, 0.6); }
+.pdf-thumbnail-label { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #2c3e50;}
+
+#pdfCanvasWrapper { position: relative; display: inline-block; transform-origin: center center; transition: transform 0.25s ease; }
+#pdfMainCanvas { display: block; max-width: none !important; filter: grayscale(100%) contrast(160%) brightness(110%); background: white;}
+
+#pdfCropBox { position: absolute; box-sizing: border-box; border: 2px dashed #f39c12; background: rgba(243, 156, 18, 0.15); cursor: move; touch-action: none; display: none; }
+.pdf-crop-handle { position: absolute; width: 16px; height: 16px; background: #f39c12; border: 2px solid white; border-radius: 50%; touch-action: none; }
+.pdf-crop-handle[data-dir="nw"] { left: -9px; top: -9px; cursor: nwse-resize; }
+.pdf-crop-handle[data-dir="ne"] { right: -9px; top: -9px; cursor: nesw-resize; }
+.pdf-crop-handle[data-dir="sw"] { left: -9px; bottom: -9px; cursor: nesw-resize; }
+.pdf-crop-handle[data-dir="se"] { right: -9px; bottom: -9px; cursor: nwse-resize; }  
     </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
@@ -701,6 +722,7 @@
         #smartScannerPage .progress-container { width: 40%; background-color: #ecf0f1; border-radius: 10px; margin-top: 25px; overflow: hidden; border: 2px solid #bdc3c7; }
         #smartScannerPage .progress-bar { height: 25px; width: 0%; background-color: #27ae60; text-align: center; line-height: 25px; color: white; font-weight: bold; transition: width 0.4s ease; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 </head>
 <body>
@@ -2462,18 +2484,93 @@ async function saveToGoogleDrive(jsonData) {
 </div>
 
 </div>
+<!-- SMART PDF SCANNER SPA COMPONENT -->
+<div id="pdfScannerPage">
+    <div id="pdfCprLoader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 99999; flex-direction: column; align-items: center; justify-content: center;">
+        <h2 style="color: #c0392b; margin-bottom: 20px;">❤️ ജീവൻ രക്ഷിക്കാം: CPR Steps</h2>
+        <div style="display: flex; gap: 30px; text-align: center; margin-bottom: 30px;">
+            <div class="cpr-step" id="pdfStep1" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🗣️</span><br><b>1. Check</b></div>
+            <div class="cpr-step" id="pdfStep2" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">📞</span><br><b>2. Call</b></div>
+            <div class="cpr-step" id="pdfStep3" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🫀</span><br><b>3. Compress</b></div>
+            <div class="cpr-step" id="pdfStep4" style="opacity: 0.3; transition: 0.3s;"><span style="font-size: 50px;">🌬️</span><br><b>4. Breathe</b></div>
+        </div>
+        <h4 style="color: #2c3e50;">PDF-ലെ വിവരങ്ങൾ വേർതിരിക്കുന്നു...</h4>
+        <div style="width: 50%; background: #ddd; border-radius: 10px; overflow: hidden; height: 25px;">
+            <div id="pdfCprProgress" style="width: 0%; background: #27ae60; height: 100%; text-align: center; color: white; font-weight: bold; line-height: 25px; transition: 0.4s;">0%</div>
+        </div>
+    </div>
+
+    <div class="scan-top-bar" style="background-color: #e67e22;">
+        <div class="scan-title-text" style="color: white; font-size: 26px; font-weight: bold;">Medistock Smart PDF Scanner</div>
+        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px;">
+            <button class="index-btn" style="padding: 8px 15px; background: #2c3e50; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="closePdfScanner()">BACK TO ADD STOCK</button>
+            <button class="index-btn" style="padding: 8px 15px; background: #8e44ad; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="closePdfScanner(); showHomePage();">HOME</button>
+            <button class="index-btn" style="padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerImportExtractedData()">IMPORT EXTRACTED DATA TO EXCEL GRID</button>
+            <button class="index-btn" style="padding: 8px 15px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerClearAll()">CLEAR ALL</button>
+        </div>
+    </div>
+
+    <div class="pdf-main-content">
+        <!-- Thumbnails Panel -->
+        <div class="pdf-left-panel">
+            <h3 style="margin: 0 0 15px 0; color: #2c3e50; text-align: center; font-size: 16px;">PDF Pages</h3>
+            <div id="pdfThumbnailsContainer"></div>
+        </div>
+
+        <!-- Main Canvas & Crop Panel -->
+        <div class="pdf-center-panel" id="pdfImgContainer">
+            <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; position: absolute; top: 10px; z-index: 10;">
+                <button class="index-btn" onclick="pdfZoomIn()" style="padding: 6px 12px; background: #2c3e50; color: white; border: none; border-radius: 4px;">Zoom In (+)</button>
+                <button class="index-btn" onclick="pdfZoomOut()" style="padding: 6px 12px; background: #2c3e50; color: white; border: none; border-radius: 4px;">Zoom Out (-)</button>
+                <button class="index-btn" onclick="pdfConfirmCrop()" style="padding: 6px 12px; background: #27ae60; color: white; border: none; border-radius: 4px;">Crop Confirm ✅</button>
+                <button class="index-btn" onclick="pdfResetCropToFull()" style="padding: 6px 12px; background: #7f8c8d; color: white; border: none; border-radius: 4px;">Reset Crop</button>
+            </div>
+            
+            <div id="pdfCropStatus" style="position: absolute; top: 50px; z-index: 10; color: white; font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;"></div>
+            
+            <div id="pdfCanvasWrapper" style="margin-top: 60px;">
+                <canvas id="pdfMainCanvas" style="display:none;"></canvas>
+                <div id="pdfCropBox">
+                    <div class="pdf-crop-handle" data-dir="nw"></div>
+                    <div class="pdf-crop-handle" data-dir="ne"></div>
+                    <div class="pdf-crop-handle" data-dir="sw"></div>
+                    <div class="pdf-crop-handle" data-dir="se"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls & Results Panel -->
+        <div class="pdf-right-panel">
+            <div class="scan-controls" style="border-color: #e67e22;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; width: 100%;">
+                    <input type="file" id="pdfFileInput" accept="application/pdf" style="max-width: 60%;" onchange="handlePdfUpload(event)">    
+                    <button class="index-btn" style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold;" onclick="pdfScannerClearPageNoColumn()">Clear Page No</button>
+                </div>
+                <button class="scan-btn-scan" style="background-color: #e67e22;" onclick="pdfScannerProcessImage()">തിരഞ്ഞെടുത്ത പേജ് സ്കാൻ ചെയ്യുക</button>
+                <div id="pdfScanStatusMessage" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
+            </div>
+            <div id="pdfScanResultArea" style="flex: 1; overflow: auto;"></div>
+        </div>
+    </div>
+</div>
 
     <!-- ADD STOCK PAGE -->
  <div id="stockPage" class="index-page-wrapper full-width-wrapper" style="display: none;">
     <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
-        <button class="index-btn bg-dark" onclick="showHomePage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
-        <button class="index-btn" onclick="openMainStockDetails()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #f39c12; color: white; cursor: pointer;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
-        <button class="index-btn" onclick="openLastAddedMedicines()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #7f8c8d; color: white; cursor: pointer;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Details of Last Added Medicines</b></button>
-        <button class="index-btn" onclick="showExcelImportPage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #218c74; color: white; cursor: pointer;"><i class="fa-solid fa-file-excel"></i> <b>Load from Excel Sheet & Extract</b></button>
-        <button class="index-btn" onclick="openSmartScanner()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #8e44ad; color: white; cursor: pointer;"><i class="fa-solid fa-file-invoice"></i> <b>Open Smart Scanner</b></button>
-        <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
-        <button class="index-btn" onclick="openModal()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #e74c3c; color: white; cursor: pointer;"><i class="fa-solid fa-folder-open"></i> <b>To get PROJECT NAME & CODE</b></button>
-    </div>
+    <button class="index-btn bg-dark" onclick="showHomePage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+    <button class="index-btn" onclick="openMainStockDetails()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #f39c12; color: white; cursor: pointer;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
+    <button class="index-btn" onclick="openLastAddedMedicines()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #7f8c8d; color: white; cursor: pointer;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Details of Last Added Medicines</b></button>
+    <button class="index-btn" onclick="showExcelImportPage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #218c74; color: white; cursor: pointer;"><i class="fa-solid fa-file-excel"></i> <b>Load from Excel Sheet & Extract</b></button>
+    
+    <!-- Existing Image Scanner Button -->
+    <button class="index-btn" onclick="openSmartScanner()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #8e44ad; color: white; cursor: pointer;"><i class="fa-solid fa-file-image"></i> <b>Open Image Scanner</b></button>
+    
+    <!-- New PDF Scanner Button -->
+    <button class="index-btn" onclick="openPdfScanner()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #e67e22; color: white; cursor: pointer; box-shadow: 0 4px #d35400;"><i class="fa-solid fa-file-pdf"></i> <b>Open Smart PDF Scanner</b></button>
+    
+    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+    <button class="index-btn" onclick="openModal()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #e74c3c; color: white; cursor: pointer;"><i class="fa-solid fa-folder-open"></i> <b>To get PROJECT NAME & CODE</b></button>
+</div>
         <div class="sheet-title" style="margin-bottom: 5px;">SHEET FOR ADDING MEDICINES TO STOCK</div>
         
         <div style="text-align: center; font-family: 'Anek Malayalam', sans-serif; font-weight: 500; font-size: 10px; color: red; margin-bottom: 15px; letter-spacing: 0.5px;">
@@ -17744,7 +17841,409 @@ window.autoSyncToDrive = async function() {
         // 5. "Load from Excel Sheet & Extract" പേജിലേക്ക് നാവിഗേറ്റ് ചെയ്യുന്നു
         if (typeof showExcelImportPage === 'function') showExcelImportPage();
     }
+// ==========================================
+// SMART PDF SCANNER JAVASCRIPT LOGIC
+// ==========================================
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
+let pdfDoc = null;
+let pdfCurrentPageNum = 1;
+let pdfScale = 1.5; // Initial render scale for clear quality
+let pdfViewportScale = 1; // UI zoom scale
+let pdfNaturalW = 0, pdfNaturalH = 0;
+let pdfCropRect = { left: 0, top: 0, width: 0, height: 0 };
+let pdfCropConfirmed = false;
+let pdfCprInterval;
+
+// SPA Navigation
+function openPdfScanner() {
+    hideAllPages(); // Ensure this function hides all other pages
+    document.getElementById('pdfScannerPage').style.display = 'flex';
+}
+
+function closePdfScanner() {
+    document.getElementById('pdfScannerPage').style.display = 'none';
+    showStockPage(); // Return to Stock page
+}
+
+function pdfScannerClearAll() {
+    document.getElementById('pdfFileInput').value = '';
+    document.getElementById('pdfThumbnailsContainer').innerHTML = '';
+    const canvas = document.getElementById('pdfMainCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'none';
+    
+    document.getElementById('pdfScanResultArea').innerHTML = '';
+    document.getElementById('pdfScanStatusMessage').innerHTML = '';
+    const cb = document.getElementById('pdfCropBox'); if (cb) cb.style.display = 'none';
+    const cs = document.getElementById('pdfCropStatus'); if (cs) cs.innerText = '';
+    
+    pdfDoc = null; pdfNaturalW = 0; pdfNaturalH = 0; pdfViewportScale = 1; pdfCropConfirmed = false;
+}
+
+// Handling PDF Upload
+async function handlePdfUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type === "application/pdf") {
+        const fileReader = new FileReader();
+        fileReader.onload = async function() {
+            const typedarray = new Uint8Array(this.result);
+            try {
+                pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+                document.getElementById('pdfThumbnailsContainer').innerHTML = '';
+                // Render Thumbnails
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    renderThumbnail(i);
+                }
+                // Automatically render the first page in Main View
+                renderMainPage(1);
+            } catch (error) {
+                alert("PDF ലോഡ് ചെയ്യുന്നതിൽ പിശക്: " + error.message);
+            }
+        };
+        fileReader.readAsArrayBuffer(file);
+    } else {
+        alert("ദയവായി ഒരു PDF ഫയൽ തിരഞ്ഞെടുക്കുക.");
+    }
+}
+
+async function renderThumbnail(pageNum) {
+    const page = await pdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 0.3 }); // Small scale for thumbnail
+    
+    const container = document.createElement('div');
+    container.innerHTML = `<div class="pdf-thumbnail-label">Page ${pageNum}</div>`;
+    
+    const canvas = document.createElement('canvas');
+    canvas.className = 'pdf-thumbnail';
+    canvas.id = `pdf-thumb-${pageNum}`;
+    const ctx = canvas.getContext('2d');
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+    
+    container.appendChild(canvas);
+    container.onclick = () => renderMainPage(pageNum);
+    document.getElementById('pdfThumbnailsContainer').appendChild(container);
+}
+
+async function renderMainPage(pageNum) {
+    pdfCurrentPageNum = pageNum;
+    
+    // Highlight active thumbnail
+    document.querySelectorAll('.pdf-thumbnail').forEach(t => t.classList.remove('active'));
+    const activeThumb = document.getElementById(`pdf-thumb-${pageNum}`);
+    if(activeThumb) activeThumb.classList.add('active');
+
+    const page = await pdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: pdfScale }); // High quality render scale
+    
+    const canvas = document.getElementById('pdfMainCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    canvas.style.display = 'block';
+    
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+    
+    pdfNaturalW = canvas.width;
+    pdfNaturalH = canvas.height;
+    
+    // Auto-fit to container
+    const container = document.getElementById('pdfImgContainer');
+    const cw = container.clientWidth - 40; 
+    const ch = container.clientHeight - 80;
+    pdfViewportScale = Math.min(cw / pdfNaturalW, ch / pdfNaturalH); 
+    
+    pdfApplyImageSize();
+    
+    // Default Crop Box setup for tables (bottom 60% of page)
+    pdfCropRect = { left: pdfNaturalW * 0.05, top: pdfNaturalH * 0.35, width: pdfNaturalW * 0.90, height: pdfNaturalH * 0.60 };
+    pdfCropConfirmed = false;
+    pdfDrawCropBox();
+    
+    const cropBox = document.getElementById('pdfCropBox');
+    cropBox.style.display = 'block'; cropBox.style.borderColor = '#f39c12';
+    pdfSetCropStatus(`Page ${pageNum}: ടേബിൾ ഭാഗം ക്രോപ്പ് ബോക്സിൽ ക്രമീകരിച്ച് 'Crop Confirm' അമർത്തുക`, "#f1c40f");
+}
+
+function pdfApplyImageSize() {
+    const canvas = document.getElementById('pdfMainCanvas');
+    const wrapper = document.getElementById('pdfCanvasWrapper');
+    if (!canvas || !wrapper || !pdfNaturalW) return;
+    
+    const dW = pdfNaturalW * pdfViewportScale; 
+    const dH = pdfNaturalH * pdfViewportScale;
+    
+    canvas.style.width = dW + 'px'; canvas.style.height = dH + 'px';
+    wrapper.style.width = dW + 'px'; wrapper.style.height = dH + 'px';
+    pdfDrawCropBox();
+}
+
+function pdfZoomBy(delta) {
+    if (!pdfNaturalW) return;
+    const oldScale = pdfViewportScale;
+    const newScale = Math.max(0.1, Math.min(3, oldScale + delta));
+    if (newScale === oldScale) return;
+    pdfViewportScale = newScale;
+    pdfApplyImageSize();
+}
+function pdfZoomIn() { pdfZoomBy(0.1); }
+function pdfZoomOut() { pdfZoomBy(-0.1); }
+
+function pdfDrawCropBox() {
+    const cropBox = document.getElementById('pdfCropBox'); if (!cropBox) return;
+    cropBox.style.left = (pdfCropRect.left * pdfViewportScale) + 'px';
+    cropBox.style.top = (pdfCropRect.top * pdfViewportScale) + 'px';
+    cropBox.style.width = (pdfCropRect.width * pdfViewportScale) + 'px';
+    cropBox.style.height = (pdfCropRect.height * pdfViewportScale) + 'px';
+}
+
+function pdfSetCropStatus(msg, color) {
+    const el = document.getElementById('pdfCropStatus');
+    if (el) { el.innerText = msg; el.style.color = color; }
+}
+
+function pdfConfirmCrop() {
+    if (!pdfNaturalW) { alert("ദയവായി ആദ്യം ഒരു PDF തിരഞ്ഞെടുക്കുക!"); return; }
+    pdfCropConfirmed = true;
+    document.getElementById('pdfCropBox').style.borderColor = '#27ae60';
+    pdfSetCropStatus("✅ ക്രോപ്പ് സ്ഥിരീകരിച്ചു! ഈ ഭാഗം സ്കാൻ ചെയ്യാം.", "#2ecc71");
+}
+
+function pdfResetCropToFull() {
+    if (!pdfNaturalW) return;
+    pdfCropRect = { left: 0, top: 0, width: pdfNaturalW, height: pdfNaturalH };
+    pdfCropConfirmed = false;
+    document.getElementById('pdfCropBox').style.borderColor = '#f39c12';
+    pdfDrawCropBox();
+    pdfSetCropStatus("ക്രോപ്പ് ബോക്സ് പൂർണ്ണ പേജ് ആയി റീസെറ്റ് ചെയ്തു.", "white");
+}
+
+// ----------------------------------------
+// PDF Crop Box Dragging Logic (Mouse/Touch)
+// ----------------------------------------
+let pdfCropDragMode = null; let pdfDragStartX = 0, pdfDragStartY = 0; let pdfStartRect = null;
+
+function pdfScreenDeltaToLocal(dxScreen, dyScreen) {
+    return { lx: dxScreen / pdfViewportScale, ly: dyScreen / pdfViewportScale };
+}
+
+function pdfOnCropPointerDown(e, mode) {
+    e.stopPropagation(); e.preventDefault();
+    pdfCropDragMode = mode; pdfDragStartX = e.clientX; pdfDragStartY = e.clientY;
+    pdfStartRect = Object.assign({}, pdfCropRect);
+    document.addEventListener('pointermove', pdfOnCropPointerMove);
+    document.addEventListener('pointerup', pdfOnCropPointerUp);
+}
+
+function pdfOnCropPointerMove(e) {
+    if (!pdfCropDragMode) return;
+    const dxScreen = e.clientX - pdfDragStartX; const dyScreen = e.clientY - pdfDragStartY;
+    const { lx, ly } = pdfScreenDeltaToLocal(dxScreen, dyScreen);
+    const minSize = 20; let r = Object.assign({}, pdfStartRect);
+
+    if (pdfCropDragMode === 'move') { r.left = pdfStartRect.left + lx; r.top = pdfStartRect.top + ly; } 
+    else if (pdfCropDragMode === 'nw') { r.left = pdfStartRect.left + lx; r.top = pdfStartRect.top + ly; r.width = pdfStartRect.width - lx; r.height = pdfStartRect.height - ly; } 
+    else if (pdfCropDragMode === 'ne') { r.top = pdfStartRect.top + ly; r.width = pdfStartRect.width + lx; r.height = pdfStartRect.height - ly; } 
+    else if (pdfCropDragMode === 'sw') { r.left = pdfStartRect.left + lx; r.width = pdfStartRect.width - lx; r.height = pdfStartRect.height + ly; } 
+    else if (pdfCropDragMode === 'se') { r.width = pdfStartRect.width + lx; r.height = pdfStartRect.height + ly; }
+
+    if (r.width < minSize) r.width = minSize; if (r.height < minSize) r.height = minSize;
+    if (r.left < 0) r.left = 0; if (r.top < 0) r.top = 0;
+    if (pdfNaturalW && r.left + r.width > pdfNaturalW) { if (pdfCropDragMode === 'move') r.left = pdfNaturalW - r.width; else r.width = pdfNaturalW - r.left; }
+    if (pdfNaturalH && r.top + r.height > pdfNaturalH) { if (pdfCropDragMode === 'move') r.top = pdfNaturalH - r.height; else r.height = pdfNaturalH - r.top; }
+
+    pdfCropRect = r; pdfCropConfirmed = false;
+    document.getElementById('pdfCropBox').style.borderColor = '#f39c12';
+    pdfDrawCropBox();
+}
+
+function pdfOnCropPointerUp() { pdfCropDragMode = null; document.removeEventListener('pointermove', pdfOnCropPointerMove); document.removeEventListener('pointerup', pdfOnCropPointerUp); }
+
+(function pdfSetupCropBoxListeners() {
+    const cropBox = document.getElementById('pdfCropBox'); if (!cropBox) return;
+    cropBox.addEventListener('pointerdown', function (e) { if (e.target.classList.contains('pdf-crop-handle')) return; pdfOnCropPointerDown(e, 'move'); });
+    cropBox.querySelectorAll('.pdf-crop-handle').forEach(function (h) { h.addEventListener('pointerdown', function (e) { pdfOnCropPointerDown(e, h.dataset.dir); }); });
+})();
+
+// ----------------------------------------
+// PDF Scanning and API Logic
+// ----------------------------------------
+function pdfScannerProcessImage() {
+    if (!pdfDoc) { alert("ദയവായി സ്കാൻ ചെയ്യാൻ ഒരു PDF തിരഞ്ഞെടുക്കുക!"); return; }
+    if (!pdfCropConfirmed) { alert("ദയവായി ടേബിൾ ഭാഗം ക്രമീകരിച്ച് 'Crop Confirm ✅' ബട്ടൺ അമർത്തുക!"); return; }
+    
+    // Direct processing (Skipped confirm dialog for speed, as requested for advanced users)
+    pdfScannerDoProcessImage();
+}
+
+function pdfScannerDoProcessImage() {
+    const scanBtn = document.querySelector('#pdfScannerPage .scan-btn-scan');
+    const sourceCanvas = document.getElementById('pdfMainCanvas');
+    const statusMessage = document.getElementById('pdfScanStatusMessage');
+    const resultArea = document.getElementById('pdfScanResultArea');
+
+    scanBtn.disabled = true; scanBtn.style.opacity = "0.6";
+    statusMessage.innerHTML = `Page ${pdfCurrentPageNum} പരിശോധിക്കുന്നു... ദയവായി കാത്തിരിക്കുക ⏳`; 
+    statusMessage.style.color = "#e67e22";
+    
+    pdfScannerStartCPRProgress();
+
+    try {
+        // Crop the specific area from the rendered PDF Canvas
+        const croppedCanvas = document.createElement('canvas');
+        croppedCanvas.width = pdfCropRect.width;
+        croppedCanvas.height = pdfCropRect.height;
+        const ctx = croppedCanvas.getContext('2d');
+        
+        ctx.drawImage(sourceCanvas, pdfCropRect.left, pdfCropRect.top, pdfCropRect.width, pdfCropRect.height, 0, 0, pdfCropRect.width, pdfCropRect.height);
+        
+        // Convert to Base64
+        const base64Data = croppedCanvas.toDataURL('image/jpeg', 0.92).split(',')[1];
+        pdfScannerCallGeminiAPI(base64Data);
+    } catch (err) {
+        pdfScannerStopCPRProgress();
+        statusMessage.innerHTML = "❌ ക്രോപ്പ് ചെയ്യുന്നതിൽ പിശക്: " + err.message; statusMessage.style.color = "red";
+        scanBtn.disabled = false; scanBtn.style.opacity = "1";
+    }
+}
+
+async function pdfScannerCallGeminiAPI(base64Image) {
+    const statusMessage = document.getElementById('pdfScanStatusMessage');
+    const resultArea = document.getElementById('pdfScanResultArea');
+    const scanBtn = document.querySelector('#pdfScannerPage .scan-btn-scan');
+    // Uses the same API endpoint and user details as the image scanner
+    const API_URL = "https://script.google.com/macros/s/AKfycbzFqhSiU0HUABnTwQ0zZqBJIqZUMWxlt4Lcnn1b4xlpxrQA3f9fi0mWnhwbwX1Shl_0rg/exec"; 
+    let userIdentifier = localStorage.getItem("medistock_user_id") || "Medistock User";
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST', redirect: 'follow', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ image: base64Image, email: userIdentifier })
+        });
+        if (!response.ok) throw new Error(`സെർവർ തടസ്സം (Status: ${response.status}).`);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message || "അജ്ഞാതമായ തടസ്സം നേരിട്ടു!");
+
+        if (data.candidates && data.candidates.length > 0) {
+            const extractedText = data.candidates[0].content.parts[0].text;
+            
+            // Append result to existing results (allows scanning multiple pages into one list)
+            const newTableHTML = pdfScannerConvertToDataEntryForm(extractedText);
+            if(resultArea.innerHTML === "") {
+                resultArea.innerHTML = newTableHTML;
+            } else {
+                // If table exists, extract rows and append
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = newTableHTML;
+                const newRows = tempDiv.querySelectorAll('tbody tr');
+                const existingTbody = resultArea.querySelector('tbody');
+                if(existingTbody) {
+                    newRows.forEach(row => existingTbody.appendChild(row));
+                }
+            }
+            
+            statusMessage.innerHTML = `✅ Page ${pdfCurrentPageNum} സ്കാനിംഗ് വിജയകരം! ഡാറ്റ പരിശോധിക്കുക.`; statusMessage.style.color = "green";
+        } else throw new Error("PDF-ൽ നിന്നും ഡാറ്റ ലഭിച്ചില്ല.");
+    } catch (error) {
+        statusMessage.innerHTML = "❌ പരാജയപ്പെട്ടു: " + error.message; statusMessage.style.color = "red";
+    } finally {
+        scanBtn.disabled = false; scanBtn.style.opacity = "1";
+        pdfScannerStopCPRProgress();
+    }
+}
+
+function pdfScannerConvertToDataEntryForm(markdownText) {
+    const lines = markdownText.split('\n').filter(line => line.trim().startsWith('|'));
+    if (lines.length <= 2) return "<p style='color:red; text-align:center;'>ബില്ലിൽ നിന്നും ഡാറ്റ കണ്ടെത്താനായില്ല.</p>";
+    let html = `<table class="scan-medistock-table" id="pdfScanMedistockTable">
+        <thead><tr><th style="width: 10%;">Page No</th><th style="width: 40%;">Name of Medicines</th><th style="width: 20%;">Batch</th><th style="width: 15%;">Exp.Dt.</th><th style="width: 15%;">Qty</th></tr></thead><tbody>`;
+    for (let i = 2; i < lines.length; i++) {
+        let cols = lines[i].split('|').map(col => col.trim()).filter(col => col !== '');
+        if (cols.length < 4) continue; 
+        let pageNo = cols.length >= 5 ? cols[0] : ""; let medName = cols.length >= 5 ? cols[1] : cols[0];
+        let batch = cols.length >= 5 ? cols[2] : cols[1]; let expiry = cols.length >= 5 ? cols[3] : cols[2]; let qty = cols.length >= 5 ? cols[4] : cols[3];
+        html += `<tr><td><input type="text" value="${pageNo}"></td><td><input type="text" value="${medName}"></td><td><input type="text" value="${batch}"></td><td><input type="text" value="${expiry}"></td><td><input type="text" value="${qty}"></td></tr>`;
+    }
+    return html + `</tbody></table>`;
+}
+
+// ----------------------------------------
+// PDF Scanner Actions
+// ----------------------------------------
+function pdfScannerImportExtractedData() {
+    const table = document.getElementById('pdfScanMedistockTable');
+    if (!table) { alert("എക്സ്പോർട്ട് ചെയ്യാൻ ഡാറ്റയൊന്നുമില്ല!"); return; }
+
+    const rows = table.querySelectorAll('tbody tr');
+    let dataIndex = 1;
+    
+    if(typeof initGrids === 'function') initGrids();
+
+    // Find the next empty row in Excel Grid
+    for(let i=1; i<=300; i++) {
+        let medInput = document.getElementById('xl_med_' + i);
+        if(medInput && medInput.value.trim() === "") {
+            dataIndex = i;
+            break;
+        }
+    }
+
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length >= 5) {
+            let medInput = document.getElementById('xl_med_' + dataIndex);
+            if (medInput) {
+                medInput.value = inputs[1].value;
+                document.getElementById('xl_bat_' + dataIndex).value = inputs[2].value;
+                document.getElementById('xl_exp_' + dataIndex).value = inputs[3].value;
+                document.getElementById('xl_qty_' + dataIndex).value = inputs[4].value;
+                document.getElementById('xl_pag_' + dataIndex).value = inputs[0].value;
+            }
+            dataIndex++;
+        }
+    });
+
+    closePdfScanner();
+    if(typeof showExcelImportPage === 'function') showExcelImportPage();
+}
+
+function pdfScannerClearPageNoColumn() {
+    var table = document.querySelector('#pdfScanResultArea table');
+    if (!table) return;
+    var rows = table.querySelectorAll('tbody tr');
+    for (var j = 0; j < rows.length; j++) {
+        var cell = rows[j].querySelectorAll('td')[0];
+        if (cell) { var input = cell.querySelector('input'); if (input) input.value = ''; }
+    }
+}
+
+// Loader Logic
+function pdfScannerStartCPRProgress() {
+    let loader = document.getElementById('pdfCprLoader'); if(loader) loader.style.display = 'flex';
+    let pBar = document.getElementById('pdfCprProgress'); if(pBar) { pBar.style.width = '0%'; pBar.innerText = '0%'; }
+    for(let i=1; i<=4; i++) { let step = document.getElementById('pdfStep'+i); if(step) step.style.opacity = '0.3'; }
+    let width = 0;
+    pdfCprInterval = setInterval(() => {
+        if (width >= 90) return; width += Math.floor(Math.random() * 5) + 2; if(width > 90) width = 90;
+        if(pBar) { pBar.style.width = width + '%'; pBar.innerText = width + '%'; }
+        if(width > 20 && document.getElementById('pdfStep1')) document.getElementById('pdfStep1').style.opacity = '1';
+        if(width > 40 && document.getElementById('pdfStep2')) document.getElementById('pdfStep2').style.opacity = '1';
+        if(width > 60 && document.getElementById('pdfStep3')) document.getElementById('pdfStep3').style.opacity = '1';
+        if(width > 80 && document.getElementById('pdfStep4')) document.getElementById('pdfStep4').style.opacity = '1';
+    }, 400);
+}
+
+function pdfScannerStopCPRProgress() {
+    if(pdfCprInterval) clearInterval(pdfCprInterval);
+    let pBar = document.getElementById('pdfCprProgress'); if(pBar) { pBar.style.width = '100%'; pBar.innerText = '100%'; }
+    setTimeout(() => { let loader = document.getElementById('pdfCprLoader'); if(loader) loader.style.display = 'none'; }, 800);
+}
 </script>
 </body>
 </html>
