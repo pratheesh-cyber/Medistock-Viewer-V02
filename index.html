@@ -743,14 +743,16 @@
      data-auto_prompt="false">
 </div>
 
-<div class="g_id_signin" style="margin-bottom: 20px;"
-     data-type="standard"
-     data-shape="rectangular"
-     data-theme="filled_blue"
-     data-text="signin_with"
-     data-size="large"
-     data-logo_alignment="left"
-     data-width="320">
+<div style="display: flex; justify-content: center; width: 100%; margin-bottom: 20px;">
+    <div class="g_id_signin" 
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="filled_blue"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="left"
+         data-width="320">
+    </div>
 </div>
             
             <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
@@ -3262,7 +3264,7 @@ async function saveToGoogleDrive(jsonData) {
             </div>
         </div>
     </div>
-    <!-- ========================================= -->
+<!-- ========================================= -->
 <!-- MORE DETAILS PAGE COMPONENT -->
 <!-- ========================================= -->
 <div id="moreDetailsPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
@@ -3276,7 +3278,13 @@ async function saveToGoogleDrive(jsonData) {
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
 
-    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 30px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 10px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
+
+    <!-- പുതിയതായി ചേർത്ത വിവരണം -->
+    <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
+        ഈ വിൻഡോയിൽ നിന്നും ലഭിക്കുന്നത് ഔദ്യോഗിക രജിസ്റ്ററുകളുടെ ഫോർമാറ്റല്ല. പുറത്ത് നിന്നും രജിസ്റ്ററുകൾ വാങ്ങേണ്ടിവരുന്ന സാഹചര്യത്തിൽ നമ്മുടെ ഡ്യൂട്ടിയുടെ ഭാഗമായ രജിസ്റ്ററുകൾ വൃത്തിയായും എളുപ്പത്തിലും കൈകാര്യം ചെയ്യുന്നതിനുള്ള മാതൃകകൾ ആണിത്.<br>
+        <span style="font-size: 14px; color: #2c3e50; font-weight: bold;">(കോട്ടയം ജില്ലയിലെ മുപ്പതോളം സ്ഥാപനങ്ങളിൽ ഈ മോഡൽ ഞങ്ങൾ ഒന്നിച്ച് print ചെയ്ത് ഉപയോഗിച്ചുവരുന്നു.)</span>
+    </div>
 
     <div class="master-container" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         <table class="register-table">
@@ -3290,43 +3298,59 @@ async function saveToGoogleDrive(jsonData) {
             <tbody>
                 <tr>
                     <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (PM) മാതൃക-1</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1aaEXzV52Yuh6HFHGJJU12quuW3hRPQtf/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1KYz64IOB14bFz7uzR3lEclLu50UU3TB_/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (PM) മാതൃക-2</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1lL0VCi7vviX6v6lfXY_1AYjm8BWbKzuo/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1_zgkFcvwvFJROby0UyK5tsyG243edYit/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (KC) മാതൃക-1</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1WzfDzAJ4BytnRCzvNqvxcx21KVm4U1cV/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1-YNbnUZDpyY3FWfcr9R6QqMi-SkMuugN/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (KC) മാതൃക-2</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1A3khXNlhSpALvhzkVG4gKvSkRzCQKWUj/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1kg6kCHQzQIvY_8c4NQsK41Fep1CYeBvy/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>മെയിൻ സ്റ്റോക്ക് രജിസ്റ്റർ മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1oY5ocEme_xzUQXVhkZkgyv5j_xB7T-MQ/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1EyDiYe_DsJoxwJZ8HFY_rG13cEwwWhfW/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>പ്രതിദിന കഷായ രജിസ്റ്റർ മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1DUxHJsgxw5ew1P0ntmoDjckq5pDnhlnN/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1XJ-lN650pxNu7w1fxQZwsJ-pfJGsg4YI/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
                     <td>ഇൻഡൻ്റ് ബുക്ക് മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1x5wsX8fRY24GAkfWtXTIgUYuut5TZs4u/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>സ്റ്റോക്ക് രജിസ്റ്റർ ഇൻഡക്സ് മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1x5wsX8fRY24GAkfWtXTIgUYuut5TZs4u/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td></td>
+                </tr>
+                <!-- പുതിയതായി ചേർത്ത മൂന്ന് വരികൾ -->
+                <tr>
+                    <td>ആദ്യം ഔഷധങ്ങളുടെ ഇൻവോയ്സിന്റെ പുറകുവശത്ത് എഴുതേണ്ട സർട്ടിഫിക്കറ്റ് മാതൃക</td>
+                    <td></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1UeUEdPt4E5PnMD-q5LYwu1S_Zrs79TV4/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>ഔഷധങ്ങളുടെ OP യിലെ സ്റ്റോക്ക് എടുക്കുന്നതിനുള്ള ലിസ്റ്റ് മാതൃക</td>
+                    <td></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1pajLu0yCmsZG6F64dtbHC4RmYJ9CmWCH/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                </tr>
+                <tr>
+                    <td>ഔഷധങ്ങളുടെ OPയിലെ സ്റ്റോക്ക് MO ക്ക് നൽകുന്നതിനുള്ള ലിസ്റ്റ് മാതൃക</td>
+                    <td></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1Yovir0YQrnseDW1aZ8v0LoO6HbKfkJi0/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
             </tbody>
         </table>
@@ -17263,21 +17287,21 @@ window.clearLocalDraft = function() {
     </div>
 </div>
 <script>
-    function handleCredentialResponse(response) {
-        // ലോഗിൻ വിജയകരമായാൽ ആദ്യം ഈ മെസ്സേജ് സ്ക്രീനിൽ വരും
-        alert("Login Successful! മെഡിസ്റ്റോക്ക് വ്യൂവറിലേക്ക് സ്വാഗതം..."); 
-        
-        if(response.credential) {
-            // ലോഗിൻ സ്ക്രീൻ (loginStartPage) മറയ്ക്കുന്നു
-            var loginPage = document.getElementById('loginStartPage');
-            if(loginPage) {
-                loginPage.style.display = 'none';
-            } else {
-                alert("Error: loginStartPage എന്ന ഐഡി കണ്ടെത്താൻ കഴിഞ്ഞില്ല!");
-            }
-        }
-    }
-    // ഗൂഗിൾ ഡ്രൈവിലേക്ക് ഡാറ്റ തനിയെ ബാക്കപ്പ് ചെയ്യാനുള്ള സ്മാർട്ട് ഫംഗ്ഷൻ (Expert Mode)
+    // പഴയ alert() ന് പകരം കൃത്യമായി നടുവിൽ വരുന്ന കസ്റ്റം വിൻഡോ കോഡ്
+document.getElementById('sumteckAlertText').innerText = "Login Successful! മെഡിസ്റ്റോക്ക് വ്യൂവറിലേക്ക് സ്വാഗതം...";
+document.getElementById('modalOverlay').style.display = 'block';
+const winAlert = document.getElementById('sumteckAlertWindow');
+winAlert.style.display = 'block';
+
+document.getElementById('sumteckAlertOk').onclick = function() {
+    winAlert.style.display = 'none';
+    document.getElementById('modalOverlay').style.display = 'none';
+    
+    // ഇതിന് ശേഷം ലോഗിൻ പേജ് ഹൈഡ് ചെയ്യാനും ഹോം പേജിലേക്ക് പോകാനുമുള്ള കോഡ്
+    let loginPg = document.getElementById('loginStartPage');
+    if(loginPg) loginPg.style.display = 'none';
+    if (typeof showHomePage === 'function') showHomePage();
+};
 window.autoSyncToDrive = async function() {
     if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ ബാക്കപ്പ് വർക്ക് ചെയ്യില്ല
     
