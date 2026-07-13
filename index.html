@@ -2602,7 +2602,7 @@ async function saveToGoogleDrive(jsonData) {
                
                <div class="input-group" style="width: 14ch; flex-shrink: 0;">
                   <label style="text-align: center; display: block; width: 100%;">Invoice Date:</label>
-                  <input type="text" id="invoiceDateInput" autocomplete="off" placeholder="DDMMYYYY" style="text-align: center;" onblur="validateInvoiceDate(this)">
+                  <input type="text" id="invoiceDateInput" autocomplete="off" placeholder="DD/MM/YYYY" style="text-align: center;" onblur="validateInvoiceDate(this)">
                </div>
                <div class="input-group">
                   <label>Invoice No/ID</label>
@@ -4149,7 +4149,7 @@ loadData();
     for(let i=1; i<=300; i++) {
         const row = document.createElement('div');
         row.className = 'entry-row entry-grid-layout';
-        row.innerHTML = `<input type="text" id="sino_${i}" tabindex="-1" readonly><input list="category-list" id="cat_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="handleCategoryInput(this, ${i})" placeholder="..."><input list="medicine-list" id="med_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="updateSino(${i}, this)" placeholder="Type/Search..."><input type="text" id="bat_${i}"><input type="text" id="exp_${i}" placeholder="MYY" onblur="validateExpField(this); calculateRowStatus(${i});"><input type="text" id="qty_${i}"><input type="text" id="pag_${i}"><input type="text" id="rac_${i}"><div id="status_${i}" class="status-cell">---</div>`;
+        row.innerHTML = `<input type="text" id="sino_${i}" tabindex="-1" readonly><input list="category-list" id="cat_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="handleCategoryInput(this, ${i})" placeholder="..."><input list="medicine-list" id="med_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="updateSino(${i}, this)" placeholder="Type/Search..."><input type="text" id="bat_${i}"><input type="text" id="exp_${i}" placeholder="M/YY" onblur="validateExpField(this); calculateRowStatus(${i});"><input type="text" id="qty_${i}"><input type="text" id="pag_${i}"><input type="text" id="rac_${i}"><div id="status_${i}" class="status-cell">---</div>`;
         grid.appendChild(row);
     }
     
@@ -4767,27 +4767,11 @@ window.addAllToStock = function() {
         });
 
         // 🌟 ഡാറ്റ ലോക്കൽ സ്റ്റോറേജിലേക്ക് സേവ് ചെയ്യുന്നു 🌟
+        // (saveData() ഗ്ലോബലായി Wrap ചെയ്തിട്ടുള്ളതിനാൽ, ഇത് തന്നെ Google Drive-ലേക്കുള്ള
+        //  ബാക്കപ്പ് (smartAutoBackup) ഓട്ടോമാറ്റിക്കായി, ശരിയായ ഫയലിലേക്ക് ട്രിഗർ ചെയ്യും.
+        //  പഴയ, തെറ്റായ ഫയൽ പേരിലേക്ക് (medistock_database.json) സേവ് ചെയ്തിരുന്ന
+        //  ഡ്യൂപ്ലിക്കേറ്റ്/ഉപയോഗശൂന്യമായ കോഡ് ഇവിടെ നിന്ന് നീക്കം ചെയ്തു. 🌟
         if(typeof saveData === 'function') saveData(); 
-
-        // 🚀 ഗൂഗിൾ ഡ്രൈവിലേക്ക് തനിയെ സേവ് ചെയ്യാനുള്ള എക്സ്പേർട്ട് കോഡ് 🚀
-        if (typeof saveToGoogleDrive === 'function' && window.accessToken) {
-            let backupData = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if (key && key.startsWith('medistock_')) {
-                    backupData[key] = localStorage.getItem(key);
-                }
-            }
-            saveToGoogleDrive(backupData); // ഡ്രൈവിലേക്ക് ഡാറ്റ പുഷ് ചെയ്യുന്നു
-            
-            // സ്ക്രീനിൽ മനോഹരമായ ഒരു Success Message കാണിക്കാൻ
-            let msg = document.createElement('div');
-            msg.innerHTML = '<i class="fa-brands fa-google-drive"></i> Auto Saved to Google Drive';
-            msg.style.cssText = "position:fixed; bottom:20px; left:20px; background:#27ae60; color:white; padding:10px 20px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:99999; transition: opacity 0.5s; display:flex; gap:8px; align-items:center;";
-            document.body.appendChild(msg);
-            setTimeout(() => msg.style.opacity = "0", 3000);
-            setTimeout(() => msg.remove(), 3500);
-        }
 
         if(typeof renderTable === 'function') renderTable(); 
         if(typeof updateInvoiceLists === 'function') updateInvoiceLists(); 
@@ -5274,7 +5258,7 @@ function updateColumnEdits(type) {
           catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
           document.getElementById(`name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
           document.getElementById(`bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
-          document.getElementById(`exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="MYY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
+          document.getElementById(`exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
           document.getElementById(`qty_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.qty}" onblur="autoSaveCell(${id}, 'qty', this.value)">`;
           document.getElementById(`pag_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.page}" onblur="autoSaveCell(${id}, 'page', this.value)">`;
           document.getElementById(`fund_${id}`).innerHTML = `<input list="fund-list" class="editing-input" value="${item.fund}" onblur="autoSaveCell(${id}, 'fund', this.value)" ${clickClear}>`;
@@ -5502,7 +5486,7 @@ function editOpDetailsRow(id) {
     catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
     document.getElementById(`ops_d_name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
     document.getElementById(`ops_d_bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
-    document.getElementById(`ops_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="MYY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
+    document.getElementById(`ops_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
     document.getElementById(`ops_d_qty_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.qty}" onblur="autoSaveCell(${id}, 'qty', this.value)">`;
     document.getElementById(`ops_d_pag_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.page}" onblur="autoSaveCell(${id}, 'page', this.value)">`;
     document.getElementById(`ops_d_fund_${id}`).innerHTML = `<input list="fund-list" class="editing-input" value="${item.fund}" onblur="autoSaveCell(${id}, 'fund', this.value)" ${clickClear}>`;
@@ -5721,7 +5705,7 @@ function editIpDetailsRow(id) {
     catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
     document.getElementById(`ips_d_name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
     document.getElementById(`ips_d_bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
-    document.getElementById(`ips_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="MYY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
+    document.getElementById(`ips_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
     document.getElementById(`ips_d_qty_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.qty}" onblur="autoSaveCell(${id}, 'qty', this.value)">`;
     document.getElementById(`ips_d_pag_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.page}" onblur="autoSaveCell(${id}, 'page', this.value)">`;
     document.getElementById(`ips_d_fund_${id}`).innerHTML = `<input list="fund-list" class="editing-input" value="${item.fund}" onblur="autoSaveCell(${id}, 'fund', this.value)" ${clickClear}>`;
@@ -9192,7 +9176,7 @@ function validateInvoiceDate(el) {
     }
 
     if (parts.length < 3) {
-        showWarning(el, "തീയതി കൃത്യമായി നൽകുക (DDMMYYYY)!");
+        showWarning(el, "തീയതി കൃത്യമായി നൽകുക (DD/MM/YYYY)!");
         el.value = ""; return;
     }
 
@@ -10234,7 +10218,7 @@ window.calculateKashayamDays = function() {
     // പുതിയ ഫോർമാറ്റ് : Available for : Days
     if (weeklyReq > 0) {
         let totalFormulaVal = (totalKsc * 40) + (totalKc * 11.66666666666666667);
-        let days = (totalFormulaVal / weeklyReq)*7;
+        let days = totalFormulaVal / weeklyReq;
         resultContainer.innerHTML = `Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">${Math.round(days)}</span> &nbsp; Days`;
     } else {
         resultContainer.innerHTML = `Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">" "</span> &nbsp; Days`;
@@ -17187,6 +17171,10 @@ window.smartAutoBackup = async function() {
         let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
             headers: { 'Authorization': 'Bearer ' + accessToken }
         });
+        if (!searchRes.ok) {
+            // 🌟 ടോക്കൺ കാലാവധി കഴിഞ്ഞതോ / അനുമതി പ്രശ്നമോ ആണെങ്കിൽ ഇവിടെ പിടിക്കപ്പെടും 🌟
+            throw new Error('Drive Search Failed: HTTP ' + searchRes.status);
+        }
         let searchData = await searchRes.json();
         
         let method = 'POST';
@@ -17201,10 +17189,25 @@ window.smartAutoBackup = async function() {
         form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
         form.append('file', new Blob([fileContent], { type: 'application/json' }));
         
-        await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + accessToken }, body: form });
+        let uploadRes = await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + accessToken }, body: form });
+        if (!uploadRes.ok) {
+            throw new Error('Drive Upload Failed: HTTP ' + uploadRes.status);
+        }
         console.log("✅ Smart Sync: Backup Successful!");
+        window.__lastDriveBackupFailed = false;
     } catch(e) {
         console.error("Backup Error:", e);
+        window.__lastDriveBackupFailed = true;
+        // 🌟 ബാക്കപ്പ് പരാജയപ്പെട്ടാൽ ഇത് നിശബ്ദമായി മറച്ചുവെക്കാതെ, സ്ക്രീനിൽ കാണിക്കുന്നു 🌟
+        let old = document.getElementById('driveBackupFailToast');
+        if (old) old.remove();
+        let msg = document.createElement('div');
+        msg.id = 'driveBackupFailToast';
+        msg.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Google Drive ബാക്കപ്പ് പരാജയപ്പെട്ടു! വീണ്ടും ലോഗിൻ ചെയ്ത് നോക്കുക.';
+        msg.style.cssText = "position:fixed; bottom:20px; left:20px; background:#c0392b; color:white; padding:10px 20px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:99999; transition: opacity 0.5s; display:flex; gap:8px; align-items:center; font-size:13px;";
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.style.opacity = "0"; }, 5000);
+        setTimeout(() => { msg.remove(); }, 5500);
     }
 };
 
@@ -17464,7 +17467,10 @@ window.autoSyncToDrive = async function() {
         if (typeof originalSmartAutoBackup === 'function') {
             await originalSmartAutoBackup();
         }
-        showBackupConfirmation();
+        // 🌟 യഥാർത്ഥത്തിൽ ബാക്കപ്പ് വിജയിച്ചെങ്കിൽ മാത്രം "Success" മെസേജ് കാണിക്കുന്നു 🌟
+        if (!window.__lastDriveBackupFailed) {
+            showBackupConfirmation();
+        }
     };
 
     // ---------------------------------------------------------------
