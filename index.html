@@ -18505,51 +18505,44 @@ function checkMandatoryHomeInputs() {
         applyCprImageSrc();
     }
 })();
-// ========================================================
-// INDENT PREPARATION WINDOW - Qty Indent Validation (Advanced)
-// ========================================================
 const indLeftTable = document.getElementById('indLeftTableBody');
 if (indLeftTable) {
     indLeftTable.addEventListener('input', function(e) {
-        if (e.target && e.target.tagName === 'INPUT') {
+        if (e.target && e.target.tagName === 'INPUT' && e.target.id && e.target.id.indexOf('ind_qty_') === 0) {
             let row = e.target.closest('tr');
             if (!row) return;
 
-            let msQtyCell = row.cells[4];
-            let indentQtyCell = row.cells[5];
+            if (e.target.value.trim() === '') {
+                e.target.style.backgroundColor = '';
+                return;
+            }
 
-            if (indentQtyCell && indentQtyCell.contains(e.target)) {
-                let msQty = parseFloat(msQtyCell.textContent || msQtyCell.innerText) || 0;
-                let enteredQty = parseFloat(e.target.value);
+            // Qty in M.S എന്ന പരിധി ഇൻപുട്ടിന്റെ തന്നെ max അട്രിബ്യൂട്ടിൽ നിന്ന് നേരിട്ട് എടുക്കുന്നു
+            // (ബാച്ച് വരികളിൽ കോളം എണ്ണം വ്യത്യാസപ്പെടുന്നതിനാൽ cell-index ആശ്രയിക്കുന്നില്ല)
+            let msQty = parseFloat(e.target.getAttribute('max')) || 0;
+            let enteredQty = parseFloat(e.target.value);
 
-                if (e.target.value.trim() === '') {
-                    e.target.style.backgroundColor = '';
-                    return;
-                }
-
-                if (enteredQty > msQty) {
-                    e.target.value = ''; 
-                    e.target.style.backgroundColor = ''; 
-                    
-                    if (typeof showWarning === 'function') {
-                        showWarning(e.target, `ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
-                    } else {
-                        alert(`ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
-                        e.target.focus();
-                    }
+            if (enteredQty > msQty) {
+                e.target.value = ''; 
+                e.target.style.backgroundColor = ''; 
+                
+                if (typeof showWarning === 'function') {
+                    showWarning(e.target, `ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
                 } else {
-                    // SI No കോളത്തിൽ അക്കങ്ങൾ (1, 2, 3...) ഉണ്ടോ എന്ന് മാത്രം പരിശോധിക്കുന്നു
-                    // അക്കങ്ങൾ ഉണ്ടെങ്കിൽ അത് മെയിൻ ബാച്ച് (ആദ്യത്തെ വരി), ഇല്ലെങ്കിൽ തുടർന്നുള്ള ബാച്ചുകൾ
-                    let slNoText = row.cells[0] ? (row.cells[0].textContent || row.cells[0].innerText).trim() : '';
-                    let isFirstBatch = /^[0-9]+$/.test(slNoText); 
-                    
-                    if (isFirstBatch) {
-                        // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം (CSS മുൻഗണന ഉറപ്പാക്കാൻ !important നൽകുന്നു)
-                        e.target.style.setProperty('background-color', '#90ee90', 'important');
-                    } else {
-                        // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം
-                        e.target.style.setProperty('background-color', '#fff9c4', 'important');
-                    }
+                    alert(`ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
+                    e.target.focus();
+                }
+            } else {
+                // ആദ്യത്തെ ബാച്ചിന്റെ റോയിൽ മാത്രം SI No/Medicine/Name/Total Qty എന്നിവയ്ക്ക്
+                // rowspan ഉള്ള td ഉണ്ടാകും. അത് ഉണ്ടോ എന്ന് നോക്കിയാൽ ആദ്യ ബാച്ചാണോ എന്ന് കൃത്യമായി അറിയാം.
+                let isFirstBatch = !!row.querySelector('td[rowspan]');
+
+                if (isFirstBatch) {
+                    // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം (മാറ്റമില്ല)
+                    e.target.style.setProperty('background-color', '#90ee90', 'important');
+                } else {
+                    // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം (ഇപ്പോൾ ശരിയായി പ്രവർത്തിക്കും)
+                    e.target.style.setProperty('background-color', '#fff9c4', 'important');
                 }
             }
         }
