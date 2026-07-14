@@ -1110,7 +1110,100 @@ window.onload = function() {
     });
 };
 
+// ബാക്ക്ഗ്രൗണ്ടിൽ ഗൂഗിൾ ഡ്രൈവ് ലോഡ് ചെയ്യാനുള്ള പുതിയ ഫംഗ്ഷൻ (ഇതും കൂടെ നൽകണം)
+async function restoreDataFromDriveSilent() {
+    try {
+        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
+            headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        let searchData = await searchRes.json();
+        if (searchData.files && searchData.files.length > 0) {
+            let fileId = searchData.files[0].id;
+            let dlRes = await fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media', {
+                headers: { 'Authorization': 'Bearer ' + accessToken }
+            });
+            let data = await dlRes.json();
+            
+            for (let key in data) { localStorage.setItem(key, data[key]); }
+            console.log("☁️ Auto-Restore from Drive Successful!");
+            
+            // 🌟 EXPERT FIX (Auto-Restore Completeness): localStorage-ൽ പുതിയ ഡാറ്റ വന്നാൽ മാത്രം പോരാ,
+            // മെമ്മറിയിലുള്ള stockItems/customProjectsMap പോലുള്ള വേരിയബിളുകളും, id="indentAtItemPage",
+            // id="indentAtPagePage", id="indentHistoryPage", id="preIndentSummaryPage" ഉൾപ്പെടെ എല്ലാ
+            // പേജുകളിലെയും ടേബിളുകളും/ഇൻപുട്ടുകളും തനിയെ പുതുക്കേണ്ടതുണ്ട്. അതിനാൽ ഒറ്റ renderDetailsTable()
+            // പോരാ എന്ന് കണ്ടെത്തി, എല്ലാ പേജുകൾക്കും വേണ്ടിയുള്ള ഒരു യൂണിഫൈഡ് റീഫ്രഷ് ഫംഗ്ഷൻ ചേർത്തിരിക്കുന്നു.
+            if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                window.refreshAllPagesAfterRestore();
+            } else if (typeof renderDetailsTable === 'function') {
+                renderDetailsTable(); // ഫോൾബാക്ക് (പഴയ പെരുമാറ്റം)
+            }
+        }
+    } catch(e) { console.error("Restore Error:", e); }
+}
 
+// =====================================================================
+// 🌟 EXPERT ADDITION: AUTO-RESTORE-ന് ശേഷം എല്ലാ പേജുകളും പുതുക്കുന്ന യൂണിഫൈഡ് ഫംഗ്ഷൻ 🌟
+// (Google Drive-ൽ നിന്ന് ലോഗിൻ ചെയ്ത ഉടനെ ഡാറ്റ വരുമ്പോൾ, ഈ ഫംഗ്ഷൻ:
+//  1. മെമ്മറി വേരിയബിളുകൾ (stockItems, customProjectsMap, lastProcessedIndentNo) പുതുക്കുന്നു
+//  2. HOME പേജിലെ ഇൻപുട്ടുകളും (Institution/Pharmacist/Nurse/CO പേരുകൾ, SIGN/SEAL) പുതുക്കുന്നു
+//  3. id="indentAtItemPage", id="indentAtPagePage", id="indentHistoryPage" ഉൾപ്പെടെ
+//     ഇൻഡന്റ് പേജുകൾ പുതുക്കുന്നു
+//  4. id="preIndentSummaryPage"-ലെ ടേബിളും Weekly Kashayam Requirement ബോക്സും പുതുക്കുന്നു
+//  5. id="openingStockPage", id="mainStockDetailsPage", id="opSubStockDetailsPage",
+//     id="ipSubStockDetailsPage" പുതുക്കുന്നു
+//  6. id="lastAddedMedicinesPage", id="lastAddedOPStockPage", id="lastAddedIPStockPage" പുതുക്കുന്നു
+// നിലവിലുള്ള ഒരു ഫംഗ്ഷനും നീക്കം ചെയ്യുകയോ മാറ്റുകയോ ചെയ്യാതെ, ഉള്ളവയെല്ലാം ഉണ്ടെങ്കിൽ മാത്രം വിളിക്കുന്നു. 🌟
+// =====================================================================
+window.refreshAllPagesAfterRestore = function() {
+    try {
+        // 1. മെമ്മറി വേരിയബിളുകൾ പുതുക്കുന്നു (ഏറ്റവും പ്രധാനം: ഇത് ചെയ്തില്ലെങ്കിൽ localStorage-ൽ
+        //    പുതിയ ഡാറ്റ വന്നാലും, സ്ക്രീനിൽ പഴയ (ശൂന്യമായേക്കാവുന്ന) ഡാറ്റ തന്നെ തുടരും)
+        if (typeof loadData === 'function') loadData();
+        if (typeof loadHomeInputs === 'function') loadHomeInputs();
+        if (typeof buildFundList === 'function') buildFundList();
+        if (typeof populateFooters === 'function') populateFooters();
+
+        // 2. HOME പേജിലെ SIGN / SEAL ചിത്രങ്ങൾ localStorage-ൽ (img_sign_pharm, img_sign_nurse,
+        //    img_sign_officer, img_round_seal) നേരിട്ട് സേവ് ആയതിനാലും, PDF ജനറേറ്റ് ചെയ്യുമ്പോൾ
+        //    മാത്രം അവിടെ നിന്ന് നേരിട്ട് വായിക്കുന്നതിനാലും, ഇവിടെ പ്രത്യേകം റീഫ്രഷ് ചെയ്യേണ്ട ആവശ്യമില്ല
+        //    (മുകളിലെ localStorage restore ലൂപ്പ് തന്നെ ഈ കീകളും പുതുക്കിക്കഴിഞ്ഞു).
+
+        // 3. Weekly Kashayam Requirement ബോക്സ് (id="preIndentSummaryPage") പുതുക്കുന്നു
+        let kReq = localStorage.getItem('medistock_weekly_kashayam_req');
+        let kEl = document.getElementById('weeklyKashayamReq');
+        if (kEl && kReq !== null && kReq !== undefined) {
+            kEl.value = kReq;
+        }
+        if (typeof calculateKashayamDays === 'function') calculateKashayamDays();
+
+        // 4. Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock ടേബിളുകൾ
+        //    (id="mainStockDetailsPage", id="opSubStockDetailsPage", id="ipSubStockDetailsPage", id="openingStockPage")
+        if (typeof renderTable === 'function') renderTable();
+        if (typeof renderDetailsTable === 'function') renderDetailsTable();
+        if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
+        if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
+        if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
+        if (typeof renderMainRackDetailsTable === 'function') renderMainRackDetailsTable();
+
+        // 5. ഇൻഡന്റ് പേജുകൾ: id="indentAtItemPage", id="indentAtPagePage", id="indentHistoryPage"
+        if (typeof renderIndentLeftTable === 'function') renderIndentLeftTable();
+        if (typeof renderAdvancedIndentLeftTable === 'function') renderAdvancedIndentLeftTable();
+        if (typeof renderIndentRightTable === 'function') renderIndentRightTable();
+        if (typeof renderIndentedMainTable === 'function') renderIndentedMainTable();
+
+        // 6. id="preIndentSummaryPage" ടേബിൾ
+        if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+
+        // 7. Last Added പേജുകൾ: lastAddedMedicinesPage, lastAddedOPStockPage, lastAddedIPStockPage
+        if (typeof renderLastAddedTable === 'function') renderLastAddedTable();
+        if (typeof renderLastAddedOPTable === 'function') renderLastAddedOPTable();
+        if (typeof renderLastAddedIPTable === 'function') renderLastAddedIPTable();
+
+        console.log("✅ Auto-Restore: Google Drive-ൽ നിന്നുള്ള ഡാറ്റ ഉപയോഗിച്ച് എല്ലാ പേജുകളും വിജയകരമായി പുതുക്കി.");
+    } catch(e) {
+        console.error("Page Refresh After Restore Error:", e);
+    }
+};
 // ലോഗിൻ ബട്ടൺ അമർത്തുമ്പോൾ
 function handleAuthClick() {
     if (tokenClient) {
@@ -1118,88 +1211,6 @@ function handleAuthClick() {
     }
 }
 
-// ഡാറ്റ മൊത്തമായി ശേഖരിച്ച് ബാക്കപ്പ് ചെയ്യാനുള്ള ഗ്ലോബൽ ഫംഗ്ഷൻ (Smart Auto-Backup)
-let backupTimer;
-function triggerSmartBackup(delay = 0) {
-    clearTimeout(backupTimer);
-    backupTimer = setTimeout(() => {
-        let allData = {};
-        for (let i = 0; i < localStorage.length; i++) {
-            let key = localStorage.key(i);
-            allData[key] = localStorage.getItem(key);
-        }
-        saveToGoogleDrive(allData);
-    }, delay);
-}
-
-// ഗൂഗിൾ ഡ്രൈവിലേക്ക് ഡാറ്റ സേവ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ 
-async function saveToGoogleDrive(jsonData) {
-    if (!window.accessToken) {
-        console.log("No Google Auth Token found. Backup skipped.");
-        return;
-    }
-
-    const fileContent = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-    const metadata = {
-        'name': 'medistock_backup_data.json', // Restore ഫയലുമായി പേര് ഒന്നിപ്പിച്ചു
-        'mimeType': 'application/json'
-    };
-
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', fileContent);
-
-    try {
-        const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-            method: 'POST',
-            headers: new Headers({ 'Authorization': 'Bearer ' + window.accessToken }),
-            body: form
-        });
-        
-        if(response.ok) {
-            console.log("☁️ Smart Auto-Backup: ഡാറ്റ ഡ്രൈവിൽ സേവ് ചെയ്തു!");
-        }
-    } catch(err) {
-        console.error("Drive Save Error:", err);
-    }
-}
-
-// ബാക്ക്ഗ്രൗണ്ടിൽ ഗൂഗിൾ ഡ്രൈവ് ലോഡ് ചെയ്യാനുള്ള ഫംഗ്ഷൻ (Auto-Restore)
-async function restoreDataFromDriveSilent() {
-    try {
-        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
-            headers: { 'Authorization': 'Bearer ' + window.accessToken }
-        });
-        let searchData = await searchRes.json();
-        if (searchData.files && searchData.files.length > 0) {
-            let fileId = searchData.files[0].id;
-            let dlRes = await fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media', {
-                headers: { 'Authorization': 'Bearer ' + window.accessToken }
-            });
-            let data = await dlRes.json();
-            
-            for (let key in data) { localStorage.setItem(key, data[key]); }
-            console.log("☁️ Auto-Restore from Drive Successful!");
-            
-            // ലോക്കൽ ഡാറ്റകൾ വേരിയബിളുകളിലേക്ക് അപ്ഡേറ്റ് ചെയ്യാൻ
-            if(typeof loadData === 'function') loadData();
-            if(typeof loadHomeInputs === 'function') loadHomeInputs();
-            
-            // Pre-Indent പേജിലെ ഡാറ്റ തിരികെ കൊണ്ടുവരാൻ
-            if (document.getElementById('weeklyKashayamReq') && localStorage.getItem('medistock_kashayam_req')) {
-                document.getElementById('weeklyKashayamReq').value = localStorage.getItem('medistock_kashayam_req');
-            }
-            
-            // ടേബിളുകൾ ഉണ്ടെങ്കിൽ റീലോഡ് ചെയ്യുക
-            if(typeof renderDetailsTable === 'function') renderDetailsTable();
-            if(typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
-            if(typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
-            if(typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
-        }
-    } catch(e) { console.error("Restore Error:", e); }
-} 
-                
-                
                 (function() {
                     function forceSetLSGD() {
                         let inp = document.getElementById('mainIndentFundInput');
@@ -3732,6 +3743,12 @@ const categoryColors = {
         let stockItems = [];
         let lastProcessedIndentNo = "";
 
+        function saveData() {
+          localStorage.setItem('medistock_items', JSON.stringify(stockItems));
+          localStorage.setItem('medistock_projects', JSON.stringify(customProjectsMap));
+          localStorage.setItem('medistock_last_indent', lastProcessedIndentNo);
+        }
+
         function loadData() {
             let items = localStorage.getItem('medistock_items');
             if(items) stockItems = JSON.parse(items);
@@ -3741,23 +3758,11 @@ const categoryColors = {
            if(lastInd) lastProcessedIndentNo = lastInd;
         }
 
-        function saveData() {
-    localStorage.setItem('medistock_items', JSON.stringify(stockItems));
-    localStorage.setItem('medistock_projects', JSON.stringify(customProjectsMap));
-    localStorage.setItem('medistock_last_indent', lastProcessedIndentNo);
-    
-    // ഏതൊരു മാറ്റം വരുമ്പോളും Google Drive-ലേക്ക് സേവ് ചെയ്യാൻ (ഉദാ: Add, Delete, Generate Indent, Edit)
-    triggerSmartBackup(500); 
-}
-
-function saveHomeInputs() {
-    const inputs = document.querySelectorAll('.yellow-input');
-    const data = Array.from(inputs).map(i => i.value);
-    localStorage.setItem('medistock_home_inputs', JSON.stringify(data));
-    
-    // Home page ടൈപ്പിംഗ് നിർത്തി 3 സെക്കൻഡിന് ശേഷം ബാക്കപ്പ് ചെയ്യാൻ
-    triggerSmartBackup(3000); 
-}
+        function saveHomeInputs() {
+            const inputs = document.querySelectorAll('.yellow-input');
+            const data = Array.from(inputs).map(i => i.value);
+          localStorage.setItem('medistock_home_inputs', JSON.stringify(data));
+        }
 
         function loadHomeInputs() {
             let data = localStorage.getItem('medistock_home_inputs');
@@ -10239,9 +10244,8 @@ window.calculateKashayamDays = function() {
     let kcValue = kcInput.value;
     let kscValue = kscInput.value;
     
-    // രണ്ടും NIL ആണെങ്കിൽ മെസ്സേജ് കാണിക്കാൻ
     if (kcValue === "NIL" && kscValue === "NIL") {
-        resultContainer.innerHTML = `<span style="font-weight: bold; font-size: 15px; color: #c0392b;">മെയിൻ സ്റ്റോക്കിൽ കഷായ ചൂർണ്ണങ്ങൾ നലവിലില്ല</span>`;
+        resultContainer.innerHTML = `<span style="font-weight: bold; font-size: 15px; color: #c0392b;">മെയിൻ സ്റ്റോക്കിൽ കഷായ ചൂർണ്ണങ്ങൾ നിലവിലില്ല</span>`;
         return; 
     }
     
@@ -10249,13 +10253,14 @@ window.calculateKashayamDays = function() {
     let totalKsc = kscValue === "NIL" ? 0 : parseFloat(kscValue);
     let weeklyReq = parseFloat(document.getElementById('weeklyKashayamReq').value) || 0;
     
-    // പുതിയ ഫോർമാറ്റ് : Available for : Days
     if (weeklyReq > 0) {
         let totalFormulaVal = (totalKsc * 40) + (totalKc * 11.66666666666666667);
-        let days = totalFormulaVal / weeklyReq;
+        // ഇവിടെയാണ് മാറ്റം വരുത്തിയിരിക്കുന്നത് (ഉത്തരത്തിനെ 7 കൊണ്ട് ഗുണിക്കുന്നു)
+        let days = (totalFormulaVal / weeklyReq) * 7;
+        
         resultContainer.innerHTML = `Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">${Math.round(days)}</span> &nbsp; Days`;
     } else {
-        resultContainer.innerHTML = `Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">" "</span> &nbsp; Days`;
+        resultContainer.innerHTML = `<span style="font-size: 15px; font-weight: bold; color: #c0392b;">Waiting for Input (Qty of Kashayam @ First Box)</span>`;
     }
 };
 
@@ -10331,36 +10336,6 @@ window.updateKashayamStockTotals = function() {
     if(kscInput) kscInput.value = totalKsc > 0 ? totalKsc : "NIL";
     
     calculateKashayamDays(); 
-};
-
-window.calculateKashayamDays = function() {
-    let kcInput = document.getElementById('totalMsKc');
-    let kscInput = document.getElementById('totalMsKsc');
-    let resultContainer = document.getElementById('kashayamResultContainer');
-    
-    if (!kcInput || !kscInput || !resultContainer) return;
-
-    let kcValue = kcInput.value;
-    let kscValue = kscInput.value;
-    
-    if (kcValue === "NIL" && kscValue === "NIL") {
-        resultContainer.innerHTML = `<span style="font-weight: bold; font-size: 15px; color: #c0392b;">മെയിൻ സ്റ്റോക്കിൽ കഷായ ചൂർണ്ണങ്ങൾ നിലവിലില്ല</span>`;
-        return; 
-    }
-    
-    let totalKc = kcValue === "NIL" ? 0 : parseFloat(kcValue);
-    let totalKsc = kscValue === "NIL" ? 0 : parseFloat(kscValue);
-    let weeklyReq = parseFloat(document.getElementById('weeklyKashayamReq').value) || 0;
-    
-    if (weeklyReq > 0) {
-        let totalFormulaVal = (totalKsc * 40) + (totalKc * 11.66666666666666667);
-        // ഇവിടെയാണ് മാറ്റം വരുത്തിയിരിക്കുന്നത് (ഉത്തരത്തിനെ 7 കൊണ്ട് ഗുണിക്കുന്നു)
-        let days = (totalFormulaVal / weeklyReq) * 7;
-        
-        resultContainer.innerHTML = `Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">${Math.round(days)}</span> &nbsp; Days`;
-    } else {
-        resultContainer.innerHTML = `<span style="font-size: 15px; font-weight: bold; color: #c0392b;">Waiting for Input (Qty of Kashayam @ First Box)</span>`;
-    }
 };
 
 // =====================================================================
@@ -17386,60 +17361,6 @@ window.clearLocalDraft = function() {
             }
         }
     }
-    // ഗൂഗിൾ ഡ്രൈവിലേക്ക് ഡാറ്റ തനിയെ ബാക്കപ്പ് ചെയ്യാനുള്ള സ്മാർട്ട് ഫംഗ്ഷൻ (Expert Mode)
-window.autoSyncToDrive = async function() {
-    if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ ബാക്കപ്പ് വർക്ക് ചെയ്യില്ല
-    
-    try {
-        let backupData = {};
-        for (let i = 0; i < localStorage.length; i++) {
-            let key = localStorage.key(i);
-            if (key && key.startsWith('medistock_')) {
-                backupData[key] = localStorage.getItem(key);
-            }
-        }
-
-        const fileContent = new Blob([JSON.stringify(backupData)], { type: 'application/json' });
-        const metadata = { 'name': 'medistock_backup_data.json', 'mimeType': 'application/json' };
-        
-        const form = new FormData();
-        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-        form.append('file', fileContent);
-
-        // പഴയ ബാക്കപ്പ് ഫയൽ ഡ്രൈവിൽ ഉണ്ടോയെന്ന് നോക്കുന്നു
-        let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
-            headers: { 'Authorization': 'Bearer ' + accessToken }
-        });
-        let searchData = await searchRes.json();
-        
-        let method = 'POST';
-        let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
-        
-        if (searchData.files && searchData.files.length > 0) {
-            method = 'PATCH'; // പഴയ ഫയൽ ഉണ്ടെങ്കിൽ അത് തന്നെ അപ്ഡേറ്റ് ചെയ്യുന്നു
-            url = 'https://www.googleapis.com/upload/drive/v3/files/' + searchData.files[0].id + '?uploadType=multipart';
-        }
-
-        let response = await fetch(url, {
-            method: method,
-            headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
-            body: form
-        });
-
-        if (response.ok) {
-            console.log("☁️ Auto Backup Success!");
-            // സ്ക്രീനിൽ സേവ് ആയെന്നുള്ള മെസ്സേജ് കാണിക്കാൻ
-            let msg = document.createElement('div');
-            msg.innerHTML = '<i class="fa-brands fa-google-drive"></i> Saved to Drive';
-            msg.style.cssText = "position:fixed; bottom:20px; left:20px; background:#27ae60; color:white; padding:10px 20px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:99999; transition: opacity 0.5s; display:flex; gap:8px; align-items:center;";
-            document.body.appendChild(msg);
-            setTimeout(() => msg.style.opacity = "0", 3000);
-            setTimeout(() => msg.remove(), 3500);
-        }
-    } catch (err) {
-        console.error("Drive Sync Error:", err);
-    }
-};
 </script>
 
 <!-- ================================================================================= -->
@@ -17519,7 +17440,7 @@ window.autoSyncToDrive = async function() {
             clearTimeout(homeInputBackupTimer);
             homeInputBackupTimer = setTimeout(function() {
                 if (typeof window.smartAutoBackup === 'function') window.smartAutoBackup();
-            }, 59000); // ടൈപ്പിംഗ് നിർത്തി 59 സെക്കൻഡിന് ശേഷം മാത്രം ബാക്ക്ഗ്രൗണ്ട് ബാക്കപ്പ്
+            }, 3000); // 🌟 EXPERT FIX: ടൈപ്പിംഗ് നിർത്തി 3 സെക്കൻഡിന് ശേഷം മാത്രം ബാക്ക്ഗ്രൗണ്ട് ബാക്കപ്പ് (spec ആവശ്യപ്പെട്ടത് പ്രകാരം)
         }
     });
 
@@ -17532,7 +17453,7 @@ window.autoSyncToDrive = async function() {
             let result = originalProcessAndSaveImage.apply(this, arguments);
             setTimeout(function() {
                 if (typeof window.smartAutoBackup === 'function') window.smartAutoBackup();
-            }, 1500); // ചിത്രം പ്രോസസ്സ് ചെയ്ത് ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ആകാൻ അല്പം സമയം നൽകുന്നു
+            }, 3000); // 🌟 EXPERT FIX: SIGN/SEAL അപ്‌ലോഡ് ചെയ്ത് 3 സെക്കൻഡിന് ശേഷം ഗൂഗിൾ ഡ്രൈവിലേക്ക് ബാക്കപ്പ് (spec പ്രകാരം)
             return result;
         };
     }
@@ -18585,42 +18506,6 @@ function checkMandatoryHomeInputs() {
         applyCprImageSrc();
     }
 })();
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. ഹോം പേജിലെ ഇൻപുട്ടുകൾ (3 സെക്കൻഡ് ഡിലേ)
-    const homeInputs = document.querySelectorAll('#homePage .yellow-input');
-    homeInputs.forEach(input => {
-        input.addEventListener('input', () => {
-            saveHomeInputs(); 
-        });
-    });
-
-    // 2. ഹോം പേജിലെ ഇമേജ് അപ്‌ലോഡുകൾ (Sign & Seal - 3 സെക്കൻഡ് ഡിലേ)
-    const fileInputs = document.querySelectorAll('#homePage input[type="file"]');
-    fileInputs.forEach(fileInput => {
-        fileInput.addEventListener('change', () => {
-            triggerSmartBackup(3000);
-        });
-    });
-
-    // 3. Pre-Indent പേജിലെ കഷായം ഇൻപുട്ട് (4 സെക്കൻഡ് ഡിലേ)
-    const kashayamInput = document.getElementById('weeklyKashayamReq');
-    if(kashayamInput) {
-        kashayamInput.addEventListener('input', () => {
-            localStorage.setItem('medistock_kashayam_req', kashayamInput.value);
-            triggerSmartBackup(4000);
-        });
-    }
-    
-    // 4. Reset All Data ചെയ്യുമ്പോൾ ഡ്രൈവിലും ബാക്കപ്പ് അപ്ഡേറ്റ് ചെയ്യാൻ
-    if (typeof window.executeFinalReset === 'function') {
-        const originalExecuteFinalReset = window.executeFinalReset;
-        window.executeFinalReset = function() {
-            originalExecuteFinalReset();
-            triggerSmartBackup(500); // ഡാറ്റ ക്ലിയർ ചെയ്ത ശേഷം ഗൂഗിൾ ഡ്രൈവും ശൂന്യമാക്കാൻ
-        };
-    }
-});
 </script>
 </body>
 </html>
