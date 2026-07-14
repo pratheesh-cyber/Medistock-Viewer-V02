@@ -18538,19 +18538,17 @@ if (indLeftTable) {
                         e.target.focus();
                     }
                 } else {
-                    // അദൃശ്യമായ സ്പേസുകളും (&nbsp;) ടാഗുകളും മറികടക്കാൻ കൂടുതൽ കൃത്യതയുള്ള പരിശോധന
-                    let slNoText = row.cells[0] ? (row.cells[0].textContent || row.cells[0].innerText).replace(/&nbsp;/g, '').trim() : '';
-                    let medNameText = row.cells[2] ? (row.cells[2].textContent || row.cells[2].innerText).replace(/&nbsp;/g, '').trim() : '';
-                    
-                    // Sl No അല്ലെങ്കിൽ Name of Medicine ശൂന്യമാണെങ്കിൽ അത് തുടർന്നുള്ള ബാച്ച് (Sub-row) ആയി കണക്കാക്കാം
-                    let isFirstBatch = (slNoText !== '' && medNameText !== '');
+                    // SI No കോളത്തിൽ അക്കങ്ങൾ (1, 2, 3...) ഉണ്ടോ എന്ന് മാത്രം പരിശോധിക്കുന്നു
+                    // അക്കങ്ങൾ ഉണ്ടെങ്കിൽ അത് മെയിൻ ബാച്ച് (ആദ്യത്തെ വരി), ഇല്ലെങ്കിൽ തുടർന്നുള്ള ബാച്ചുകൾ
+                    let slNoText = row.cells[0] ? (row.cells[0].textContent || row.cells[0].innerText).trim() : '';
+                    let isFirstBatch = /^[0-9]+$/.test(slNoText); 
                     
                     if (isFirstBatch) {
-                        // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം
-                        e.target.style.backgroundColor = '#90ee90';
+                        // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം (CSS മുൻഗണന ഉറപ്പാക്കാൻ !important നൽകുന്നു)
+                        e.target.style.setProperty('background-color', '#90ee90', 'important');
                     } else {
                         // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം
-                        e.target.style.backgroundColor = '#fff9c4';
+                        e.target.style.setProperty('background-color', '#fff9c4', 'important');
                     }
                 }
             }
