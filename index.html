@@ -18506,38 +18506,31 @@ function checkMandatoryHomeInputs() {
     }
 })();
 // ========================================================
-// INDENT PREPARATION WINDOW - Qty Indent Validation
+// INDENT PREPARATION WINDOW - Qty Indent Validation (Advanced)
 // ========================================================
 const indLeftTable = document.getElementById('indLeftTableBody');
 if (indLeftTable) {
     indLeftTable.addEventListener('input', function(e) {
-        // ടൈപ്പ് ചെയ്യുന്നത് ഒരു ഇൻപുട്ട് ബോക്സിൽ തന്നെയാണോ എന്ന് പരിശോധിക്കുന്നു
         if (e.target && e.target.tagName === 'INPUT') {
             let row = e.target.closest('tr');
             if (!row) return;
 
-            // Qty in M.S 5-ാമത്തെ കോളവും (index 4), Qty Indent 6-ാമത്തെ കോളവും (index 5) ആണ്
             let msQtyCell = row.cells[4];
             let indentQtyCell = row.cells[5];
 
-            // ഉപയോക്താവ് ടൈപ്പ് ചെയ്യുന്നത് Qty Indent കോളത്തിൽ തന്നെയാണെന്ന് ഉറപ്പുവരുത്തുന്നു
             if (indentQtyCell && indentQtyCell.contains(e.target)) {
-                // Qty in M.S ലെ സംഖ്യ വേർതിരിച്ചെടുക്കുന്നു
                 let msQty = parseFloat(msQtyCell.innerText) || 0;
                 let enteredQty = parseFloat(e.target.value);
 
-                // ഇൻപുട്ട് ബോക്സ് ശൂന്യമാണെങ്കിൽ ബാക്ക്ഗ്രൗണ്ട് നിറം പഴയപടിയാക്കുന്നു
                 if (e.target.value.trim() === '') {
                     e.target.style.backgroundColor = '';
                     return;
                 }
 
-                // ടൈപ്പ് ചെയ്ത സംഖ്യ Qty in M.S-നേക്കാൾ വലുതാണെങ്കിൽ
                 if (enteredQty > msQty) {
-                    e.target.value = ''; // സംഖ്യ ഉടൻ ഡിലീറ്റ് ആകുന്നു
-                    e.target.style.backgroundColor = ''; // നിറം മാറ്റുന്നു
+                    e.target.value = ''; 
+                    e.target.style.backgroundColor = ''; 
                     
-                    // സ്ക്രീനിന്റെ നടുവിൽ Error മെസ്സേജ് കാണിക്കുന്നു (നിങ്ങളുടെ നിലവിലുള്ള showWarning ഫംഗ്ഷൻ ഉപയോഗിച്ച്)
                     if (typeof showWarning === 'function') {
                         showWarning(e.target, `ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
                     } else {
@@ -18545,8 +18538,17 @@ if (indLeftTable) {
                         e.target.focus();
                     }
                 } else {
-                    // സംഖ്യ ചെറുതോ തുല്യമോ ആണെങ്കിൽ ബോക്സിന് ഇളം പച്ച നിറം (#90ee90) നൽകുന്നു
-                    e.target.style.backgroundColor = '#90ee90';
+                    // SI No കോളം (index 0) ശൂന്യമാണോ എന്ന് പരിശോധിക്കുന്നു. 
+                    // ശൂന്യമല്ലെങ്കിൽ അത് ആദ്യത്തെ ബാച്ച് ആണ്, ശൂന്യമാണെങ്കിൽ തുടർന്നുള്ള ബാച്ചുകളും.
+                    let isFirstBatch = (row.cells[0] && row.cells[0].innerText.trim() !== '');
+                    
+                    if (isFirstBatch) {
+                        // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം
+                        e.target.style.backgroundColor = '#90ee90';
+                    } else {
+                        // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം
+                        e.target.style.backgroundColor = '#fff9c4';
+                    }
                 }
             }
         }
@@ -18567,7 +18569,7 @@ function validateAndAddAllToStock() {
         let expEl = document.getElementById('exp_' + i);
         let qtyEl = document.getElementById('qty_' + i);
         let pagEl = document.getElementById('pag_' + i);
-        let racEl = document.getElementById('rac_' + i); // റാക്ക് ഓപ്ഷണൽ ആണെങ്കിലും പരിശോധനയ്ക്ക് എടുക്കുന്നു
+        let racEl = document.getElementById('rac_' + i); 
 
         let catVal = catEl.value.trim();
         let batVal = batEl.value.trim();
@@ -18577,17 +18579,16 @@ function validateAndAddAllToStock() {
         let racVal = racEl.value.trim();
 
         if (nameVal !== "") {
-            // Name of Medicine ഉണ്ടെങ്കിൽ കൃത്യമായ ഓർഡറിൽ പരിശോധിക്കുന്നു
+            // Name of Medicine ഉണ്ടെങ്കിൽ കൃത്യമായ ഓർഡറിൽ പരിശോധിക്കുന്നു (Batch No ഒഴിവാക്കിയിരിക്കുന്നു)
             if (catVal === "") { showWarning(catEl, "Row " + i + ": Medicine Item നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
-            if (batVal === "") { showWarning(batEl, "Row " + i + ": Batch No നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
             if (expVal === "") { showWarning(expEl, "Row " + i + ": Exp.Dt. നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
             if (qtyVal === "") { showWarning(qtyEl, "Row " + i + ": Qty നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
             if (pagVal === "") { showWarning(pagEl, "Row " + i + ": Page No നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
         } else {
-            // Name of Medicine ഇല്ലാതെ മറ്റ് കോളങ്ങളിൽ എന്തെങ്കിലും ഡാറ്റ ഉണ്ടോ എന്ന് പരിശോധിക്കുന്നു
+            // Name of Medicine ഇല്ലാതെ മറ്റ് കോളങ്ങളിൽ (Batch No ഉൾപ്പെടെ) എന്തെങ്കിലും ഡാറ്റ ഉണ്ടോ എന്ന് പരിശോധിക്കുന്നു
             if (catVal !== "" || batVal !== "" || expVal !== "" || qtyVal !== "" || pagVal !== "" || racVal !== "") {
                 showWarning(nameEl, "Row " + i + ": Name of Medicine ഇല്ലാതെ മറ്റ് വിവരങ്ങൾ നൽകാൻ പാടില്ല! ദയവായി പരിശോധിക്കുക.");
-                return; // ഫംഗ്ഷൻ ഇവിടെ അവസാനിക്കുന്നു
+                return; 
             }
         }
     }
