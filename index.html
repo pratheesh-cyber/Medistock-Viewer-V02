@@ -2641,13 +2641,12 @@ function handleAuthClick() {
                
                <div class="input-group" style="width: 14ch; flex-shrink: 0;">
                   <label style="text-align: center; display: block; width: 100%;">Invoice Date:</label>
-                  <input type="text" id="invoiceDateInput" autocomplete="off" placeholder="DD/MM/YYYY" style="text-align: center;" onblur="validateInvoiceDate(this)">
-               </div>
+<input type="text" id="invoiceDateInput" autocomplete="off" placeholder="DDMMYY" style="text-align: center;" onblur="validateInvoiceDate(this)">               </div>
                <div class="input-group">
                   <label>Invoice No/ID</label>
                   <input type="text" id="invoiceInput" autocomplete="off" placeholder="..." style="width:17ch;">
                </div>
-              <button class="add-btn" onclick="confirmAddAllToStock()">ADD TO STOCK</button>
+              <button class="add-btn" onclick="validateAndAddAllToStock()">ADD TO STOCK</button>
           </div>
 
 <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; width: 100%;">
@@ -4188,7 +4187,7 @@ loadData();
     for(let i=1; i<=300; i++) {
         const row = document.createElement('div');
         row.className = 'entry-row entry-grid-layout';
-        row.innerHTML = `<input type="text" id="sino_${i}" tabindex="-1" readonly><input list="category-list" id="cat_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="handleCategoryInput(this, ${i})" placeholder="..."><input list="medicine-list" id="med_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="updateSino(${i}, this)" placeholder="Type/Search..."><input type="text" id="bat_${i}"><input type="text" id="exp_${i}" placeholder="M/YY" onblur="validateExpField(this); calculateRowStatus(${i});"><input type="text" id="qty_${i}"><input type="text" id="pag_${i}"><input type="text" id="rac_${i}"><div id="status_${i}" class="status-cell">---</div>`;
+        row.innerHTML = `<input type="text" id="sino_${i}" tabindex="-1" readonly><input list="category-list" id="cat_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="handleCategoryInput(this, ${i})" placeholder="..."><input list="medicine-list" id="med_${i}" onfocus="this.value=''" onclick="this.value=''" oninput="updateSino(${i}, this)" placeholder="Type/Search..."><input type="text" id="bat_${i}"><input type="text" id="exp_${i}" placeholder="MYY" onblur="validateExpField(this); calculateRowStatus(${i});"><input type="text" id="qty_${i}"><input type="text" id="pag_${i}"><input type="text" id="rac_${i}"><div id="status_${i}" class="status-cell">---</div>`;
         grid.appendChild(row);
     }
     
@@ -18506,6 +18505,98 @@ function checkMandatoryHomeInputs() {
         applyCprImageSrc();
     }
 })();
+// ========================================================
+// INDENT PREPARATION WINDOW - Qty Indent Validation
+// ========================================================
+const indLeftTable = document.getElementById('indLeftTableBody');
+if (indLeftTable) {
+    indLeftTable.addEventListener('input', function(e) {
+        // ടൈപ്പ് ചെയ്യുന്നത് ഒരു ഇൻപുട്ട് ബോക്സിൽ തന്നെയാണോ എന്ന് പരിശോധിക്കുന്നു
+        if (e.target && e.target.tagName === 'INPUT') {
+            let row = e.target.closest('tr');
+            if (!row) return;
+
+            // Qty in M.S 5-ാമത്തെ കോളവും (index 4), Qty Indent 6-ാമത്തെ കോളവും (index 5) ആണ്
+            let msQtyCell = row.cells[4];
+            let indentQtyCell = row.cells[5];
+
+            // ഉപയോക്താവ് ടൈപ്പ് ചെയ്യുന്നത് Qty Indent കോളത്തിൽ തന്നെയാണെന്ന് ഉറപ്പുവരുത്തുന്നു
+            if (indentQtyCell && indentQtyCell.contains(e.target)) {
+                // Qty in M.S ലെ സംഖ്യ വേർതിരിച്ചെടുക്കുന്നു
+                let msQty = parseFloat(msQtyCell.innerText) || 0;
+                let enteredQty = parseFloat(e.target.value);
+
+                // ഇൻപുട്ട് ബോക്സ് ശൂന്യമാണെങ്കിൽ ബാക്ക്ഗ്രൗണ്ട് നിറം പഴയപടിയാക്കുന്നു
+                if (e.target.value.trim() === '') {
+                    e.target.style.backgroundColor = '';
+                    return;
+                }
+
+                // ടൈപ്പ് ചെയ്ത സംഖ്യ Qty in M.S-നേക്കാൾ വലുതാണെങ്കിൽ
+                if (enteredQty > msQty) {
+                    e.target.value = ''; // സംഖ്യ ഉടൻ ഡിലീറ്റ് ആകുന്നു
+                    e.target.style.backgroundColor = ''; // നിറം മാറ്റുന്നു
+                    
+                    // സ്ക്രീനിന്റെ നടുവിൽ Error മെസ്സേജ് കാണിക്കുന്നു (നിങ്ങളുടെ നിലവിലുള്ള showWarning ഫംഗ്ഷൻ ഉപയോഗിച്ച്)
+                    if (typeof showWarning === 'function') {
+                        showWarning(e.target, `ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
+                    } else {
+                        alert(`ERROR: സ്റ്റോക്കിലുള്ള പരമാവധി ${msQty} എണ്ണം മാത്രമേ Indent ചെയ്യാൻ സാധിക്കൂ!`);
+                        e.target.focus();
+                    }
+                } else {
+                    // സംഖ്യ ചെറുതോ തുല്യമോ ആണെങ്കിൽ ബോക്സിന് ഇളം പച്ച നിറം (#90ee90) നൽകുന്നു
+                    e.target.style.backgroundColor = '#90ee90';
+                }
+            }
+        }
+    });
+}
+// ========================================================
+// ROW VALIDATION BEFORE ADDING TO STOCK
+// ========================================================
+function validateAndAddAllToStock() {
+    // 300 വരികൾ വരെ പരിശോധിക്കാൻ (താങ്കളുടെ കോഡിലെ ലിമിറ്റ്)
+    for (let i = 1; i <= 300; i++) {
+        let nameEl = document.getElementById('med_' + i);
+        if (!nameEl) continue; // എലമെന്റ് ഇല്ലെങ്കിൽ സ്കിപ്പ് ചെയ്യുക
+        
+        let nameVal = nameEl.value.trim();
+        let catEl = document.getElementById('cat_' + i);
+        let batEl = document.getElementById('bat_' + i);
+        let expEl = document.getElementById('exp_' + i);
+        let qtyEl = document.getElementById('qty_' + i);
+        let pagEl = document.getElementById('pag_' + i);
+        let racEl = document.getElementById('rac_' + i); // റാക്ക് ഓപ്ഷണൽ ആണെങ്കിലും പരിശോധനയ്ക്ക് എടുക്കുന്നു
+
+        let catVal = catEl.value.trim();
+        let batVal = batEl.value.trim();
+        let expVal = expEl.value.trim();
+        let qtyVal = qtyEl.value.trim();
+        let pagVal = pagEl.value.trim();
+        let racVal = racEl.value.trim();
+
+        if (nameVal !== "") {
+            // Name of Medicine ഉണ്ടെങ്കിൽ കൃത്യമായ ഓർഡറിൽ പരിശോധിക്കുന്നു
+            if (catVal === "") { showWarning(catEl, "Row " + i + ": Medicine Item നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
+            if (batVal === "") { showWarning(batEl, "Row " + i + ": Batch No നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
+            if (expVal === "") { showWarning(expEl, "Row " + i + ": Exp.Dt. നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
+            if (qtyVal === "") { showWarning(qtyEl, "Row " + i + ": Qty നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
+            if (pagVal === "") { showWarning(pagEl, "Row " + i + ": Page No നൽകാൻ വിട്ടുപോയിട്ടുണ്ട്!"); return; }
+        } else {
+            // Name of Medicine ഇല്ലാതെ മറ്റ് കോളങ്ങളിൽ എന്തെങ്കിലും ഡാറ്റ ഉണ്ടോ എന്ന് പരിശോധിക്കുന്നു
+            if (catVal !== "" || batVal !== "" || expVal !== "" || qtyVal !== "" || pagVal !== "" || racVal !== "") {
+                showWarning(nameEl, "Row " + i + ": Name of Medicine ഇല്ലാതെ മറ്റ് വിവരങ്ങൾ നൽകാൻ പാടില്ല! ദയവായി പരിശോധിക്കുക.");
+                return; // ഫംഗ്ഷൻ ഇവിടെ അവസാനിക്കുന്നു
+            }
+        }
+    }
+    
+    // മുകളിലെ എല്ലാ പരിശോധനകളും വിജയകരമായി പൂർത്തിയാക്കിയാൽ മാത്രം നിലവിലുള്ള ഫംഗ്ഷൻ പ്രവർത്തിപ്പിക്കുന്നു
+    if (typeof confirmAddAllToStock === 'function') {
+        confirmAddAllToStock();
+    }
+}
 </script>
 </body>
 </html>
