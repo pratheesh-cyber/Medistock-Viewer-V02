@@ -18519,7 +18519,7 @@ if (indLeftTable) {
             let indentQtyCell = row.cells[5];
 
             if (indentQtyCell && indentQtyCell.contains(e.target)) {
-                let msQty = parseFloat(msQtyCell.innerText) || 0;
+                let msQty = parseFloat(msQtyCell.textContent || msQtyCell.innerText) || 0;
                 let enteredQty = parseFloat(e.target.value);
 
                 if (e.target.value.trim() === '') {
@@ -18538,9 +18538,12 @@ if (indLeftTable) {
                         e.target.focus();
                     }
                 } else {
-                    // SI No കോളം (index 0) ശൂന്യമാണോ എന്ന് പരിശോധിക്കുന്നു. 
-                    // ശൂന്യമല്ലെങ്കിൽ അത് ആദ്യത്തെ ബാച്ച് ആണ്, ശൂന്യമാണെങ്കിൽ തുടർന്നുള്ള ബാച്ചുകളും.
-                    let isFirstBatch = (row.cells[0] && row.cells[0].innerText.trim() !== '');
+                    // അദൃശ്യമായ സ്പേസുകളും (&nbsp;) ടാഗുകളും മറികടക്കാൻ കൂടുതൽ കൃത്യതയുള്ള പരിശോധന
+                    let slNoText = row.cells[0] ? (row.cells[0].textContent || row.cells[0].innerText).replace(/&nbsp;/g, '').trim() : '';
+                    let medNameText = row.cells[2] ? (row.cells[2].textContent || row.cells[2].innerText).replace(/&nbsp;/g, '').trim() : '';
+                    
+                    // Sl No അല്ലെങ്കിൽ Name of Medicine ശൂന്യമാണെങ്കിൽ അത് തുടർന്നുള്ള ബാച്ച് (Sub-row) ആയി കണക്കാക്കാം
+                    let isFirstBatch = (slNoText !== '' && medNameText !== '');
                     
                     if (isFirstBatch) {
                         // ആദ്യത്തെ ബാച്ചിന് ഇളം പച്ച നിറം
