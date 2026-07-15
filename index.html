@@ -3078,6 +3078,15 @@ function handleAuthClick() {
         </div>
     </div>
  <div id="indentHistoryPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
+    <div id="histCprLoader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 99999; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="width: 92%; max-width: 900px; margin: 0 auto 20px auto;">
+            <img id="histCprImage" class="cpr-infographic-img" alt="CPR Steps" style="clip-path: inset(0 100% 0 0);">
+        </div>
+        <h4 style="color: #2c3e50;">INDENT HISTORY ലോഡ് ചെയ്യുന്നു...</h4>
+        <div style="width: 50%; background: #ddd; border-radius: 10px; overflow: hidden; height: 25px;">
+            <div id="histCprProgress" style="width: 0%; background: #27ae60; height: 100%; text-align: center; color: white; font-weight: bold; line-height: 25px; transition: 0.4s;">0%</div>
+        </div>
+    </div>
     <div class="no-print" style="text-align: center; margin-bottom: 25px;">
         <button type="button" style="background:#2c3e50; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
         
@@ -3131,7 +3140,7 @@ function handleAuthClick() {
                     </button>
                 </div>
 
-                <div class="input-wrapper" style="flex: 1; min-width: 200px; gap: 2px;">
+                <div class="input-wrapper" style="flex: 1; min-width: 140px; gap: 2px;">
                     <label>Search Anything in History...</label>
                     <div style="position: relative; width: 100%;">
                         <input type="text" id="historySearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search item, fund, batch..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px;">
@@ -3139,14 +3148,26 @@ function handleAuthClick() {
                     </div>
                 </div>
 
+                <div class="input-wrapper" style="gap: 2px;">
+                    <label>&nbsp;</label>
+                    <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
+                        <i class="fa-solid fa-trash"></i> DELETE SELECTED
+                    </button>
+                </div>
+
                 <div style="border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px;">
                     <span style="font-size: 11px; font-weight: 900; color: #8e44ad; margin-bottom: 2px; text-transform: uppercase;">Show Recent Indents</span>
-                    <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center;">
+                    <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center; flex-wrap: wrap; max-width: 340px;">
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="10" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 10</label>
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="20" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 20</label>
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="30" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 30</label>
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="40" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 40</label>
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="50" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 50</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="60" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 60</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="70" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 70</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="80" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 80</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="90" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 90</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="100" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 100</label>
                     </div>
                 </div>
 
@@ -6649,6 +6670,7 @@ function processIndent() {
 window.showIndentHistory = function() {
     hideAllPages();
     document.getElementById('indentHistoryPage').style.display = 'block';
+    startHistCPRProgress();
     
     // സേവ് ചെയ്ത റേഡിയോ ബട്ടൺ ലോഡ് ചെയ്യുന്നു (Default 50)
     let savedLimit = localStorage.getItem('medistock_history_limit') || "50";
@@ -6665,6 +6687,7 @@ window.showIndentHistory = function() {
     
     if(historyArr.length === 0) {
         container.innerHTML = "<h3 style='text-align:center; color:#e74c3c;'>No Indent History found!</h3>";
+        stopHistCPRProgress();
         return;
     }
     
@@ -6728,6 +6751,83 @@ window.showIndentHistory = function() {
     if(document.getElementById('histItemInput')) document.getElementById('histItemInput').value = "ALL MEDICINE";
     if(document.getElementById('historySearchInput')) document.getElementById('historySearchInput').value = "";
     filterHistoryTables();
+    stopHistCPRProgress();
+};
+
+// 🌟 INDENT HISTORY ലോഡ് ആകുന്നത് വരെയുള്ള PROGRESS BAR / CPR IMAGE 🌟
+let histCprInterval = null;
+window.startHistCPRProgress = function() {
+    let loader = document.getElementById('histCprLoader');
+    if(loader) loader.style.display = 'flex';
+    let pBar = document.getElementById('histCprProgress');
+    if(pBar) { pBar.style.width = '0%'; pBar.innerText = '0%'; }
+    let img = document.getElementById('histCprImage');
+    if(img) img.style.clipPath = 'inset(0 100% 0 0)';
+    let width = 0;
+    if(histCprInterval) clearInterval(histCprInterval);
+    histCprInterval = setInterval(() => {
+        if (width >= 90) return;
+        width += Math.floor(Math.random() * 5) + 2;
+        if(width > 90) width = 90;
+        if(pBar) { pBar.style.width = width + '%'; pBar.innerText = width + '%'; }
+        if(img) img.style.clipPath = 'inset(0 ' + (100 - width) + '% 0 0)';
+    }, 400);
+};
+
+window.stopHistCPRProgress = function() {
+    if(histCprInterval) clearInterval(histCprInterval);
+    let pBar = document.getElementById('histCprProgress');
+    if(pBar) { pBar.style.width = '100%'; pBar.innerText = '100%'; }
+    let img = document.getElementById('histCprImage');
+    if(img) img.style.clipPath = 'inset(0 0% 0 0)';
+    setTimeout(() => {
+        let loader = document.getElementById('histCprLoader');
+        if(loader) loader.style.display = 'none';
+    }, 800);
+};
+
+// 🌟 DELETE SELECTED ബട്ടൺ: സെലക്ട് ചെയ്ത ഇൻഡന്റുകൾ ഹിസ്റ്ററിയിൽ നിന്നും ഡിലീറ്റ് ചെയ്യുന്നു 🌟
+window.deleteSelectedHistory = function() {
+    let checked = document.querySelectorAll('.history-block-cb:checked');
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed'; overlay.style.top = '0'; overlay.style.left = '0';
+    overlay.style.width = '100vw'; overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.7)'; overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center'; overlay.style.alignItems = 'center'; overlay.style.zIndex = '10000';
+    const modal = document.createElement('div');
+    modal.style.backgroundColor = 'white'; modal.style.padding = '30px'; modal.style.borderRadius = '8px'; modal.style.textAlign = 'center'; modal.style.maxWidth = '90%';
+
+    if (checked.length === 0) {
+        modal.innerHTML = `
+            <h2 style="color: #c0392b; margin-top: 0;">⚠️ മുന്നറിയിപ്പ്</h2>
+            <p style="font-size: 18px; margin-bottom: 25px; font-weight: bold; color: #2c3e50;">ദയവായി ഡിലീറ്റ് ചെയ്യേണ്ട ഇൻഡന്റ്(കൾ) ആദ്യം സെലക്ട് ചെയ്യുക.</p>
+            <button id="delHistOk" style="background: #2980b9; color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">OK</button>
+        `;
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        document.getElementById('delHistOk').onclick = function() { document.body.removeChild(overlay); };
+        return;
+    }
+
+    modal.innerHTML = `
+        <h2 style="color: #c0392b; margin-top: 0;">⚠️ മുന്നറിയിപ്പ്</h2>
+        <p style="font-size: 18px; margin-bottom: 25px; font-weight: bold; color: #2c3e50;">സെലക്ട് ചെയ്ത ${checked.length} ഇൻഡന്റ്(കൾ) INDENT HISTORY-യിൽ നിന്നും പൂർണ്ണമായും ഡിലീറ്റ് ആക്കണമോ?</p>
+        <button id="delHistYes" style="background: #e74c3c; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">YES</button>
+        <button id="delHistNo" style="background: #7f8c8d; color: white; border: none; padding: 10px 25px; margin: 0 10px; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold;">NO</button>
+    `;
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    document.getElementById('delHistYes').onclick = function() {
+        document.body.removeChild(overlay);
+        let idsToDelete = Array.from(document.querySelectorAll('.history-block-cb:checked')).map(cb => String(cb.value));
+        let historyStr = localStorage.getItem('medistock_indent_history');
+        let historyArr = historyStr ? JSON.parse(historyStr) : [];
+        historyArr = historyArr.filter(entry => !idsToDelete.includes(String(entry.id)));
+        localStorage.setItem('medistock_indent_history', JSON.stringify(historyArr));
+        showIndentHistory();
+    };
+    document.getElementById('delHistNo').onclick = function() { document.body.removeChild(overlay); };
 };
 
 // 🌟 സെലക്ട് ഓൾ ഫംഗ്ഷൻ (Selection doesn't hide anything) 🌟
@@ -18498,6 +18598,8 @@ function checkMandatoryHomeInputs() {
         if (img1) img1.src = CPR_INFOGRAPHIC_SRC;
         let img2 = document.getElementById('pdfCprImage');
         if (img2) img2.src = CPR_INFOGRAPHIC_SRC;
+        let img3 = document.getElementById('histCprImage');
+        if (img3) img3.src = CPR_INFOGRAPHIC_SRC;
     }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', applyCprImageSrc);
@@ -18505,6 +18607,9 @@ function checkMandatoryHomeInputs() {
         applyCprImageSrc();
     }
 })();
+// ========================================================
+// INDENT PREPARATION WINDOW - Qty Indent Validation (Advanced)
+// ========================================================
 const indLeftTable = document.getElementById('indLeftTableBody');
 if (indLeftTable) {
     indLeftTable.addEventListener('input', function(e) {
@@ -18542,7 +18647,7 @@ if (indLeftTable) {
                     e.target.style.setProperty('background-color', '#90ee90', 'important');
                 } else {
                     // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം (ഇപ്പോൾ ശരിയായി പ്രവർത്തിക്കും)
-                    e.target.style.setProperty('background-color', '#90caf9', 'important');
+                    e.target.style.setProperty('background-color', '#fff9c4', 'important');
                 }
             }
         }
