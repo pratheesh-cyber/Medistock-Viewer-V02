@@ -3167,6 +3167,11 @@ function handleAuthClick() {
     </div>
 </div>
 
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-shrink: 0;">
+                    <label for="displayedIndentsCount" style="font-weight: 900; color: #c0392b; cursor: default; font-size: 14px; margin: 0; text-align: center; line-height: 1.15;">DISPLAYED<br>INDENTS</label>
+                    <input type="text" id="displayedIndentsCount" value="0" readonly maxlength="3" style="width: 3ch; height: 38px; text-align: center; font-weight: 900; font-size: 16px; color: #c0392b; border: 2px solid #c0392b; border-radius: 6px; background: #fdecea; padding: 0; box-sizing: content-box;">
+                </div>
+
             </div>
         </div>    
     <div id="historyContainer" style="display: flex; flex-direction: column; gap: 40px;"></div>
@@ -6691,6 +6696,7 @@ window.showIndentHistory = function() {
     if(historyArr.length === 0) {
         container.innerHTML = "<h3 style='text-align:center; color:#e74c3c;'>No Indent History found!</h3>";
         stopHistCPRProgress();
+        if (typeof updateDisplayedIndentsCount === 'function') updateDisplayedIndentsCount();
         return;
     }
     
@@ -6906,6 +6912,17 @@ window.filterHistoryTables = function() {
         // കണ്ടീഷനുകൾ ശരിയാണെങ്കിൽ കാണിക്കും, ഇല്ലെങ്കിൽ മറയ്ക്കും
         block.style.display = show ? '' : 'none';
     });
+
+    // 🌟 SEARCH & DISPLAY OPTION ബോക്സിലെ "DISPLAYED INDENTS" കൗണ്ട് അപ്ഡേറ്റ് ചെയ്യുന്നു 🌟
+    if (typeof updateDisplayedIndentsCount === 'function') updateDisplayedIndentsCount();
+};
+
+// 🌟 നിലവിൽ സ്ക്രീനിൽ കാണിക്കുന്ന (ഫിൽറ്റർ ചെയ്ത ശേഷമുള്ള) ഇൻഡന്റുകളുടെ എണ്ണം കാണിക്കുന്നു 🌟
+window.updateDisplayedIndentsCount = function() {
+    let countBox = document.getElementById('displayedIndentsCount');
+    if (!countBox) return;
+    let visibleCount = document.querySelectorAll('.history-block-item:not([style*="display: none"])').length;
+    countBox.value = visibleCount;
 };
 // 🌟 Refresh ബട്ടൺ ഫംഗ്ഷൻ (എല്ലാം ഡിഫോൾട്ട് ആക്കി മാറ്റുന്നു) 🌟
 window.resetHistoryFilters = function() {
@@ -18671,7 +18688,7 @@ if (indLeftTable) {
                     e.target.style.setProperty('background-color', '#90ee90', 'important');
                 } else {
                     // ഒരേ ഔഷധത്തിന്റെ തുടർന്നുള്ള ബാച്ചുകൾക്ക് ഇളം മഞ്ഞ നിറം (ഇപ്പോൾ ശരിയായി പ്രവർത്തിക്കും)
-                    e.target.style.setProperty('background-color', '#fff9c4', 'important');
+                    e.target.style.setProperty('background-color', '#90caf9', 'important');
                 }
             }
         }
