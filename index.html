@@ -3112,8 +3112,14 @@ function handleAuthClick() {
         </div>
 
         <div class="soothing-box box-blue no-print" style="border: 2px solid #3498db; padding: 15px; margin-bottom: 20px;">
-            <div style="width: 100%; text-align: center; margin-bottom: 10px;">
+            <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                <button onclick="resetHistoryFilters()" style="height: 35px; background: #e67e22; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #d35400; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #d35400';">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
                 <h3 class="box-title" style="margin: 0; padding-bottom: 5px; border-bottom: 2px dashed #ccc; display: inline-block;">SEARCH & DISPLAY OPTION</h3>
+                <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
+                    <i class="fa-solid fa-trash"></i> DELETE SELECTED
+                </button>
             </div>
             
             <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
@@ -3133,28 +3139,6 @@ function handleAuthClick() {
                     <input list="details-item-list" id="histItemInput" class="index-input" value="ALL MEDICINE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL MEDICINE'; filterHistoryTables();" onchange="filterHistoryTables()" oninput="filterHistoryTables()" style="height: 38px; border: 2px solid #2980b9;">
                 </div>
 
-                <div class="input-wrapper" style="gap: 2px;">
-                    <label>&nbsp;</label>
-                    <button onclick="resetHistoryFilters()" style="height: 35px; background: #e67e22; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #d35400; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #d35400';">
-                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
-                    </button>
-                </div>
-
-                <div class="input-wrapper" style="flex: 1; min-width: 140px; gap: 2px;">
-    <label>Search Anything in History...</label>
-    <div style="position: relative; width: 100%;">
-        <input type="text" id="historySearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search item, fund, batch..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px;">
-        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('historySearchInput').value=''; filterHistoryTables();"></i> 
-    </div>
-</div>
-
-<div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
-    <label>&nbsp;</label>
-    <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
-        <i class="fa-solid fa-trash"></i> DELETE SELECTED
-    </button>
-</div>
-
 <div style="border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px; flex-shrink: 0;">
     <span style="font-size: 11px; font-weight: 900; color: #8e44ad; margin-bottom: 2px; text-transform: uppercase;">Show Recent Indents</span>
     <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
@@ -3164,6 +3148,22 @@ function handleAuthClick() {
         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="50" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 50</label>
         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="75" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 75</label>
         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="100" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 100</label>
+    </div>
+</div>
+
+                <div class="input-wrapper" style="flex: 1; min-width: 140px; gap: 2px;">
+    <label>Search Anything in History...</label>
+    <div style="position: relative; width: 100%;">
+        <input type="text" id="historySearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search item, fund, batch..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px;">
+        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('historySearchInput').value=''; filterHistoryTables();"></i> 
+    </div>
+</div>
+
+<div class="input-wrapper" style="width: 25ch; gap: 2px; flex-shrink: 0;">
+    <label>Search by INDENT NO...</label>
+    <div style="position: relative; width: 100%;">
+        <input type="text" id="historyIndentNoSearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search INDENT NO..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px; width: 100%;">
+        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('historyIndentNoSearchInput').value=''; filterHistoryTables();"></i>
     </div>
 </div>
 
@@ -6653,6 +6653,13 @@ function processIndent() {
     let historyStr = localStorage.getItem('medistock_indent_history');
     let historyArr = historyStr ? JSON.parse(historyStr) : [];
     historyArr.unshift(historyEntry); 
+
+    // 🌟 ഓട്ടോ ഡിലീറ്റ് ലോജിക്: റേഡിയോ ബട്ടണിൽ സെലക്ട് ചെയ്ത എണ്ണം നോക്കുന്നു (Default 50) 🌟
+    let savedLimit = parseInt(localStorage.getItem('medistock_history_limit') || "50");
+    if (historyArr.length > savedLimit) {
+        historyArr = historyArr.slice(0, savedLimit);
+    }
+
     localStorage.setItem('medistock_indent_history', JSON.stringify(historyArr));
 
     hideAllPages();
@@ -6702,7 +6709,7 @@ window.showIndentHistory = function() {
             <div style="display: flex; align-items: center; justify-content: space-between; font-weight: bold; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px;">
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <input type="checkbox" class="history-block-cb no-print" value="${entry.id}" style="width: 30px; height: 30px; cursor: pointer; accent-color: #27ae60; margin: 0;">
-                    <span style="font-size: 16px;">INDENT NO: ${entry.indentNo}</span>
+                    <span class="hist-indentno" style="font-size: 16px;">INDENT NO: ${entry.indentNo}</span>
                 </div>
                 <span style="font-size: 16px;">INDENT DATE: ${entry.date}</span>
             </div>
@@ -6746,6 +6753,7 @@ window.showIndentHistory = function() {
     if(document.getElementById('histFundInput')) document.getElementById('histFundInput').value = "ALL PROJECT MEDICINES";
     if(document.getElementById('histItemInput')) document.getElementById('histItemInput').value = "ALL MEDICINE";
     if(document.getElementById('historySearchInput')) document.getElementById('historySearchInput').value = "";
+    if(document.getElementById('historyIndentNoSearchInput')) document.getElementById('historyIndentNoSearchInput').value = "";
     filterHistoryTables();
     stopHistCPRProgress();
 };
@@ -6837,6 +6845,8 @@ window.filterHistoryTables = function() {
     let fundInputVal = document.getElementById('histFundInput').value.trim().toUpperCase();
     let itemFilter = document.getElementById('histItemInput').value.trim().toUpperCase();
     let searchText = document.getElementById('historySearchInput').value.trim().toLowerCase();
+    let indentNoSearchEl = document.getElementById('historyIndentNoSearchInput');
+    let indentNoSearchText = indentNoSearchEl ? indentNoSearchEl.value.trim().toLowerCase() : "";
 
     let blocks = document.querySelectorAll('.history-block-item'); 
 
@@ -6886,6 +6896,13 @@ window.filterHistoryTables = function() {
             if (!blockText.includes(searchText)) show = false;
         }
 
+        // 4. INDENT NO സേർച്ച് ഫിൽറ്റർ (ഓരോ ഇൻഡന്റിന്റെയും INDENT NO: എന്നതിന് ശേഷം വരുന്നത് മാത്രം സേർച്ച് ചെയ്യുന്നു)
+        if (show && indentNoSearchText !== "") {
+            let indentNoEl = block.querySelector('.hist-indentno');
+            let indentNoText = indentNoEl ? indentNoEl.innerText.replace(/indent no:\s*/i, '').trim().toLowerCase() : "";
+            if (!indentNoText.includes(indentNoSearchText)) show = false;
+        }
+
         // കണ്ടീഷനുകൾ ശരിയാണെങ്കിൽ കാണിക്കും, ഇല്ലെങ്കിൽ മറയ്ക്കും
         block.style.display = show ? '' : 'none';
     });
@@ -6902,6 +6919,10 @@ window.resetHistoryFilters = function() {
     // സേർച്ച് ബോക്സ് പൂർണ്ണമായി ക്ലിയർ ചെയ്യുന്നു
     let searchInput = document.getElementById('historySearchInput');
     if (searchInput) searchInput.value = "";
+
+    // INDENT NO സേർച്ച് ബോക്സ് പൂർണ്ണമായി ക്ലിയർ ചെയ്യുന്നു
+    let indentNoSearchInput = document.getElementById('historyIndentNoSearchInput');
+    if (indentNoSearchInput) indentNoSearchInput.value = "";
     
     // ടേബിൾ വീണ്ടും പഴയപടിയാക്കി ഫിൽറ്റർ ചെയ്യുന്നു
     if (typeof filterHistoryTables === 'function') {
@@ -16393,6 +16414,13 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
     let historyStr = localStorage.getItem('medistock_indent_history');
     let historyArr = historyStr ? JSON.parse(historyStr) : [];
     historyArr.unshift(historyEntry);
+
+    // 🌟 ഓട്ടോ ഡിലീറ്റ് ലോജിക്: റേഡിയോ ബട്ടണിൽ സെലക്ട് ചെയ്ത എണ്ണം നോക്കുന്നു (Default 50) 🌟
+    let savedLimit = parseInt(localStorage.getItem('medistock_history_limit') || "50");
+    if (historyArr.length > savedLimit) {
+        historyArr = historyArr.slice(0, savedLimit);
+    }
+
     localStorage.setItem('medistock_indent_history', JSON.stringify(historyArr));
 
     if(typeof hideAllPages === 'function') hideAllPages();
