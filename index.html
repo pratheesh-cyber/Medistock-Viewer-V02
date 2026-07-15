@@ -3123,7 +3123,7 @@ function handleAuthClick() {
                     <label for="historySelectAll" style="font-weight: 900; color: #c0392b; cursor: pointer; font-size: 14px; margin: 0;">SELECT/<br>DESELECT ALL</label>
                 </div>
 
-                <div class="input-wrapper" style="width: 22ch; gap: 2px;">
+                <div class="input-wrapper" style="width: 25ch; gap: 2px;">
                     <label>Select Fund Type</label>
                     <input list="fund-list-filter" id="histFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES'; filterHistoryTables();" onchange="filterHistoryTables()" oninput="filterHistoryTables()" style="height: 38px; border: 2px solid #2980b9;">
                 </div>
@@ -3155,7 +3155,7 @@ function handleAuthClick() {
                     </button>
                 </div>
 
-                <div style="border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px;">
+                <div style="width: 45ch;"border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px;">
                     <span style="font-size: 11px; font-weight: 900; color: #8e44ad; margin-bottom: 2px; text-transform: uppercase;">Show Recent Indents</span>
                     <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center; flex-wrap: wrap; max-width: 230px;">
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="15" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 15</label>
