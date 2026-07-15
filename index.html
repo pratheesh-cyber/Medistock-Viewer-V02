@@ -3123,12 +3123,12 @@ function handleAuthClick() {
                     <label for="historySelectAll" style="font-weight: 900; color: #c0392b; cursor: pointer; font-size: 14px; margin: 0;">SELECT/<br>DESELECT ALL</label>
                 </div>
 
-                <div class="input-wrapper" style="width: 25ch; gap: 2px;">
+                <div class="input-wrapper" style="width: 25.5ch; gap: 2px;">
                     <label>Select Fund Type</label>
                     <input list="fund-list-filter" id="histFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES'; filterHistoryTables();" onchange="filterHistoryTables()" oninput="filterHistoryTables()" style="height: 38px; border: 2px solid #2980b9;">
                 </div>
 
-                <div class="input-wrapper" style="width: 20ch; gap: 2px;">
+                <div class="input-wrapper" style="width: 18ch; gap: 2px;">
                     <label>Search by Item</label>
                     <input list="details-item-list" id="histItemInput" class="index-input" value="ALL MEDICINE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL MEDICINE'; filterHistoryTables();" onchange="filterHistoryTables()" oninput="filterHistoryTables()" style="height: 38px; border: 2px solid #2980b9;">
                 </div>
@@ -3141,31 +3141,31 @@ function handleAuthClick() {
                 </div>
 
                 <div class="input-wrapper" style="flex: 1; min-width: 140px; gap: 2px;">
-                    <label>Search Anything in History...</label>
-                    <div style="position: relative; width: 100%;">
-                        <input type="text" id="historySearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search item, fund, batch..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px;">
-                        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('historySearchInput').value=''; filterHistoryTables();"></i> 
-                    </div>
-                </div>
+    <label>Search Anything in History...</label>
+    <div style="position: relative; width: 100%;">
+        <input type="text" id="historySearchInput" oninput="filterHistoryTables()" class="index-input" placeholder="Search item, fund, batch..." style="padding-right: 30px; border: 2px solid #2980b9; height: 38px;">
+        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('historySearchInput').value=''; filterHistoryTables();"></i> 
+    </div>
+</div>
 
-                <div class="input-wrapper" style="gap: 2px;">
-                    <label>&nbsp;</label>
-                    <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
-                        <i class="fa-solid fa-trash"></i> DELETE SELECTED
-                    </button>
-                </div>
+<div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
+    <label>&nbsp;</label>
+    <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
+        <i class="fa-solid fa-trash"></i> DELETE SELECTED
+    </button>
+</div>
 
-                <div style="width: 45ch;"border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px;">
-                    <span style="font-size: 11px; font-weight: 900; color: #8e44ad; margin-bottom: 2px; text-transform: uppercase;">Show Recent Indents</span>
-                    <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center; flex-wrap: wrap; max-width: 230px;">
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="15" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 15</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="25" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 25</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="35" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 35</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="50" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 50</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="75" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 75</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="100" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 100</label>
-                    </div>
-                </div>
+<div style="border: 2px solid #8e44ad; padding: 4px 10px; border-radius: 8px; background: #f9f0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 45px; flex-shrink: 0;">
+    <span style="font-size: 11px; font-weight: 900; color: #8e44ad; margin-bottom: 2px; text-transform: uppercase;">Show Recent Indents</span>
+    <div style="display: flex; gap: 10px; font-weight: bold; font-size: 14px; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="15" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 15</label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="25" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 25</label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="35" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 35</label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="50" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 50</label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="75" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 75</label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 3px;"><input type="radio" name="historyLimit" value="100" onchange="updateHistoryLimit(this)" style="width:16px; height:16px; margin:0; cursor:pointer; accent-color:#8e44ad;"> 100</label>
+    </div>
+</div>
 
             </div>
         </div>    
