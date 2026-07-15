@@ -3116,7 +3116,7 @@ function handleAuthClick() {
                 <button onclick="resetHistoryFilters()" style="height: 35px; background: #e67e22; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #d35400; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #d35400';">
                     <i class="fa-solid fa-arrows-rotate"></i> REFRESH DISPLAY
                 </button>
-                <h3 class="box-title" style="margin: 0; padding-bottom: 5px; border-bottom: 2px dashed #ccc; display: inline-block;">SEARCH & DISPLAY OPTION</h3>
+                <h3 class="box-title" style="margin: 0; padding-bottom: 5px; border-bottom: 2px dashed #ccc; display: inline-block;">SEARCH & DISPLAY OPTION     </h3>
                 <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
                     <i class="fa-solid fa-trash"></i> DELETE SELECTED
                 </button>
@@ -3338,6 +3338,9 @@ function handleAuthClick() {
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT DATA</button>
+        <!-- 🌟 പുതിയതായി ചേർത്ത UNDO ബട്ടൺ: Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിലെ 
+             ഏറ്റവും അവസാനത്തെ Add/Edit/Delete പ്രവർത്തനം തിരികെ എടുക്കാൻ 🌟 -->
+        <button class="nav-btn" style="margin-bottom: 0; background: #d35400;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO LAST ACTION</button>
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
@@ -3764,10 +3767,114 @@ const categoryColors = {
         let stockItems = [];
         let lastProcessedIndentNo = "";
 
+        // =====================================================================
+        // 🌟 EXPERT ADDITION: UNDO സിസ്റ്റം 🌟
+        // Main Stock (id="mainStockDetailsPage"), Sub Stock OP (id="opSubStockDetailsPage"),
+        // Sub Stock IP (id="ipSubStockDetailsPage"), Opening Stock (id="openingStockPage") എന്നിവയിലെ
+        // എല്ലാ ADD / EDIT / DELETE പ്രവർത്തനങ്ങളും ഒടുവിൽ ഇവിടെയുള്ള saveData() വഴിയാണ് 
+        // localStorage-ൽ സേവ് ആകുന്നത്. അതിനാൽ, പുതിയ ഡാറ്റ എഴുതുന്നതിന് തൊട്ടുമുൻപ് നിലവിലുള്ള 
+        // (പഴയ) ഡാറ്റയുടെ ഒരു സ്നാപ്പ്ഷോട്ട് ഒരു Undo സ്റ്റാക്കിൽ സൂക്ഷിച്ചാൽ, ഈ 4 പേജുകളിലെയും 
+        // ഏത് ADD / EDIT / DELETE പ്രവർത്തനവും തിരികെ (Undo) ചെയ്യാൻ സാധിക്കും.
+        // (id="preIndentSummaryPage" ഈ 4 പേജുകളിലെയും ഡാറ്റയിൽ നിന്നും ഫിൽട്ടർ ചെയ്ത് കാണിക്കുന്ന ഒരു 
+        //  സമ്മറി മാത്രമായതിനാൽ - അതിൽ സ്വന്തമായി Add/Edit/Delete ഇല്ലാത്തതിനാൽ - ഇത് വഴി തന്നെ 
+        //  സ്വയമേവ പരിരക്ഷിക്കപ്പെടുന്നു.)
+        const MEDISTOCK_UNDO_KEY = 'medistock_undo_stack';
+        const MEDISTOCK_UNDO_MAX_STEPS = 15;
+        const MEDISTOCK_UNDO_GROUP_WINDOW_MS = 4000; // ഒരേ എഡിറ്റിന്റെ ഭാഗമായ തുടർച്ചയായ സേവുകളെ ഒറ്റ Undo സ്റ്റെപ്പ് ആക്കുന്നു
+        let medistockLastUndoPushTime = 0;
+
+        function medistockPushUndoSnapshot() {
+            try {
+                let now = Date.now();
+                // അടുത്ത നിമിഷങ്ങളിൽ തന്നെ (ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായി) വീണ്ടും saveData() 
+                // വിളിച്ചതാണെങ്കിൽ, ആദ്യമെടുത്ത Snapshot തന്നെ നിലനിർത്തുന്നു
+                if (now - medistockLastUndoPushTime < MEDISTOCK_UNDO_GROUP_WINDOW_MS) {
+                    medistockLastUndoPushTime = now;
+                    return;
+                }
+                medistockLastUndoPushTime = now;
+
+                let snapshot = {
+                    items: localStorage.getItem('medistock_items'),
+                    projects: localStorage.getItem('medistock_projects'),
+                    lastIndent: localStorage.getItem('medistock_last_indent'),
+                    time: now
+                };
+                let stackRaw = localStorage.getItem(MEDISTOCK_UNDO_KEY);
+                let stack = stackRaw ? JSON.parse(stackRaw) : [];
+                stack.push(snapshot);
+                if (stack.length > MEDISTOCK_UNDO_MAX_STEPS) stack = stack.slice(stack.length - MEDISTOCK_UNDO_MAX_STEPS);
+                localStorage.setItem(MEDISTOCK_UNDO_KEY, JSON.stringify(stack));
+            } catch (e) { console.error("Undo Snapshot Error:", e); }
+        }
+
         function saveData() {
+          // പുതിയ ഡാറ്റ എഴുതി ഓവർറൈറ്റ് ചെയ്യുന്നതിന് മുൻപ്, നിലവിലുള്ള (പഴയ) ഡാറ്റ Undo സ്റ്റാക്കിൽ സൂക്ഷിക്കുന്നു
+          medistockPushUndoSnapshot();
           localStorage.setItem('medistock_items', JSON.stringify(stockItems));
           localStorage.setItem('medistock_projects', JSON.stringify(customProjectsMap));
           localStorage.setItem('medistock_last_indent', lastProcessedIndentNo);
+        }
+
+        // 🌟 "MORE DETAILS" പേജിലെ "UNDO LAST ACTION" ബട്ടൺ അമർത്തുമ്പോൾ പ്രവർത്തിക്കുന്ന ഫംഗ്ഷൻ 🌟
+        function medistockUndoLastAction() {
+            try {
+                let stackRaw = localStorage.getItem(MEDISTOCK_UNDO_KEY);
+                let stack = stackRaw ? JSON.parse(stackRaw) : [];
+                if (stack.length === 0) {
+                    if (typeof showCustomConfirm === 'function') {
+                        showCustomConfirm("Undo ചെയ്യാൻ മുൻപത്തെ പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.", function(){}, function(){});
+                    } else {
+                        alert("Undo ചെയ്യാൻ മുൻപത്തെ പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.");
+                    }
+                    return;
+                }
+
+                let doRestore = function() {
+                    let last = stack.pop();
+                    localStorage.setItem(MEDISTOCK_UNDO_KEY, JSON.stringify(stack));
+
+                    if (last.items !== null && last.items !== undefined) localStorage.setItem('medistock_items', last.items); else localStorage.removeItem('medistock_items');
+                    if (last.projects !== null && last.projects !== undefined) localStorage.setItem('medistock_projects', last.projects); else localStorage.removeItem('medistock_projects');
+                    if (last.lastIndent !== null && last.lastIndent !== undefined) localStorage.setItem('medistock_last_indent', last.lastIndent); else localStorage.removeItem('medistock_last_indent');
+
+                    // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
+                    medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
+                    if (typeof loadData === 'function') loadData();
+                    if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                        window.refreshAllPagesAfterRestore();
+                    } else {
+                        if (typeof renderTable === 'function') renderTable();
+                        if (typeof renderDetailsTable === 'function') renderDetailsTable();
+                        if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
+                        if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
+                        if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
+                        if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+                    }
+
+                    document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ പ്രവർത്തനം വിജയകരമായി Undo ചെയ്തിരിക്കുന്നു.";
+                    document.getElementById('modalOverlay').style.display = 'block';
+                    const winAlert = document.getElementById('sumteckAlertWindow');
+                    winAlert.style.display = 'block';
+                    document.getElementById('sumteckAlertOk').onclick = function() {
+                        winAlert.style.display = 'none';
+                        document.getElementById('modalOverlay').style.display = 'none';
+                    };
+                };
+
+                if (typeof showCustomConfirm === 'function') {
+                    showCustomConfirm(
+                        "Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ ഏറ്റവും അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+                        doRestore,
+                        function() {}
+                    );
+                } else if (confirm("അവസാനം സേവ് ചെയ്ത മാറ്റം Undo ചെയ്യണോ?")) {
+                    doRestore();
+                }
+            } catch (e) {
+                console.error("Undo Error:", e);
+                alert("Undo ചെയ്യുന്നതിനിടെ ഒരു പിശക് സംഭവിച്ചു.");
+            }
         }
 
         function loadData() {
@@ -17906,7 +18013,7 @@ window.clearLocalDraft = function() {
         for (let i = 2; i < lines.length; i++) {
             let cols = lines[i].split('|').map(col => col.trim()).filter(col => col !== '');
             if (cols.length < 4) continue; 
-            let pageNo = cols.length >= 5 ? cols[0] : "";
+            let pageNo = cols.length >= 5 ? medistockSanitizeScannedPageNo(cols[0]) : "";
             let medName = cols.length >= 5 ? cols[1] : cols[0];
             let batch = cols.length >= 5 ? cols[2] : cols[1];
             let expiry = cols.length >= 5 ? cols[3] : cols[2];
@@ -18429,6 +18536,22 @@ async function pdfScannerCallGeminiAPI(base64Image) {
     }
 }
 
+// 🌟 EXPERT ADDITION: സ്കാൻ ചെയ്യുമ്പോൾ Page No കൃത്യമായി ലഭ്യമല്ലെങ്കിലോ, വ്യക്തമല്ലാത്ത 
+// (ഉദാ: N/A, -, ?, Not Visible, Unclear തുടങ്ങിയ) വിലയാണെങ്കിലോ ആ Page No ശൂന്യമാക്കുന്ന ഫംഗ്ഷൻ.
+// pdfScannerPage, smartScannerPage എന്നീ രണ്ട് പേജുകളും ഈ ഒരൊറ്റ ഫംഗ്ഷൻ തന്നെ ഉപയോഗിക്കുന്നു.
+function medistockSanitizeScannedPageNo(raw) {
+    if (raw === null || raw === undefined) return "";
+    let v = String(raw).trim();
+    if (v === "") return "";
+    // AI സ്കാൻ ചെയ്യുമ്പോൾ 'ലഭ്യമല്ല / വ്യക്തമല്ല' എന്ന അർത്ഥത്തിൽ തിരികെ നൽകാവുന്ന വാക്കുകൾ/ചിഹ്നങ്ങൾ
+    let unclearPattern = /^(n\/?a|na|nil|null|none|-{1,4}|—|–|\?{1,4}|not\s*(visible|clear|readable|found|available)|un(clear|known|readable|available|detected)|illegible|no\s*page(\s*no)?|cannot\s*(read|scan)|x{2,})$/i;
+    if (unclearPattern.test(v)) return "";
+    // Page No എന്നത് സാധാരണയായി അക്കങ്ങൾ (ചിലപ്പോൾ 12/13, 12-13 പോലെ) ആയിരിക്കും;
+    // ഒരു അക്കം പോലും ഇല്ലാത്ത ടെക്സ്റ്റ് ആണെങ്കിൽ അതും കൃത്യമായി സ്കാൻ ചെയ്യാൻ കഴിയാത്തതായി കണക്കാക്കി ശൂന്യമാക്കുന്നു
+    if (!/\d/.test(v)) return "";
+    return v;
+}
+
 function pdfScannerConvertToDataEntryForm(markdownText) {
     const lines = markdownText.split('\n').filter(line => line.trim().startsWith('|'));
     if (lines.length <= 2) return "<p style='color:red; text-align:center;'>ബില്ലിൽ നിന്നും ഡാറ്റ കണ്ടെത്താനായില്ല.</p>";
@@ -18437,7 +18560,7 @@ function pdfScannerConvertToDataEntryForm(markdownText) {
     for (let i = 2; i < lines.length; i++) {
         let cols = lines[i].split('|').map(col => col.trim()).filter(col => col !== '');
         if (cols.length < 4) continue; 
-        let pageNo = cols.length >= 5 ? cols[0] : ""; let medName = cols.length >= 5 ? cols[1] : cols[0];
+        let pageNo = cols.length >= 5 ? medistockSanitizeScannedPageNo(cols[0]) : ""; let medName = cols.length >= 5 ? cols[1] : cols[0];
         let batch = cols.length >= 5 ? cols[2] : cols[1]; let expiry = cols.length >= 5 ? cols[3] : cols[2]; let qty = cols.length >= 5 ? cols[4] : cols[3];
         html += `<tr><td><input type="text" value="${pageNo}"></td><td><input type="text" value="${medName}"></td><td><input type="text" value="${batch}"></td><td><input type="text" value="${expiry}"></td><td><input type="text" value="${qty}"></td></tr>`;
     }
