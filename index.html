@@ -2428,13 +2428,12 @@ function handleAuthClick() {
 </div>
     <div id="excelImportPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
-            <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="goBackFromExcel()"><i class="fa-solid fa-arrow-left"></i> BACK</button>
-            <button class="nav-btn" style="margin-bottom: 0; background: #f39c12;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
-            <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; font-size: 16px; padding: 10px 30px;" onclick="importExtractedData()"><i class="fa-solid fa-file-import"></i> IMPORT EXTRACTED DATA</button>
-            <button class="nav-btn" style="margin-bottom: 0; background: #2980b9;" onclick="showMainStockIndex()">GO TO MAIN STOCK INDEX</button>
-            <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="clearExcelImportData()"><i class="fa-solid fa-trash"></i> CLEAR ALL</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="goBackFromExcel()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #f39c12;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> Home</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; font-size: 16px; padding: 10px 30px;" onclick="importExtractedData()"><i class="fa-solid fa-file-import"></i> Import Extracted Data</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="clearExcelImportData()"><i class="fa-solid fa-trash"></i> Clear All</button>
             <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="openSmartScanner()"><i class="fa-solid fa-file-image"></i> Open Image Scanner</button>
-            <button class="nav-btn" style="margin-bottom: 0; background: #218c74;" onclick="showStockPage()"><i class="fa-solid fa-box"></i> SHEET FOR ADDING MEDICINES TO STOCK</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #218c74;" onclick="showStockPage()"><i class="fa-solid fa-box"></i> Sheet for Adding to Stock</button>
             <button class="nav-btn" style="margin-bottom: 0; background: #e67e22;" onclick="openPdfScanner()"><i class="fa-solid fa-file-pdf"></i> Open PDF Scanner</button>
         </div>
         
@@ -2453,7 +2452,7 @@ function handleAuthClick() {
 
         <div class="master-container" style="background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
 <div style="text-align: center; color: #e67e22; font-weight: bold; margin-bottom: 15px;">
-                Excel-ൽ നിന്നുള്ള കോളം ഡാറ്റകൾ പകർത്തി (Copy), താഴെ അതാത് കോളത്തിലെ ആദ്യത്തെ ബോക്സിൽ ക്ലിക്ക് ചെയ്ത് Paste (Ctrl+V) ചെയ്യുക.
+                നിങ്ങൾക്ക് ഈ ഷീറ്റിൽ Excel Shee ൽ നിന്നും  Name of Medicine,Batch No,Exp.Dt.,Qty,Page No എന്നീ കോളങ്ങളിൽ Copy-Paste ചെയ്യാൻ സാധിക്കും.Software-Image/Pdf സ്കാനർ പേജുകളിൽ നിന്നും IMPORT ചെയ്യുന്ന ടേബിളും ഈ പേജിൽ ആണ് ആദ്യം വരുന്നത്.ഇങ്ങനെ വരുന്നവയുടെ Name of Medicine കോളത്തിൽ Yellow Color വന്നാൽ അതിന്റെ അർത്ഥം ചെറിയ അക്ഷരതെറ്റ് വന്നവ Software തനിയെ തിരുത്തിയതോ Software ന് സംശയമുള്ളതോ ആണ് എന്നാണ്.Name of Medicine കോളത്തിൽ ഇങ്ങനെ വന്നത് പരിശോധിച്ച് തിരുത്തുന്നതിലും എളുപ്പം അങ്ങനെ കാണിക്കുന്ന ബോക്സിലെ ഡാറ്റ സെലക്റ്റ് ചെയ്ത് ഡിലീറ്റ് ചെയ്തിട്ട് നമ്മൾ തന്നെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കുന്നതാണ്. അതിന് ആദ്യം ഈ Medicine Item കോളത്തിലെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കണം രണ്ടാമത് Name of Medicine കോളത്തിലും അവസാനം IMPORT EXTRACTED DATA എന്ന ബട്ടൺ ഉപയോഗിക്കുക. ഏര്രവും എളുപ്പം ചെയ്യുന്നതിന് HAND BOOK ഉപയോഗിക്കുക
                 <div style="color: #2980b9; font-size: 14px; font-weight: 600; margin-top: 5px; text-align: center;">
                     (SI No, Medicine Item എന്നിവ Medistock Viewer തനിയെ രേഖപ്പെടുത്തി നൽകുന്നതാണ്)
                 </div>
@@ -2551,14 +2550,17 @@ function handleAuthClick() {
     </div>
 
     <div class="scan-top-bar" style="background-color: #e67e22;">
-        <div class="scan-title-text" style="color: white; font-size: 26px; font-weight: bold;">Medistock Smart PDF Scanner</div>
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px;">
-            <button class="index-btn" style="padding: 8px 15px; background: #2c3e50; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="closePdfScanner()">BACK TO ADD STOCK</button>
-            <button class="index-btn" style="padding: 8px 15px; background: #8e44ad; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerGoHome()">HOME</button>
-            <button class="index-btn" style="padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerImportExtractedData()">IMPORT EXTRACTED DATA</button>
-            <button class="index-btn" style="padding: 8px 15px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerClearAll()">CLEAR ALL</button>
-        </div>
+    <div class="scan-title-text" style="color: white; font-size: 26px; font-weight: bold; text-align: center;">Medistock Smart PDF Scanner</div>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 12px;">
+        <button class="index-btn" style="padding: 8px 15px; background: #2980b9; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="goBack()">BACK</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #2c3e50; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="closePdfScanner()">BACK TO ADD STOCK</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #8e44ad; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerGoHome()">HOME</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #16a085; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="showExcelImportPage()">Load from Excel Sheet & Extract</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerImportExtractedData()">IMPORT EXTRACTED DATA</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="showStockPage()">SHEET FOR ADDING MEDICINES TO STOCK</button>
+        <button class="index-btn" style="padding: 8px 15px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold;" onclick="pdfScannerClearAll()">CLEAR ALL</button>
     </div>
+</div>
 
     <div class="pdf-main-content">
         <!-- Thumbnails Panel -->
