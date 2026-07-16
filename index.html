@@ -3116,7 +3116,7 @@ function handleAuthClick() {
                 <button onclick="resetHistoryFilters()" style="height: 35px; background: #e67e22; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #d35400; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #d35400';">
                     <i class="fa-solid fa-arrows-rotate"></i> REFRESH DISPLAY
                 </button>
-                <h3 class="box-title" style="margin: 0; padding-bottom: 5px; border-bottom: 2px dashed #ccc; display: inline-block;">SEARCH & DISPLAY OPTION     </h3>
+                <h3 class="box-title" style="margin: 0; padding-bottom: 5px; border-bottom: 2px dashed #ccc; display: inline-block;">SEARCH & DISPLAY OPTION</h3>
                 <button type="button" id="deleteSelectedHistoryBtn" onclick="deleteSelectedHistory()" style="height: 35px; background: #c0392b; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #922b21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s; flex-shrink: 0;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #922b21';">
                     <i class="fa-solid fa-trash"></i> DELETE SELECTED
                 </button>
@@ -3768,38 +3768,49 @@ const categoryColors = {
         let lastProcessedIndentNo = "";
 
         // =====================================================================
-        // 🌟 EXPERT ADDITION: UNDO സിസ്റ്റം 🌟
-        // Main Stock (id="mainStockDetailsPage"), Sub Stock OP (id="opSubStockDetailsPage"),
-        // Sub Stock IP (id="ipSubStockDetailsPage"), Opening Stock (id="openingStockPage") എന്നിവയിലെ
-        // എല്ലാ ADD / EDIT / DELETE പ്രവർത്തനങ്ങളും ഒടുവിൽ ഇവിടെയുള്ള saveData() വഴിയാണ് 
-        // localStorage-ൽ സേവ് ആകുന്നത്. അതിനാൽ, പുതിയ ഡാറ്റ എഴുതുന്നതിന് തൊട്ടുമുൻപ് നിലവിലുള്ള 
-        // (പഴയ) ഡാറ്റയുടെ ഒരു സ്നാപ്പ്ഷോട്ട് ഒരു Undo സ്റ്റാക്കിൽ സൂക്ഷിച്ചാൽ, ഈ 4 പേജുകളിലെയും 
-        // ഏത് ADD / EDIT / DELETE പ്രവർത്തനവും തിരികെ (Undo) ചെയ്യാൻ സാധിക്കും.
-        // (id="preIndentSummaryPage" ഈ 4 പേജുകളിലെയും ഡാറ്റയിൽ നിന്നും ഫിൽട്ടർ ചെയ്ത് കാണിക്കുന്ന ഒരു 
-        //  സമ്മറി മാത്രമായതിനാൽ - അതിൽ സ്വന്തമായി Add/Edit/Delete ഇല്ലാത്തതിനാൽ - ഇത് വഴി തന്നെ 
-        //  സ്വയമേവ പരിരക്ഷിക്കപ്പെടുന്നു.)
+        // 🌟 EXPERT ADDITION: UNDO സിസ്റ്റം (വിപുലീകരിച്ചത്) 🌟
+        // Main Stock, Sub Stock OP, Sub Stock IP, Opening Stock (stockItems വഴി saveData() 
+        // ഉപയോഗിക്കുന്നവ) എന്നിവ കൂടാതെ, താഴെ പറയുന്ന localStorage കീകൾ വഴി പ്രവർത്തിക്കുന്ന 
+        // പേജുകൾ കൂടി ഇനി ഈ Undo സിസ്റ്റം പരിരക്ഷിക്കുന്നു:
+        //   • medistock_indent_history        → id="indentHistoryPage"
+        //   • medistock_last_transaction      → id="lastAddedOPStockPage", id="lastAddedIPStockPage"
+        //   • medistock_main_last_added_date/time → id="lastAddedMedicinesPage"
+        //   • medistock_op_last_added_date/time   → id="lastAddedOPStockPage"
+        //   • medistock_ip_last_added_date/time   → id="lastAddedIPStockPage"
+        // id="indentAtItemPage", id="indentAtPagePage" എന്നിവ stockItems/lastProcessedIndentNo 
+        // മാറ്റത്തിൽ നിന്നു തന്നെ (renderIndentLeftTable / renderIndentRightTable വഴി) പുതുക്കപ്പെടുന്നു.
+        //
+        // ഇത് നടപ്പിലാക്കാൻ, ഈ എല്ലാ കീകളിലേക്കുമുള്ള localStorage.setItem() എഴുത്തിനെ ഒരൊറ്റ 
+        // പോയിന്റിൽ "ഹുക്ക്" ചെയ്ത് അതിന് മുൻപുള്ള (പഴയ) മൂല്യങ്ങൾ ഒരു Undo സ്റ്റാക്കിൽ സൂക്ഷിക്കുന്നു.
         const MEDISTOCK_UNDO_KEY = 'medistock_undo_stack';
         const MEDISTOCK_UNDO_MAX_STEPS = 15;
-        const MEDISTOCK_UNDO_GROUP_WINDOW_MS = 4000; // ഒരേ എഡിറ്റിന്റെ ഭാഗമായ തുടർച്ചയായ സേവുകളെ ഒറ്റ Undo സ്റ്റെപ്പ് ആക്കുന്നു
+        const MEDISTOCK_UNDO_GROUP_WINDOW_MS = 4000; // ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായ തുടർച്ചയായ സേവുകളെ ഒറ്റ Undo സ്റ്റെപ്പ് ആക്കുന്നു
+        const MEDISTOCK_UNDO_TRACKED_KEYS = [
+            'medistock_items', 'medistock_projects', 'medistock_last_indent',
+            'medistock_indent_history', 'medistock_last_transaction',
+            'medistock_main_last_added_date', 'medistock_main_last_added_time',
+            'medistock_op_last_added_date', 'medistock_op_last_added_time',
+            'medistock_ip_last_added_date', 'medistock_ip_last_added_time'
+        ];
         let medistockLastUndoPushTime = 0;
+        let medistockUndoRestoring = false; // Restore ചെയ്യുന്ന സമയത്ത് സ്വയം ഒരു Snapshot എടുക്കാതിരിക്കാൻ
 
         function medistockPushUndoSnapshot() {
             try {
+                if (medistockUndoRestoring) return;
                 let now = Date.now();
-                // അടുത്ത നിമിഷങ്ങളിൽ തന്നെ (ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായി) വീണ്ടും saveData() 
-                // വിളിച്ചതാണെങ്കിൽ, ആദ്യമെടുത്ത Snapshot തന്നെ നിലനിർത്തുന്നു
+                // അടുത്ത നിമിഷങ്ങളിൽ തന്നെ (ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായി) വീണ്ടും ട്രാക്ക് ചെയ്യുന്ന ഒരു കീ 
+                // എഴുതുന്നതാണെങ്കിൽ, ആദ്യമെടുത്ത Snapshot തന്നെ നിലനിർത്തുന്നു
                 if (now - medistockLastUndoPushTime < MEDISTOCK_UNDO_GROUP_WINDOW_MS) {
                     medistockLastUndoPushTime = now;
                     return;
                 }
                 medistockLastUndoPushTime = now;
 
-                let snapshot = {
-                    items: localStorage.getItem('medistock_items'),
-                    projects: localStorage.getItem('medistock_projects'),
-                    lastIndent: localStorage.getItem('medistock_last_indent'),
-                    time: now
-                };
+                let snapshot = { time: now, data: {} };
+                MEDISTOCK_UNDO_TRACKED_KEYS.forEach(function(k) {
+                    snapshot.data[k] = localStorage.getItem(k);
+                });
                 let stackRaw = localStorage.getItem(MEDISTOCK_UNDO_KEY);
                 let stack = stackRaw ? JSON.parse(stackRaw) : [];
                 stack.push(snapshot);
@@ -3808,9 +3819,17 @@ const categoryColors = {
             } catch (e) { console.error("Undo Snapshot Error:", e); }
         }
 
+        // 🌟 ട്രാക്ക് ചെയ്യുന്ന ഏത് കീ എഴുതിയാലും, എഴുതുന്നതിന് മുൻപ് ഒരു Snapshot എടുക്കാൻ 
+        // localStorage.setItem() പൊതുവായി "ഹുക്ക്" ചെയ്യുന്നു (നിലവിലുള്ള ബാക്കി കോഡിലൊന്നും മാറ്റം വരുത്തേണ്ടതില്ല)
+        const medistockOriginalSetItem = localStorage.setItem.bind(localStorage);
+        localStorage.setItem = function(key, value) {
+            if (!medistockUndoRestoring && MEDISTOCK_UNDO_TRACKED_KEYS.indexOf(key) !== -1) {
+                medistockPushUndoSnapshot();
+            }
+            return medistockOriginalSetItem(key, value);
+        };
+
         function saveData() {
-          // പുതിയ ഡാറ്റ എഴുതി ഓവർറൈറ്റ് ചെയ്യുന്നതിന് മുൻപ്, നിലവിലുള്ള (പഴയ) ഡാറ്റ Undo സ്റ്റാക്കിൽ സൂക്ഷിക്കുന്നു
-          medistockPushUndoSnapshot();
           localStorage.setItem('medistock_items', JSON.stringify(stockItems));
           localStorage.setItem('medistock_projects', JSON.stringify(customProjectsMap));
           localStorage.setItem('medistock_last_indent', lastProcessedIndentNo);
@@ -3834,14 +3853,23 @@ const categoryColors = {
                     let last = stack.pop();
                     localStorage.setItem(MEDISTOCK_UNDO_KEY, JSON.stringify(stack));
 
-                    if (last.items !== null && last.items !== undefined) localStorage.setItem('medistock_items', last.items); else localStorage.removeItem('medistock_items');
-                    if (last.projects !== null && last.projects !== undefined) localStorage.setItem('medistock_projects', last.projects); else localStorage.removeItem('medistock_projects');
-                    if (last.lastIndent !== null && last.lastIndent !== undefined) localStorage.setItem('medistock_last_indent', last.lastIndent); else localStorage.removeItem('medistock_last_indent');
+                    medistockUndoRestoring = true; // പുനഃസ്ഥാപിക്കുന്ന ഈ എഴുത്തുകൾ പുതിയ Snapshot ആയി എടുക്കാതിരിക്കാൻ
+                    try {
+                        MEDISTOCK_UNDO_TRACKED_KEYS.forEach(function(k) {
+                            let v = last.data ? last.data[k] : undefined;
+                            if (v !== null && v !== undefined) localStorage.setItem(k, v); else localStorage.removeItem(k);
+                        });
+                    } finally {
+                        medistockUndoRestoring = false;
+                    }
+                    medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
 
                     // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
-                    medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
                     if (typeof loadData === 'function') loadData();
                     if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                        // ഇത് നിലവിൽ Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / 
+                        // Pre-Indent Summary / Indent @ Item / Indent @ Page No / Last Added (Main, OP, IP) 
+                        // എന്നിവയെല്ലാം പുതുക്കുന്നു
                         window.refreshAllPagesAfterRestore();
                     } else {
                         if (typeof renderTable === 'function') renderTable();
@@ -3850,6 +3878,19 @@ const categoryColors = {
                         if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
                         if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
                         if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+                        if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
+                        if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
+                        if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
+                        if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
+                        if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+                    }
+
+                    // 🌟 id="indentHistoryPage" നിലവിൽ തുറന്നിരിക്കുകയാണെങ്കിൽ മാത്രം അതും പുതുക്കുന്നു 
+                    // (ഈ പേജിന്റെ റെൻഡർ ഫംഗ്ഷൻ പേജ് നാവിഗേഷൻ കൂടി ചെയ്യുന്നതിനാൽ, മറ്റൊരു പേജിൽ 
+                    //  ആയിരിക്കുമ്പോൾ അബദ്ധത്തിൽ ഈ പേജിലേക്ക് മാറാതിരിക്കാൻ ഈ ചെക്ക് ആവശ്യമാണ്)
+                    let histPageEl = document.getElementById('indentHistoryPage');
+                    if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
+                        window.showIndentHistory();
                     }
 
                     document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ പ്രവർത്തനം വിജയകരമായി Undo ചെയ്തിരിക്കുന്നു.";
@@ -3864,7 +3905,7 @@ const categoryColors = {
 
                 if (typeof showCustomConfirm === 'function') {
                     showCustomConfirm(
-                        "Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ ഏറ്റവും അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+                        "Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / Indent / Indent History / Last Added എന്നിവയിൽ ഏറ്റവും അവസാനം വരുത്തിയ മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
                         doRestore,
                         function() {}
                     );
