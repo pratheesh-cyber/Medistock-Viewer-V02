@@ -5514,6 +5514,10 @@ function updateColumnEdits(type) {
             let clickClear = `onclick="this.value=''"`;
 
           catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
+          // 🌟 EXPERT FIX: Edit മോഡിൽ കയറുമ്പോൾ തന്നെ, നിലവിൽ സെലക്ട് ആയ Medicine item അടിസ്ഥാനമാക്കി
+          // medicine-list ഡേറ്റാലിസ്റ്റ് നിറയ്ക്കുന്നു, അതിനാൽ Medicine item ഡിലീറ്റ് ചെയ്ത് വീണ്ടും
+          // സെലക്ട് ചെയ്യാതെ തന്നെ NAME OF MEDICINE ഡ്രോപ്പ് ഡൗൺ ആദ്യമേ വർക്ക് ചെയ്യും 🌟
+          handleInlineCategory(catTd.querySelector('input'));
           document.getElementById(`name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
           document.getElementById(`bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
           document.getElementById(`exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
@@ -5742,6 +5746,10 @@ function editOpDetailsRow(id) {
     let clickClear = `onclick="this.value=''"`;
 
     catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
+    // 🌟 EXPERT FIX: Edit മോഡിൽ കയറുമ്പോൾ തന്നെ, നിലവിൽ സെലക്ട് ആയ Medicine item അടിസ്ഥാനമാക്കി
+    // medicine-list ഡേറ്റാലിസ്റ്റ് നിറയ്ക്കുന്നു, അതിനാൽ Medicine item ഡിലീറ്റ് ചെയ്ത് വീണ്ടും
+    // സെലക്ട് ചെയ്യാതെ തന്നെ NAME OF MEDICINE ഡ്രോപ്പ് ഡൗൺ ആദ്യമേ വർക്ക് ചെയ്യും 🌟
+    handleInlineCategory(catTd.querySelector('input'));
     document.getElementById(`ops_d_name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
     document.getElementById(`ops_d_bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
     document.getElementById(`ops_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
@@ -5961,6 +5969,10 @@ function editIpDetailsRow(id) {
     let clickClear = `onclick="this.value=''"`;
 
     catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
+    // 🌟 EXPERT FIX: Edit മോഡിൽ കയറുമ്പോൾ തന്നെ, നിലവിൽ സെലക്ട് ആയ Medicine item അടിസ്ഥാനമാക്കി
+    // medicine-list ഡേറ്റാലിസ്റ്റ് നിറയ്ക്കുന്നു, അതിനാൽ Medicine item ഡിലീറ്റ് ചെയ്ത് വീണ്ടും
+    // സെലക്ട് ചെയ്യാതെ തന്നെ NAME OF MEDICINE ഡ്രോപ്പ് ഡൗൺ ആദ്യമേ വർക്ക് ചെയ്യും 🌟
+    handleInlineCategory(catTd.querySelector('input'));
     document.getElementById(`ips_d_name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveCell(${id}, 'name', this.value)" ${clickClear}>`;
     document.getElementById(`ips_d_bat_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.batch}" onblur="autoSaveCell(${id}, 'batch', this.value)">`;
     document.getElementById(`ips_d_exp_${id}`).innerHTML = `<input type="text" class="editing-input" placeholder="M/YY" value="${item.exp}" onblur="validateExpField(this); autoSaveCell(${id}, 'exp', this.value)">`;
@@ -6137,6 +6149,10 @@ function editOpeningRow(id) {
             let clickClear = `onclick="this.value=''"`;
 
            catTd.innerHTML = `<input list="category-list" class="editing-input" value="${item.item}" onblur="autoSaveOpeningCell(${id}, 'item', this.value)" oninput="handleInlineCategory(this)" ${clickClear}>`;
+          // 🌟 EXPERT FIX: Edit മോഡിൽ കയറുമ്പോൾ തന്നെ, നിലവിൽ സെലക്ട് ആയ Medicine item അടിസ്ഥാനമാക്കി
+          // medicine-list ഡേറ്റാലിസ്റ്റ് നിറയ്ക്കുന്നു, അതിനാൽ Medicine item ഡിലീറ്റ് ചെയ്ത് വീണ്ടും
+          // സെലക്ട് ചെയ്യാതെ തന്നെ NAME OF MEDICINE ഡ്രോപ്പ് ഡൗൺ ആദ്യമേ വർക്ക് ചെയ്യും 🌟
+          handleInlineCategory(catTd.querySelector('input'));
           document.getElementById(`op_name_${id}`).innerHTML = `<input list="medicine-list" class="editing-input" style="text-align:left;" value="${item.name}" onblur="autoSaveOpeningCell(${id}, 'name', this.value)" ${clickClear}>`;
           document.getElementById(`op_fund_${id}`).innerHTML = `<input list="fund-list" class="editing-input" value="${item.fund}" onblur="autoSaveOpeningCell(${id}, 'fund', this.value)" ${clickClear}>`;
           document.getElementById(`op_pag_${id}`).innerHTML = `<input type="text" class="editing-input" value="${item.page}" onblur="autoSaveOpeningCell(${id}, 'page', this.value)">`;
@@ -16096,6 +16112,14 @@ window.applyManualPageBreaksForHistory = function(containerId) {
             document.getElementById('modalOverlay').style.display = 'none';
             document.getElementById('sumteckAlertOk').onclick = oldOnClick; 
             
+            // 🌟 EXPERT FIX: INDENT HISTORY പേജിലെ ഏത് ബട്ടൺ ഉപയോഗിച്ചാലും (ഇവിടെ PRINT / PERFECT PDF),
+            // ആ പേജിൽ നിലവിലുള്ള PROGRESS BAR / CPR STEPS ലോഡർ ആ ബട്ടണിന്റെ അന്തിമ റിസൽട്ട്
+            // (പ്രിന്റ് വിൻഡോ വരുന്നത്) വരെ സ്ക്രീനിൽ കാണിക്കുന്നു. മറ്റ് പേജുകളിലെ ഇതേ ബട്ടണിന്റെ
+            // പ്രവർത്തനത്തിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല 🌟
+            if (pageId === 'indentHistoryPage' && typeof startHistCPRProgress === 'function') {
+                startHistCPRProgress();
+            }
+            
             let container = document.getElementById(pageId);
             if(typeof prepareTableForPrintOrPdf === 'function') prepareTableForPrintOrPdf(pageId);
             container.classList.add('print-pdf-active');
@@ -16140,6 +16164,11 @@ if (pageContainer) {
                                 block.classList.remove('hide-history-print');
                                 block.style.display = '';
                             });
+                            // 🌟 EXPERT FIX: ബട്ടണിന്റെ അന്തിമ റിസൽട്ട് (പ്രിന്റ് പ്രോസസ്സ് പൂർത്തിയായി,
+                            // പേജ് പഴയപടി ആയി) ഇപ്പോൾ ലഭിച്ചു എന്നതിനാൽ ലോഡർ ഇവിടെ നിർത്തുന്നു 🌟
+                            if (typeof stopHistCPRProgress === 'function') {
+                                stopHistCPRProgress();
+                            }
                         }
                     }, 500);
                 }, 50);
