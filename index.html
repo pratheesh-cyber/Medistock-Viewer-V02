@@ -832,6 +832,19 @@
         <button onclick="closeEditAlert()" style="background:white; color:#e67e22; border:none; padding:10px 30px; border-radius:8px; font-weight:bold; cursor:pointer;">YES</button>
     </div>
 
+    <div id="excelFirstPasteInfoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10075; align-items:center; justify-content:center; backdrop-filter: blur(3px);">
+        <div style="background:#2c3e50; color:white; padding:30px; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.5); text-align:left; font-size:16px; max-width:650px; width:90%; line-height:1.8; max-height:85vh; overflow-y:auto;">
+            <h3 style="margin-top:0; color:#f1c40f; text-align:center;"><i class="fa-solid fa-circle-info"></i> ശ്രദ്ധിക്കുക</h3>
+            <p>പുതിയതായി Paste ചെയ്ത <b>Name of Medicine</b> കോളത്തിൽ <span style="background:#f1c40f; color:black; padding:2px 8px; border-radius:4px; font-weight:bold;">Yellow Color</span> വന്നാൽ അതിന്റെ അർത്ഥം ചെറിയ അക്ഷരതെറ്റ് വന്നവ Software തനിയെ തിരുത്തിയതോ Software ന് സംശയമുള്ളതോ ആണ് എന്നാണ്.</p>
+            <p>Name of Medicine കോളത്തിൽ ഇങ്ങനെ വന്നത് പരിശോധിച്ച് തിരുത്തുന്നതിലും എളുപ്പം അങ്ങനെ കാണിക്കുന്ന ബോക്സിലെ ഡാറ്റ പൂർണ്ണമായി സെലക്റ്റ് ചെയ്ത് ഡിലീറ്റ് ചെയ്തിട്ട് നമ്മൾ തന്നെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കുന്നതാണ്.</p>
+            <p>അതിന് ആദ്യം ഈ നിരയിലെ <b>Medicine Item</b> കോളത്തിലെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കണം. രണ്ടാമത് <b>Name of Medicine</b> കോളത്തിലും Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കണം.</p>
+            <p style="margin-bottom:0;">ഈ വിൻഡോയിൽ എല്ലാം പരിശോധിച്ച ശേഷം അവസാനം ഔഷധങ്ങൾ ചേർക്കേണ്ട <b>IMPORT EXTRACTED DATA</b> എന്ന ബട്ടൺ ഉപയോഗിക്കുക. ഏറ്റവും എളുപ്പം ചെയ്യുന്നതിന് <b>HAND BOOK</b> ഉപയോഗിക്കുക.</p>
+            <div style="text-align:center; margin-top:20px;">
+                <button onclick="closeExcelFirstPasteInfo()" style="background:#f1c40f; color:#2c3e50; border:none; padding:10px 40px; border-radius:8px; font-weight:900; cursor:pointer; font-size:16px;">OK, മനസ്സിലായി</button>
+            </div>
+        </div>
+    </div>
+
     <div id="projectModal">
         <button class="modal-close" onclick="closeModal()">X</button>
         <h3 style="text-align:center; color:#005088; margin-top:0;">PROJECT NAME & CODE</h3>
@@ -2453,10 +2466,7 @@ function handleAuthClick() {
 
         <div class="master-container" style="background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
 <div style="text-align: center; color: #e67e22; font-weight: bold; margin-bottom: 15px;">
-                നിങ്ങൾക്ക് ഈ ഷീറ്റിൽ Excel Shee ൽ നിന്നും  Name of Medicine,Batch No,Exp.Dt.,Qty,Page No എന്നീ കോളങ്ങളിൽ Copy-Paste ചെയ്യാൻ സാധിക്കും.Software-Image/Pdf സ്കാനർ പേജുകളിൽ നിന്നും IMPORT ചെയ്യുന്ന ടേബിളും ഈ പേജിൽ ആണ് ആദ്യം വരുന്നത്.ഇങ്ങനെ വരുന്നവയുടെ Name of Medicine കോളത്തിൽ Yellow Color വന്നാൽ അതിന്റെ അർത്ഥം ചെറിയ അക്ഷരതെറ്റ് വന്നവ Software തനിയെ തിരുത്തിയതോ Software ന് സംശയമുള്ളതോ ആണ് എന്നാണ്.Name of Medicine കോളത്തിൽ ഇങ്ങനെ വന്നത് പരിശോധിച്ച് തിരുത്തുന്നതിലും എളുപ്പം അങ്ങനെ കാണിക്കുന്ന ബോക്സിലെ ഡാറ്റ സെലക്റ്റ് ചെയ്ത് ഡിലീറ്റ് ചെയ്തിട്ട് നമ്മൾ തന്നെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കുന്നതാണ്. അതിന് ആദ്യം ഈ Medicine Item കോളത്തിലെ Drop Down List ൽ നിന്നും തിരഞ്ഞെടുക്കണം രണ്ടാമത് Name of Medicine കോളത്തിലും അവസാനം IMPORT EXTRACTED DATA എന്ന ബട്ടൺ ഉപയോഗിക്കുക. ഏര്രവും എളുപ്പം ചെയ്യുന്നതിന് HAND BOOK ഉപയോഗിക്കുക
-                <div style="color: #2980b9; font-size: 14px; font-weight: 600; margin-top: 5px; text-align: center;">
-                    (SI No, Medicine Item എന്നിവ Medistock Viewer തനിയെ രേഖപ്പെടുത്തി നൽകുന്നതാണ്)
-                </div>
+                ഈ വിൻഡോയുടെ പ്രവർത്തനം കൃത്യമായി മനസിലാക്കുന്നതിനും ഏറ്റവും എളുപ്പം ചെയ്യുന്നതിന് HAND BOOK കൃത്യമായി വായിക്കുക.എന്നിട്ടും സംശയം വന്നാൽ HELP DESK സഹായം തേടുക!
             </div>
             <div class="entry-container">
                 <div class="sticky-header entry-grid-layout" style="grid-template-columns: 50px 160px 1fr 120px 80px 70px 70px 80px;">
@@ -4378,7 +4388,7 @@ loadData();
             row.className = 'entry-row entry-grid-layout';
             row.style.gridTemplateColumns = '50px 160px 1fr 120px 80px 70px 70px 80px';
             row.innerHTML = `
-                <input type="text" id="xl_sino_${i}" readonly style="background-color: #e2e8f0; cursor: not-allowed; text-align: center; font-weight: bold; color: black;">
+                <input type="text" id="xl_sino_${i}" disabled style="background-color: #e2e8f0; cursor: not-allowed; text-align: center; font-weight: bold; color: black;">
                 <input list="category-list" id="xl_cat_${i}" style="text-align: center; font-weight: bold;" oninput="handleCategoryInput(this, ${i})">
                 <input list="medicine-list" id="xl_med_${i}" style="text-align:left;" oninput="autoFillExcelColumns(); refreshExcelGridLockState();">
                 <input type="text" id="xl_bat_${i}" oninput="refreshExcelGridLockState()">
@@ -7749,12 +7759,16 @@ function clearExcelImportData() {
 // ==========================================
 // 🌟 EXCEL IMPORT GRID - ROW LOCK/UNLOCK ലോജിക് 🌟
 // പട്ടികയിൽ (Name of Medicine, Batch No, Exp.Dt., Qty, Page No എന്നീ കോളങ്ങളിൽ) ഒരു ഡാറ്റയും
-// ഇല്ലാത്ത അവസ്ഥയിൽ, ആദ്യത്തെ റോ ഒഴികെ ബാക്കി എല്ലാ റോകളും ലോക്ക് ചെയ്ത് ഉപയോഗിക്കാൻ പറ്റാത്ത
-// വിധം ആക്കുന്നു. എന്തെങ്കിലും ഡാറ്റ ഈ കോളങ്ങളിൽ ഏതെങ്കിലും റോയിൽ വന്നാൽ എല്ലാ റോകളും
-// തനിയെ അൺലോക്ക് ആകും. (Scanner പേജുകളിൽ നിന്നുള്ള IMPORT EXTRACTED DATA വഴി വരുന്ന ഡാറ്റയ്ക്ക്
-// ഈ ലോക്ക് കണ്ടീഷൻ ബാധകമല്ല - ആ ഫംഗ്ഷനുകൾ നേരിട്ട് unlockAllExcelRows() വിളിക്കുന്നു.)
+// ഇല്ലാത്ത അവസ്ഥയിൽ, ആദ്യത്തെ റോയിലെ ഈ 5 കോളങ്ങൾ ഒഴികെ ബാക്കി എല്ലാം ലോക്ക് ചെയ്ത് ഉപയോഗിക്കാൻ
+// പറ്റാത്ത വിധം ആക്കുന്നു. SI No കോളം എല്ലാ സമയവും (ലോക്ക് സ്റ്റേറ്റ് പരിഗണിക്കാതെ) സ്ഥിരമായി
+// ഡിസേബിൾ ചെയ്തിരിക്കും (Row Template-ൽ തന്നെ disabled ആയി സെറ്റ് ചെയ്തിട്ടുണ്ട്). Medicine Item,
+// Rack No എന്നീ കോളങ്ങൾ എല്ലാ റോകളിലും (ആദ്യ റോ ഉൾപ്പെടെ) ലോക്ക് ചെയ്യുന്നു. എന്തെങ്കിലും ഡാറ്റ
+// ഈ 5 കോളങ്ങളിൽ ഏതെങ്കിലും റോയിൽ വന്നാൽ എല്ലാ റോകളും (Medicine Item, Rack No ഉൾപ്പെടെ) തനിയെ
+// അൺലോക്ക് ആകും. (Scanner പേജുകളിൽ നിന്നുള്ള IMPORT EXTRACTED DATA വഴി വരുന്ന ഡാറ്റയ്ക്ക് ഈ ലോക്ക്
+// കണ്ടീഷൻ ബാധകമല്ല - ആ ഫംഗ്ഷനുകൾ നേരിട്ട് unlockAllExcelRows() വിളിക്കുന്നു.)
 // ==========================================
 const EXCEL_GRID_LOCK_COLS = ['med', 'bat', 'exp', 'qty', 'pag'];
+const EXCEL_GRID_FULL_LOCK_COLS = ['cat', 'rac']; // ആദ്യ റോ ഉൾപ്പെടെ എല്ലാ റോകളിലും ലോക്ക് ചെയ്യേണ്ട കോളങ്ങൾ
 
 function excelGridHasAnyData() {
     for (let i = 1; i <= 300; i++) {
@@ -7767,8 +7781,19 @@ function excelGridHasAnyData() {
 }
 
 function lockExcelGridExceptFirstRow() {
+    // Name of Medicine, Batch No, Exp.Dt., Qty, Page No - ആദ്യ റോ ഒഴികെ ബാക്കി റോകൾ ലോക്ക് ചെയ്യുന്നു
     for (let i = 2; i <= 300; i++) {
         EXCEL_GRID_LOCK_COLS.forEach(function(col) {
+            let el = document.getElementById('xl_' + col + '_' + i);
+            if (el) {
+                el.disabled = true;
+                el.classList.add('xl-row-locked');
+            }
+        });
+    }
+    // Medicine Item, Rack No - ആദ്യ റോ ഉൾപ്പെടെ എല്ലാ റോകളും പൂർണ്ണമായി ലോക്ക് ചെയ്യുന്നു
+    for (let i = 1; i <= 300; i++) {
+        EXCEL_GRID_FULL_LOCK_COLS.forEach(function(col) {
             let el = document.getElementById('xl_' + col + '_' + i);
             if (el) {
                 el.disabled = true;
@@ -7780,7 +7805,7 @@ function lockExcelGridExceptFirstRow() {
 
 function unlockAllExcelRows() {
     for (let i = 1; i <= 300; i++) {
-        EXCEL_GRID_LOCK_COLS.forEach(function(col) {
+        EXCEL_GRID_LOCK_COLS.concat(EXCEL_GRID_FULL_LOCK_COLS).forEach(function(col) {
             let el = document.getElementById('xl_' + col + '_' + i);
             if (el) {
                 el.disabled = false;
@@ -7788,6 +7813,7 @@ function unlockAllExcelRows() {
             }
         });
     }
+    // SI No കോളം ഏത് അവസ്ഥയിലും സ്ഥിരമായി ഡിസേബിൾ ആയി തുടരണം
 }
 
 function refreshExcelGridLockState() {
@@ -7796,6 +7822,19 @@ function refreshExcelGridLockState() {
     } else {
         lockExcelGridExceptFirstRow();
     }
+}
+
+// 🌟 ആദ്യമായി Paste ചെയ്യുമ്പോൾ കാണിക്കേണ്ട വിവരണ സന്ദേശം (ശൂന്യമായ പട്ടികയിൽ നിന്നും ആദ്യമായി ഡാറ്റ വരുമ്പോൾ മാത്രം)
+function showExcelFirstPasteInfoIfNeeded(wasEmptyBeforePaste) {
+    if (wasEmptyBeforePaste && excelGridHasAnyData()) {
+        let infoModal = document.getElementById('excelFirstPasteInfoModal');
+        if (infoModal) infoModal.style.display = 'flex';
+    }
+}
+
+function closeExcelFirstPasteInfo() {
+    let infoModal = document.getElementById('excelFirstPasteInfoModal');
+    if (infoModal) infoModal.style.display = 'none';
 }
 
 function handleExcelPaste(e) {
@@ -7812,6 +7851,9 @@ function handleExcelPaste(e) {
 
     let colNames = ['sino', 'cat', 'med', 'bat', 'exp', 'qty', 'pag', 'rac'];
     let startColIdx = colNames.indexOf(startColStr);
+
+    // 🌟 പേസ്റ്റ് ചെയ്യുന്നതിന് മുൻപ് പട്ടിക ശൂന്യമായിരുന്നോ എന്ന് ഓർത്തുവെക്കുന്നു (ആദ്യ പേസ്റ്റ് സന്ദേശം കാണിക്കാൻ)
+    let wasEmptyBeforePaste = !excelGridHasAnyData();
 
     for (let i = 0; i < rows.length; i++) {
         if(rows[i].trim() === '') continue;
@@ -7846,6 +7888,8 @@ function handleExcelPaste(e) {
     autoFillExcelColumns();
     // 🌟 പേസ്റ്റ് ചെയ്ത ഡാറ്റ അനുസരിച്ച് ലോക്ക്/അൺലോക്ക് അവസ്ഥ പുതുക്കുന്നു
     refreshExcelGridLockState();
+    // 🌟 ശൂന്യമായ പട്ടികയിൽ ഇത് ആദ്യത്തെ പേസ്റ്റ് ആണെങ്കിൽ വിവരണ സന്ദേശം കാണിക്കുന്നു
+    showExcelFirstPasteInfoIfNeeded(wasEmptyBeforePaste);
 }
 
 // --- 1. സ്പെല്ലിംഗ് സാമ്യം (Fuzzy Match) കണ്ടുപിടിക്കാനുള്ള ഫംഗ്ഷനുകൾ ---
@@ -17477,6 +17521,9 @@ window.loadScannedDataToExcelGrid = function() {
         let grid = document.getElementById('excelGrid');
         if (!grid) return;
 
+        // 🌟 ഡാറ്റ ചേർക്കുന്നതിന് മുൻപ് പട്ടിക ശൂന്യമായിരുന്നോ എന്ന് ഓർത്തുവെക്കുന്നു (ആദ്യ ഡാറ്റ സന്ദേശം കാണിക്കാൻ)
+        let wasEmptyBeforeScanLoad = (typeof excelGridHasAnyData === 'function') ? !excelGridHasAnyData() : false;
+
         // നിലവിലുള്ള വരികൾ എടുക്കുന്നു
         let rows = grid.querySelectorAll('.entry-row');
         
@@ -17512,6 +17559,9 @@ window.loadScannedDataToExcelGrid = function() {
 
         // 🌟 സ്കാനർ ഡാറ്റ ആയതിനാൽ റോ-ലോക്ക് കണ്ടീഷൻ ബാധകമല്ല - എല്ലാ റോകളും അൺലോക്ക് ചെയ്യുന്നു
         if (typeof unlockAllExcelRows === 'function') unlockAllExcelRows();
+
+        // 🌟 ശൂന്യമായ പട്ടികയിലേക്ക് ഇത് ആദ്യമായി വരുന്ന ഡാറ്റ ആണെങ്കിൽ വിവരണ സന്ദേശം കാണിക്കുന്നു
+        if (typeof showExcelFirstPasteInfoIfNeeded === 'function') showExcelFirstPasteInfoIfNeeded(wasEmptyBeforeScanLoad);
 
         alert("സ്കാൻ ചെയ്ത ഡാറ്റ വിജയകരമായി ചേർത്തിരിക്കുന്നു!");
         
@@ -18304,6 +18354,9 @@ window.clearLocalDraft = function() {
         }
         let scanRows = scanTable.querySelectorAll('tbody tr');
 
+        // 🌟 ഡാറ്റ ചേർക്കുന്നതിന് മുൻപ് പട്ടിക ശൂന്യമായിരുന്നോ എന്ന് ഓർത്തുവെക്കുന്നു (ആദ്യ ഡാറ്റ സന്ദേശം കാണിക്കാൻ)
+        let wasEmptyBeforeImport = (typeof excelGridHasAnyData === 'function') ? !excelGridHasAnyData() : false;
+
         // 2. "Load from Excel Sheet & Extract" ഗ്രിഡിൽ ആദ്യത്തെ ശൂന്യമായ വരി കണ്ടെത്തുന്നു
         //    (നിലവിലുള്ള ഡാറ്റയ്ക്ക് മുകളിൽ എഴുതി പോകാതിരിക്കാൻ)
         let startRow = 1;
@@ -18359,6 +18412,9 @@ window.clearLocalDraft = function() {
 
         // 4.1 🌟 സ്കാനർ പേജിൽ നിന്നുള്ള IMPORT ആയതിനാൽ റോ-ലോക്ക് കണ്ടീഷൻ ബാധകമല്ല - എല്ലാ റോകളും അൺലോക്ക് ചെയ്യുന്നു
         if (typeof unlockAllExcelRows === 'function') unlockAllExcelRows();
+
+        // 4.2 🌟 ശൂന്യമായ പട്ടികയിലേക്ക് ഇത് ആദ്യമായി വരുന്ന ഡാറ്റ ആണെങ്കിൽ വിവരണ സന്ദേശം കാണിക്കുന്നു
+        if (typeof showExcelFirstPasteInfoIfNeeded === 'function') showExcelFirstPasteInfoIfNeeded(wasEmptyBeforeImport);
 
         // 4.5 പകർത്തിക്കഴിഞ്ഞാൽ ഈ പേജിലെ സ്കാൻ ചെയ്ത പട്ടികയിലെ ഡാറ്റ പൂർണ്ണമായും ഡിലീറ്റ് ചെയ്യുന്നു
         document.getElementById('resultArea').innerHTML = '';
@@ -18736,6 +18792,9 @@ function pdfScannerImportExtractedData() {
     
     if(typeof initGrids === 'function') initGrids();
 
+    // 🌟 ഡാറ്റ ചേർക്കുന്നതിന് മുൻപ് പട്ടിക ശൂന്യമായിരുന്നോ എന്ന് ഓർത്തുവെക്കുന്നു (ആദ്യ ഡാറ്റ സന്ദേശം കാണിക്കാൻ)
+    let wasEmptyBeforePdfImport = (typeof excelGridHasAnyData === 'function') ? !excelGridHasAnyData() : false;
+
     // Find the next empty row in Excel Grid
     for(let i=1; i<=300; i++) {
         let medInput = document.getElementById('xl_med_' + i);
@@ -18771,6 +18830,8 @@ function pdfScannerImportExtractedData() {
     if (typeof autoFillExcelColumns === 'function') autoFillExcelColumns();
     // 🌟 സ്കാനർ പേജിൽ നിന്നുള്ള IMPORT ആയതിനാൽ റോ-ലോക്ക് കണ്ടീഷൻ ബാധകമല്ല - എല്ലാ റോകളും അൺലോക്ക് ചെയ്യുന്നു
     if (typeof unlockAllExcelRows === 'function') unlockAllExcelRows();
+    // 🌟 ശൂന്യമായ പട്ടികയിലേക്ക് ഇത് ആദ്യമായി വരുന്ന ഡാറ്റ ആണെങ്കിൽ വിവരണ സന്ദേശം കാണിക്കുന്നു
+    if (typeof showExcelFirstPasteInfoIfNeeded === 'function') showExcelFirstPasteInfoIfNeeded(wasEmptyBeforePdfImport);
     if(typeof showExcelImportPage === 'function') showExcelImportPage();
 }
 
