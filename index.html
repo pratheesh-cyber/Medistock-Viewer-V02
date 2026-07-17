@@ -3922,7 +3922,7 @@ const categoryColors = {
 
                 if (typeof showCustomConfirm === 'function') {
                     showCustomConfirm(
-                        "Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / Indent / Indent History / Last Added എന്നിവയിൽ ഏറ്റവും അവസാനം വരുത്തിയ മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+                        "ഏറ്റവും അവസാനം വരുത്തിയ മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
                         doRestore,
                         function() {}
                     );
@@ -19203,10 +19203,47 @@ function validateAndAddAllToStock() {
     const SKIP_ONCLICK_PATTERNS = ['processImage(', 'pdfScannerProcessImage(', 'showIndentHistory(', 'executeIndentPrint(', 'executeIndentPDF('];
     const SKIP_IDS = ['scanYesBtn', 'sumteckAlertOk'];
 
+    // 🌟 EXPERT FIX: ഏതെങ്കിലും പേജിലേക്ക് നേരിട്ട് എത്തുന്ന (ഫിൽട്ടറോ കണ്ടീഷനോ ഒന്നും
+    // ആശ്രയിക്കാത്ത) ശുദ്ധമായ NAVIGATION ബട്ടണുകൾക്ക് (HOME, go to X STOCK, INDENT @ Item/Page No,
+    // BACK, Close തുടങ്ങിയവ) ഈ ലോഡർ ഒരിക്കലും കാണിക്കില്ല. സേർച്ച് ബോക്സ് ഒരു <button> അല്ലാത്തതിനാൽ
+    // (<input>/<i> ഐക്കൺ ആയതിനാൽ) അതും സ്വാഭാവികമായി ഈ ലിസണറിൽ പെടില്ല.
+    // എന്നാൽ ഫിൽട്ടർ ചെയ്തും നിശ്ചിത കണ്ടീഷൻ പ്രകാരവും (നിലവിലെ പേജിൽ തന്നെയോ, മറ്റൊരു
+    // പേജിലേക്ക് മാറിയോ) മാറ്റം വരുത്തുന്ന ബട്ടണുകൾക്ക് ലോഡർ ഡിഫോൾട്ട് ആയി തുടരും 🌟
+    const SIMPLE_NAV_FUNCTIONS = new Set([
+        'showHomePage', 'showStockPage', 'showMainStockIndex', 'showOpSubStockIndex', 'showIpSubStockIndex',
+        'openMainStockDetails', 'openOpSubStockDetails', 'openIpSubStockDetails', 'showOpeningStockIndex',
+        'openModal', 'closeModal', 'showEditAlert', 'closeEditAlert', 'closeExcelFirstPasteInfo', 'closeDangerWarning',
+        'goBackFromHelpDesk', 'showHelpDeskPage', 'showIndentGenPage', 'goBackFromIndentGen',
+        'openIndentAtItemPage', 'openIndentAtPagePage', 'goBackFromMainChargeList', 'goBackFromLastAdded',
+        'goBackFromPreIndent', 'goBackFromIndentedMain'
+    ]);
+
+    // ബട്ടണിന്റെ onclick ആകെ, "പേജ് hide/show ചെയ്യുക" എന്ന സുരക്ഷിതമായ ഭാഗങ്ങൾ മാത്രമാണോ എന്ന്
+    // പരിശോധിക്കുന്നു (ഉദാ: document.getElementById('X').style.display='block'; window.scrollTo(0,0);).
+    // ഫിൽട്ടർ/കണ്ടീഷൻ അടിസ്ഥാനമാക്കിയുള്ള ഒരു ഫംഗ്ഷൻ കോളും ഇല്ലെങ്കിൽ മാത്രം ഇത് true ആകും.
+    function isRawNavigationToggle(oc) {
+        let stripped = oc
+            .replace(/if\s*\(\s*typeof\s+hideAllPages\s*===?\s*['"]function['"]\s*\)\s*hideAllPages\(\)\s*;?/g, '')
+            .replace(/hideAllPages\(\)\s*;?/g, '')
+            .replace(/document\.getElementById\((['"])[^'"]*\1\)\.style\.display\s*=\s*(['"])[a-zA-Z-]*\2\s*;?/g, '')
+            .replace(/window\.scrollTo\(\s*0\s*,\s*0\s*\)\s*;?/g, '')
+            .trim();
+        return stripped.length === 0;
+    }
+
+    function isSimpleNavigationButton(btn) {
+        let oc = (btn.getAttribute('onclick') || '').trim();
+        if (!oc) return false;
+        let m = oc.match(/^([A-Za-z_$][\w$]*)\(\)\s*;?$/);
+        if (m && SIMPLE_NAV_FUNCTIONS.has(m[1])) return true;
+        return isRawNavigationToggle(oc);
+    }
+
     function shouldSkipButton(btn) {
         if (SKIP_IDS.indexOf(btn.id) !== -1) return true;
         let oc = btn.getAttribute('onclick') || '';
-        return SKIP_ONCLICK_PATTERNS.some(function(p) { return oc.indexOf(p) !== -1; });
+        if (SKIP_ONCLICK_PATTERNS.some(function(p) { return oc.indexOf(p) !== -1; })) return true;
+        return isSimpleNavigationButton(btn);
     }
 
     // capture ഘട്ടത്തിൽ (ബട്ടണിന്റെ സ്വന്തം onclick പ്രവർത്തിക്കുന്നതിന് മുൻപ്) ലോഡർ കാണിക്കുന്നു;
