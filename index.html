@@ -3922,7 +3922,7 @@ const categoryColors = {
 
                 if (typeof showCustomConfirm === 'function') {
                     showCustomConfirm(
-                        "ഏറ്റവും അവസാനം വരുത്തിയ മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+                        "Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / Indent / Indent History / Last Added എന്നിവയിൽ ഏറ്റവും അവസാനം വരുത്തിയ മാറ്റം Undo ചെയ്യാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
                         doRestore,
                         function() {}
                     );
@@ -16126,13 +16126,6 @@ window.applyManualPageBreaksForHistory = function(containerId) {
             document.getElementById('modalOverlay').style.display = 'none';
             document.getElementById('sumteckAlertOk').onclick = oldOnClick; 
             
-            // 🌟 EXPERT FIX: ഏത് പേജിലെ PRINT / PERFECT PDF ബട്ടൺ ഉപയോഗിച്ചാലും (Indent @ Item,
-            // Indent @ Page No, Indent History എന്നിവയിൽ ഏതായാലും), പൊതുവായ (global) PROGRESS BAR /
-            // CPR STEPS ലോഡർ ആ ബട്ടണിന്റെ അന്തിമ റിസൽട്ട് (പ്രിന്റ് വിൻഡോ വരുന്നത്) വരെ കാണിക്കുന്നു 🌟
-            if (typeof window.showGlobalActionLoader === 'function') {
-                window.showGlobalActionLoader();
-            }
-            
             let container = document.getElementById(pageId);
             if(typeof prepareTableForPrintOrPdf === 'function') prepareTableForPrintOrPdf(pageId);
             container.classList.add('print-pdf-active');
@@ -16177,11 +16170,6 @@ if (pageContainer) {
                                 block.classList.remove('hide-history-print');
                                 block.style.display = '';
                             });
-                        }
-                        // 🌟 EXPERT FIX: ബട്ടണിന്റെ അന്തിമ റിസൽട്ട് (പ്രിന്റ് പ്രോസസ്സ് പൂർത്തിയായി,
-                        // പേജ് പഴയപടി ആയി) ഇപ്പോൾ ലഭിച്ചു എന്നതിനാൽ ഏത് പേജിലായാലും ലോഡർ ഇവിടെ നിർത്തുന്നു 🌟
-                        if (typeof window.hideGlobalActionLoader === 'function') {
-                            window.hideGlobalActionLoader();
                         }
                     }, 500);
                 }, 50);
@@ -19131,136 +19119,6 @@ function validateAndAddAllToStock() {
         confirmAddAllToStock();
     }
 }
-</script>
-
-<script>
-(function() {
-    // 🌟 EXPERT FIX: ഏത് പേജിലെ ഏത് ബട്ടൺ ഉപയോഗിച്ചാലും, INDENT HISTORY പേജിൽ കാണുന്ന അതേ
-    // ശൈലിയിലുള്ള PROGRESS BAR / CPR STEPS ലോഡർ ആ ബട്ടണിന്റെ അന്തിമ റിസൽട്ട് വരുന്നത് വരെ
-    // സ്ക്രീനിൽ കാണിക്കാനും, റിസൽട്ട് പൂർത്തിയായാൽ ഉടനെ (പെട്ടെന്ന് പ്രവർത്തിക്കുന്ന ബട്ടൺ ആണെങ്കിലും)
-    // അപ്രത്യക്ഷമാക്കാനും വേണ്ടിയുള്ള പൊതുവായ, പേജ്-സ്വതന്ത്രമായ സംവിധാനം.
-    // ഇത് document.body യുടെ നേരിട്ടുള്ള ഭാഗമായി ചേർക്കുന്നതിനാൽ ഏത് പേജിലും വർക്ക് ചെയ്യും.
-    // നിലവിലുള്ള ഒരു ബട്ടണിന്റെയും ഫംഗ്ഷന്റെയും യഥാർത്ഥ പ്രവർത്തനത്തിലും ലോജിക്കിലും ഇത്
-    // ഒരു മാറ്റവും വരുത്തുന്നില്ല — കാഴ്ചയ്ക്ക് ഒരു ലോഡിംഗ് സൂചന മാത്രം കൂട്ടിച്ചേർക്കുന്നു 🌟
-
-    let loaderEl = null, progressEl = null, imageEl = null, tickInterval = null, width = 0;
-
-    function ensureLoaderDOM() {
-        if (loaderEl) return;
-        loaderEl = document.createElement('div');
-        loaderEl.id = 'globalActionCprLoader';
-        loaderEl.style.cssText = "display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.95);z-index:999999;flex-direction:column;align-items:center;justify-content:center;";
-        loaderEl.innerHTML =
-            '<div style="width:92%; max-width:900px; margin:0 auto 20px auto;">' +
-                '<img id="globalActionCprImage" class="cpr-infographic-img" alt="CPR Steps" style="clip-path: inset(0 100% 0 0);">' +
-            '</div>' +
-            '<div style="width:50%; background:#ddd; border-radius:10px; overflow:hidden; height:25px;">' +
-                '<div id="globalActionCprProgress" style="width:0%; background:#27ae60; height:100%; text-align:center; color:white; font-weight:bold; line-height:25px; transition:0.25s;">0%</div>' +
-            '</div>';
-        document.body.appendChild(loaderEl);
-        progressEl = document.getElementById('globalActionCprProgress');
-        imageEl = document.getElementById('globalActionCprImage');
-    }
-
-    function ensureImageSrc() {
-        if (imageEl && imageEl.src) return;
-        // ഇതിനകം ലോഡ് ചെയ്ത CPR ഇമേജ്, നിലവിലുള്ള ഏതെങ്കിലും ലോഡറിൽ നിന്നും പകർത്തുന്നു (ഒരേ ഇമേജ് വീണ്ടും ഉപയോഗിക്കാൻ)
-        ['cprImage', 'pdfCprImage', 'histCprImage'].some(function(id) {
-            let el = document.getElementById(id);
-            if (el && el.src) { if (imageEl) imageEl.src = el.src; return true; }
-            return false;
-        });
-    }
-
-    window.showGlobalActionLoader = function() {
-        ensureLoaderDOM();
-        ensureImageSrc();
-        loaderEl.style.display = 'flex';
-        width = 0;
-        if (progressEl) { progressEl.style.width = '0%'; progressEl.innerText = '0%'; }
-        if (imageEl) imageEl.style.clipPath = 'inset(0 100% 0 0)';
-        if (tickInterval) clearInterval(tickInterval);
-        tickInterval = setInterval(function() {
-            if (width >= 90) return;
-            width += Math.floor(Math.random() * 6) + 3;
-            if (width > 90) width = 90;
-            if (progressEl) { progressEl.style.width = width + '%'; progressEl.innerText = width + '%'; }
-            if (imageEl) imageEl.style.clipPath = 'inset(0 ' + (100 - width) + '% 0 0)';
-        }, 120);
-    };
-
-    window.hideGlobalActionLoader = function() {
-        if (!loaderEl) return;
-        if (tickInterval) clearInterval(tickInterval);
-        if (progressEl) { progressEl.style.width = '100%'; progressEl.innerText = '100%'; }
-        if (imageEl) imageEl.style.clipPath = 'inset(0 0% 0 0)';
-        setTimeout(function() { if (loaderEl) loaderEl.style.display = 'none'; }, 150);
-    };
-
-    // 🌟 സ്വന്തമായി തന്നെ ശരിയായ (real async completion വരെയുള്ള) ലോഡിംഗ് സംവിധാനം ഇതിനകം
-    // കൈകാര്യം ചെയ്യുന്ന ബട്ടണുകൾ (Smart Scanner, PDF Scanner, Indent History, PRINT/PERFECT PDF)
-    // ഇവിടെ ഒഴിവാക്കുന്നു — ഇരട്ട ലോഡർ ഒരുമിച്ച് വരാതിരിക്കാൻ വേണ്ടി മാത്രം 🌟
-    const SKIP_ONCLICK_PATTERNS = ['processImage(', 'pdfScannerProcessImage(', 'showIndentHistory(', 'executeIndentPrint(', 'executeIndentPDF('];
-    const SKIP_IDS = ['scanYesBtn', 'sumteckAlertOk'];
-
-    // 🌟 EXPERT FIX: ഏതെങ്കിലും പേജിലേക്ക് നേരിട്ട് എത്തുന്ന (ഫിൽട്ടറോ കണ്ടീഷനോ ഒന്നും
-    // ആശ്രയിക്കാത്ത) ശുദ്ധമായ NAVIGATION ബട്ടണുകൾക്ക് (HOME, go to X STOCK, INDENT @ Item/Page No,
-    // BACK, Close തുടങ്ങിയവ) ഈ ലോഡർ ഒരിക്കലും കാണിക്കില്ല. സേർച്ച് ബോക്സ് ഒരു <button> അല്ലാത്തതിനാൽ
-    // (<input>/<i> ഐക്കൺ ആയതിനാൽ) അതും സ്വാഭാവികമായി ഈ ലിസണറിൽ പെടില്ല.
-    // എന്നാൽ ഫിൽട്ടർ ചെയ്തും നിശ്ചിത കണ്ടീഷൻ പ്രകാരവും (നിലവിലെ പേജിൽ തന്നെയോ, മറ്റൊരു
-    // പേജിലേക്ക് മാറിയോ) മാറ്റം വരുത്തുന്ന ബട്ടണുകൾക്ക് ലോഡർ ഡിഫോൾട്ട് ആയി തുടരും 🌟
-    const SIMPLE_NAV_FUNCTIONS = new Set([
-        'showHomePage', 'showStockPage', 'showMainStockIndex', 'showOpSubStockIndex', 'showIpSubStockIndex',
-        'openMainStockDetails', 'openOpSubStockDetails', 'openIpSubStockDetails', 'showOpeningStockIndex',
-        'openModal', 'closeModal', 'showEditAlert', 'closeEditAlert', 'closeExcelFirstPasteInfo', 'closeDangerWarning',
-        'goBackFromHelpDesk', 'showHelpDeskPage', 'showIndentGenPage', 'goBackFromIndentGen',
-        'openIndentAtItemPage', 'openIndentAtPagePage', 'goBackFromMainChargeList', 'goBackFromLastAdded',
-        'goBackFromPreIndent', 'goBackFromIndentedMain'
-    ]);
-
-    // ബട്ടണിന്റെ onclick ആകെ, "പേജ് hide/show ചെയ്യുക" എന്ന സുരക്ഷിതമായ ഭാഗങ്ങൾ മാത്രമാണോ എന്ന്
-    // പരിശോധിക്കുന്നു (ഉദാ: document.getElementById('X').style.display='block'; window.scrollTo(0,0);).
-    // ഫിൽട്ടർ/കണ്ടീഷൻ അടിസ്ഥാനമാക്കിയുള്ള ഒരു ഫംഗ്ഷൻ കോളും ഇല്ലെങ്കിൽ മാത്രം ഇത് true ആകും.
-    function isRawNavigationToggle(oc) {
-        let stripped = oc
-            .replace(/if\s*\(\s*typeof\s+hideAllPages\s*===?\s*['"]function['"]\s*\)\s*hideAllPages\(\)\s*;?/g, '')
-            .replace(/hideAllPages\(\)\s*;?/g, '')
-            .replace(/document\.getElementById\((['"])[^'"]*\1\)\.style\.display\s*=\s*(['"])[a-zA-Z-]*\2\s*;?/g, '')
-            .replace(/window\.scrollTo\(\s*0\s*,\s*0\s*\)\s*;?/g, '')
-            .trim();
-        return stripped.length === 0;
-    }
-
-    function isSimpleNavigationButton(btn) {
-        let oc = (btn.getAttribute('onclick') || '').trim();
-        if (!oc) return false;
-        let m = oc.match(/^([A-Za-z_$][\w$]*)\(\)\s*;?$/);
-        if (m && SIMPLE_NAV_FUNCTIONS.has(m[1])) return true;
-        return isRawNavigationToggle(oc);
-    }
-
-    function shouldSkipButton(btn) {
-        if (SKIP_IDS.indexOf(btn.id) !== -1) return true;
-        let oc = btn.getAttribute('onclick') || '';
-        if (SKIP_ONCLICK_PATTERNS.some(function(p) { return oc.indexOf(p) !== -1; })) return true;
-        return isSimpleNavigationButton(btn);
-    }
-
-    // capture ഘട്ടത്തിൽ (ബട്ടണിന്റെ സ്വന്തം onclick പ്രവർത്തിക്കുന്നതിന് മുൻപ്) ലോഡർ കാണിക്കുന്നു;
-    // ബട്ടണിന്റെ (സിൻക്രണസ്) പ്രവർത്തനവും അതിന്റെ ഫലമായുള്ള സ്ക്രീൻ അപ്ഡേറ്റും പൂർത്തിയായി ഒരു
-    // ഫ്രെയിം പെയിന്റ് ആയ ഉടനെ (double requestAnimationFrame) ലോഡർ അപ്രത്യക്ഷമാക്കുന്നു
-    document.addEventListener('click', function(e) {
-        let btn = e.target.closest('button');
-        if (!btn || btn.disabled) return;
-        if (shouldSkipButton(btn)) return;
-        window.showGlobalActionLoader();
-        requestAnimationFrame(function() {
-            requestAnimationFrame(function() {
-                window.hideGlobalActionLoader();
-            });
-        });
-    }, true);
-})();
 </script>
 </body>
 </html>
