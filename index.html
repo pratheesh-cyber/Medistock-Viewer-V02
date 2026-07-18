@@ -4431,6 +4431,17 @@ loadData();
           Object.keys(medicineData).forEach(cat => { let opt = document.createElement('option'); opt.value = cat; catDL.appendChild(opt); });
           buildFundList(); setupNavigation();
           renderTable();
+
+          // 🌟 EXPERT FIX (PERSISTENCE ACROSS BROWSER CLOSE/REOPEN): id="indentAtItemPage",
+          // id="indentAtPagePage", id="lastAddedOPStockPage", id="lastAddedIPStockPage"
+          // എന്നിവയിലെ ഡാറ്റ ബ്രൗസർ വീണ്ടും തുറന്നാലും കാണിക്കാൻ, ആപ്പ് ലോഡ് ആകുന്ന ഉടനെ
+          // തന്നെ ഈ പേജുകൾ localStorage-ൽ നിന്നും പുതുക്കുന്നു. (ഈ പേജുകൾ സ്ക്രീനിൽ 
+          // ഇപ്പോൾ ദൃശ്യമല്ലെങ്കിലും, അടുത്ത തവണ ഈ പേജിലേക്ക് പോകുമ്പോൾ ശരിയായ ഡാറ്റ 
+          // അതിൽ നേരത്തെ തന്നെ നിറഞ്ഞിരിക്കും.) നിലവിലുള്ള ഒരു ഫംഗ്ഷനും/പേജും/ബട്ടണും 
+          // ഇത് മാറ്റം വരുത്തുന്നില്ല. 🌟
+          if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
+          if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+          if (typeof window.restoreIndentViewPagesFromStorage === 'function') window.restoreIndentViewPagesFromStorage();
         }
 
         function handleCategoryInput(el, i) {
@@ -5037,6 +5048,22 @@ window.addAllToStock = function() {
         }
 
         stockItems.push(...tempValidItems);
+
+        // 🌟 EXPERT FIX: ADD TO STOCK വഴി Sub Stock OP / Sub Stock IP ലേക്ക് മരുന്ന് ചേർക്കുമ്പോഴും,
+        // INDENT PREPARATION WINDOW-ലെ GENERATE ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ ചെയ്യുന്നത് പോലെ തന്നെ 
+        // isLastAddedOP / isLastAddedIP ഫ്ലാഗ് സെറ്റ് ചെയ്യുന്നു. ഇത് id="lastAddedOPStockPage",
+        // id="lastAddedIPStockPage" പേജുകളിലെ പട്ടികയിൽ എപ്പോഴും ഏറ്റവും പുതിയ ബാച്ച് മാത്രം 
+        // (പഴയത് ഡിലീറ്റ് ആയി) കാണിക്കാനും, ബ്രൗസർ ക്ലോസ് ചെയ്ത് വീണ്ടും തുറന്നാലും ഈ ഡാറ്റ 
+        // നിലനിൽക്കാനും (localStorage-ൽ stockItems-നൊപ്പം ഈ ഫ്ലാഗും സേവ് ആകുന്നതിനാൽ) വേണ്ടിയാണ്. 🌟
+        if (st === "Sub Stock OP" || st === "Sub Stock IP") {
+            let flagKey = (st === "Sub Stock OP") ? "isLastAddedOP" : "isLastAddedIP";
+            stockItems.forEach(function(existingItem) {
+                if (existingItem.type === st) existingItem[flagKey] = false;
+            });
+            tempValidItems.forEach(function(newItem) {
+                newItem[flagKey] = true;
+            });
+        }
 
         rowsToClear.forEach(i => {
             ['cat','med','bat','exp','qty','pag','rac','sino'].forEach(f => {
@@ -12931,16 +12958,21 @@ window.checkSubStockConfirmation_NEW = function() {
     document.getElementById('subStockYesBtn').onclick = function() {
         modal.style.display = 'none'; 
         
-        // 🌟 STEP 1: പഴയ ടേബിളുകളിലെ ഡാറ്റ പൂർണ്ണമായും ഡിലീറ്റ് ചെയ്യുന്നു (CLEARING TABLES) 🌟
+        // 🌟 STEP 1: പഴയ ടേബിളുകളിലെ ഡാറ്റ ഡിലീറ്റ് ചെയ്യുന്നു (CLEARING TABLES) 🌟
+        // 🌟 EXPERT FIX: ഇപ്പോൾ ഏത് സബ് സ്റ്റോക്കിലേക്കാണോ (OP / IP) ഇൻഡന്റ് എടുക്കുന്നത്,
+        // ആ സബ് സ്റ്റോക്കിന്റെ "Last Added" ടേബിൾ മാത്രമേ ക്ലിയർ ചെയ്യൂ. എതിർ വശത്തെ 
+        // (ഇൻഡന്റ് ചെയ്യാത്ത) സബ് സ്റ്റോക്കിന്റെ ടേബിളിനെ ഇനി തൊടില്ല — അതിലെ ഡാറ്റ അതേപടി 
+        // നിലനിൽക്കും. ഇതാണ് "Ip Sub Stock-ലേക്ക് ഇൻഡന്റ് എടുക്കുമ്പോൾ OP-യുടെ ഡാറ്റ 
+        // നഷ്ടപ്പെടുന്നു (തിരിച്ചും)" എന്ന പ്രശ്നത്തിന്റെ യഥാർത്ഥ കാരണം. 🌟
         let indentedTbody = document.getElementById('indentedMainTableBody');
-        let opTbody = document.getElementById('lastAddedOPTableBody');
-        let ipTbody = document.getElementById('lastAddedIPTableBody');
+        let targetTbody = (subStock === "Sub Stock OP")
+            ? document.getElementById('lastAddedOPTableBody')
+            : document.getElementById('lastAddedIPTableBody');
 
         let clearText = "<tr><td colspan='15' style='padding:40px; color:#e74c3c; font-size:18px; font-weight:900; text-align:center;'>പഴയ ഡാറ്റകൾ പൂർണ്ണമായും ഡിലീറ്റ് ചെയ്തു... പുതിയ ഡാറ്റകൾ പ്രോസസ്സ് ചെയ്യുന്നു... ദയവായി കാത്തിരിക്കുക...</td></tr>";
 
         if (indentedTbody) indentedTbody.innerHTML = clearText;
-        if (opTbody) opTbody.innerHTML = clearText;
-        if (ipTbody) ipTbody.innerHTML = clearText;
+        if (targetTbody) targetTbody.innerHTML = clearText;
 
         // 🌟 STEP 2: പഴയ ഡാറ്റ മാറിയെന്ന് ഉറപ്പുവരുത്തിയ ശേഷം പുതിയ ഇൻഡന്റ് പ്രോസസ്സ് ചെയ്യുന്നു 🌟
         setTimeout(function() {
@@ -16763,9 +16795,64 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
 
     localStorage.setItem('medistock_indent_history', JSON.stringify(historyArr));
 
+    // 🌟 EXPERT FIX (PERSISTENCE ACROSS BROWSER CLOSE/REOPEN): id="indentAtItemPage",
+    // id="indentAtPagePage" എന്നീ പേജുകളിൽ ഇപ്പോൾ ജനറേറ്റ് ചെയ്ത ഇൻഡന്റിന്റെ പൂർണ്ണ ഡാറ്റ
+    // (രണ്ട് ടേബിളുകളും, ടൈറ്റിലുകളും, ഒപ്പുകളും) localStorage-ൽ സേവ് ചെയ്യുന്നു. ബ്രൗസർ
+    // ക്ലോസ് ചെയ്ത് വീണ്ടും തുറന്നാലും init()-ൽ ഇത് വായിച്ച് ഈ പേജുകളിൽ അവസാനത്തെ ഇൻഡന്റ്
+    // തന്നെ തിരികെ കാണിക്കാൻ ഇത് ഉപയോഗിക്കുന്നു. നിലവിലുള്ള ഒരു ഫംഗ്ഷനും ഇത് മാറ്റം
+    // വരുത്തുന്നില്ല — ഒരു പുതിയ localStorage കീ മാത്രമാണ് ചേർത്തിരിക്കുന്നത്. 🌟
+    try {
+        let indentViewState = {
+            indentNo: indentNo,
+            subStock: subStock,
+            fund: fund,
+            itemTableHTML: tbodyItemHTML,
+            pageTableHTML: tbodyPageHTML,
+            itemTitle1: document.getElementById('indentItemTitle1') ? document.getElementById('indentItemTitle1').innerText : "",
+            itemTitle2: document.getElementById('indentItemTitle2') ? document.getElementById('indentItemTitle2').innerText : "",
+            itemTitle3: document.getElementById('indentItemTitle3') ? document.getElementById('indentItemTitle3').innerText : "",
+            pageTitle1: document.getElementById('pageNoIndentTitle1') ? document.getElementById('pageNoIndentTitle1').innerText : "",
+            pageTitle2: document.getElementById('pageNoIndentTitle2') ? document.getElementById('pageNoIndentTitle2').innerText : "",
+            pageTitle3: document.getElementById('pageNoIndentTitle3') ? document.getElementById('pageNoIndentTitle3').innerText : "",
+            officerHTML: offStr,
+            pharmacistHTML: phmStr
+        };
+        localStorage.setItem('medistock_indent_view_state', JSON.stringify(indentViewState));
+    } catch(e) { console.error("Indent View Persist Error:", e); }
+
     if(typeof hideAllPages === 'function') hideAllPages();
     let pageNode = document.getElementById('indentAtPagePage');
     if(pageNode) pageNode.style.display = 'block';
+};
+
+// =====================================================================
+// 🌟 EXPERT FIX (PERSISTENCE ACROSS BROWSER CLOSE/REOPEN): id="indentAtItemPage",
+// id="indentAtPagePage" പേജുകൾ തുറക്കുമ്പോൾ (ബ്രൗസർ വീണ്ടും തുറന്നാലും) മുകളിൽ സേവ്
+// ചെയ്ത അവസാനത്തെ ഇൻഡന്റ് ഡാറ്റ തിരികെ കാണിക്കാനുള്ള റീസ്റ്റോർ ഫംഗ്ഷൻ 🌟
+// =====================================================================
+window.restoreIndentViewPagesFromStorage = function() {
+    try {
+        let raw = localStorage.getItem('medistock_indent_view_state');
+        if (!raw) return;
+        let s = JSON.parse(raw);
+
+        let tBodyItem = document.getElementById('indentItemTableBody');
+        let tBodyPage = document.getElementById('pageNoTableBody');
+        if (tBodyItem && s.itemTableHTML) tBodyItem.innerHTML = s.itemTableHTML;
+        if (tBodyPage && s.pageTableHTML) tBodyPage.innerHTML = s.pageTableHTML;
+
+        if(document.getElementById('indentItemTitle1') && s.itemTitle1) document.getElementById('indentItemTitle1').innerText = s.itemTitle1;
+        if(document.getElementById('indentItemTitle2') && s.itemTitle2) document.getElementById('indentItemTitle2').innerText = s.itemTitle2;
+        if(document.getElementById('indentItemTitle3') && s.itemTitle3) document.getElementById('indentItemTitle3').innerText = s.itemTitle3;
+        if(document.getElementById('pageNoIndentTitle1') && s.pageTitle1) document.getElementById('pageNoIndentTitle1').innerText = s.pageTitle1;
+        if(document.getElementById('pageNoIndentTitle2') && s.pageTitle2) document.getElementById('pageNoIndentTitle2').innerText = s.pageTitle2;
+        if(document.getElementById('pageNoIndentTitle3') && s.pageTitle3) document.getElementById('pageNoIndentTitle3').innerText = s.pageTitle3;
+
+        if(document.getElementById('indSignOfficer') && s.officerHTML) document.getElementById('indSignOfficer').innerHTML = s.officerHTML;
+        if(document.getElementById('indSignPharm') && s.pharmacistHTML) document.getElementById('indSignPharm').innerHTML = s.pharmacistHTML;
+        if(document.getElementById('pageNoSignOfficer') && s.officerHTML) document.getElementById('pageNoSignOfficer').innerHTML = s.officerHTML;
+        if(document.getElementById('pageNoSignPharm') && s.pharmacistHTML) document.getElementById('pageNoSignPharm').innerHTML = s.pharmacistHTML;
+    } catch(e) { console.error("Indent View Restore Error:", e); }
 };
 </script>
 </script>
@@ -17823,16 +17910,13 @@ document.addEventListener('visibilitychange', function() {
             return;
         }
         try {
-            if (localBackupFileHandle) {
-                // മുൻപ് ഒരു handle ഉണ്ടെങ്കിൽ, ആദ്യം അതിന് വീണ്ടും അനുമതി ചോദിക്കുന്നു
-                let perm = await localBackupFileHandle.requestPermission({ mode: 'readwrite' });
-                if (perm === 'granted') {
-                    medistockStartBackupTimer();
-                    medistockUpdateBackupStatusUI(true);
-                    await window.medistockWriteLocalBackupNow();
-                    return;
-                }
-            }
+            // 🌟 EXPERT FIX: മുൻപ് ഒരു ഫയൽ ലൊക്കേഷൻ സെലക്ട് ചെയ്തിട്ടുണ്ടെങ്കിലും, ബട്ടൺ 
+            // അമർത്തുന്നത് "വീണ്ടും തിരഞ്ഞെടുക്കുക" (RESELECT) എന്ന ഉദ്ദേശത്തോടെയാണ്. പഴയ 
+            // handle-ന് വെറുതെ അനുമതി മാത്രം വീണ്ടും ചോദിച്ച് നിശബ്ദമായി തിരികെ പോയിരുന്നതിനാൽ 
+            // (browser ഇതിനകം അനുമതി നൽകിയിട്ടുണ്ടെങ്കിൽ), ഫയൽ പിക്കർ ഡയലോഗ് ഒരിക്കലും 
+            // തുറക്കാതെ ബട്ടൺ "പ്രവർത്തിക്കാത്തത്" പോലെ തോന്നിച്ചിരുന്നു. ഇപ്പോൾ ഈ ബട്ടൺ 
+            // അമർത്തുമ്പോൾ എപ്പോഴും ഫയൽ പിക്കർ ഡയലോഗ് തുറന്ന് പുതിയ ലൊക്കേഷൻ/ഫയൽ 
+            // തിരഞ്ഞെടുക്കാൻ അനുവദിക്കുന്നു. 🌟
             let handle = await window.showSaveFilePicker({
                 suggestedName: MEDISTOCK_LOCAL_BACKUP_FILENAME,
                 types: [{ description: 'JSON Backup File', accept: { 'application/json': ['.json'] } }]
