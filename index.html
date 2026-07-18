@@ -1475,7 +1475,7 @@ function handleAuthClick() {
 </div>
     <!-- MAIN STOCK DETAILS PAGE -->
 <div id="mainStockDetailsPage" class="index-page-wrapper full-width-wrapper" style="display: none;">
-        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-bottom: 2px; font-size: 20px;">MAIN STOCK WINDOW</h1>
+        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">MAIN STOCK WINDOW</h1>
 
         <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
     <button class="index-btn bg-dark" onclick="goBackFromMainDetails()" style="padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
@@ -1656,7 +1656,7 @@ function handleAuthClick() {
 
     <!-- OP SUB STOCK DETAILS PAGE -->
     <div id="opSubStockDetailsPage" class="index-page-wrapper full-width-wrapper">
-        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-bottom: 2px; font-size: 20px;">OP SUB STOCK WINDOW</h1>
+        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">OP SUB STOCK WINDOW</h1>
 
         <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
     <button class="index-btn bg-dark" onclick="showOpSubStockIndex()" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
@@ -1839,7 +1839,7 @@ function handleAuthClick() {
 
     <!-- IP SUB STOCK DETAILS PAGE -->
     <div id="ipSubStockDetailsPage" class="index-page-wrapper full-width-wrapper">
-        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-bottom: 2px; font-size: 20px;">IP SUB STOCK WINDOW</h1>
+        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">IP SUB STOCK WINDOW</h1>
 
         <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
     <button class="index-btn bg-dark" onclick="showIpSubStockIndex()" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
@@ -2756,7 +2756,7 @@ function handleAuthClick() {
     <!-- INDENT PREPARATION PAGE -->
     <div id="indentPrepPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
-            <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 2px; font-size: 20px;">INDENT PREPARATION WINDOW</h1></div>
+            <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">INDENT PREPARATION WINDOW</h1></div>
 
     <button class="index-btn bg-dark" onclick="showMainStockIndex()" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; color: white; border-radius: 16px;">
         <i class="fa-solid fa-arrow-left"></i> <b>BACK</b>
@@ -3358,8 +3358,13 @@ function handleAuthClick() {
         <!-- 🌟 പുതിയതായി ചേർത്ത UNDO ബട്ടൺ: Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിലെ 
              ഏറ്റവും അവസാനത്തെ Add/Edit/Delete പ്രവർത്തനം തിരികെ എടുക്കാൻ 🌟 -->
         <button class="nav-btn" style="margin-bottom: 0; background: #d35400;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO LAST ACTION</button>
+        <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Downloads ഫോൾഡറിലേക്കുള്ള Local Auto-Backup സജീവമാക്കാൻ 🌟 -->
+        <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
+    </div>
+    <div style="text-align:center; margin-bottom: 15px;">
+        <span id="medistockLocalBackupStatusText" style="font-size: 12px; font-weight: bold; color: #7f8c8d;">🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.</span>
     </div>
 
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 10px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
@@ -11410,8 +11415,24 @@ window.executePreIndentExpertPDFGeneration = function(filename, isPrint, type) {
       
       let rightFooterText = (type === 'PRINT') ? 'Statement Dtd: ' + dateStr : 'Dtd: ' + dateStr;
 
+      // 🌟 PDF ഔട്ട്പുട്ടിൽ നിന്നും മാത്രം "Invoice No/ID" കോളം (അവസാന കോളം) ഒഴിവാക്കുന്നു 🌟
+      // (സ്ക്രീനിൽ കാണിക്കുന്ന ടേബിളിൽ ഈ കോളം അതേപടി തുടരും; ഒരു ക്ലോൺ ഉണ്ടാക്കി അതിൽ നിന്ന്
+      //  മാത്രം ഈ കോളം നീക്കം ചെയ്ത ശേഷമാണ് PDF ഉണ്ടാക്കുന്നത്)
+      let originalTableEl = document.querySelector('#preIndentSummaryPage table');
+      let pdfTableEl = originalTableEl ? originalTableEl.cloneNode(true) : null;
+      if (pdfTableEl) {
+        pdfTableEl.querySelectorAll('tr').forEach(function(row) {
+          let lastCell = row.lastElementChild;
+          if (lastCell) row.removeChild(lastCell);
+        });
+        pdfTableEl.style.position = 'absolute';
+        pdfTableEl.style.left = '-99999px';
+        pdfTableEl.style.top = '0';
+        document.body.appendChild(pdfTableEl);
+      }
+
       doc.autoTable({
-        html: '#preIndentSummaryPage table',
+        html: pdfTableEl || '#preIndentSummaryPage table',
         useCss: true,
         theme: 'grid',
         startY: 0.9, 
@@ -11486,6 +11507,8 @@ window.executePreIndentExpertPDFGeneration = function(filename, isPrint, type) {
     } finally {
       if(alertWindow) alertWindow.style.display = 'none';
       if(modalOverlay) modalOverlay.style.display = 'none';
+      // 🌟 താൽക്കാലികമായി ഉണ്ടാക്കിയ (Invoice No/ID ഒഴിവാക്കിയ) ക്ലോൺ ടേബിൾ നീക്കം ചെയ്യുന്നു 🌟
+      if (pdfTableEl && pdfTableEl.parentNode) pdfTableEl.parentNode.removeChild(pdfTableEl);
     }
   }, 100);
 };
@@ -17680,6 +17703,179 @@ document.addEventListener('visibilitychange', function() {
         smartAutoBackup(); // കമ്പ്യൂട്ടർ സ്ലീപ്പിലായാലും ടാബ് ക്ലോസ് ചെയ്താലും ഇത് തനിയെ ബാക്കപ്പ് എടുക്കും
     }
 });
+
+// =====================================================================
+// 🌟 EXPERT ADDITION: LOCAL "DOWNLOADS" ഫോൾഡർ AUTO-BACKUP സിസ്റ്റം 🌟
+// (Google Drive ബാക്കപ്പിന് പുറമെ, File System Access API ഉപയോഗിച്ച്
+//  "Medistock back-up.json" എന്ന ഒറ്റ ഫയൽ, ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ
+//  Downloads ഫോൾഡറിൽ തന്നെ, ഓരോ 5 മിനിറ്റിലും, ടാബ്/ആപ്പ് ക്ലോസ് ചെയ്യുമ്പോഴും,
+//  "MORE DETAILS" പേജിലെ EXPORT DATA ബട്ടൺ അമർത്തുമ്പോഴും - പഴയത് REPLACE ചെയ്ത്
+//  തനിയെ പുതുക്കപ്പെടും. ഇത് ബ്രൗസർ ഒരു തവണ മാത്രം ചോദിക്കുന്ന അനുമതിയെ (File System
+//  Access API - നിലവിൽ Chrome / Edge പോലുള്ള Chromium ബ്രൗസറുകളിൽ മാത്രമേ ലഭ്യമാവൂ)
+//  ആശ്രയിച്ചാണ് പ്രവർത്തിക്കുന്നത്. നിലവിലുള്ള ഒരു ഫംഗ്ഷനും/ബട്ടണും/പേജും ഇതുമൂലം മാറ്റം
+//  വരുത്തിയിട്ടില്ല. 🌟
+// =====================================================================
+(function() {
+    const MEDISTOCK_LOCAL_BACKUP_DB = 'medistockLocalBackupDB';
+    const MEDISTOCK_LOCAL_BACKUP_STORE = 'handles';
+    const MEDISTOCK_LOCAL_BACKUP_KEY = 'backupFileHandle';
+    const MEDISTOCK_LOCAL_BACKUP_FILENAME = 'Medistock back-up.json';
+    const MEDISTOCK_LOCAL_BACKUP_INTERVAL_MS = 5 * 60 * 1000; // 5 മിനിറ്റ്
+
+    let localBackupFileHandle = null;
+    let localBackupTimerId = null;
+
+    function medistockIdbOpen() {
+        return new Promise(function(resolve, reject) {
+            let req = indexedDB.open(MEDISTOCK_LOCAL_BACKUP_DB, 1);
+            req.onupgradeneeded = function() {
+                if (!req.result.objectStoreNames.contains(MEDISTOCK_LOCAL_BACKUP_STORE)) {
+                    req.result.createObjectStore(MEDISTOCK_LOCAL_BACKUP_STORE);
+                }
+            };
+            req.onsuccess = function() { resolve(req.result); };
+            req.onerror = function() { reject(req.error); };
+        });
+    }
+
+    async function medistockIdbGet(key) {
+        try {
+            let db = await medistockIdbOpen();
+            return await new Promise(function(resolve, reject) {
+                let tx = db.transaction(MEDISTOCK_LOCAL_BACKUP_STORE, 'readonly');
+                let req = tx.objectStore(MEDISTOCK_LOCAL_BACKUP_STORE).get(key);
+                req.onsuccess = function() { resolve(req.result || null); };
+                req.onerror = function() { reject(req.error); };
+            });
+        } catch (e) { return null; }
+    }
+
+    async function medistockIdbSet(key, value) {
+        try {
+            let db = await medistockIdbOpen();
+            return await new Promise(function(resolve, reject) {
+                let tx = db.transaction(MEDISTOCK_LOCAL_BACKUP_STORE, 'readwrite');
+                tx.objectStore(MEDISTOCK_LOCAL_BACKUP_STORE).put(value, key);
+                tx.oncomplete = function() { resolve(true); };
+                tx.onerror = function() { reject(tx.error); };
+            });
+        } catch (e) { return false; }
+    }
+
+    // 🌟 സോഫ്റ്റ്‌വെയറിലെ മുഴുവൻ പേജിലേയും ഡാറ്റയും (localStorage-ൽ ഉള്ളതെല്ലാം) JSON ആയി ശേഖരിക്കുന്നു
+    function medistockCollectFullBackupJSON() {
+        let data = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            if (key) data[key] = localStorage.getItem(key);
+        }
+        return JSON.stringify(data, null, 2);
+    }
+
+    async function medistockWriteToHandle(handle, content) {
+        let writable = await handle.createWritable();
+        await writable.write(content);
+        await writable.close();
+    }
+
+    function medistockUpdateBackupStatusUI(active) {
+        let el = document.getElementById('medistockLocalBackupStatusText');
+        let btn = document.getElementById('medistockLocalBackupBtn');
+        if (el) {
+            el.innerText = active
+                ? '🟢 Local Auto-Backup സജീവമാണ് (Downloads ഫോൾഡറിൽ "Medistock back-up.json")'
+                : '🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.';
+        }
+        if (btn) btn.innerText = active ? '🔁 Local Auto-Backup വീണ്ടും തിരഞ്ഞെടുക്കുക' : '📁 Local Auto-Backup സജീവമാക്കുക';
+    }
+
+    // ഇപ്പോൾ ലഭ്യമായ handle ഉപയോഗിച്ച് (അനുമതി ഉണ്ടെങ്കിൽ മാത്രം) ഫയൽ എഴുതുന്നു
+    window.medistockWriteLocalBackupNow = async function() {
+        if (!localBackupFileHandle) return false;
+        try {
+            let perm = await localBackupFileHandle.queryPermission({ mode: 'readwrite' });
+            if (perm !== 'granted') return false;
+            await medistockWriteToHandle(localBackupFileHandle, medistockCollectFullBackupJSON());
+            window.__medistockLastLocalBackupTime = new Date();
+            console.log('💾 Local Folder Auto-Backup Successful: ' + MEDISTOCK_LOCAL_BACKUP_FILENAME);
+            return true;
+        } catch (e) {
+            console.error('Local Backup Write Error:', e);
+            return false;
+        }
+    };
+
+    function medistockStartBackupTimer() {
+        if (localBackupTimerId) clearInterval(localBackupTimerId);
+        localBackupTimerId = setInterval(function() {
+            window.medistockWriteLocalBackupNow();
+        }, MEDISTOCK_LOCAL_BACKUP_INTERVAL_MS);
+    }
+
+    // "MORE DETAILS" പേജിലെ ബട്ടൺ അമർത്തുമ്പോൾ (ആദ്യമായോ, അനുമതി വീണ്ടും ചോദിക്കാനോ) വിളിക്കുന്നത്
+    window.medistockEnableLocalAutoBackup = async function() {
+        if (!window.showSaveFilePicker) {
+            alert('ഈ ബ്രൗസറിൽ ഈ ഫീച്ചർ ലഭ്യമല്ല. ദയവായി Google Chrome അല്ലെങ്കിൽ Microsoft Edge ബ്രൗസർ ഉപയോഗിക്കുക.');
+            return;
+        }
+        try {
+            if (localBackupFileHandle) {
+                // മുൻപ് ഒരു handle ഉണ്ടെങ്കിൽ, ആദ്യം അതിന് വീണ്ടും അനുമതി ചോദിക്കുന്നു
+                let perm = await localBackupFileHandle.requestPermission({ mode: 'readwrite' });
+                if (perm === 'granted') {
+                    medistockStartBackupTimer();
+                    medistockUpdateBackupStatusUI(true);
+                    await window.medistockWriteLocalBackupNow();
+                    return;
+                }
+            }
+            let handle = await window.showSaveFilePicker({
+                suggestedName: MEDISTOCK_LOCAL_BACKUP_FILENAME,
+                types: [{ description: 'JSON Backup File', accept: { 'application/json': ['.json'] } }]
+            });
+            localBackupFileHandle = handle;
+            await medistockIdbSet(MEDISTOCK_LOCAL_BACKUP_KEY, handle);
+            medistockStartBackupTimer();
+            medistockUpdateBackupStatusUI(true);
+            await window.medistockWriteLocalBackupNow();
+            alert('✅ Local Auto-Backup ക്രമീകരിച്ചു! ഇനി മുതൽ ഓരോ 5 മിനിറ്റിലും, EXPORT DATA അമർത്തുമ്പോഴും, സോഫ്റ്റ്‌വെയർ ക്ലോസ് ചെയ്യുമ്പോഴും ഈ ഫയൽ (Medistock back-up.json) തനിയെ പുതുക്കപ്പെടും.');
+        } catch (e) {
+            if (e.name !== 'AbortError') console.error('Enable Local Backup Error:', e);
+        }
+    };
+
+    // App തുറക്കുമ്പോൾ മുൻപ് അനുമതി നൽകിയ handle ഉണ്ടെങ്കിൽ വീണ്ടും ഉപയോഗിക്കാൻ ശ്രമിക്കുന്നു
+    async function medistockTryRestoreLocalBackupHandle() {
+        try {
+            let handle = await medistockIdbGet(MEDISTOCK_LOCAL_BACKUP_KEY);
+            if (!handle) { medistockUpdateBackupStatusUI(false); return; }
+            localBackupFileHandle = handle;
+            let perm = await handle.queryPermission({ mode: 'readwrite' });
+            if (perm === 'granted') {
+                medistockStartBackupTimer();
+                medistockUpdateBackupStatusUI(true);
+            } else {
+                // ബ്രൗസർ സുരക്ഷാ നിയമപ്രകാരം, ബട്ടൺ ക്ലിക്ക് വഴി മാത്രമേ അനുമതി വീണ്ടും ചോദിക്കാൻ കഴിയൂ
+                medistockUpdateBackupStatusUI(false);
+            }
+        } catch (e) { medistockUpdateBackupStatusUI(false); }
+    }
+    document.addEventListener('DOMContentLoaded', medistockTryRestoreLocalBackupHandle);
+
+    // ടാബ് മറയുമ്പോൾ / ആപ്പ് ക്ലോസ് ചെയ്യുമ്പോൾ (Best-Effort) ബാക്കപ്പ് എടുക്കാൻ
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') {
+            window.medistockWriteLocalBackupNow();
+        }
+    });
+    window.addEventListener('beforeunload', function() {
+        window.medistockWriteLocalBackupNow();
+    });
+
+    // EXPORT DATA ബട്ടണിനും മറ്റും ഈ അതേ ഫയലിലേക്ക് (permission ഉണ്ടെങ്കിൽ) നേരിട്ട് എഴുതാൻ
+    window.medistockGetLocalBackupHandle = function() { return localBackupFileHandle; };
+    window.MEDISTOCK_LOCAL_BACKUP_FILENAME = MEDISTOCK_LOCAL_BACKUP_FILENAME;
+})();
 // =====================================================================
 // 🌟 2. LOCAL DRAFT AUTO-SAVE (DEBOUNCED) 🌟
 // =====================================================================
@@ -18911,7 +19107,7 @@ function pdfScannerStopCPRProgress() {
     setTimeout(() => { let loader = document.getElementById('pdfCprLoader'); if(loader) loader.style.display = 'none'; }, 800);
 }
 // 1. JSON Export ഫംഗ്ഷൻ (ബാക്കപ്പ് എടുക്കാൻ)
-function exportDataToJSON() {
+async function exportDataToJSON() {
     let backupData = {};
     // Medistock Viewer മായി ബന്ധപ്പെട്ട എല്ലാ ഡാറ്റയും LocalStorage-ൽ നിന്നും വേർതിരിച്ചെടുക്കുന്നു
     for (let i = 0; i < localStorage.length; i++) {
@@ -18922,14 +19118,37 @@ function exportDataToJSON() {
     }
     
     const dataStr = JSON.stringify(backupData, null, 2);
+    const fixedName = (typeof window.MEDISTOCK_LOCAL_BACKUP_FILENAME === 'string')
+        ? window.MEDISTOCK_LOCAL_BACKUP_FILENAME : 'Medistock back-up.json';
+
+    // 🌟 EXPERT ADDITION: "Local Auto-Backup" അനുമതി നൽകിയിട്ടുണ്ടെങ്കിൽ, EXPORT DATA ബട്ടണും
+    // അതേ ഒറ്റ ഫയലിലേക്ക് (Medistock back-up.json) തന്നെ, പഴയത് REPLACE ചെയ്ത് എഴുതുന്നു 🌟
+    try {
+        let handle = (typeof window.medistockGetLocalBackupHandle === 'function') ? window.medistockGetLocalBackupHandle() : null;
+        if (handle) {
+            let perm = await handle.queryPermission({ mode: 'readwrite' });
+            if (perm === 'granted') {
+                let writable = await handle.createWritable();
+                await writable.write(dataStr);
+                await writable.close();
+                if (typeof showCustomConfirm === 'function') {
+                    showCustomConfirm('✅ ഡാറ്റ "' + fixedName + '" എന്ന ഫയലിലേക്ക് (പഴയത് replace ചെയ്ത്) സേവ് ചെയ്തിരിക്കുന്നു.', function(){}, null);
+                } else {
+                    alert('✅ ഡാറ്റ "' + fixedName + '" എന്ന ഫയലിലേക്ക് (പഴയത് replace ചെയ്ത്) സേവ് ചെയ്തിരിക്കുന്നു.');
+                }
+                return;
+            }
+        }
+    } catch (e) { console.error('Export via handle failed, falling back to normal download:', e); }
+
+    // ഫോൾബാക്ക്: File System Access API ലഭ്യമല്ലെങ്കിലോ അനുമതി ഇല്ലെങ്കിലോ, സാധാരണ ഡൗൺലോഡ് ആയി നൽകുന്നു
+    // (ഇത്തരം സന്ദർഭത്തിൽ, ബ്രൗസർ ക്രമീകരണം അനുസരിച്ച് ഒരേ പേരിലുള്ള ഫയൽ ഉണ്ടെങ്കിൽ "(1)" പോലുള്ള
+    //  സഫിക്സോടെ പുതിയൊരു ഫയൽ ഉണ്ടായേക്കാം - ഇത് ബ്രൗസറിന്റെ സുരക്ഷാ പരിധിയാണ്)
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    
-    let dateStr = new Date().toISOString().split('T')[0];
-    a.download = `Medistock_Viewer_Backup_${dateStr}.json`;
-    
+    a.download = fixedName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
