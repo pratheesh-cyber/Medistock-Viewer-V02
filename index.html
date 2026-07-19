@@ -8980,6 +8980,8 @@ window.executeMainChargeListExpertPDFGeneration = function(filename, isPrint) {
             }
         });
     }
+    // 🌟 STATUS കോളത്തിലെ ഫിൽ നിറം PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ മാത്രം opacity കുറയ്ക്കുന്നു 🌟
+    let mainChargeStatusRestoreList = (chargeTableEl && isPrint === true) ? medistockApplyPrintStatusOpacity(chargeTableEl) : [];
 
     let printArea = document.getElementById('mainChargeListPrintArea');
     let origDisplay = printArea.style.display;
@@ -9052,6 +9054,7 @@ window.executeMainChargeListExpertPDFGeneration = function(filename, isPrint) {
                     }
                 }
             });
+            medistockRestorePrintStatusOpacity(mainChargeStatusRestoreList);
 
             let officerName = document.getElementById('inp_co') ? String(document.getElementById('inp_co').value.trim()) : "";
             let officerDesig = document.getElementById('inp_co_des') ? String(document.getElementById('inp_co_des').value.trim()) : "";
@@ -10002,7 +10005,39 @@ function medistockLightenColorForPrint(colorStr, alpha) {
     let nb = Math.round(b * alpha + 255 * (1 - alpha));
     return `rgb(${nr}, ${ng}, ${nb})`;
 }
-const MEDISTOCK_PRINT_STATUS_OPACITY = 0.35;
+const MEDISTOCK_PRINT_STATUS_OPACITY = 0.5;
+
+// 🌟 EXPERT ADDITION: മുകളിലുള്ള ലോജിക് ഏത് പേജിലെ "PRINT / PERFECT PDF" ബട്ടൺ
+// ഉപയോഗിച്ചാലും (Main/OP/IP Stock Statement, Pre-Indent Summary മുതലായവയിലും) പ്രവർത്തിക്കാൻ
+// വേണ്ടിയുള്ള പൊതു (generic) ഫങ്ഷനുകൾ. STATUS/Days-left ബോക്സുകൾ തിരിച്ചറിയുന്നത് അവയുടെ
+// bg-red/bg-maroon/bg-orange/bg-yellow/bg-green ക്ലാസ് നോക്കിയാണ് - അതിനാൽ ഏത് പേജിലും
+// മറ്റൊരു കോളത്തെയോ ബട്ടണിനെയോ ഇത് ബാധിക്കില്ല 🌟
+const MEDISTOCK_STATUS_COLOR_SELECTOR = 'td.bg-red, td.bg-maroon, td.bg-orange, td.bg-yellow, td.bg-green, td.status-cell';
+function medistockApplyPrintStatusOpacity(containerEl) {
+    if (!containerEl) return [];
+    let cells = containerEl.querySelectorAll(MEDISTOCK_STATUS_COLOR_SELECTOR);
+    let restoreList = [];
+    cells.forEach(cell => {
+        let liveBg = window.getComputedStyle(cell).backgroundColor;
+        restoreList.push({
+            cell: cell,
+            prevBg: cell.style.backgroundColor,
+            prevBgPriority: cell.style.getPropertyPriority('background-color'),
+            prevCol: cell.style.color,
+            prevColPriority: cell.style.getPropertyPriority('color')
+        });
+        cell.style.setProperty('background-color', medistockLightenColorForPrint(liveBg, MEDISTOCK_PRINT_STATUS_OPACITY), 'important');
+        cell.style.setProperty('color', 'black', 'important');
+    });
+    return restoreList;
+}
+function medistockRestorePrintStatusOpacity(restoreList) {
+    if (!restoreList) return;
+    restoreList.forEach(item => {
+        if (item.prevBg) { item.cell.style.setProperty('background-color', item.prevBg, item.prevBgPriority || ''); } else { item.cell.style.removeProperty('background-color'); }
+        if (item.prevCol) { item.cell.style.setProperty('color', item.prevCol, item.prevColPriority || ''); } else { item.cell.style.removeProperty('color'); }
+    });
+}
 
 window.prepareMainDetailsPrintArea = function(reduceStatusOpacityForPrint) {
     let originalRows = document.querySelectorAll('#detailsTableBody tr');
@@ -11536,6 +11571,9 @@ window.executePreIndentExpertPDFGeneration = function(filename, isPrint, type) {
         pdfTableEl.style.left = '-99999px';
         pdfTableEl.style.top = '0';
         document.body.appendChild(pdfTableEl);
+        // 🌟 STATUS കോളത്തിലെ ഫിൽ നിറം PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ മാത്രം opacity കുറയ്ക്കുന്നു 🌟
+        // (ഇത് ക്ലോൺ ചെയ്ത table-ൽ മാത്രമായതിനാൽ സ്ക്രീനിലെ യഥാർത്ഥ table-നെ ബാധിക്കില്ല)
+        if (isPrint === true) { medistockApplyPrintStatusOpacity(pdfTableEl); }
       }
 
       doc.autoTable({
@@ -14840,6 +14878,8 @@ window.executeOpChargeListExpertPDFGeneration = function(filename, isPrint) {
             }
         });
     }
+    // 🌟 STATUS കോളത്തിലെ ഫിൽ നിറം PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ മാത്രം opacity കുറയ്ക്കുന്നു 🌟
+    let opChargeStatusRestoreList = (chargeTableEl && isPrint === true) ? medistockApplyPrintStatusOpacity(chargeTableEl) : [];
 
     let printArea = document.getElementById('opChargeListPrintArea');
     let origDisplay = printArea.style.display;
@@ -14911,6 +14951,7 @@ window.executeOpChargeListExpertPDFGeneration = function(filename, isPrint) {
                     }
                 }
             });
+            medistockRestorePrintStatusOpacity(opChargeStatusRestoreList);
 
             // OP-ക്ക് ഫാർമസിസ്റ്റിന്റെ വിവരങ്ങൾ എടുക്കുന്നു
             let officerName = document.getElementById('inp_pharm') ? String(document.getElementById('inp_pharm').value.trim()) : "";
@@ -15020,6 +15061,8 @@ window.executeIpChargeListExpertPDFGeneration = function(filename, isPrint) {
             }
         });
     }
+    // 🌟 STATUS കോളത്തിലെ ഫിൽ നിറം PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ മാത്രം opacity കുറയ്ക്കുന്നു 🌟
+    let ipChargeStatusRestoreList = (chargeTableEl && isPrint === true) ? medistockApplyPrintStatusOpacity(chargeTableEl) : [];
 
     let printArea = document.getElementById('ipChargeListPrintArea');
     let origDisplay = printArea.style.display;
@@ -15091,6 +15134,7 @@ window.executeIpChargeListExpertPDFGeneration = function(filename, isPrint) {
                     }
                 }
             });
+            medistockRestorePrintStatusOpacity(ipChargeStatusRestoreList);
 
             // IP-ക്ക് നഴ്സിന്റെ വിവരങ്ങൾ എടുക്കുന്നു
             let officerName = document.getElementById('inp_nurse') ? String(document.getElementById('inp_nurse').value.trim()) : "";
@@ -16281,6 +16325,8 @@ window.applyManualPageBreaksForHistory = function(containerId) {
             if(typeof prepareTableForPrintOrPdf === 'function') prepareTableForPrintOrPdf(pageId);
             container.classList.add('print-pdf-active');
             document.body.classList.add('print-mode');
+            // 🌟 STATUS കോളത്തിലെ ഫിൽ നിറം PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ മാത്രം opacity കുറയ്ക്കുന്നു 🌟
+            let indentStatusRestoreList = medistockApplyPrintStatusOpacity(container);
 
             let originalDocTitle = document.title;
             let titleTextEl = (pageId === 'indentAtItemPage') ? document.getElementById('indentItemTitle2') : document.getElementById('pageNoIndentTitle2');
@@ -16299,6 +16345,7 @@ window.applyManualPageBreaksForHistory = function(containerId) {
                 setTimeout(() => {
                     window.print();
                     setTimeout(() => {
+                        medistockRestorePrintStatusOpacity(indentStatusRestoreList);
                         container.classList.remove('print-pdf-active');
                         document.body.classList.remove('print-mode');
                         if(typeof restoreTableAfterPrintOrPdf === 'function') restoreTableAfterPrintOrPdf(pageId);
