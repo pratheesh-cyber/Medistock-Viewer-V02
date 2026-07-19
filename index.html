@@ -16862,7 +16862,31 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
 window.restoreIndentViewPagesFromStorage = function() {
     try {
         let raw = localStorage.getItem('medistock_indent_view_state');
-        if (!raw) return;
+
+        if (!raw) {
+            // 🌟 EXPERT FIX (LEGACY BACKUP FALLBACK): പഴയ (ഈ ഫീച്ചർ വരുന്നതിന് മുൻപ് എടുത്ത)
+            // Medistock back-up.json ഫയലുകളിൽ 'medistock_indent_view_state' എന്ന കീ ഉണ്ടാവില്ല.
+            // അത്തരം സന്ദർഭത്തിൽ, നിലവിലുള്ള 'medistock_indent_history' എന്ന ലിസ്റ്റിലെ ഏറ്റവും
+            // പുതിയ എൻട്രി ഉപയോഗിച്ച് id="indentAtItemPage" എങ്കിലും പുനഃസ്ഥാപിക്കുന്നു (ഈ 
+            // ചരിത്രത്തിൽ Page No ടേബിളിന്റെ പ്രത്യേക ഫോർമാറ്റ് സേവ് ആകാത്തതിനാൽ ആ ടേബിൾ ഇവിടെ 
+            // പുനഃസ്ഥാപിക്കാൻ കഴിയില്ല, പക്ഷെ Item ടേബിളെങ്കിലും ശൂന്യമാകാതെ നിലനിൽക്കും). 🌟
+            try {
+                let histStr = localStorage.getItem('medistock_indent_history');
+                let histArr = histStr ? JSON.parse(histStr) : [];
+                if (histArr.length > 0) {
+                    let latest = histArr[0];
+                    let tBodyItem = document.getElementById('indentItemTableBody');
+                    if (tBodyItem && latest.tableHTML) tBodyItem.innerHTML = latest.tableHTML;
+                    if(document.getElementById('indentItemTitle1') && latest.indentNo) document.getElementById('indentItemTitle1').innerText = `INDENT NO: ${latest.indentNo}`;
+                    if(document.getElementById('indentItemTitle2') && latest.title2) document.getElementById('indentItemTitle2').innerText = latest.title2;
+                    if(document.getElementById('indentItemTitle3') && latest.title3) document.getElementById('indentItemTitle3').innerText = latest.title3;
+                    if(document.getElementById('indSignOfficer') && latest.officer) document.getElementById('indSignOfficer').innerHTML = latest.officer;
+                    if(document.getElementById('indSignPharm') && latest.pharmacist) document.getElementById('indSignPharm').innerHTML = latest.pharmacist;
+                }
+            } catch(e2) { console.error("Legacy Indent History Fallback Error:", e2); }
+            return;
+        }
+
         let s = JSON.parse(raw);
 
         let tBodyItem = document.getElementById('indentItemTableBody');
