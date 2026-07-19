@@ -148,6 +148,12 @@
         .bg-orange { background-color: #ffa500 !important; color: black !important; }
         .bg-yellow { background-color: #ffff00 !important; color: black !important; }
         .bg-green { background-color: #00ff00 !important; color: black !important; }
+        /* 🌟 EXPERT FIX: STATUS കോളത്തിലെ "BELOW 3 MONTH" (.bg-orange) എന്ന ക്ലാസ്, മറ്റ് പല
+           ബട്ടണുകൾക്കും പൊതുവായ ഗ്രേഡിയന്റ് സ്റ്റൈലിന്റെ അതേ പേരിലുള്ളതിനാൽ ആ ഗ്രേഡിയന്റ്
+           ഇമേജ് ഈ സോളിഡ് ഓറഞ്ച് നിറത്തിന് മുകളിൽ വന്ന് മറച്ചിരുന്നു. ഇത് സ്റ്റാറ്റസ് സെല്ലുകളിൽ
+           മാത്രം (ബട്ടണുകളെ ബാധിക്കാതെ) പരിഹരിച്ച്, MAIN STOCK WINDOW സ്ക്രീനിലും PRINT/PDF-ലും
+           ഒരേ ഓറഞ്ച് നിറം തന്നെ വരുത്തുന്നു 🌟 */
+        .status-cell.bg-orange { background: #ffa500 !important; color: black !important; }
         .table-responsive { overflow-x: auto; overflow-y: auto; width: 100%; white-space: nowrap; margin-top: 0; max-height: 60vh; }
         table { width: 100%; border-collapse: collapse; background: white; margin-top: 0; }
         th { background: #34495e; color: white; padding: 0px !important; text-align: center; font-size: 14px !important; font-weight: bold; vertical-align: middle; border: 1px solid #2c3e50; position: sticky; top: 0; z-index: 10; height: 25px;}
@@ -861,7 +867,7 @@
         </div>
 
 <table class="info-table" style="table-layout: fixed;">
-          <caption style="padding: 4px 0 !important; margin: 0 !important; font-size: 15px !important; letter-spacing: 0px !important;">PLEASE FILL IN THE YELLOW CELLS BELOW</caption>
+          <caption style="padding: 4px 0 !important; margin: 0 !important; font-size: 15px !important; letter-spacing: 0px !important;">for Private Use Only</caption>
           
           <tr>
               <td class="label-cell gradient-bg" style="width: 30%; font-weight: 700 !important;">NAME OF THE INSTITUTION:</td>
@@ -1280,7 +1286,7 @@ function handleAuthClick() {
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; align-items: stretch;">
             <button class="btn-outline" style="width: 100%; height: 100%; background: #c0392b; color: white; border-color: #922b21; padding: 10px;" onclick="showMainChargeListPage('CHARGE LIST OF MAIN STOCK MEDICINES')">CHARGE LIST OF MAIN STOCK</button>
             <button class="btn-outline" style="width: 100%; height: 100%; background: #d35400; color: white; border-color: #a04000; padding: 10px;" onclick="showMainChargeListPage('MAIN STOCK MEDICINES STATEMENT FOR NAC')">Main Stock Medicines Statement for NAC</button>
-            <button class="btn-outline" style="width: 100%; height: 100%; background: #2980b9; color: white; border-color: #1f618d; padding: 10px;" onclick="showPreIndentSummaryPage()">PREE-INDENT STOCK SUMMARY</button>        
+            <button class="btn-outline" style="width: 100%; height: 100%; background: #2980b9; color: white; border-color: #1f618d; padding: 10px;" onclick="showPreIndentSummaryPage()">PRE-INDENT STOCK SUMMARY</button>        
             <button class="btn-outline" style="width: 100%; height: 100%; background: #16a085; color: white; border-color: #117864; padding: 10px;" onclick="showMainChargeListPage('MAINSTOCK MEDICINES STATEMENT')">MEDICINE STOCK STATEMENT</button>
         </div>
 
@@ -2975,15 +2981,16 @@ function handleAuthClick() {
     <div id="indentAtItemPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div class="no-print">
             <div class="top-btn-row no-print" style="text-align: center; margin-bottom: 25px;">
-    <button type="button" style="background:#2c3e50; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
-    <button type="button" style="background:#8e44ad; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
-    <button type="button" style="background:#f39c12; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 go to MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
+    <button type="button" style="background:#2c3e50; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
+    <button type="button" style="background:#8e44ad; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
+    <button type="button" style="background:#f39c12; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 go to MAIN STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
-    <button type="button" style="background:#16a085; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
-    <button type="button" style="background:#7f8c8d; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()">🎧 HELP DESK</button>
-    <button type="button" style="background:#27ae60; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
+    <button type="button" style="background:#16a085; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
+    <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()">🎧 HELP DESK</button>
+    <button type="button" style="background:#27ae60; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
+    <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
 <div style="display: none;">
@@ -3202,16 +3209,17 @@ function handleAuthClick() {
     <div id="indentAtPagePage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div class="no-print">
             <div class="top-btn-row no-print" style="text-align: center; margin-bottom: 25px;">
-    <button type="button" style="background:#2c3e50; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
-    <button type="button" style="background:#8e44ad; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
-    <button type="button" style="background:#f39c12; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 go to MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
+    <button type="button" style="background:#2c3e50; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
+    <button type="button" style="background:#8e44ad; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
+    <button type="button" style="background:#f39c12; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 go to MAIN STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
-    <button type="button" style="background:#16a085; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtPagePage')">🖨 PRINT / PERFECT PDF</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
+    <button type="button" style="background:#16a085; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtPagePage')">🖨 PRINT / PERFECT PDF</button>
     
-    <button type="button" style="background:#7f8c8d; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()" >🎧 HELP DESK</button>
-    <button type="button" style="background:#2980b9; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
+    <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()" >🎧 HELP DESK</button>
+    <button type="button" style="background:#2980b9; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
+    <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
 <div style="display: none;">
@@ -5338,7 +5346,23 @@ window.renderLastAddedIPTable = function() {
     });
     tbody.innerHTML = html;
 };
+        // 🌟 EXPERT FIX: കൂടുതൽ ഉപയോഗിക്കുന്ന fund കോഡുകൾക്ക് സ്ഥിരവും (മാറാത്തതും) പരസ്പരം
+        // സാമ്യമില്ലാത്തതും, print എടുക്കുമ്പോൾ കൂടുതൽ മഷി ചിലവാകാത്തതുമായ നിറങ്ങൾ 🌟
+        const MEDISTOCK_FIXED_FUND_COLORS = {
+            "DEPT": "#FFE0B2",
+            "KC-D": "#C8E6C9",
+            "LSGD": "#BBDEFB",
+            "NAM":  "#F8BBD0",
+            "NAM2": "#D1C4E9",
+            "NCD":  "#FFF9C4",
+            "NEAR": "#B2DFDB",
+            "CAMP": "#FFCCBC",
+            "PLAN": "#CFD8DC"
+        };
         function getFundColor(fundName) {
+            if (fundName && MEDISTOCK_FIXED_FUND_COLORS.hasOwnProperty(fundName)) {
+                return MEDISTOCK_FIXED_FUND_COLORS[fundName];
+            }
             let hash = 0;
             for (let i = 0; i < fundName.length; i++) hash = fundName.charCodeAt(i) + ((hash << 5) - hash);
             let h = Math.abs(hash) % 360;
@@ -8775,7 +8799,7 @@ window.executeExpertPDFGeneration = function(filename, isPrint) {
     document.getElementById('modalOverlay').style.display = 'block';
     document.getElementById('sumteckAlertWindow').style.display = 'block';
     
-    prepareMainDetailsPrintArea(); 
+    prepareMainDetailsPrintArea(isPrint === true); 
 
     let tableEl = document.querySelector('#mainPrintTable');
     if (tableEl) {
@@ -9965,7 +9989,22 @@ window.executeDeleteExpiredMain = function() {
 // 🌟 WORLD-CLASS VECTOR PDF GENERATION (ZERO CUTS, 100% PERFECT) 🌟
 // =====================================================================
 
-window.prepareMainDetailsPrintArea = function() {
+// 🌟 EXPERT ADDITION: PRINT / PERFECT PDF എടുക്കുമ്പോൾ STATUS കോളത്തിലെ ഫിൽ നിറം
+// കൂടുതൽ മഷി ചിലവാകാത്ത വിധം opacity കുറച്ച് (വെളുപ്പിലേക്ക് ലയിപ്പിച്ച്), എന്നാൽ
+// തിരിച്ചറിയാവുന്ന വിധം നൽകാൻ. GENERATE QUICK PDF-നെയോ മറ്റ് പേജുകളെയോ ബാധിക്കില്ല 🌟
+function medistockLightenColorForPrint(colorStr, alpha) {
+    if (!colorStr) return colorStr;
+    let m = colorStr.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (!m) return colorStr;
+    let r = parseInt(m[1], 10), g = parseInt(m[2], 10), b = parseInt(m[3], 10);
+    let nr = Math.round(r * alpha + 255 * (1 - alpha));
+    let ng = Math.round(g * alpha + 255 * (1 - alpha));
+    let nb = Math.round(b * alpha + 255 * (1 - alpha));
+    return `rgb(${nr}, ${ng}, ${nb})`;
+}
+const MEDISTOCK_PRINT_STATUS_OPACITY = 0.35;
+
+window.prepareMainDetailsPrintArea = function(reduceStatusOpacityForPrint) {
     let originalRows = document.querySelectorAll('#detailsTableBody tr');
     let printTbody = document.getElementById('mainDetailsPrintTableBody');
     printTbody.innerHTML = "";
@@ -9985,6 +10024,11 @@ window.prepareMainDetailsPrintArea = function() {
                 let bg9 = window.getComputedStyle(cells[9]).backgroundColor;
                 let col9 = window.getComputedStyle(cells[9]).color;
                 let bg10 = window.getComputedStyle(cells[10]).backgroundColor;
+                // STATUS കോളം (bg9) മാത്രം - PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ opacity കുറയ്ക്കുന്നു
+                if (reduceStatusOpacityForPrint) {
+                    bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col9 = 'black';
+                }
                 
                 // AutoTable-ന് വായിക്കാൻ പാകത്തിൽ ഇൻലൈൻ സ്റ്റൈലുകൾ നൽകുന്നു
                 tr.innerHTML = `
@@ -10201,7 +10245,7 @@ window.openRackForLastAddedOP = function() {
 // 🌟 OP SUB STOCK: EXPERT PDF GENERATION (STATUS WIDTH: 1.15) 🌟
 // =====================================================================
 
-window.prepareOpDetailsPrintArea = function() {
+window.prepareOpDetailsPrintArea = function(reduceStatusOpacityForPrint) {
     let title2 = document.getElementById('opDpTitle2');
     let title3 = document.getElementById('opDpTitle3');
     if(title2) document.getElementById('opPrintTitleLine2').innerText = title2.innerText;
@@ -10221,6 +10265,10 @@ window.prepareOpDetailsPrintArea = function() {
                 let bg8 = window.getComputedStyle(cells[8]).backgroundColor; let col8 = window.getComputedStyle(cells[8]).color;
                 let bg9 = window.getComputedStyle(cells[9]).backgroundColor; let col9 = window.getComputedStyle(cells[9]).color;
                 let bg10 = window.getComputedStyle(cells[10]).backgroundColor;
+                if (reduceStatusOpacityForPrint) {
+                    bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col9 = 'black';
+                }
                 
                 // Indent Date, Indent No, Act എന്നിവ ഒഴിവാക്കി കൃത്യം 11 കോളം മാത്രം എടുക്കുന്നു
                 tr.innerHTML = `
@@ -10250,7 +10298,7 @@ window.executeOpExpertPDFGeneration = function(filename, isPrint) {
     document.getElementById('modalOverlay').style.display = 'block';
     document.getElementById('sumteckAlertWindow').style.display = 'block';
     
-    prepareOpDetailsPrintArea(); 
+    prepareOpDetailsPrintArea(isPrint === true); 
 
     let tableEl = document.querySelector('#opPrintTable');
     if (tableEl) {
@@ -10480,7 +10528,7 @@ window.openRackForLastAddedIP = function() {
 // 🌟 IP SUB STOCK: EXPERT PDF GENERATION (STATUS WIDTH: 1.15) 🌟
 // =====================================================================
 
-window.prepareIpDetailsPrintArea = function() {
+window.prepareIpDetailsPrintArea = function(reduceStatusOpacityForPrint) {
     let title2 = document.getElementById('ipDpTitle2');
     let title3 = document.getElementById('ipDpTitle3');
     if(title2) document.getElementById('ipPrintTitleLine2').innerText = title2.innerText;
@@ -10501,6 +10549,10 @@ window.prepareIpDetailsPrintArea = function() {
                 let bg8 = window.getComputedStyle(cells[8]).backgroundColor; let col8 = window.getComputedStyle(cells[8]).color;
                 let bg9 = window.getComputedStyle(cells[9]).backgroundColor; let col9 = window.getComputedStyle(cells[9]).color;
                 let bg10 = window.getComputedStyle(cells[10]).backgroundColor;
+                if (reduceStatusOpacityForPrint) {
+                    bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col9 = 'black';
+                }
                 
                 tr.innerHTML = `
                     <td style="text-align: center;">${slNo++}</td>
@@ -10526,7 +10578,7 @@ window.executeIpExpertPDFGeneration = function(filename, isPrint) {
     document.getElementById('modalOverlay').style.display = 'block';
     document.getElementById('sumteckAlertWindow').style.display = 'block';
     
-    prepareIpDetailsPrintArea(); 
+    prepareIpDetailsPrintArea(isPrint === true); 
 
     let tableEl = document.querySelector('#ipPrintTable');
     if (tableEl) {
@@ -17979,7 +18031,7 @@ document.addEventListener('visibilitychange', function() {
             medistockStartBackupTimer();
             medistockUpdateBackupStatusUI(true);
             await window.medistockWriteLocalBackupNow();
-            alert('✅ Local Auto-Backup ക്രമീകരിച്ചു! ഇനി മുതൽ ഓരോ 5 മിനിറ്റിലും, EXPORT DATA അമർത്തുമ്പോഴും, സോഫ്റ്റ്‌വെയർ ക്ലോസ് ചെയ്യുമ്പോഴും ഈ ഫയൽ (Medistock back-up.json) തനിയെ പുതുക്കപ്പെടും.');
+            alert('✅ Local Auto-Backup ക്രമീകരിച്ചു! ഇനി മുതൽ ഓരോ 5 മിനിറ്റിലും, EXPORT DATA അമർത്തുമ്പോഴും,Software ൽ മാറ്റങ്ങൾ വരുത്തുമ്പോളും ഈ ഫയൽ (Medistock back-up.json) തനിയെ പുതുക്കപ്പെടും.');
         } catch (e) {
             if (e.name !== 'AbortError') console.error('Enable Local Backup Error:', e);
         }
