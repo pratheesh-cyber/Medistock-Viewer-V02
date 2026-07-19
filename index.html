@@ -3354,6 +3354,10 @@ function handleAuthClick() {
 <!-- ========================================= -->
 <div id="moreDetailsPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
     
+    <!-- 1. ഹെഡിങ് ഏറ്റവും മുകളിൽ നൽകുകയും Margin 2px ആക്കുകയും ചെയ്തു -->
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
+    
+    <!-- 2. ബട്ടണുകളുടെ സെക്ഷൻ ഹെഡിങ്ങിന് താഴെ നൽകുന്നു -->
     <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
         <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
@@ -3367,16 +3371,15 @@ function handleAuthClick() {
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
+    
     <div style="text-align:center; margin-bottom: 15px;">
         <span id="medistockLocalBackupStatusText" style="font-size: 12px; font-weight: bold; color: #7f8c8d;">🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.</span>
     </div>
 
-    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 10px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
-
     <!-- പുതിയതായി ചേർത്ത വിവരണം -->
     <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
         ഈ വിൻഡോയിൽ നിന്നും ലഭിക്കുന്നത് ഔദ്യോഗിക രജിസ്റ്ററുകളുടെ ഫോർമാറ്റല്ല. പുറത്ത് നിന്നും രജിസ്റ്ററുകൾ വാങ്ങേണ്ടിവരുന്ന സാഹചര്യത്തിൽ നമ്മുടെ ഡ്യൂട്ടിയുടെ ഭാഗമായ രജിസ്റ്ററുകൾ വൃത്തിയായും എളുപ്പത്തിലും കൈകാര്യം ചെയ്യുന്നതിനുള്ള മാതൃകകൾ ആണിത്.<br>
-        <span style="font-size: 10px; color: #2c3e50; font-weight: bold;">(കോട്ടയം ജില്ലയിലെ മുപ്പതോളം സ്ഥാപനങ്ങളിൽ ഈ മോഡൽ അനുസരിച്ച്  ഞങ്ങൾ ഒന്നിച്ച് print ചെയ്ത് ഉപയോഗിക്കുന്നുണ്ട്.അങ്ങനെ കുറച്ച് പേര് ചേർന്ന് ഒന്നിച്ച് Print ചെയ്താൽ തുക കുറഞ്ഞുകിട്ടും.)</span>
+        <span style="font-size: 10px; color: #2c3e50; font-weight: bold;">(കോട്ടയം ജില്ലയിലെ മുപ്പതോളം സ്ഥാപനങ്ങളിൽ ഈ മോഡൽ അനുസരിച്ച്  ഞങ്ങൾ ഒന്നിച്ച് print ചെയ്ത് എടുത്തിരുന്നു.അങ്ങനെ കുറച്ച് പേര് ചേർന്ന് ഒന്നിച്ച് Print ചെയ്താൽ തുക കുറഞ്ഞുകിട്ടും.)</span>
     </div>
 
     <div class="master-container" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
@@ -4294,6 +4297,8 @@ function deleteSelectedCustomCodes() {
                   stockItems = stockItems.filter(item => item.id != rowToDeleteId);
                 }
               saveData();
+              // 🌟 EXPERT FIX: വരി ഡിലീറ്റ് ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ (Medistock back-up.json) ഉടനെ പുതുക്കുന്നു
+              if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
                
               if(rowToDeleteType === 'main') renderDetailsTable();
                 else if(rowToDeleteType === 'op') renderOpDetailsTable();
@@ -4330,6 +4335,8 @@ function deleteSelectedCustomCodes() {
                 return true; 
             });
            saveData();
+            // 🌟 EXPERT FIX: Expired മരുന്നുകൾ ബൾക്ക് ഡിലീറ്റ് ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+            if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
             if (deleteContext === 'main') renderDetailsTable();
             else if (deleteContext === 'op') renderOpDetailsTable();
             else renderIpDetailsTable();
@@ -4354,6 +4361,8 @@ function deleteSelectedCustomCodes() {
                 return true; 
             });
            saveData();
+          // 🌟 EXPERT FIX: Empty Qty വരികൾ ബൾക്ക് ഡിലീറ്റ് ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+          if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
           if(emptyQtyContext === 'op') renderOpDetailsTable();
             else renderIpDetailsTable();
           renderTable(); renderOpeningStockTable();
@@ -5083,6 +5092,10 @@ window.addAllToStock = function() {
         //  ഡ്യൂപ്ലിക്കേറ്റ്/ഉപയോഗശൂന്യമായ കോഡ് ഇവിടെ നിന്ന് നീക്കം ചെയ്തു. 🌟
         if(typeof saveData === 'function') saveData(); 
 
+        // 🌟 EXPERT FIX: ADD TO STOCK ബട്ടൺ ഉപയോഗിച്ച് മരുന്ന് ചേർത്ത ശേഷം (ഈ ഫങ്ഷൻ പൂർത്തിയായ ശേഷം)
+        // Local Auto-Backup ഫയൽ (Medistock back-up.json) ഉടനെ പുതുക്കുന്നു 🌟
+        if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
+
         if(typeof renderTable === 'function') renderTable(); 
         if(typeof updateInvoiceLists === 'function') updateInvoiceLists(); 
         if(typeof renderOpeningStockTable === 'function') renderOpeningStockTable(); 
@@ -5510,6 +5523,9 @@ function updateColumnEdits(type) {
     // 2. മാറ്റങ്ങൾ സേവ് ചെയ്യുന്നു
     if (typeof saveData === 'function') saveData();
 
+    // 🌟 EXPERT FIX: Column-wise Edit Update ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+    if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
+
     // 3. അതാത് ടേബിളുകൾ റിഫ്രഷ് ചെയ്യുന്നു
     if(type === 'main') { 
         renderDetailsTable(); 
@@ -5632,6 +5648,8 @@ function updateMainDetailsRow(id) {
     // 2. ഡാറ്റ സേവ് ചെയ്യുന്നു
     saveData();
 
+    // 🌟 EXPERT FIX: Main Stock വരി Update ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+    if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 
     // 3. ടേബിൾ റിഫ്രഷ് ചെയ്ത് എഡിറ്റിംഗ് മോഡ് അവസാനിപ്പിക്കുന്നു
     renderDetailsTable(); 
@@ -5839,6 +5857,8 @@ function editOpDetailsRow(id) {
             // 2. ഡാറ്റ സേവ് ചെയ്യുന്നു
             saveData();
 
+            // 🌟 EXPERT FIX: OP Sub Stock വരി Update ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+            if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 
             // 3. ടേബിൾ റിഫ്രഷ് ചെയ്ത് എഡിറ്റിംഗ് മോഡ് അവസാനിപ്പിക്കുന്നു
             renderOpDetailsTable(); 
@@ -6062,6 +6082,8 @@ function editIpDetailsRow(id) {
             // 2. ഡാറ്റ സേവ് ചെയ്യുന്നു
             saveData();
 
+            // 🌟 EXPERT FIX: IP Sub Stock വരി Update ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+            if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 
             // 3. ടേബിൾ റിഫ്രഷ് ചെയ്ത് എഡിറ്റിംഗ് മോഡ് അവസാനിപ്പിക്കുന്നു
             renderIpDetailsTable(); 
@@ -6236,6 +6258,8 @@ function editOpeningRow(id) {
             // 2. ഡാറ്റ സേവ് ചെയ്യുന്നു
             saveData();
 
+            // 🌟 EXPERT FIX: Opening Stock വരി Update ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
+            if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 
             // 3. ടേബിൾ റിഫ്രഷ് ചെയ്ത് എഡിറ്റിംഗ് മോഡ് അവസാനിപ്പിക്കുന്നു
             renderOpeningStockTable(); 
@@ -16819,6 +16843,11 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
         };
         localStorage.setItem('medistock_indent_view_state', JSON.stringify(indentViewState));
     } catch(e) { console.error("Indent View Persist Error:", e); }
+
+    // 🌟 EXPERT FIX: INDENT PREPARATION WINDOW-ലെ GENERATE ബട്ടൺ ഉപയോഗിച്ച് ഇൻഡന്റ് ജനറേറ്റ്
+    // ചെയ്ത ശേഷം (ഈ ഫങ്ഷൻ പൂർത്തിയായ ശേഷം) Local Auto-Backup ഫയൽ (Medistock back-up.json)
+    // ഉടനെ പുതുക്കുന്നു 🌟
+    if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 
     if(typeof hideAllPages === 'function') hideAllPages();
     let pageNode = document.getElementById('indentAtPagePage');
