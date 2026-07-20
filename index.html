@@ -2678,7 +2678,7 @@ function handleAuthClick() {
                     <div style="display:flex; gap:10px; width:100%; align-items: flex-end;">
                         <div class="input-group" style="width: 15ch; flex-shrink: 0;">
                             <label style="color:#3498db;">CUSTOM FUND CODE</label>
-                            <input type="text" id="customFundCode" maxlength="5" oninput="validateCode(this); updateFundDesc();" onblur="saveCustomFund()" placeholder="Code" style="width:100%;">
+                            <input type="text" id="customFundCode" maxlength="20" oninput="validateCode(this); enforceCustomFundCodeLimit(this); updateFundDesc();" onblur="saveCustomFund()" placeholder="Code" style="width:100%;">
                         </div>
                         
                         <div class="input-group" style="flex:1;">
@@ -2968,6 +2968,7 @@ function handleAuthClick() {
                       <thead>
                           <tr>
                                 <th style="width: auto;">NAME OF MEDICINE</th>
+                                <th style="width: 7ch; background-color: #00695c; color: white;">Qty</th>
                                 <th style="width: 8ch;">DAYS LEFT</th>
                                 <th style="width: 9ch;">Exp.Dt.</th>
                           </tr>
@@ -3367,6 +3368,9 @@ function handleAuthClick() {
     
     <!-- 2. ബട്ടണുകളുടെ സെക്ഷൻ ഹെഡിങ്ങിന് താഴെ നൽകുന്നു -->
     <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+        <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് 
+             പരീക്ഷണം നടത്താനുള്ള SAMPLE DATA ഡൗൺലോഡ് ചെയ്യാൻ 🌟 -->
+        <button class="nav-btn" style="margin-bottom: 0; background: #2980b9;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD SAMPLE DATA</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
@@ -3453,7 +3457,7 @@ function handleAuthClick() {
                 </tr>
                 <tr>
                     <td>സ്റ്റോക്ക് രജിസ്റ്റർ ഇൻഡക്സ് മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1x5wsX8fRY24GAkfWtXTIgUYuut5TZs4u/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1N50XAlc_SlJ2ciGqxDfyhZ48TuEmiU4_/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td></td>
                 </tr>
                 <!-- പുതിയതായി ചേർത്ത മൂന്ന് വരികൾ -->
@@ -3474,6 +3478,40 @@ function handleAuthClick() {
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- ========================================= -->
+<!-- LOCAL AUTO-BACKUP FOLDER NOT SET - REMINDER MODAL -->
+<!-- ========================================= -->
+<div id="medistockBackupReminderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(22, 160, 133, 0.95); z-index:10055; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box;">
+    <i class="fa-solid fa-folder-plus" style="font-size: 90px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+    <h1 style="font-size: 30px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">ഓർമ്മപ്പെടുത്തൽ</h1>
+    <p style="font-size: 18px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 30px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #16a085;">
+        Software തുറക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി Local Auto-Backup ഫയൽ നിർമ്മിച്ച് അതിൽ സേവ് ചെയ്യുന്നതിനായി, MORE DETAILS എന്ന പേജിലെ Local Auto-Backup സജീവമാക്കുക എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട് ചെയ്ത ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക.
+    </p>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+        <button onclick="document.getElementById('medistockBackupReminderModal').style.display='none'; if(typeof hideAllPages === 'function') hideAllPages(); document.getElementById('moreDetailsPage').style.display='block'; window.scrollTo(0,0);" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">📁 MORE DETAILS പേജിലേക്ക് പോകുക</button>
+        <button onclick="document.getElementById('medistockBackupReminderModal').style.display='none';" style="background: #7f8c8d; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
+    </div>
+</div>
+
+<!-- ========================================= -->
+<!-- DOWNLOAD SAMPLE DATA WARNING MODAL -->
+<!-- ========================================= -->
+<div id="sampleDataWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(41, 128, 185, 0.95); z-index:10056; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box; overflow-y: auto;">
+    <div style="max-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
+        <i class="fa-solid fa-vial-circle-check" style="font-size: 80px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+        <h1 style="font-size: 28px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">DOWNLOAD SAMPLE DATA</h1>
+        <p style="font-size: 17px; font-weight: bold; max-width: 850px; line-height: 1.7; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #2980b9; text-align: left;">
+            ഇത് Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യുന്നതിനുള്ള ബട്ടൺ ആണ്. ഇത് ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നതിന് മാത്രം ഉപയോഗിക്കുക. ഈ ബട്ടൺ ഉപയോഗിച്ചാൽ SAMPLE DATA DOWNLOAD ആകും. ഈ പേജിലെ IMPORT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഈ SAMPLE DATA Software ൽ ചേർക്കാൻ സാധിക്കും.<br><br>
+            പഠിച്ച് കഴിഞ്ഞിട്ട് HOME പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
+            <span style="color: #f1c40f; display: block; text-align: center; font-size: 19px;">ഇതുമായി മുന്നോട്ട് പോകാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?</span>
+        </p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <button onclick="executeDownloadSampleData()" style="background: #27ae60; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">YES, IMPORT</button>
+            <button onclick="document.getElementById('sampleDataWarningModal').style.display='none';" style="background: #e74c3c; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">NO, CANCEL</button>
+        </div>
     </div>
 </div>
 
@@ -3843,7 +3881,12 @@ const categoryColors = {
             'medistock_indent_history', 'medistock_last_transaction',
             'medistock_main_last_added_date', 'medistock_main_last_added_time',
             'medistock_op_last_added_date', 'medistock_op_last_added_time',
-            'medistock_ip_last_added_date', 'medistock_ip_last_added_time'
+            'medistock_ip_last_added_date', 'medistock_ip_last_added_time',
+            // 🌟 പുതിയതായി ചേർത്തത്: id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ 
+            // നിലവിൽ കാണിക്കുന്ന (ജനറേറ്റ് ചെയ്ത) ഇൻഡന്റ് ഡാറ്റ ഇതിലാണ് സേവ് ആകുന്നത്. ഇത് കൂടി 
+            // ട്രാക്ക് ചെയ്യുന്നതിനാൽ, Undo ബട്ടൺ അമർത്തുമ്പോൾ ഈ രണ്ട് പേജുകളിലെയും ടേബിളുകൾ 
+            // ഇൻഡന്റ് ജനറേറ്റ് ചെയ്യുന്നതിന് മുൻപ് ഉണ്ടായിരുന്ന അതേ ഇൻഡന്റിലേക്ക് തന്നെ മാറും 🌟
+            'medistock_indent_view_state'
         ];
         let medistockLastUndoPushTime = 0;
         let medistockUndoRestoring = false; // Restore ചെയ്യുന്ന സമയത്ത് സ്വയം ഒരു Snapshot എടുക്കാതിരിക്കാൻ
@@ -3919,6 +3962,14 @@ const categoryColors = {
 
                     // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
                     if (typeof loadData === 'function') loadData();
+
+                    // 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ നിലവിൽ 
+                    // കാണിക്കുന്ന ഇൻഡന്റ്, Undo ചെയ്ത ശേഷം localStorage-ലേക്ക് പുനഃസ്ഥാപിച്ച 
+                    // (restore ചെയ്ത) പഴയ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച് തന്നെ വീണ്ടും കാണിക്കുന്നു 🌟
+                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
+                        window.restoreIndentViewPagesFromStorage();
+                    }
+
                     if (typeof window.refreshAllPagesAfterRestore === 'function') {
                         // ഇത് നിലവിൽ Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / 
                         // Pre-Indent Summary / Indent @ Item / Indent @ Page No / Last Added (Main, OP, IP) 
@@ -4659,6 +4710,18 @@ function validateExpField(el) {
         function updateSino(index, el) { document.getElementById('sino_' + index).value = (el.value.trim() !== "") ? index : ""; }
         function showWarning(el, msg) { const err = document.getElementById('errorMessage'); err.innerHTML = msg; err.style.display = 'block'; el.focus(); setTimeout(() => { err.style.display = 'none'; }, 3500); }
         function validateCode(input) { input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+
+        // 🌟 CUSTOM FUND CODE ബോക്സിൽ പരമാവധി 4 അക്ഷരം മാത്രം അനുവദിക്കാൻ, കൂടുതൽ ടൈപ്പ് ചെയ്യാൻ 
+        // ശ്രമിച്ചാൽ വാണിംഗ് മെസേജ് കാണിക്കാൻ ഉള്ള ഫംഗ്ഷൻ 🌟
+        let customFundCodeWarnTimer = null;
+        function enforceCustomFundCodeLimit(input) {
+            if (input.value.length > 4) {
+                input.value = input.value.slice(0, 4);
+                if (customFundCodeWarnTimer) return; // ആവർത്തിച്ചുള്ള അലേർട്ട് ഒഴിവാക്കാൻ
+                customFundCodeWarnTimer = setTimeout(function(){ customFundCodeWarnTimer = null; }, 1500);
+                alert('⚠️ CUSTOM FUND CODE ബോക്സിൽ പരമാവധി 4 അക്ഷരങ്ങൾ മാത്രമേ നൽകാൻ കഴിയൂ.');
+            }
+        }
 
 // ഡ്രോപ്പ് ഡൗൺ ലിസ്റ്റുകൾ നിർമ്മിക്കുന്ന ഫംഗ്ഷൻ (ALL PROJECT MEDICINES ഒഴിവാക്കിയത്)
   // ഡ്രോപ്പ് ഡൗൺ ലിസ്റ്റുകൾ നിർമ്മിക്കുന്ന ഫംഗ്ഷൻ (രണ്ടായി തിരിച്ചു നൽകുന്നു)
@@ -6572,6 +6635,7 @@ window.renderIndentRightTable = function() {
         tbody.innerHTML += `
             <tr>
                 <td style="text-align:left; padding: 8px 10px !important;">${s.name}</td>
+                <td style="padding: 8px 10px !important; font-weight: 900;">${s.qty || ""}</td>
                 <td class="${cls}" style="padding: 8px 10px !important;">${s.daysLeft}</td>
                 <td style="padding: 8px 10px !important;">${s.exp}</td>
             </tr>
@@ -10059,10 +10123,12 @@ window.prepareMainDetailsPrintArea = function(reduceStatusOpacityForPrint) {
                 let bg9 = window.getComputedStyle(cells[9]).backgroundColor;
                 let col9 = window.getComputedStyle(cells[9]).color;
                 let bg10 = window.getComputedStyle(cells[10]).backgroundColor;
-                // STATUS കോളം (bg9) മാത്രം - PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ opacity കുറയ്ക്കുന്നു
+                // STATUS (bg9), Days left (bg8) എന്നീ കോളങ്ങൾ - PRINT / PERFECT PDF ആയിരിക്കുമ്പോൾ opacity കുറയ്ക്കുന്നു
                 if (reduceStatusOpacityForPrint) {
                     bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
                     col9 = 'black';
+                    bg8 = medistockLightenColorForPrint(bg8, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col8 = 'black';
                 }
                 
                 // AutoTable-ന് വായിക്കാൻ പാകത്തിൽ ഇൻലൈൻ സ്റ്റൈലുകൾ നൽകുന്നു
@@ -10303,6 +10369,8 @@ window.prepareOpDetailsPrintArea = function(reduceStatusOpacityForPrint) {
                 if (reduceStatusOpacityForPrint) {
                     bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
                     col9 = 'black';
+                    bg8 = medistockLightenColorForPrint(bg8, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col8 = 'black';
                 }
                 
                 // Indent Date, Indent No, Act എന്നിവ ഒഴിവാക്കി കൃത്യം 11 കോളം മാത്രം എടുക്കുന്നു
@@ -10587,6 +10655,8 @@ window.prepareIpDetailsPrintArea = function(reduceStatusOpacityForPrint) {
                 if (reduceStatusOpacityForPrint) {
                     bg9 = medistockLightenColorForPrint(bg9, MEDISTOCK_PRINT_STATUS_OPACITY);
                     col9 = 'black';
+                    bg8 = medistockLightenColorForPrint(bg8, MEDISTOCK_PRINT_STATUS_OPACITY);
+                    col8 = 'black';
                 }
                 
                 tr.innerHTML = `
@@ -18093,10 +18163,17 @@ document.addEventListener('visibilitychange', function() {
     };
 
     // App തുറക്കുമ്പോൾ മുൻപ് അനുമതി നൽകിയ handle ഉണ്ടെങ്കിൽ വീണ്ടും ഉപയോഗിക്കാൻ ശ്രമിക്കുന്നു
+    // 🌟 ഫോൾഡർ ഒരിക്കലും സെറ്റ് ചെയ്തിട്ടില്ലെങ്കിൽ, Software തുറക്കുമ്പോൾ എപ്പോഴും 
+    // ഓർമ്മപ്പെടുത്തൽ മെസേജ് കാണിക്കാൻ 🌟
+    function medistockShowBackupReminderIfNeeded() {
+        let modal = document.getElementById('medistockBackupReminderModal');
+        if (modal) modal.style.display = 'flex';
+    }
+
     async function medistockTryRestoreLocalBackupHandle() {
         try {
             let handle = await medistockIdbGet(MEDISTOCK_LOCAL_BACKUP_KEY);
-            if (!handle) { medistockUpdateBackupStatusUI(false); return; }
+            if (!handle) { medistockUpdateBackupStatusUI(false); medistockShowBackupReminderIfNeeded(); return; }
             localBackupFileHandle = handle;
             let perm = await handle.queryPermission({ mode: 'readwrite' });
             if (perm === 'granted') {
@@ -18106,7 +18183,7 @@ document.addEventListener('visibilitychange', function() {
                 // ബ്രൗസർ സുരക്ഷാ നിയമപ്രകാരം, ബട്ടൺ ക്ലിക്ക് വഴി മാത്രമേ അനുമതി വീണ്ടും ചോദിക്കാൻ കഴിയൂ
                 medistockUpdateBackupStatusUI(false);
             }
-        } catch (e) { medistockUpdateBackupStatusUI(false); }
+        } catch (e) { medistockUpdateBackupStatusUI(false); medistockShowBackupReminderIfNeeded(); }
     }
     document.addEventListener('DOMContentLoaded', medistockTryRestoreLocalBackupHandle);
 
@@ -19406,6 +19483,17 @@ async function exportDataToJSON() {
 // 2. JSON Import വാണിംഗ് കാണിക്കാൻ
 function confirmImportData() {
     document.getElementById('importWarningModal').style.display = 'flex';
+}
+
+// 🌟 പുതിയതായി ചേർത്തത്: DOWNLOAD SAMPLE DATA ബട്ടൺ അമർത്തുമ്പോൾ വിശദീകരണ മെസേജ് ബോക്സ് കാണിക്കാൻ 🌟
+function confirmDownloadSampleData() {
+    document.getElementById('sampleDataWarningModal').style.display = 'flex';
+}
+
+// 🌟 മെസേജ് ബോക്സിലെ YES, IMPORT ബട്ടൺ അമർത്തുമ്പോൾ സാമ്പിൾ ഡാറ്റ (json) ഡൗൺലോഡ് ചെയ്യാൻ 🌟
+function executeDownloadSampleData() {
+    document.getElementById('sampleDataWarningModal').style.display = 'none';
+    window.open('https://drive.google.com/file/d/1hh_urH52HBCSBY0OBDppeAENbs581T1p/view?usp=sharing', '_blank');
 }
 
 // 3. വാണിംഗ് YES നൽകിയാൽ File Browser തുറക്കാൻ
