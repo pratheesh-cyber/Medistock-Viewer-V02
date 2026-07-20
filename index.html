@@ -2678,7 +2678,7 @@ function handleAuthClick() {
                     <div style="display:flex; gap:10px; width:100%; align-items: flex-end;">
                         <div class="input-group" style="width: 15ch; flex-shrink: 0;">
                             <label style="color:#3498db;">CUSTOM FUND CODE</label>
-                            <input type="text" id="customFundCode" maxlength="10" oninput="validateCustomFundCode(this); updateFundDesc();" onblur="saveCustomFund()" placeholder="Code" style="width:100%;">
+                            <input type="text" id="customFundCode" maxlength="5" oninput="validateCode(this); updateFundDesc();" onblur="saveCustomFund()" placeholder="Code" style="width:100%;">
                         </div>
                         
                         <div class="input-group" style="flex:1;">
@@ -2937,7 +2937,7 @@ function handleAuthClick() {
 <div class="input-wrapper" style="width: 100%; gap: 2px;">
             <label style="text-align: center; display: block;">Project Selected for Comparison</label>
             <div class="dynamic-green-yellow-box" style="height: 40px !important; min-height: 40px; max-height: 40px; padding: 0; box-sizing: border-box; border: 1px solid #64b5f6; flex-direction: row; margin: 0; justify-content: center; align-items: center; border-radius: 8px; width: 100%; background: linear-gradient(to top, #e3f2fd, #bbdefb);">
-                <span id="indRightProjName" style="font-family: inherit; color: #005088; font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 5px; line-height: 1;">SELECT A FUND TO VIEW PROJECT</span>
+                <span id="indRightProjName" style="font-family: inherit; color: #005088; font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 5px; line-height: 1;">Select a Fund to Compare with the Indent</span>
             </div>
          </div>
 
@@ -2968,7 +2968,6 @@ function handleAuthClick() {
                       <thead>
                           <tr>
                                 <th style="width: auto;">NAME OF MEDICINE</th>
-                                <th style="width: 7ch;">Qty</th>
                                 <th style="width: 8ch;">DAYS LEFT</th>
                                 <th style="width: 9ch;">Exp.Dt.</th>
                           </tr>
@@ -2991,7 +2990,7 @@ function handleAuthClick() {
     <button type="button" style="background:#16a085; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()">🎧 HELP DESK</button>
     <button type="button" style="background:#27ae60; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
-    <button type="button" class="index-btn" onclick="medistockUndoIndentTableRows()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="ഈ പേജിലെ പട്ടികയിലെ ഡാറ്റ, മുൻപത്തെ ഇൻഡന്റ് അവസ്ഥയിലേക്ക് Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
+    <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
 <div style="display: none;">
@@ -3220,7 +3219,7 @@ function handleAuthClick() {
     
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()" >🎧 HELP DESK</button>
     <button type="button" style="background:#2980b9; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
-    <button type="button" class="index-btn" onclick="medistockUndoIndentTableRows()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="ഈ പേജിലെ പട്ടികയിലെ ഡാറ്റ, മുൻപത്തെ ഇൻഡന്റ് അവസ്ഥയിലേക്ക് Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
+    <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
 <div style="display: none;">
@@ -3368,8 +3367,6 @@ function handleAuthClick() {
     
     <!-- 2. ബട്ടണുകളുടെ സെക്ഷൻ ഹെഡിങ്ങിന് താഴെ നൽകുന്നു -->
     <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
-        <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Software ആദ്യമായി പഠിക്കുന്നവർക്ക് പരീക്ഷിക്കാനുള്ള SAMPLE DATA Download ചെയ്യാൻ 🌟 -->
-        <button class="nav-btn" style="margin-bottom: 0; background: #2ecc71;" onclick="medistockConfirmSampleDataDownload()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-download"></i> DOWNLOAD SAMPLE DATA</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
@@ -3456,7 +3453,7 @@ function handleAuthClick() {
                 </tr>
                 <tr>
                     <td>സ്റ്റോക്ക് രജിസ്റ്റർ ഇൻഡക്സ് മാതൃക</td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1N50XAlc_SlJ2ciGqxDfyhZ48TuEmiU4_/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1x5wsX8fRY24GAkfWtXTIgUYuut5TZs4u/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td></td>
                 </tr>
                 <!-- പുതിയതായി ചേർത്ത മൂന്ന് വരികൾ -->
@@ -3492,21 +3489,6 @@ function handleAuthClick() {
     <div style="display: flex; gap: 30px;">
         <button onclick="executeImportData()" style="background: #c0392b; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">YES, IMPORT</button>
         <button onclick="document.getElementById('importWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">NO, CANCEL</button>
-    </div>
-</div>
-
-<!-- ========================================= -->
-<!-- 🌟 DOWNLOAD SAMPLE DATA - CONFIRMATION MODAL 🌟 -->
-<!-- ========================================= -->
-<div id="sampleDataConfirmModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10050; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px);">
-    <i class="fa-solid fa-circle-info" style="font-size: 90px; margin-bottom: 20px; color: #2ecc71; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
-    <p style="font-size: 18px; font-weight: bold; max-width: 800px; line-height: 1.7; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #2ecc71; font-family: 'Anek Malayalam', sans-serif;">
-        ഇത് Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യുന്നതിനുള്ള ബട്ടൺ ആണ്. ഇത് ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നതിന് മാത്രം ഉപയോഗിക്കുക. ഈ ബട്ടൺ ഉപയോഗിച്ചാൽ SAMPLE DATA DOWNLOAD ആകും. ഈ പേജിലെ IMPORT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഈ SAMPLE DATA Software ൽ ചേർക്കാൻ സാധിക്കും. പഠിച്ച് കഴിഞ്ഞിട്ട് HOME പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
-        ഇതുമായി മുന്നോട്ട് പോകാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?
-    </p>
-    <div style="display: flex; gap: 30px;">
-        <button onclick="medistockExecuteSampleDataDownload()" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">YES, IMPORT</button>
-        <button onclick="document.getElementById('sampleDataConfirmModal').style.display='none'" style="background: #c0392b; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">NO, CANCEL</button>
     </div>
 </div>
 
@@ -3906,26 +3888,16 @@ const categoryColors = {
           localStorage.setItem('medistock_last_indent', lastProcessedIndentNo);
         }
 
-        // 🌟 "MORE DETAILS" പേജിലെ "UNDO LAST ACTION" ബട്ടണിനും, id="indentAtItemPage" /
-        // id="indentAtPagePage" പേജുകളിലെ "UNDO" ബട്ടണിനും പൊതുവായി ഉപയോഗിക്കുന്ന ഫംഗ്ഷൻ.
-        // onAfterUndo എന്ന ഓപ്ഷണൽ പാരാമീറ്റർ നൽകിയാൽ (നിലവിലുള്ള ഒരു കോളിനും ഇത് നൽകാത്തതിനാൽ
-        // മറ്റൊരു ബട്ടണിന്റെയും പ്രവർത്തനത്തിന് മാറ്റം വരില്ല), അത് ഈ ഫംഗ്ഷന്റെ സാധാരണ
-        // പ്രവർത്തനത്തിന് (Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock Undo)
-        // പുറമെ, "കൂടെ" അഡീഷണലായി വിളിക്കപ്പെടും. 🌟
-        function medistockUndoLastAction(onAfterUndo) {
+        // 🌟 "MORE DETAILS" പേജിലെ "UNDO LAST ACTION" ബട്ടൺ അമർത്തുമ്പോൾ പ്രവർത്തിക്കുന്ന ഫംഗ്ഷൻ 🌟
+        function medistockUndoLastAction() {
             try {
                 let stackRaw = localStorage.getItem(MEDISTOCK_UNDO_KEY);
                 let stack = stackRaw ? JSON.parse(stackRaw) : [];
                 if (stack.length === 0) {
                     if (typeof showCustomConfirm === 'function') {
-                        showCustomConfirm("Undo ചെയ്യാൻ മുൻപത്തെ പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.", function(){
-                            if (typeof onAfterUndo === 'function') onAfterUndo();
-                        }, function(){
-                            if (typeof onAfterUndo === 'function') onAfterUndo();
-                        });
+                        showCustomConfirm("Undo ചെയ്യാൻ മുൻപത്തെ പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.", function(){}, function(){});
                     } else {
                         alert("Undo ചെയ്യാൻ മുൻപത്തെ പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.");
-                        if (typeof onAfterUndo === 'function') onAfterUndo();
                     }
                     return;
                 }
@@ -3973,12 +3945,6 @@ const categoryColors = {
                     if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
                         window.showIndentHistory();
                     }
-
-                    // 🌟 id="indentAtItemPage" / id="indentAtPagePage" പേജുകളിലെ UNDO ബട്ടൺ വഴി
-                    // വിളിക്കപ്പെട്ടതാണെങ്കിൽ, മുകളിലെ സാധാരണ Undo പ്രവർത്തനത്തിന് പുറമെ, ഇവിടെ
-                    // അഡീഷണലായി നൽകിയ callback (ആ പേജിലെ പട്ടികയിലെ മരുന്ന് ഡാറ്റ ഡിലീറ്റ്
-                    // ചെയ്യുന്ന ഫംഗ്ഷൻ) കൂടി പ്രവർത്തിപ്പിക്കുന്നു
-                    if (typeof onAfterUndo === 'function') onAfterUndo();
 
                     document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ പ്രവർത്തനം വിജയകരമായി Undo ചെയ്തിരിക്കുന്നു.";
                     document.getElementById('modalOverlay').style.display = 'block';
@@ -4693,18 +4659,6 @@ function validateExpField(el) {
         function updateSino(index, el) { document.getElementById('sino_' + index).value = (el.value.trim() !== "") ? index : ""; }
         function showWarning(el, msg) { const err = document.getElementById('errorMessage'); err.innerHTML = msg; err.style.display = 'block'; el.focus(); setTimeout(() => { err.style.display = 'none'; }, 3500); }
         function validateCode(input) { input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); }
-        // 🌟 CUSTOM FUND CODE ബോക്സിൽ പരമാവധി 4 അക്ഷരങ്ങൾ മാത്രമേ അനുവദിക്കൂ - കൂടുതൽ ടൈപ്പ് ചെയ്താൽ വാണിംഗ് കാണിക്കുന്നു 🌟
-        function validateCustomFundCode(input) {
-            input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (input.value.length > 4) {
-                input.value = input.value.substring(0, 4);
-                if (typeof showWarning === 'function') {
-                    showWarning(input, 'CUSTOM FUND CODE ബോക്സിൽ പരമാവധി 4 അക്ഷരങ്ങൾ മാത്രമേ അനുവദിക്കൂ!');
-                } else {
-                    alert('CUSTOM FUND CODE ബോക്സിൽ പരമാവധി 4 അക്ഷരങ്ങൾ മാത്രമേ അനുവദിക്കൂ!');
-                }
-            }
-        }
 
 // ഡ്രോപ്പ് ഡൗൺ ലിസ്റ്റുകൾ നിർമ്മിക്കുന്ന ഫംഗ്ഷൻ (ALL PROJECT MEDICINES ഒഴിവാക്കിയത്)
   // ഡ്രോപ്പ് ഡൗൺ ലിസ്റ്റുകൾ നിർമ്മിക്കുന്ന ഫംഗ്ഷൻ (രണ്ടായി തിരിച്ചു നൽകുന്നു)
@@ -6618,7 +6572,6 @@ window.renderIndentRightTable = function() {
         tbody.innerHTML += `
             <tr>
                 <td style="text-align:left; padding: 8px 10px !important;">${s.name}</td>
-                <td style="padding: 8px 10px !important; text-align:center;">${s.qty}</td>
                 <td class="${cls}" style="padding: 8px 10px !important;">${s.daysLeft}</td>
                 <td style="padding: 8px 10px !important;">${s.exp}</td>
             </tr>
@@ -16731,7 +16684,6 @@ window.renderIndentRightTable = function() {
         tbody.innerHTML += `
             <tr style="border-bottom: 1px solid #ccc; height: 32px;">
                 <td style="text-align:left; padding: 8px 10px !important; font-weight: 900; vertical-align: middle;">${s.name}</td>
-                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color: #e0f7fa; color:#006064;">${s.qty}</td>
                 <td class="${cls}" style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; ${daysLeftStyle}">${s.daysLeft}</td>
                 <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle;">${s.exp}</td>
             </tr>
@@ -16951,15 +16903,13 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
     if(document.getElementById('pageNoSignOfficer')) document.getElementById('pageNoSignOfficer').innerHTML = offStr;
     if(document.getElementById('pageNoSignPharm')) document.getElementById('pageNoSignPharm').innerHTML = phmStr;
 
-    let entryId = Date.now();
     let historyEntry = {
-        id: entryId,
+        id: Date.now(),
         date: new Date().toLocaleDateString(),
         indentNo: indentNo,
         title2: `INDENT FOR ${secName} - MEDICINES ARRANGE @ MEDICINE ITEM`,
         title3: `INDENT OF ${fundDesc}`,
         tableHTML: tbodyItemHTML,
-        pageTableHTML: tbodyPageHTML,
         officer: offStr,
         pharmacist: phmStr
     };
@@ -16984,7 +16934,6 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
     // വരുത്തുന്നില്ല — ഒരു പുതിയ localStorage കീ മാത്രമാണ് ചേർത്തിരിക്കുന്നത്. 🌟
     try {
         let indentViewState = {
-            id: entryId,
             indentNo: indentNo,
             subStock: subStock,
             fund: fund,
@@ -17010,97 +16959,6 @@ window.generateIndentPrintAndHistory = function(printDataRows, leftTableItems, i
     if(typeof hideAllPages === 'function') hideAllPages();
     let pageNode = document.getElementById('indentAtPagePage');
     if(pageNode) pageNode.style.display = 'block';
-};
-
-// =====================================================================
-// 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിലെ UNDO ബട്ടൺ:
-// ഏത് പേജിലെ (ITEM / PAGE No) UNDO ബട്ടൺ അമർത്തിയാലും, ഈ രണ്ട് പേജിലെയും പട്ടികയിലെ
-// മരുന്നുകളുടെ ഡാറ്റ, അവസാനത്തെ "GENERATE INDENT" ഫങ്ഷന് മുൻപ് എങ്ങനെ ആയിരുന്നോ അതുപോലെ
-// (id="indentHistoryPage" ൽ ഇതിനകം സേവ് ചെയ്തിട്ടുള്ള മുൻപത്തെ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച്)
-// തിരികെ മാറ്റുന്നു. id="indentHistoryPage" ലെ ലിസ്റ്റിൽ നിന്ന് ഒരു എൻട്രി പോലും
-// ഡിലീറ്റ് ചെയ്യുന്നില്ല - അത് പൂർണ്ണമായ ഒരു റെക്കോർഡ് ആയി അതേപടി തുടരും. Main Stock /
-// Sub Stock OP / Sub Stock IP / Opening Stock, മറ്റ് ഒരു പേജിനും ബട്ടണിനും ഫങ്ഷനും
-// ഇതുമൂലം യാതൊരു മാറ്റവും വരുന്നില്ല. 🌟
-// =====================================================================
-window.medistockUndoIndentTableRows = function() {
-    let historyStr = localStorage.getItem('medistock_indent_history');
-    let historyArr = historyStr ? JSON.parse(historyStr) : [];
-
-    if (historyArr.length === 0) {
-        alert('Undo ചെയ്യാൻ ഈ പേജിൽ മുൻപത്തെ ഇൻഡന്റ് ഡാറ്റയൊന്നും ലഭ്യമല്ല.');
-        return;
-    }
-
-    // നിലവിൽ ഈ പേജുകളിൽ കാണിക്കുന്ന ഇൻഡന്റ്, HISTORY ലിസ്റ്റിലെ ഏത് എൻട്രിയാണെന്ന് കണ്ടെത്തുന്നു
-    let currentId = null;
-    try {
-        let viewStr = localStorage.getItem('medistock_indent_view_state');
-        if (viewStr) currentId = JSON.parse(viewStr).id || null;
-    } catch (e) { /* ignore */ }
-
-    let currentIndex = currentId ? historyArr.findIndex(h => h.id === currentId) : -1;
-    if (currentIndex === -1) currentIndex = 0; // നിലവിലെ എൻട്രി കണ്ടെത്താൻ കഴിഞ്ഞില്ലെങ്കിൽ, ഏറ്റവും പുതിയത് (top) തന്നെ ആണെന്ന് കണക്കാക്കുന്നു
-
-    let previousEntry = historyArr[currentIndex + 1] || null;
-
-    if (!previousEntry) {
-        if (!confirm('ഇത് ഇതുവരെ ജനറേറ്റ് ചെയ്ത ആദ്യത്തെ ഇൻഡന്റ് ആണ്. Undo ചെയ്താൽ ഈ പേജിലെ പട്ടിക (ഇൻഡന്റ് ജനറേറ്റ് ചെയ്യുന്നതിന് മുൻപ് ഉണ്ടായിരുന്നത് പോലെ) ശൂന്യമാകും. തുടരണോ?')) return;
-    } else {
-        if (!confirm('ഈ പേജിലെ പട്ടികയിലെ ഡാറ്റ, അവസാനം ജനറേറ്റ് ചെയ്ത ഇൻഡന്റിന് മുൻപ് ഉണ്ടായിരുന്ന അവസ്ഥയിലേക്ക് Undo ചെയ്യണോ?')) return;
-    }
-
-    let tBodyItem = document.getElementById('indentItemTableBody');
-    let tBodyPage = document.getElementById('pageNoTableBody');
-
-    if (previousEntry) {
-        // 🌟 HISTORY-യിൽ സേവ് ചെയ്തിട്ടുള്ള മുൻപത്തെ ഇൻഡന്റിന്റെ ഡാറ്റ ഉപയോഗിച്ച് രണ്ട്
-        // പട്ടികകളും (ITEM & PAGE No), ടൈറ്റിലുകളും, ഒപ്പുകളും തിരികെ പഴയപടി ആക്കുന്നു
-        if (tBodyItem) tBodyItem.innerHTML = previousEntry.tableHTML || '';
-        if (tBodyPage) tBodyPage.innerHTML = previousEntry.pageTableHTML || previousEntry.tableHTML || '';
-
-        let pageTitle2 = (previousEntry.title2 || '').replace('MEDICINE ITEM', 'PAGE NO');
-
-        if (document.getElementById('indentItemTitle1')) document.getElementById('indentItemTitle1').innerText = `INDENT NO: ${previousEntry.indentNo}`;
-        if (document.getElementById('indentItemTitle2')) document.getElementById('indentItemTitle2').innerText = previousEntry.title2 || '';
-        if (document.getElementById('indentItemTitle3')) document.getElementById('indentItemTitle3').innerText = previousEntry.title3 || '';
-        if (document.getElementById('pageNoIndentTitle1')) document.getElementById('pageNoIndentTitle1').innerText = `INDENT NO: ${previousEntry.indentNo}`;
-        if (document.getElementById('pageNoIndentTitle2')) document.getElementById('pageNoIndentTitle2').innerText = pageTitle2;
-        if (document.getElementById('pageNoIndentTitle3')) document.getElementById('pageNoIndentTitle3').innerText = previousEntry.title3 || '';
-        if (document.getElementById('indSignOfficer')) document.getElementById('indSignOfficer').innerHTML = previousEntry.officer || '';
-        if (document.getElementById('indSignPharm')) document.getElementById('indSignPharm').innerHTML = previousEntry.pharmacist || '';
-        if (document.getElementById('pageNoSignOfficer')) document.getElementById('pageNoSignOfficer').innerHTML = previousEntry.officer || '';
-        if (document.getElementById('pageNoSignPharm')) document.getElementById('pageNoSignPharm').innerHTML = previousEntry.pharmacist || '';
-
-        // 🌟 ബ്രൗസർ റീലോഡ് ചെയ്താലും ഇതേ (മുൻപത്തെ) അവസ്ഥ തന്നെ ഈ പേജുകളിൽ തിരികെ കാണിക്കാൻ,
-        // "current view" persisted ഡാറ്റ ഈ മുൻപത്തെ എൻട്രി പ്രകാരം പുതുക്കുന്നു 🌟
-        try {
-            let indentViewState = {
-                id: previousEntry.id,
-                indentNo: previousEntry.indentNo,
-                itemTableHTML: previousEntry.tableHTML || '',
-                pageTableHTML: previousEntry.pageTableHTML || previousEntry.tableHTML || '',
-                itemTitle1: `INDENT NO: ${previousEntry.indentNo}`,
-                itemTitle2: previousEntry.title2 || '',
-                itemTitle3: previousEntry.title3 || '',
-                pageTitle1: `INDENT NO: ${previousEntry.indentNo}`,
-                pageTitle2: pageTitle2,
-                pageTitle3: previousEntry.title3 || '',
-                officerHTML: previousEntry.officer || '',
-                pharmacistHTML: previousEntry.pharmacist || ''
-            };
-            localStorage.setItem('medistock_indent_view_state', JSON.stringify(indentViewState));
-        } catch (e) { console.error('Indent Table Undo Persist Error:', e); }
-    } else {
-        // ഇത് ആദ്യത്തെ ഇൻഡന്റ് ആയതിനാൽ, ഇതിന് മുൻപ് ഒരു ഡാറ്റയും ഇല്ല - പട്ടിക ശൂന്യമാക്കുന്നു
-        if (tBodyItem) tBodyItem.innerHTML = '';
-        if (tBodyPage) tBodyPage.innerHTML = '';
-        try { localStorage.removeItem('medistock_indent_view_state'); } catch (e) { /* ignore */ }
-    }
-
-    // 🌟 INDENT HISTORY (medistock_indent_history) ലിസ്റ്റിൽ യാതൊരു മാറ്റവും വരുത്തുന്നില്ല -
-    // id="indentHistoryPage" ൽ എല്ലാ പഴയ ഇൻഡന്റുകളും അതേപടി ഒരു റെക്കോർഡ് ആയി തുടരും 🌟
-
-    if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
 };
 
 // =====================================================================
@@ -18205,19 +18063,20 @@ document.addEventListener('visibilitychange', function() {
         }, MEDISTOCK_LOCAL_BACKUP_INTERVAL_MS);
     }
 
-    // "MORE DETAILS" പേജിലെ ബട്ടൺ അമർത്തുമ്പോൾ (ആദ്യമായോ, ഉപയോഗിക്കുന്ന ആൾ തന്നെ ഫോൾഡർ
-    // മാറ്റാൻ ആഗ്രഹിക്കുമ്പോഴോ, അനുമതി വീണ്ടും ചോദിക്കാനോ) വിളിക്കുന്നത്.
-    // 🌟 EXPERT NOTE: നേരത്തെ ഒരു ഫോൾഡർ/ഫയൽ സെലക്ട് ചെയ്തിട്ടുണ്ടെങ്കിൽ, അത് App വീണ്ടും
-    // തുറന്നാലും (IndexedDB വഴി) തനിയെ അതേപടി തുടരും - ഉപയോഗിക്കുന്ന ആൾ സ്വയം ഈ ബട്ടൺ
-    // വീണ്ടും അമർത്തി പുതിയൊരു ഫോൾഡർ/ഫയൽ തിരഞ്ഞെടുക്കുന്നത് വരെ ഇത് മാറില്ല. ബട്ടൺ
-    // അമർത്തുമ്പോൾ എപ്പോഴും ഫയൽ പിക്കർ ഡയലോഗ് തുറന്ന്, വേണമെങ്കിൽ പുതിയ ലൊക്കേഷൻ/ഫയൽ
-    // തിരഞ്ഞെടുക്കാൻ ഉപയോഗിക്കുന്ന ആളെ അനുവദിക്കുന്നു. 🌟
+    // "MORE DETAILS" പേജിലെ ബട്ടൺ അമർത്തുമ്പോൾ (ആദ്യമായോ, അനുമതി വീണ്ടും ചോദിക്കാനോ) വിളിക്കുന്നത്
     window.medistockEnableLocalAutoBackup = async function() {
         if (!window.showSaveFilePicker) {
             alert('ഈ ബ്രൗസറിൽ ഈ ഫീച്ചർ ലഭ്യമല്ല. ദയവായി Google Chrome അല്ലെങ്കിൽ Microsoft Edge ബ്രൗസർ ഉപയോഗിക്കുക.');
             return;
         }
         try {
+            // 🌟 EXPERT FIX: മുൻപ് ഒരു ഫയൽ ലൊക്കേഷൻ സെലക്ട് ചെയ്തിട്ടുണ്ടെങ്കിലും, ബട്ടൺ 
+            // അമർത്തുന്നത് "വീണ്ടും തിരഞ്ഞെടുക്കുക" (RESELECT) എന്ന ഉദ്ദേശത്തോടെയാണ്. പഴയ 
+            // handle-ന് വെറുതെ അനുമതി മാത്രം വീണ്ടും ചോദിച്ച് നിശബ്ദമായി തിരികെ പോയിരുന്നതിനാൽ 
+            // (browser ഇതിനകം അനുമതി നൽകിയിട്ടുണ്ടെങ്കിൽ), ഫയൽ പിക്കർ ഡയലോഗ് ഒരിക്കലും 
+            // തുറക്കാതെ ബട്ടൺ "പ്രവർത്തിക്കാത്തത്" പോലെ തോന്നിച്ചിരുന്നു. ഇപ്പോൾ ഈ ബട്ടൺ 
+            // അമർത്തുമ്പോൾ എപ്പോഴും ഫയൽ പിക്കർ ഡയലോഗ് തുറന്ന് പുതിയ ലൊക്കേഷൻ/ഫയൽ 
+            // തിരഞ്ഞെടുക്കാൻ അനുവദിക്കുന്നു. 🌟
             let handle = await window.showSaveFilePicker({
                 suggestedName: MEDISTOCK_LOCAL_BACKUP_FILENAME,
                 types: [{ description: 'JSON Backup File', accept: { 'application/json': ['.json'] } }]
@@ -18227,28 +18086,17 @@ document.addEventListener('visibilitychange', function() {
             medistockStartBackupTimer();
             medistockUpdateBackupStatusUI(true);
             await window.medistockWriteLocalBackupNow();
-            alert('✅ Local Auto-Backup ക്രമീകരിച്ചു! ഇനി മുതൽ ഓരോ 5 മിനിറ്റിലും, EXPORT DATA അമർത്തുമ്പോഴും, Software ൽ മാറ്റങ്ങൾ വരുത്തുമ്പോളും ഈ ഫയൽ (Medistock back-up.json) തനിയെ പുതുക്കപ്പെടും. ഈ ഫോൾഡർ, നിങ്ങൾ തന്നെ ഈ ബട്ടൺ വീണ്ടും ഉപയോഗിച്ച് മാറ്റുന്നത് വരെ അതേപടി തുടരും.');
+            alert('✅ Local Auto-Backup ക്രമീകരിച്ചു! ഇനി മുതൽ ഓരോ 5 മിനിറ്റിലും, EXPORT DATA അമർത്തുമ്പോഴും,Software ൽ മാറ്റങ്ങൾ വരുത്തുമ്പോളും ഈ ഫയൽ (Medistock back-up.json) തനിയെ പുതുക്കപ്പെടും.');
         } catch (e) {
             if (e.name !== 'AbortError') console.error('Enable Local Backup Error:', e);
         }
     };
 
-    // 🌟 ഫോൾഡർ ഇതുവരെ ഒരിക്കൽ പോലും സെറ്റ് ചെയ്തിട്ടില്ലെങ്കിൽ, Software തുറക്കുമ്പോൾ
-    // MORE DETAILS പേജിലെ ബട്ടൺ ഉപയോഗിച്ച് ഒരിക്കൽ ഫോൾഡർ സെലക്ട് ചെയ്ത ശേഷം മാത്രം
-    // ഉപയോഗിച്ച് തുടങ്ങാൻ ഓർമ്മിപ്പിക്കുന്ന മെസേജ് 🌟
-    function medistockShowBackupSetupReminder() {
-        setTimeout(function() {
-            alert('software തുറക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി Local Auto-Backup ഫയൽ നിർമ്മിച്ച് അതിൽ സേവ് ചെയ്യണമെങ്കിൽ MORE DETAILS എന്ന പേജിലെ Local Auto-Backup സജീവമാക്കുക എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട് ചെയ്ത ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക.');
-        }, 800);
-    }
-
-    // App തുറക്കുമ്പോൾ മുൻപ് അനുമതി നൽകിയ handle ഉണ്ടെങ്കിൽ വീണ്ടും ഉപയോഗിക്കാൻ ശ്രമിക്കുന്നു.
-    // ഒരു handle-ഉം സേവ് ചെയ്തിട്ടില്ലെങ്കിൽ മാത്രം (അതായത് ഫോൾഡർ ഒരിക്കൽ പോലും സെറ്റ്
-    // ചെയ്തിട്ടില്ലെങ്കിൽ) മുകളിലെ ഓർമ്മപ്പെടുത്തൽ മെസേജ് കാണിക്കുന്നു.
+    // App തുറക്കുമ്പോൾ മുൻപ് അനുമതി നൽകിയ handle ഉണ്ടെങ്കിൽ വീണ്ടും ഉപയോഗിക്കാൻ ശ്രമിക്കുന്നു
     async function medistockTryRestoreLocalBackupHandle() {
         try {
             let handle = await medistockIdbGet(MEDISTOCK_LOCAL_BACKUP_KEY);
-            if (!handle) { medistockUpdateBackupStatusUI(false); medistockShowBackupSetupReminder(); return; }
+            if (!handle) { medistockUpdateBackupStatusUI(false); return; }
             localBackupFileHandle = handle;
             let perm = await handle.queryPermission({ mode: 'readwrite' });
             if (perm === 'granted') {
@@ -19604,23 +19452,6 @@ function processImportFile(event) {
 function showMoreDetailsPage() {
     hideAllPages();
     document.getElementById('moreDetailsPage').style.display = 'block';
-}
-
-// =====================================================================
-// 🌟 DOWNLOAD SAMPLE DATA (MORE DETAILS PAGE) 🌟
-// Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്താനുള്ള
-// സാമ്പിൾ ഡാറ്റ (json) Download ചെയ്യാൻ. IMPORT DATA ബട്ടൺ ഉപയോഗിച്ച് ഈ
-// ഡൗൺലോഡ് ചെയ്ത ഫയൽ Software ലേക്ക് ചേർക്കാം.
-// =====================================================================
-const MEDISTOCK_SAMPLE_DATA_LINK = 'https://drive.google.com/file/d/1hh_urH52HBCSBY0OBDppeAENbs581T1p/view?usp=sharing';
-
-function medistockConfirmSampleDataDownload() {
-    document.getElementById('sampleDataConfirmModal').style.display = 'flex';
-}
-
-function medistockExecuteSampleDataDownload() {
-    document.getElementById('sampleDataConfirmModal').style.display = 'none';
-    window.open(MEDISTOCK_SAMPLE_DATA_LINK, '_blank');
 }
 // ========================================================
 // HOME PAGE MANDATORY FIELD VALIDATION
