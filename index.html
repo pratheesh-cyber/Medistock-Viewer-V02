@@ -154,6 +154,12 @@
            മാത്രം (ബട്ടണുകളെ ബാധിക്കാതെ) പരിഹരിച്ച്, MAIN STOCK WINDOW സ്ക്രീനിലും PRINT/PDF-ലും
            ഒരേ ഓറഞ്ച് നിറം തന്നെ വരുത്തുന്നു 🌟 */
         .status-cell.bg-orange { background: #ffa500 !important; color: black !important; }
+        /* 🌟 EXPERT FIX (ADDITIONAL): id="indentPrepPage"-ലെ ഇടത് വശം പട്ടികയിൽ (indLeftTableBody)
+           STATUS കോളത്തിലെ td-യിൽ നിന്ന് "status-cell" ക്ലാസ് നീക്കം ചെയ്ത ശേഷമാണ് "bg-orange" മാത്രം
+           ചേർക്കുന്നത് (td class="bg-orange"). അതിനാൽ മുകളിലെ ".status-cell.bg-orange" റൂൾ ഈ td-യിൽ
+           പ്രവർത്തിക്കില്ല, പഴയ ഗ്രേഡിയന്റ് (.bg-orange ബട്ടൺ സ്റ്റൈൽ) തന്നെ കാണിക്കും. അതുകൊണ്ട്
+           "status-cell" ക്ലാസ് ഇല്ലാതെ തന്നെ td.bg-orange-നും ഈ പരിഹാരം ബാധകമാക്കുന്നു 🌟 */
+        td.bg-orange { background: #ffa500 !important; color: black !important; }
         .table-responsive { overflow-x: auto; overflow-y: auto; width: 100%; white-space: nowrap; margin-top: 0; max-height: 60vh; }
         table { width: 100%; border-collapse: collapse; background: white; margin-top: 0; }
         th { background: #34495e; color: white; padding: 0px !important; text-align: center; font-size: 14px !important; font-weight: bold; vertical-align: middle; border: 1px solid #2c3e50; position: sticky; top: 0; z-index: 10; height: 25px;}
@@ -741,7 +747,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമാണ്. ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമാണ്. ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -3963,13 +3969,6 @@ const categoryColors = {
                     // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
                     if (typeof loadData === 'function') loadData();
 
-                    // 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ നിലവിൽ 
-                    // കാണിക്കുന്ന ഇൻഡന്റ്, Undo ചെയ്ത ശേഷം localStorage-ലേക്ക് പുനഃസ്ഥാപിച്ച 
-                    // (restore ചെയ്ത) പഴയ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച് തന്നെ വീണ്ടും കാണിക്കുന്നു 🌟
-                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
-                        window.restoreIndentViewPagesFromStorage();
-                    }
-
                     if (typeof window.refreshAllPagesAfterRestore === 'function') {
                         // ഇത് നിലവിൽ Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / 
                         // Pre-Indent Summary / Indent @ Item / Indent @ Page No / Last Added (Main, OP, IP) 
@@ -3987,6 +3986,16 @@ const categoryColors = {
                         if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
                         if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
                         if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+                    }
+
+                    // 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ നിലവിൽ 
+                    // കാണിക്കുന്ന ഇൻഡന്റ്, Undo ചെയ്ത ശേഷം localStorage-ലേക്ക് പുനഃസ്ഥാപിച്ച 
+                    // (restore ചെയ്ത) പഴയ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച് തന്നെ വീണ്ടും കാണിക്കുന്നു. 
+                    // ഇത് ഏറ്റവും അവസാനം വിളിക്കുന്നു, അതുകൊണ്ട് മുകളിലെ റീഫ്രഷ് ഫംഗ്ഷനുകളൊന്നും ഈ 
+                    // രണ്ട് പേജുകളിലെയും ടേബിളുകൾ (ജനറേറ്റ് ചെയ്ത കൃത്യമായ പഴയ ഇൻഡന്റ്) തിരുത്തി 
+                    // എഴുതില്ല 🌟
+                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
+                        window.restoreIndentViewPagesFromStorage();
                     }
 
                     // 🌟 id="indentHistoryPage" നിലവിൽ തുറന്നിരിക്കുകയാണെങ്കിൽ മാത്രം അതും പുതുക്കുന്നു 
@@ -16754,6 +16763,7 @@ window.renderIndentRightTable = function() {
         tbody.innerHTML += `
             <tr style="border-bottom: 1px solid #ccc; height: 32px;">
                 <td style="text-align:left; padding: 8px 10px !important; font-weight: 900; vertical-align: middle;">${s.name}</td>
+                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color: #e0f7fa; color:#006064;">${s.qty}</td>
                 <td class="${cls}" style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; ${daysLeftStyle}">${s.daysLeft}</td>
                 <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle;">${s.exp}</td>
             </tr>
