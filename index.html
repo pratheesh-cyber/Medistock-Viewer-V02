@@ -747,7 +747,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമാണ്. ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമാണ്. ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -3832,7 +3832,7 @@ const categoryColors = {
     "KC": "#c8e6c9", 
     "LEHYAM": "#e1bee7", 
     "OINTMENT": "#bbdefb", 
-    "RASAKRIYA": "#ff5722", 
+    "RASAKRIYA": "rgba(255, 87, 34, 0.25)", 
     "SYRUP": "#d7ccc8", 
     "THAILAM": "#f8bbd0", 
     "KANJIKOOTT": "#ffffff" 
@@ -17069,6 +17069,20 @@ window.restoreIndentViewPagesFromStorage = function() {
                     if(document.getElementById('indentItemTitle3') && latest.title3) document.getElementById('indentItemTitle3').innerText = latest.title3;
                     if(document.getElementById('indSignOfficer') && latest.officer) document.getElementById('indSignOfficer').innerHTML = latest.officer;
                     if(document.getElementById('indSignPharm') && latest.pharmacist) document.getElementById('indSignPharm').innerHTML = latest.pharmacist;
+
+                    // 🌟 EXPERT FIX: id="indentAtPagePage" (Page No page) ഉം ഈ പഴയ ഡാറ്റ ഉപയോഗിച്ച് 
+                    // തന്നെ പുതുക്കുന്നു. Page No പ്രകാരം പ്രത്യേകം sort ചെയ്ത ഫോർമാറ്റ് ഈ പഴയ 
+                    // (legacy) history എൻട്രിയിൽ സേവ് ആയിട്ടില്ലെങ്കിലും, അതേ പഴയ മരുന്നുകളുടെ 
+                    // ഡാറ്റ തന്നെ ഇവിടെയും കാണിക്കുന്നു - അതുവഴി Undo ചെയ്ത ശേഷം ഈ പേജും 
+                    // പുതിയ (ഇൻഡന്റ് ജനറേറ്റ് ചെയ്ത ശേഷമുള്ള) ഡാറ്റ കാണിക്കാതെ, പഴയ ഇൻഡന്റിലേക്ക് 
+                    // തന്നെ മാറുന്നു 🌟
+                    let tBodyPage = document.getElementById('pageNoTableBody');
+                    if (tBodyPage && latest.tableHTML) tBodyPage.innerHTML = latest.tableHTML;
+                    if(document.getElementById('pageNoIndentTitle1') && latest.indentNo) document.getElementById('pageNoIndentTitle1').innerText = `INDENT NO: ${latest.indentNo}`;
+                    if(document.getElementById('pageNoIndentTitle2') && latest.title2) document.getElementById('pageNoIndentTitle2').innerText = latest.title2.replace('MEDICINE ITEM', 'PAGE NO');
+                    if(document.getElementById('pageNoIndentTitle3') && latest.title3) document.getElementById('pageNoIndentTitle3').innerText = latest.title3;
+                    if(document.getElementById('pageNoSignOfficer') && latest.officer) document.getElementById('pageNoSignOfficer').innerHTML = latest.officer;
+                    if(document.getElementById('pageNoSignPharm') && latest.pharmacist) document.getElementById('pageNoSignPharm').innerHTML = latest.pharmacist;
                 }
             } catch(e2) { console.error("Legacy Indent History Fallback Error:", e2); }
             return;
@@ -17079,14 +17093,17 @@ window.restoreIndentViewPagesFromStorage = function() {
         let tBodyItem = document.getElementById('indentItemTableBody');
         let tBodyPage = document.getElementById('pageNoTableBody');
         if (tBodyItem && s.itemTableHTML) tBodyItem.innerHTML = s.itemTableHTML;
-        if (tBodyPage && s.pageTableHTML) tBodyPage.innerHTML = s.pageTableHTML;
+        // 🌟 EXPERT FIX: s.pageTableHTML ഏതെങ്കിലും കാരണവശാൽ സേവ് ആയിട്ടില്ലെങ്കിലും (പഴയ 
+        // സ്നാപ്ഷോട്ടുകളിൽ), s.itemTableHTML ഉപയോഗിച്ച് തന്നെ Page No ടേബിളും പുതുക്കുന്നു - 
+        // ഇത് ഈ പേജ് ഒരിക്കലും പഴയ ഡാറ്റയിലേക്ക് മാറാതെ പോകുന്നത് തടയുന്നു 🌟
+        if (tBodyPage) tBodyPage.innerHTML = s.pageTableHTML || s.itemTableHTML || tBodyPage.innerHTML;
 
         if(document.getElementById('indentItemTitle1') && s.itemTitle1) document.getElementById('indentItemTitle1').innerText = s.itemTitle1;
         if(document.getElementById('indentItemTitle2') && s.itemTitle2) document.getElementById('indentItemTitle2').innerText = s.itemTitle2;
         if(document.getElementById('indentItemTitle3') && s.itemTitle3) document.getElementById('indentItemTitle3').innerText = s.itemTitle3;
-        if(document.getElementById('pageNoIndentTitle1') && s.pageTitle1) document.getElementById('pageNoIndentTitle1').innerText = s.pageTitle1;
-        if(document.getElementById('pageNoIndentTitle2') && s.pageTitle2) document.getElementById('pageNoIndentTitle2').innerText = s.pageTitle2;
-        if(document.getElementById('pageNoIndentTitle3') && s.pageTitle3) document.getElementById('pageNoIndentTitle3').innerText = s.pageTitle3;
+        if(document.getElementById('pageNoIndentTitle1') && (s.pageTitle1 || s.itemTitle1)) document.getElementById('pageNoIndentTitle1').innerText = s.pageTitle1 || s.itemTitle1;
+        if(document.getElementById('pageNoIndentTitle2') && (s.pageTitle2 || s.itemTitle2)) document.getElementById('pageNoIndentTitle2').innerText = s.pageTitle2 || s.itemTitle2;
+        if(document.getElementById('pageNoIndentTitle3') && (s.pageTitle3 || s.itemTitle3)) document.getElementById('pageNoIndentTitle3').innerText = s.pageTitle3 || s.itemTitle3;
 
         if(document.getElementById('indSignOfficer') && s.officerHTML) document.getElementById('indSignOfficer').innerHTML = s.officerHTML;
         if(document.getElementById('indSignPharm') && s.pharmacistHTML) document.getElementById('indSignPharm').innerHTML = s.pharmacistHTML;
@@ -17867,6 +17884,19 @@ window.openIndentPrepWindow = function() {
     // 🌟 വിൻഡോ തുറക്കുമ്പോൾ പഴയ Qty-യും ഫിൽറ്ററുകളും പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യുന്നു 🌟
     resetIndentPanelFilters();
 
+    // 🌟 EXPERT FIX: PROJECT COMPARISON PANEL-ലെ Select Fund Type / Search by Item / Search 
+    // Medicine ബോക്സുകൾ മുൻപ് ഏതെങ്കിലും ഫണ്ട് സെലക്ട് ചെയ്തിരുന്നെങ്കിൽ, ആ പഴയ മൂല്യങ്ങൾ 
+    // ഈ വിൻഡോ വീണ്ടും തുറക്കുമ്പോൾ അതേപടി തുടർന്നിരുന്നു (ബോക്സ് ശൂന്യമായി കാണിച്ചാലും 
+    // "Project Selected for Comparison" ബോക്സിൽ പഴയ പ്രോജക്റ്റ് പേര് അതേപടി നിന്നിരുന്നു). 
+    // ഇപ്പോൾ ഈ വിൻഡോ തുറക്കുമ്പോൾ എല്ലായ്പ്പോഴും ഈ ബോക്സുകൾ പൂർണ്ണമായി റീസെറ്റ് ചെയ്യുന്നു 🌟
+    let rightFundBox = document.getElementById('indRightFund');
+    if (rightFundBox) rightFundBox.value = "";
+    let rightItemBox = document.getElementById('indRightItem');
+    if (rightItemBox) rightItemBox.value = "ALL MEDICINE";
+    let rightSearchBox = document.getElementById('indRightSearch');
+    if (rightSearchBox) rightSearchBox.value = "";
+    if (typeof updateIndRightProject === 'function') updateIndRightProject();
+
     if(typeof updateIndRightFundList === 'function') updateIndRightFundList();
     if(typeof renderIndentRightTable === 'function') renderIndentRightTable();
 };
@@ -18044,8 +18074,17 @@ document.addEventListener('visibilitychange', function() {
 //  തനിയെ പുതുക്കപ്പെടും. ഇത് ബ്രൗസർ ഒരു തവണ മാത്രം ചോദിക്കുന്ന അനുമതിയെ (File System
 //  Access API - നിലവിൽ Chrome / Edge പോലുള്ള Chromium ബ്രൗസറുകളിൽ മാത്രമേ ലഭ്യമാവൂ)
 //  ആശ്രയിച്ചാണ് പ്രവർത്തിക്കുന്നത്. നിലവിലുള്ള ഒരു ഫംഗ്ഷനും/ബട്ടണും/പേജും ഇതുമൂലം മാറ്റം
-//  വരുത്തിയിട്ടില്ല. 🌟
+//  വരുത്തിയിട്ടില്ല.
+// 🌟 EXPERT FIX (RELIABILITY): ഇത് നേരത്തെ, മുകളിലുള്ള വലിയ <script> ബ്ലോക്കിന്റെ തന്നെ 
+// ഭാഗമായിരുന്നു. ആ ബ്ലോക്കിലെ മറ്റെവിടെയെങ്കിലും (ഈ ഭാഗത്തിന് മുൻപ്) ഒരു റൺടൈം എറർ 
+// വന്നാൽ, ആ ഒറ്റ <script> ടാഗിലെ ബാക്കി മുഴുവൻ കോഡും (ഈ Local Auto-Backup സിസ്റ്റം 
+// ഉൾപ്പെടെ) നിശബ്ദമായി പ്രവർത്തിക്കാതെ പോകും - അതുകൊണ്ടാണ് ഫോൾഡർ സെറ്റ് ചെയ്യാത്തപ്പോൾ 
+// വരേണ്ട ഓർമ്മപ്പെടുത്തൽ മെസേജ് ചിലപ്പോൾ വരാതിരുന്നത്. ഈ സിസ്റ്റത്തെ അതിന്റേതായ ഒരു 
+// പ്രത്യേക <script> ടാഗിലേക്ക് മാറ്റി, മുകളിലെ കോഡിൽ എന്ത് സംഭവിച്ചാലും ഇത് എപ്പോഴും 
+// സ്വതന്ത്രമായി പ്രവർത്തിക്കുന്നുവെന്ന് ഉറപ്പാക്കുന്നു. 🌟
 // =====================================================================
+</script>
+<script>
 (function() {
     const MEDISTOCK_LOCAL_BACKUP_DB = 'medistockLocalBackupDB';
     const MEDISTOCK_LOCAL_BACKUP_STORE = 'handles';
@@ -18195,7 +18234,14 @@ document.addEventListener('visibilitychange', function() {
             }
         } catch (e) { medistockUpdateBackupStatusUI(false); medistockShowBackupReminderIfNeeded(); }
     }
-    document.addEventListener('DOMContentLoaded', medistockTryRestoreLocalBackupHandle);
+    // 🌟 EXPERT FIX (RELIABILITY): DOMContentLoaded ഇവന്റ് ഇതിനകം കടന്നുപോയിട്ടുണ്ടെങ്കിൽ 
+    // (readyState 'loading' അല്ലെങ്കിൽ), ഈ ലിസണർ ഒരിക്കലും വിളിക്കപ്പെടില്ല. അതുകൊണ്ട് അങ്ങനെ 
+    // ഒരു സാഹചര്യത്തിൽ ഉടനെ തന്നെ ഫംഗ്ഷൻ നേരിട്ട് വിളിക്കുന്നു 🌟
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', medistockTryRestoreLocalBackupHandle);
+    } else {
+        medistockTryRestoreLocalBackupHandle();
+    }
 
     // ടാബ് മറയുമ്പോൾ / ആപ്പ് ക്ലോസ് ചെയ്യുമ്പോൾ (Best-Effort) ബാക്കപ്പ് എടുക്കാൻ
     document.addEventListener('visibilitychange', function() {
@@ -18211,6 +18257,8 @@ document.addEventListener('visibilitychange', function() {
     window.medistockGetLocalBackupHandle = function() { return localBackupFileHandle; };
     window.MEDISTOCK_LOCAL_BACKUP_FILENAME = MEDISTOCK_LOCAL_BACKUP_FILENAME;
 })();
+</script>
+<script>
 // =====================================================================
 // 🌟 2. LOCAL DRAFT AUTO-SAVE (DEBOUNCED) 🌟
 // =====================================================================
