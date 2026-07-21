@@ -2970,8 +2970,8 @@ function handleAuthClick() {
                       </div>
                       <div class="input-wrapper" style="flex-shrink: 0; gap: 2px;">
                           <label>&nbsp;</label>
-                          <label style="display: flex; align-items: center; gap: 6px; height: 40px; white-space: nowrap; font-weight: bold; font-size: 15px; cursor: pointer; color: #005088;">
-                              <input type="checkbox" id="indAutoLookup" checked style="width: 30px; height: 30px; cursor: pointer; accent-color: #005088; margin: 0;">
+                          <label style="display: flex; align-items: center; gap: 6px; height: 40px; white-space: nowrap; font-weight: bold; font-size: 13px; cursor: pointer; color: #005088;">
+                              <input type="checkbox" id="indAutoLookup" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: #005088; margin: 0;">
                               Auto Lookup
                           </label>
                       </div>
@@ -16844,12 +16844,8 @@ window.handleQtyIndentAutoLookup = function(medName) {
         );
     }
 
-    // Fund (A-Z) ➔ Exp.Dt (Oldest to Newest) പ്രകാരം അടുക്കുന്നു
+    // 🌟 Auto Lookup ഫലങ്ങൾ എപ്പോഴും Exp.Dt (ആദ്യം തീരുന്നത് ആദ്യം) എന്ന ക്രമത്തിൽ കാണിക്കുന്നു 🌟
     matches.sort((a, b) => {
-        let fa = (a.fund || "").toLowerCase();
-        let fb = (b.fund || "").toLowerCase();
-        if (fa < fb) return -1;
-        if (fa > fb) return 1;
         let parseDate = d => {
             if (!d) return 999999;
             let p = d.split('/');
