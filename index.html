@@ -4131,7 +4131,16 @@ function hideAllPages() {
     });
 }
 
-        function showHomePage() { hideAllPages(); document.getElementById('homePage').style.display = 'block'; }
+        function showHomePage() {
+            hideAllPages();
+            document.getElementById('homePage').style.display = 'block';
+            // 🌟 EXPERT ADDITION: Home പേജ് ദൃശ്യമാകുമ്പോഴെല്ലാം Local Auto-Backup ഫോൾഡർ
+            // സെറ്റ് ചെയ്തിട്ടുണ്ടോ എന്ന് പരിശോധിച്ച്, ഇല്ലെങ്കിൽ ഓർമ്മപ്പെടുത്തൽ മെസേജ് കാണിക്കുന്നു.
+            // (മറ്റൊരു ഫംഗ്ഷനും/ബട്ടണും/പേജിനും ഇതുമൂലം മാറ്റം വരുന്നില്ല)
+            if (typeof window.medistockCheckAndShowBackupReminder === 'function') {
+                window.medistockCheckAndShowBackupReminder();
+            }
+        }
 function showStockPage() {
     hideAllPages();
     const pdfPage = document.getElementById('pdfScannerPage');
@@ -18284,7 +18293,7 @@ document.addEventListener('visibilitychange', function() {
         if (!localBackupFileHandle) return false;
         try {
             let perm = await localBackupFileHandle.queryPermission({ mode: 'readwrite' });
-            if (perm !== 'granted') return false;
+            if (perm !== 'granted') { medistockLocalBackupActive = false; medistockUpdateBackupStatusUI(false); return false; }
             await medistockWriteToHandle(localBackupFileHandle, medistockCollectFullBackupJSON());
             window.__medistockLastLocalBackupTime = new Date();
             console.log('💾 Local Folder Auto-Backup Successful: ' + MEDISTOCK_LOCAL_BACKUP_FILENAME);
@@ -18322,6 +18331,7 @@ document.addEventListener('visibilitychange', function() {
             });
             localBackupFileHandle = handle;
             await medistockIdbSet(MEDISTOCK_LOCAL_BACKUP_KEY, handle);
+            medistockLocalBackupActive = true;
             medistockStartBackupTimer();
             medistockUpdateBackupStatusUI(true);
             await window.medistockWriteLocalBackupNow();
@@ -18339,6 +18349,25 @@ document.addEventListener('visibilitychange', function() {
         if (modal) modal.style.display = 'flex';
     }
 
+    // 🌟 EXPERT ADDITION: നിലവിൽ ഫോൾഡർ ആക്റ്റീവ് ആയി ബാക്കപ്പ് ചെയ്യുന്നുണ്ടോ എന്ന് ശരിക്കും
+    // ഉറപ്പുവരുത്തുന്ന ഫ്ലാഗ്. ഇത് true ആണെങ്കിൽ മാത്രമേ ഓർമ്മപ്പെടുത്തൽ മെസേജ് ഒഴിവാക്കൂ.
+    let medistockLocalBackupActive = false;
+
+    // 🌟 App ആദ്യം തുറക്കുമ്പോൾ മാത്രമല്ല, Home പേജ് വീണ്ടും കാണിക്കുമ്പോഴെല്ലാം വിളിക്കാൻ
+    // പാകത്തിന് ഈ ഫംഗ്ഷൻ പുറത്തേക്ക് (window.) തുറന്നുകൊടുക്കുന്നു. ഫോൾഡർ ശരിക്കും
+    // സെറ്റ് ചെയ്തിട്ടില്ലെങ്കിലോ, മുൻപ് സെറ്റ് ചെയ്ത ഫോൾഡറിന്റെ എഴുതാനുള്ള അനുമതി
+    // (permission) ഇപ്പോൾ ഇല്ലെങ്കിലോ (അതായത് ബാക്കപ്പ് യഥാർത്ഥത്തിൽ ആക്റ്റീവ് അല്ലെങ്കിൽ)
+    // രണ്ട് സാഹചര്യത്തിലും ഓർമ്മപ്പെടുത്തൽ മെസേജ് കാണിക്കും.
+    window.medistockCheckAndShowBackupReminder = async function() {
+        if (medistockLocalBackupActive) return; // ബാക്കപ്പ് നേരത്തെ തന്നെ ആക്റ്റീവ് ആണെങ്കിൽ ഒന്നും ചെയ്യേണ്ട
+        try {
+            let handle = await medistockIdbGet(MEDISTOCK_LOCAL_BACKUP_KEY);
+            if (!handle) { medistockShowBackupReminderIfNeeded(); return; }
+            let perm = await handle.queryPermission({ mode: 'readwrite' });
+            if (perm !== 'granted') medistockShowBackupReminderIfNeeded();
+        } catch (e) { medistockShowBackupReminderIfNeeded(); }
+    };
+
     async function medistockTryRestoreLocalBackupHandle() {
         try {
             let handle = await medistockIdbGet(MEDISTOCK_LOCAL_BACKUP_KEY);
@@ -18346,11 +18375,14 @@ document.addEventListener('visibilitychange', function() {
             localBackupFileHandle = handle;
             let perm = await handle.queryPermission({ mode: 'readwrite' });
             if (perm === 'granted') {
+                medistockLocalBackupActive = true;
                 medistockStartBackupTimer();
                 medistockUpdateBackupStatusUI(true);
             } else {
-                // ബ്രൗസർ സുരക്ഷാ നിയമപ്രകാരം, ബട്ടൺ ക്ലിക്ക് വഴി മാത്രമേ അനുമതി വീണ്ടും ചോദിക്കാൻ കഴിയൂ
+                // ബ്രൗസർ സുരക്ഷാ നിയമപ്രകാരം, ബട്ടൺ ക്ലിക്ക് വഴി മാത്രമേ അനുമതി വീണ്ടും ചോദിക്കാൻ കഴിയൂ.
+                // ഈ അവസ്ഥയിൽ ബാക്കപ്പ് ശരിക്കും ആക്റ്റീവ് അല്ലാത്തതിനാൽ ഓർമ്മപ്പെടുത്തൽ മെസേജ് കാണിക്കുന്നു.
                 medistockUpdateBackupStatusUI(false);
+                medistockShowBackupReminderIfNeeded();
             }
         } catch (e) { medistockUpdateBackupStatusUI(false); medistockShowBackupReminderIfNeeded(); }
     }
