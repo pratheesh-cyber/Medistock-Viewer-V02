@@ -2960,12 +2960,21 @@ function handleAuthClick() {
                           <input list="details-item-list" id="indRightItem" class="index-input" value="ALL MEDICINE" onchange="renderIndentRightTable()" oninput="renderIndentRightTable()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL MEDICINE';">
                       </div>
                   </div>
-                  <div class="input-wrapper" style="width: 100%; gap: 2px;">
-                      <label>Search Medicine</label>
-                      <div style="position: relative; width: 100%;">
-                          <input type="text" id="indRightSearch" oninput="renderIndentRightTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
-                           <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('indRightSearch').value=''; renderIndentRightTable();"></i>
-                       </div>
+                  <div style="display: flex; gap: 10px; align-items: flex-end; width: 100%;">
+                      <div class="input-wrapper" style="flex: 1; gap: 2px; min-width: 0;">
+                          <label>Search Medicine</label>
+                          <div style="position: relative; width: 100%;">
+                              <input type="text" id="indRightSearch" oninput="renderIndentRightTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
+                               <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('indRightSearch').value=''; renderIndentRightTable();"></i>
+                           </div>
+                      </div>
+                      <div class="input-wrapper" style="flex-shrink: 0; gap: 2px;">
+                          <label>&nbsp;</label>
+                          <label style="display: flex; align-items: center; gap: 6px; height: 40px; white-space: nowrap; font-weight: bold; font-size: 13px; cursor: pointer; color: #005088;">
+                              <input type="checkbox" id="indAutoLookup" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: #005088; margin: 0;">
+                              Auto Lookup
+                          </label>
+                      </div>
                   </div>
               </div>
                
@@ -2976,6 +2985,7 @@ function handleAuthClick() {
                                 <th style="width: auto;">NAME OF MEDICINE</th>
                                 <th style="width: 7ch; background-color: #00695c; color: white;">Qty</th>
                                 <th style="width: 8ch;">DAYS LEFT</th>
+                                <th style="width: 7ch;">Fund</th>
                                 <th style="width: 9ch;">Exp.Dt.</th>
                           </tr>
                        </thead>
@@ -6587,7 +6597,17 @@ function updateIndRightProject() {
     let f = document.getElementById('indRightFund').value.trim();
     let projName = getFullFundName(f);
     document.getElementById('indRightProjName').innerText = projName ? projName : "SELECT A FUND TO VIEW PROJECT";
+    if (typeof window.syncAutoLookupCheckbox === 'function') window.syncAutoLookupCheckbox();
 }
+
+// 🌟 Auto Lookup ടിക്ക് ബോക്സ്: Select Fund Type (PROJECT COMPARISON PANEL) ബോക്സിൽ ഡാറ്റ ഉണ്ടെങ്കിൽ ടിക്ക് ഓഫ്, ഇല്ലെങ്കിൽ ടിക്ക് ഓൺ 🌟
+window.syncAutoLookupCheckbox = function() {
+    let autoBox = document.getElementById('indAutoLookup');
+    if (!autoBox) return;
+    let fundBox = document.getElementById('indRightFund');
+    let fundVal = fundBox ? fundBox.value.trim() : '';
+    autoBox.checked = (fundVal === '');
+};
 
 function updateIndRightFundList() {
     let leftFund = document.getElementById('indLeftFund').value.trim();
@@ -6608,6 +6628,7 @@ function updateIndRightFundList() {
         rightFundInput.value = "";
         renderIndentRightTable();
     }
+    if (typeof window.syncAutoLookupCheckbox === 'function') window.syncAutoLookupCheckbox();
 }
 window.renderIndentRightTable = function() {
     let fund = document.getElementById('indRightFund').value.trim();
@@ -16684,7 +16705,7 @@ window.renderAdvancedIndentLeftTable = window.renderIndentLeftTable = window.upd
             html += `
                     <td style="border: 1px solid #000; text-align:center; font-weight:bold; background-color: #e0f7fa; color:#006064; vertical-align:middle;">${batch.qty}</td>
                     <td style="border: 1px solid #000; text-align:center; background-color: #fff9c4; vertical-align:middle;">
-                        <input type="number" id="ind_qty_${batch.id}" value="${savedQty}" max="${batch.qty}" class="form-control" style="width: 70px; text-align: center; font-weight: bold; margin: 0 auto; background: white; border: 1px solid #f39c12; padding: 2px; height: 26px;" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null; window.tempIndentQuantities['${batch.id}'] = this.value;" placeholder="0">
+                        <input type="number" id="ind_qty_${batch.id}" data-med-name="${(group.name||'').replace(/"/g,'&quot;')}" value="${savedQty}" max="${batch.qty}" class="form-control" style="width: 70px; text-align: center; font-weight: bold; margin: 0 auto; background: white; border: 1px solid #f39c12; padding: 2px; height: 26px;" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null; window.tempIndentQuantities['${batch.id}'] = this.value;" onclick="if(typeof window.handleQtyIndentAutoLookup === 'function') window.handleQtyIndentAutoLookup(this.dataset.medName);" onfocus="if(typeof window.handleQtyIndentAutoLookup === 'function') window.handleQtyIndentAutoLookup(this.dataset.medName);" placeholder="0">
                     </td>
                     <td style="border: 1px solid #000; text-align:center; font-weight:bold; background-color: #f3e5f5; color:#4a148c; vertical-align:middle;">${batch.page}</td>
                     <td style="border: 1px solid #000; text-align:center; font-weight:bold; vertical-align:middle; ${daysLeftStyle}" class="${cls}">${batch.daysLeft || ''}</td>
@@ -16712,7 +16733,15 @@ window.renderIndentRightTable = function() {
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    if (!fund) return;
+    if (!fund) {
+        // 🌟 Auto Lookup മോഡിൽ ആണെങ്കിൽ, Search/Item ഫിൽട്ടറുകൾ മാറുമ്പോൾ അവസാനം Lookup ചെയ്ത
+        // മരുന്നിന്റെ ഫലം തന്നെ ആ ഫിൽട്ടറുകൾ ബാധകമാക്കി വീണ്ടും കാണിക്കുന്നു 🌟
+        let autoBox = document.getElementById('indAutoLookup');
+        if (autoBox && autoBox.checked && window.lastAutoLookupMedName && typeof window.handleQtyIndentAutoLookup === 'function') {
+            window.handleQtyIndentAutoLookup(window.lastAutoLookupMedName);
+        }
+        return;
+    }
 
     let filtered = stockItems.filter(i => i.type === "Main Stock" && i.fund === fund && parseInt(i.qty) > 0);
     
@@ -16761,16 +16790,102 @@ window.renderIndentRightTable = function() {
         else if(cls.includes('bg-yellow')) { bgCol = "#ffff00"; }
         else if(cls.includes('bg-green')) { bgCol = "#00ff00"; }
         let daysLeftStyle = bgCol ? `background-color:${bgCol} !important; color:${textCol} !important;` : "";
+        let fColor = (typeof getFundColor === 'function') ? getFundColor(s.fund) : 'white';
         
         tbody.innerHTML += `
             <tr style="border-bottom: 1px solid #ccc; height: 32px;">
                 <td style="text-align:left; padding: 8px 10px !important; font-weight: 900; vertical-align: middle;">${s.name}</td>
                 <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color: #e0f7fa; color:#006064;">${s.qty}</td>
                 <td class="${cls}" style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; ${daysLeftStyle}">${s.daysLeft}</td>
+                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color:${fColor};">${s.fund}</td>
                 <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle;">${s.exp}</td>
             </tr>
         `;
     });
+};
+
+// =====================================================================
+// 🌟 AUTO LOOKUP: Qty Indent ബോക്സ് സെലക്ട് ചെയ്യുമ്പോൾ, ആ മരുന്ന് INDENT PANEL-ലെ
+// സെലക്റ്റഡ് FUND ഒഴികെ മറ്റ് ഏത് FUND പ്രകാരം id="mainStockDetailsPage"-ൽ ഉണ്ടെങ്കിലും
+// അവ PROJECT COMPARISON PANEL-ലെ ടേബിളിൽ കാണിക്കുന്നു 🌟
+// =====================================================================
+window.handleQtyIndentAutoLookup = function(medName) {
+    let autoBox = document.getElementById('indAutoLookup');
+    if (!autoBox || !autoBox.checked) return;
+    if (!medName) return;
+
+    let tbody = document.getElementById('indRightTableBody');
+    if (!tbody) return;
+
+    let leftFundEl = document.getElementById('indLeftFund');
+    let leftFund = leftFundEl ? leftFundEl.value.trim() : '';
+
+    window.lastAutoLookupMedName = medName;
+
+    let projNameEl = document.getElementById('indRightProjName');
+    if (projNameEl) projNameEl.innerText = "OTHER FUNDS FOR: " + medName;
+
+    let matches = (typeof stockItems !== 'undefined' ? stockItems : []).filter(i =>
+        i.type === "Main Stock" && i.name === medName && i.fund !== leftFund && parseInt(i.qty) > 0
+    );
+
+    // PROJECT COMPARISON PANEL-ലെ നിലവിലുള്ള Search by Item / Search Medicine ഫിൽട്ടറുകൾ ബാധകമാക്കുന്നു
+    let itemType = document.getElementById('indRightItem') ? document.getElementById('indRightItem').value.trim() : '';
+    if (itemType && itemType !== "ALL MEDICINE" && itemType !== "ALL ITEMS") {
+        matches = matches.filter(i => i.item === itemType);
+    }
+    let search = document.getElementById('indRightSearch') ? document.getElementById('indRightSearch').value.trim().toLowerCase() : '';
+    if (search) {
+        matches = matches.filter(i =>
+            (i.name && i.name.toLowerCase().includes(search)) ||
+            (i.exp && i.exp.toLowerCase().includes(search)) ||
+            (i.daysLeft && i.daysLeft.toString().toLowerCase().includes(search)) ||
+            (i.fund && i.fund.toLowerCase().includes(search))
+        );
+    }
+
+    // Fund (A-Z) ➔ Exp.Dt (Oldest to Newest) പ്രകാരം അടുക്കുന്നു
+    matches.sort((a, b) => {
+        let fa = (a.fund || "").toLowerCase();
+        let fb = (b.fund || "").toLowerCase();
+        if (fa < fb) return -1;
+        if (fa > fb) return 1;
+        let parseDate = d => {
+            if (!d) return 999999;
+            let p = d.split('/');
+            return p.length === 2 ? parseInt(p[1]) * 100 + parseInt(p[0]) : 999999;
+        };
+        return parseDate(a.exp) - parseDate(b.exp);
+    });
+
+    if (matches.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red; font-size:10px; font-weight:bold; padding:15px;">മറ്റൊരു FUND പ്രകാരവും ആ മരുന്ന് നിലവിലില്ല!</td></tr>`;
+        return;
+    }
+
+    let html = "";
+    matches.forEach((s) => {
+        let cls = s.statusClass ? s.statusClass.replace('status-cell','').trim() : '';
+        let bgCol = ""; let textCol = "black";
+        if(cls.includes('bg-red')) { bgCol = "#ff0000"; textCol = "white"; }
+        else if(cls.includes('bg-maroon')) { bgCol = "#8b0000"; textCol = "#ffff00"; }
+        else if(cls.includes('bg-orange')) { bgCol = "#ffa500"; }
+        else if(cls.includes('bg-yellow')) { bgCol = "#ffff00"; }
+        else if(cls.includes('bg-green')) { bgCol = "#00ff00"; }
+        let daysLeftStyle = bgCol ? `background-color:${bgCol} !important; color:${textCol} !important;` : "";
+        let fColor = (typeof getFundColor === 'function') ? getFundColor(s.fund) : 'white';
+
+        html += `
+            <tr style="border-bottom: 1px solid #ccc; height: 32px;">
+                <td style="text-align:left; padding: 8px 10px !important; font-weight: 900; vertical-align: middle;">${s.name}</td>
+                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color: #e0f7fa; color:#006064;">${s.qty}</td>
+                <td class="${cls}" style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; ${daysLeftStyle}">${s.daysLeft}</td>
+                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle; background-color:${fColor};">${s.fund}</td>
+                <td style="padding: 8px 10px !important; text-align: center; font-weight: bold; vertical-align: middle;">${s.exp}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
 };
 // പേജ് മാറുമ്പോൾ ടിക്ക് ബോക്സ് റീസെറ്റ് ചെയ്യുന്ന സിസ്റ്റം
 window.addEventListener('load', function() {
@@ -17897,6 +18012,12 @@ window.openIndentPrepWindow = function() {
     if (rightItemBox) rightItemBox.value = "ALL MEDICINE";
     let rightSearchBox = document.getElementById('indRightSearch');
     if (rightSearchBox) rightSearchBox.value = "";
+
+    // 🌟 Auto Lookup ടിക്ക് ബോക്സ്: വിൻഡോ തുറക്കുമ്പോൾ എപ്പോഴും സെലക്റ്റഡ് ആയിരിക്കണം 🌟
+    let autoLookupBox = document.getElementById('indAutoLookup');
+    if (autoLookupBox) autoLookupBox.checked = true;
+    window.lastAutoLookupMedName = null;
+
     if (typeof updateIndRightProject === 'function') updateIndRightProject();
 
     if(typeof updateIndRightFundList === 'function') updateIndRightFundList();
