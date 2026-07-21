@@ -747,7 +747,7 @@
             <img src="logo.jpg" alt="Medistock Logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V-02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമാണ്. ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും  ലോഗിൻ ചെയ്യുക.</p>
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> ~ഇതൊരു  ഔദ്യോഗിക സോഫ്റ്റ്‌വെയർ അല്ല. നമ്മുടെ ജോലിഭാരം കുറച്ച് ഏറ്റവും മികച്ച MEDICINE MANAGEMENT അനുഭവത്തിനായുള്ള ഒരു ശ്രമത്തിന്റെ ഭാഗമായ് നിർമ്മിച്ച സോഫ്റ്റ്‌വെയർ ആണിത് (Privat Use Only). ഈ സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുന്നതിനും താൽപര്യമുള്ളവർ നിങ്ങളുടെ ഡാറ്റകൾ നിങ്ങളുടെ തന്നെ സ്വന്തം ഗൂഗിൾ ഡ്രൈവിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നതിനും നിങ്ങളുടെ Google Id വഴി ലോഗിൻ ചെയ്യുക.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -2990,13 +2990,13 @@ function handleAuthClick() {
             <div class="top-btn-row no-print" style="text-align: center; margin-bottom: 25px;">
     <button type="button" style="background:#2c3e50; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
     <button type="button" style="background:#8e44ad; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
+    <button type="button" style="background:#27ae60; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
     <button type="button" style="background:#f39c12; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 go to MAIN STOCK</button>
     <button type="button" style="background:#00bcd4; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
 
 <button type="button" style="background:#c0392b; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
     <button type="button" style="background:#16a085; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()">🎧 HELP DESK</button>
-    <button type="button" style="background:#27ae60; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
     <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
@@ -3124,6 +3124,9 @@ function handleAuthClick() {
     </div>
     <div class="no-print" style="text-align: center; margin-bottom: 25px;">
         <button type="button" style="background:#2c3e50; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
+        <button type="button" style="background:#2980b9; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
+        
+        <button type="button" style="background:#27ae60; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
         
         <button type="button" style="background:#f39c12; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMainStockIndex()">📦 go to MAIN STOCK</button>
         
@@ -3135,9 +3138,7 @@ function handleAuthClick() {
         
         <button type="button" style="background:#7f8c8d; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHelpDeskPage()">🎧 HELP DESK</button>
         
-        <button type="button" style="background:#2980b9; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
         
-        <button type="button" style="background:#27ae60; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
     </div>
   
 <h1 class="no-print" style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 5px; font-size: 35px;">INDENT HISTORY</h1>        
@@ -3218,6 +3219,8 @@ function handleAuthClick() {
             <div class="top-btn-row no-print" style="text-align: center; margin-bottom: 25px;">
     <button type="button" style="background:#2c3e50; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
     <button type="button" style="background:#8e44ad; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
+    <button type="button" style="background:#2980b9; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
+
     <button type="button" style="background:#f39c12; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 go to MAIN STOCK</button>
     <button type="button" style="background:#00bcd4; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
 
@@ -3225,7 +3228,6 @@ function handleAuthClick() {
     <button type="button" style="background:#16a085; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtPagePage')">🖨 PRINT / PERFECT PDF</button>
     
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()" >🎧 HELP DESK</button>
-    <button type="button" style="background:#2980b9; color:white; padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
     <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 10px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
 </div>
 
