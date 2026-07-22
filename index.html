@@ -1231,12 +1231,6 @@ window.refreshAllPagesAfterRestore = function() {
         console.error("Page Refresh After Restore Error:", e);
     }
 };
-// ലോഗിൻ ബട്ടൺ അമർത്തുമ്പോൾ
-function handleAuthClick() {
-    if (tokenClient) {
-        tokenClient.requestAccessToken();
-    }
-}
 
                 (function() {
                     function forceSetLSGD() {
@@ -4092,22 +4086,8 @@ const categoryColors = {
           populateFooters();
         });
 
-        function generateDetailsPDF() {
-          populateFooters();
-          document.getElementById('mainPrintFooter').style.display = 'block';
-            const element = document.getElementById('pdfContentArea');
-            const opt = { margin: 0.5, filename: 'Main_Stock_Details.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' } };
-           html2pdf().set(opt).from(element).save().then(() => {
-              document.getElementById('mainPrintFooter').style.display = '';
-            });
-        }
 
 
-        function generateOpeningPDF() {
-            const element = document.getElementById('openingPdfArea');
-            const opt = { margin: 0.5, filename: 'Opening_Stock_Template.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
-          html2pdf().set(opt).from(element).save();
-        }
 
 function hideAllPages() {
     let allPages = [
@@ -4333,34 +4313,6 @@ function deleteSelectedCustomCodes() {
           document.getElementById('deleteConfirmModal').style.display = 'block';
           document.getElementById('modalOverlay').style.display = 'block';
         }
-        function closeDeleteModal() {
-          document.getElementById('deleteConfirmModal').style.display = 'none';
-          document.getElementById('modalOverlay').style.display = 'none';
-        }
-        function executeDelete() {
-            let checkboxClass = deleteContext === 'main' ? '.row-checkbox' : (deleteContext === 'op' ? '.row-checkbox-op' : (deleteContext === 'opening' ? '.row-checkbox-opening' : '.row-checkbox-ip'));
-            let checkboxes = document.querySelectorAll(checkboxClass + ':checked');
-            let idsToDelete = Array.from(checkboxes).map(cb => cb.getAttribute('data-id'));
-            
-          if(idsToDelete.length > 0) {
-               if(deleteContext === 'opening') {
-                   let itemsToDelete = stockItems.filter(i => idsToDelete.includes(i.id.toString()));
-                  itemsToDelete.forEach(delItem => {
-                      stockItems = stockItems.filter(i => !(i.name === delItem.name && i.page === delItem.page));
-                   });
-                } else {
-                  stockItems = stockItems.filter(item => !idsToDelete.includes(item.id.toString()));
-                }
-              saveData();
-               
-              if(deleteContext === 'main') renderDetailsTable();
-                else if(deleteContext === 'op') renderOpDetailsTable();
-                else if(deleteContext === 'opening') renderOpeningStockTable();
-                else renderIpDetailsTable();
-              renderTable();
-            }
-          closeDeleteModal();
-        }
 
         let rowToDeleteId = null;
         let rowToDeleteType = '';
@@ -4409,55 +4361,6 @@ function deleteSelectedCustomCodes() {
         }
 
 
-        function confirmDeleteExpired(type) {
-          deleteContext = type;
-          document.getElementById('deleteExpiredModal').style.display = 'block';
-          document.getElementById('modalOverlay').style.display = 'block';
-        }
-        function closeDeleteExpiredModal() {
-          document.getElementById('deleteExpiredModal').style.display = 'none';
-          document.getElementById('modalOverlay').style.display = 'none';
-        }
-        function executeDeleteExpired() {
-            let typeStr = deleteContext === 'main' ? "Main Stock" : (deleteContext === 'op' ? "Sub Stock OP" : "Sub Stock IP");
-            stockItems = stockItems.filter(item => {
-                if (item.type === typeStr && item.status === "EXPIRED") return false;
-                return true; 
-            });
-           saveData();
-            // 🌟 EXPERT FIX: Expired മരുന്നുകൾ ബൾക്ക് ഡിലീറ്റ് ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
-            if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
-            if (deleteContext === 'main') renderDetailsTable();
-            else if (deleteContext === 'op') renderOpDetailsTable();
-            else renderIpDetailsTable();
-          renderTable(); renderOpeningStockTable();
-          closeDeleteExpiredModal();
-        }
-
-        let emptyQtyContext = '';
-        function confirmRemoveEmptyQty(type) {
-          emptyQtyContext = type;
-          document.getElementById('removeEmptyQtyModal').style.display = 'block';
-          document.getElementById('modalOverlay').style.display = 'block';
-        }
-        function closeRemoveEmptyQtyModal() {
-          document.getElementById('removeEmptyQtyModal').style.display = 'none';
-          document.getElementById('modalOverlay').style.display = 'none';
-        }
-        function executeRemoveEmptyQty() {
-            let typeStr = emptyQtyContext === 'op' ? "Sub Stock OP" : "Sub Stock IP";
-            stockItems = stockItems.filter(item => {
-                if (item.type === typeStr && (!item.qty || item.qty.toString().trim() === "")) return false;
-                return true; 
-            });
-           saveData();
-          // 🌟 EXPERT FIX: Empty Qty വരികൾ ബൾക്ക് ഡിലീറ്റ് ചെയ്ത ശേഷം Local Auto-Backup ഫയൽ ഉടനെ പുതുക്കുന്നു
-          if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
-          if(emptyQtyContext === 'op') renderOpDetailsTable();
-            else renderIpDetailsTable();
-          renderTable(); renderOpeningStockTable();
-          closeRemoveEmptyQtyModal();
-        }
 
         function updateFundDesc() {
             let f = document.getElementById('fundInput').value.trim().toUpperCase();
@@ -4738,7 +4641,6 @@ function validateExpField(el) {
     }
 }
 
-        function updateSino(index, el) { document.getElementById('sino_' + index).value = (el.value.trim() !== "") ? index : ""; }
         function showWarning(el, msg) { const err = document.getElementById('errorMessage'); err.innerHTML = msg; err.style.display = 'block'; el.focus(); setTimeout(() => { err.style.display = 'none'; }, 3500); }
         function validateCode(input) { input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 
@@ -5730,30 +5632,6 @@ function updateColumnEdits(type) {
           // Act കോളത്തിൽ Save ബട്ടൺ ചേർക്കുന്നു
           document.getElementById(`act_main_${id}`).innerHTML = `<button onclick="updateMainDetailsRow(${id})" style="background:#3498db; color:white; border:none; padding:4px 8px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;"><i class="fa-solid fa-arrows-rotate"></i> Update</button>`;
         }
-        function saveMainDetailsRow(id) {
-    // 1. എഡിറ്റ് ചെയ്ത ഇൻപുട്ട് ഫോക്കസ് നീക്കുന്നു (ഇത് ഓട്ടോ സേവ് നടക്കാൻ സഹായിക്കും)
-    if (document.activeElement && document.activeElement.tagName === "INPUT") {
-        document.activeElement.blur(); 
-    }
-    
-    // 2. ഡാറ്റ സേവ് ചെയ്യുന്നു
-    saveData();
-
-    // 3. ടേബിൾ റിഫ്രഷ് ചെയ്ത് എഡിറ്റിംഗ് മോഡ് അവസാനിപ്പിക്കുന്നു
-    renderDetailsTable(); 
-    renderTable();
-
-    // 4. വിജയിച്ചുവെന്ന മെസ്സേജ് കാണിക്കുന്നു
-    document.getElementById('sumteckAlertText').innerText = "നിങ്ങൾ പുതിയതായി മാറ്റം വരുത്തിയവ വിജയകരമായി Save ചെയ്തിരിക്കുന്നു.";
-    document.getElementById('modalOverlay').style.display = 'block';
-    const winAlert = document.getElementById('sumteckAlertWindow');
-    winAlert.style.display = 'block';
-    
-    document.getElementById('sumteckAlertOk').onclick = function() {
-        winAlert.style.display = 'none';
-        document.getElementById('modalOverlay').style.display = 'none';
-    };
-}
 
         // Save ബട്ടൺ അമർത്തുമ്പോൾ പ്രവർത്തിക്കുന്ന പുതിയ ഫംഗ്ഷൻ
 // Update ബട്ടൺ അമർത്തുമ്പോൾ പ്രവർത്തിക്കുന്ന ഫംഗ്ഷൻ
@@ -7431,147 +7309,6 @@ function openIndentAtItemPage() {
     hideAllPages();
     document.getElementById('indentAtItemPage').style.display = 'block';
 }
-function openIndentAtPagePage() {
-    hideAllPages();
-    // INDENT @ PAGE NO വിൻഡോയുടെ ഐഡി 'indentAtPagePage' ആണെന്ന് അനുമാനിക്കുന്നു
-    let pageNode = document.getElementById('indentAtPagePage');
-    if (pageNode) {
-        pageNode.style.display = 'block';
-    } else {
-        alert("INDENT @ PAGE NO എന്ന വിൻഡോ ഇതുവരെ കോഡിൽ നിർമ്മിച്ചിട്ടില്ല!");
-    }
-}
-// --- FUNCTIONS FOR NEW STATEMENT WINDOWS ---
-
-function openNacStatement() {
-    hideAllPages();
-    document.getElementById('nacStatementPage').style.display = 'block';
-    document.getElementById('nacFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('nacStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('nacArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    renderNacStatementTable();
-}
-
-function openMainChargeList() {
-    hideAllPages();
-    document.getElementById('chargeListMainPage').style.display = 'block';
-    document.getElementById('chargeFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('chargeStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('chargeArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    renderChargeListTable();
-}
-
-function openMainQuarterStatement() {
-    hideAllPages();
-    document.getElementById('quarterStatementPage').style.display = 'block';
-    document.getElementById('qtrFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('qtrStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('qtrArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    renderQuarterStatementTable();
-}
-
-function openLastAddedMedicines() {
-    hideAllPages();
-    document.getElementById('lastAddedMedicinesPage').style.display = 'block';
-    renderLastAddedTable();
-}
-
-// കോമൺ ഫിൽറ്ററിംഗ് ഫംഗ്ഷൻ (3 സ്റ്റേറ്റ്മെന്റ് വിൻഡോകൾക്കും വേണ്ടി)
-function getFilteredAndSortedDataForStatements(fundId, statusId, arrangeId) {
-    let fundFilter = document.getElementById(fundId).value.trim();
-    let statusFilter = document.getElementById(statusId).value.trim().toUpperCase();
-    let arrangeFilter = document.getElementById(arrangeId).value.trim();
-
-    let filtered = stockItems.filter(i => i.type === "Main Stock");
-
-    if (fundFilter !== "ALL PROJECT MEDICINES" && fundFilter !== "") { 
-        filtered = filtered.filter(i => i.fund === fundFilter); 
-    }
-    
-    // 🌟 SMART CASCADING EXPIRY FILTER LOGIC FOR STATEMENTS 🌟
-    if (statusFilter !== "ALL MEDICINE" && statusFilter !== "ALL MEDICINES" && statusFilter !== "") {
-        if (statusFilter === "EXPIRED") {
-            filtered = filtered.filter(i => i.status === "EXPIRED");
-        } else if (statusFilter === "BELOW 2 MONTH") {
-            filtered = filtered.filter(i => ["EXPIRED", "BELOW 2 MONTH"].includes(i.status));
-        } else if (statusFilter === "BELOW 3 MONTH") {
-            filtered = filtered.filter(i => ["EXPIRED", "BELOW 2 MONTH", "BELOW 3 MONTH"].includes(i.status));
-        } else if (statusFilter === "BELOW 6 MONTH") {
-            filtered = filtered.filter(i => ["EXPIRED", "BELOW 2 MONTH", "BELOW 3 MONTH", "BELOW 6 MONTH"].includes(i.status));
-        } else {
-            filtered = filtered.filter(i => i.status && i.status.toUpperCase() === statusFilter);
-        }
-    }
-
-    filtered.sort((a, b) => {
-        if(arrangeFilter === "MEDICINE ARRANGE @ EXP. DATE") {
-            let getVal = (d) => { let p = d.split('/'); if(p.length===2) return p[1]+p[0]; return d; };
-            return getVal(a.exp).localeCompare(getVal(b.exp));
-        } else if (arrangeFilter === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return a.item.localeCompare(b.item);
-        } else if (arrangeFilter === "MEDICINE ARRANGE @ PROJECT") {
-            return a.fund.localeCompare(b.fund);
-        } else if (arrangeFilter === "MEDICINE ARRANGE @ PAGE No") {
-            return parseInt(a.page || 0) - parseInt(b.page || 0);
-        }
-        return 0;
-    });
-
-    return filtered;
-}
-
-// ടേബിളുകൾ വരയ്ക്കുന്നതിനുള്ള ഫംഗ്ഷനുകൾ
-function renderNacStatementTable() {
-    let data = getFilteredAndSortedDataForStatements('nacFundInput', 'nacStatusInput', 'nacArrangeInput');
-    let tbody = document.getElementById('nacStatementTableBody');
-    tbody.innerHTML = buildStatementRows(data);
-}
-
-function renderChargeListTable() {
-    let data = getFilteredAndSortedDataForStatements('chargeFundInput', 'chargeStatusInput', 'chargeArrangeInput');
-    let tbody = document.getElementById('chargeListTableBody');
-    tbody.innerHTML = buildStatementRows(data);
-}
-
-function renderQuarterStatementTable() {
-    let data = getFilteredAndSortedDataForStatements('qtrFundInput', 'qtrStatusInput', 'qtrArrangeInput');
-    let tbody = document.getElementById('quarterStatementTableBody');
-    tbody.innerHTML = buildStatementRows(data);
-}
-
-// കോമൺ റോ ബിൽഡർ (Statements)
-function buildStatementRows(filteredData) {
-    let html = "";
-    filteredData.forEach((s, idx) => {
-        let cls = s.statusClass.replace('status-cell','').trim();
-        let bgCol = ""; let textCol = "black";
-        if(cls.includes('bg-red')) { bgCol = "#ff0000"; }
-        else if(cls.includes('bg-maroon')) { bgCol = "#8b0000"; textCol = "#ffff00"; }
-        else if(cls.includes('bg-orange')) { bgCol = "#ffa500"; }
-        else if(cls.includes('bg-yellow')) { bgCol = "#ffff00"; }
-else if(cls.includes('bg-green')) { bgCol = "#00ff00"; }
-        let hlStyle = bgCol ? `background-color: ${bgCol} !important; color: ${textCol} !important; font-weight:bold;` : "";
-        
-        // ക്യാപിറ്റൽ/സ്മോൾ ലെറ്റർ വ്യത്യാസം പരിഹരിച്ച് നിറം നൽകുന്നു
-        let itemColor = categoryColors[s.item] || categoryColors[(s.item || "").toUpperCase()] || 'white';
-
-        html += `
-            <tr style="height: 25px;">
-                <td style="border: 1px solid #000; padding: 2px;">${idx + 1}</td>
-                <td style="border: 1px solid #000; padding: 2px; text-align: left; background-color: ${itemColor};"><b>${s.item}</b></td>
-                <td style="border: 1px solid #000; padding: 2px; text-align: left;">${s.name}</td>
-                <td style="border: 1px solid #000; padding: 2px;">${s.exp}</td>
-                <td style="border: 1px solid #000; padding: 2px;">${s.qty}</td>
-                <td style="border: 1px solid #000; padding: 2px;">${s.page}</td>
-                <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">${s.fund}</td>
-                <td style="border: 1px solid #000; padding: 2px; ${hlStyle}" class="${cls}">${s.status}</td>
-                <td style="border: 1px solid #000; padding: 2px;">${s.batch}</td>
-                <td style="border: 1px solid #000; padding: 2px; ${hlStyle}" class="${cls}">${s.daysLeft}</td>
-                <td style="border: 1px solid #000; padding: 2px;">${s.rack}</td>
-            </tr>`;
-    });
-    return html;
-}
 
 
 
@@ -7591,34 +7328,6 @@ function openLastAddedIPStock() {
     // 🌟 ADD TO STOCK അടിക്കുമ്പോൾ തന്നെ ഡാറ്റ ഈ ടേബിളിൽ (lastAddedIPTableBody) നേരിട്ട് സേവ് ആകുന്നതിനാൽ,
     // ഇവിടെ renderLastAddedIPTable() വിളിക്കേണ്ടതില്ല. ആ ഫംഗ്ഷൻ Indent (ഇഷ്യൂ) ഫീച്ചറിനു വേണ്ടിയുള്ളതാണ്,
     // ഇത് വിളിച്ചാൽ പുതിയതായി ചേർത്ത മരുന്നുകൾക്ക് പകരം പഴയ Indent ഡാറ്റ കാണിക്കും.
-}
-// --- പുതിയ വിൻഡോകൾ ഓപ്പൺ ചെയ്യാനുള്ള നാവിഗേഷൻ ഫംഗ്ഷനുകൾ (ഇവിടെ നിന്നും കോപ്പി ചെയ്യുക) ---
-
-function openNacStatement() {
-    hideAllPages();
-    document.getElementById('nacStatementPage').style.display = 'block';
-    document.getElementById('nacFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('nacStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('nacArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    // renderNacStatementTable(); // (ഭാവിയിൽ ടേബിൾ ലോഡ് ചെയ്യാൻ)
-}
-
-function openMainChargeList() {
-    hideAllPages();
-    document.getElementById('chargeListMainPage').style.display = 'block';
-    document.getElementById('chargeFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('chargeStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('chargeArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    // renderChargeListTable(); // (ഭാവിയിൽ ടേബിൾ ലോഡ് ചെയ്യാൻ)
-}
-
-function openMainQuarterStatement() {
-    hideAllPages();
-    document.getElementById('quarterStatementPage').style.display = 'block';
-    document.getElementById('qtrFundInput').value = document.getElementById('mainFundInput').value || "ALL PROJECT MEDICINES";
-    document.getElementById('qtrStatusInput').value = document.getElementById('mainStatusInput').value || "ALL MEDICINE";
-    document.getElementById('qtrArrangeInput').value = document.getElementById('mainArrangeInput').value || "MEDICINE ARRANGE @ EXP. DATE";
-    // renderQuarterStatementTable(); // (ഭാവിയിൽ ടേബിൾ ലോഡ് ചെയ്യാൻ)
 }
 
 function openLastAddedMedicines() {
@@ -7719,35 +7428,6 @@ function goBackFromOpChargeList() {
     }
 }
 
-// 2. പുതിയ PDF ജനറേഷൻ ഫംഗ്‌ഷൻ (A4 Portrait ആയി സെറ്റ് ചെയ്തത്)
-// PDF ജനറേഷൻ മാർജിൻ .5 (inch) ആയി സെറ്റ് ചെയ്തു
-function generateOpChargeListPDF() {
-    // 1. നിലവിലെ പേജ് ടൈറ്റിൽ സേവ് ചെയ്തു വെക്കുന്നു
-    let originalTitle = document.title;
-    
-    // 2. തീയതിയും സമയവും എടുക്കുന്നു
-    let now = new Date();
-    let dateStr = now.toLocaleDateString('en-GB').replace(/\//g, '-');
-    let timeStr = now.toLocaleTimeString('en-GB').replace(/:/g, '-');
-    let pdfFileName = 'Charge_List_OP_Sub_Stock_' + dateStr + '_' + timeStr;
-    
-    // 3. ഫയലിന് പേര് ലഭിക്കാൻ ബ്രൗസറിന്റെ ടൈറ്റിൽ താൽക്കാലികമായി മാറ്റുന്നു
-    document.title = pdfFileName;
-    
-    // 4. ടേബിൾ മാത്രം സ്ക്രീനിൽ വരാനുള്ള ക്ലാസ് ആക്റ്റീവ് ആക്കുന്നു
-    document.body.classList.add('printing-op-charge');
-    
-    // 5. കുറച്ചു സമയത്തിന് ശേഷം നേരിട്ട് പ്രിന്റ്/PDF ഡയലോഗ് വിളിക്കുന്നു
-    setTimeout(() => {
-        window.print(); 
-        
-        // 6. വിൻഡോ ക്ലോസ് ചെയ്ത ശേഷം എല്ലാം പഴയപടിയാക്കുന്നു
-        setTimeout(() => {
-            document.body.classList.remove('printing-op-charge');
-            document.title = originalTitle; // ടൈറ്റിൽ പഴയതാക്കുന്നു
-        }, 1000);
-    }, 300);
-}
 
 // BACK ബട്ടൺ ഫംഗ്ഷൻ (ഇത് നിലവിൽ കോഡിൽ ഉണ്ടോ എന്ന് നോക്കുക)
 function goBackFromOpChargeList() {
@@ -8156,12 +7836,6 @@ function getSimilarity(s1, s2) {
     return ((longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)) * 100;
 }
 
-// --- 2. നോർമലൈസേഷൻ ഫംഗ്ഷൻ (സ്പേസും കുത്തുകളും അളവുകളും താൽക്കാലികമായി മാറ്റാൻ) ---
-function normalizeText(text) {
-    return text.toLowerCase()
-               .replace(/[^a-z0-9]/g, '') // സ്പേസ്, കുത്ത്, ചിഹ്നങ്ങൾ എന്നിവ മാറ്റുന്നു
-               .replace(/ml$|gm$|mg$|kg$|no$|nos$/g, ''); // അളവുകൾ അവസാനമുണ്ടെങ്കിൽ ഒഴിവാക്കുന്നു
-}
 
 // --- 3. മെയിൻ ഓട്ടോ ഫിൽ ഫംഗ്ഷൻ ---
 // ==============================================================================
@@ -9562,36 +9236,6 @@ window.toggleRowVisibilityForPrint = function(cb) {
 };
 
 
-function generateQuickPDF_RackMain() {
-    window.scrollTo(0, 0);
-    const element = document.getElementById('mainRackDetailsPrintArea');
-    
-    // താൽക്കാലികമായി ഡാറ്റ കോപ്പി ചെയ്യുന്നു
-    let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = element.innerHTML;
-    
-    // PDF-ൽ സ്റ്റൈൽ വരാൻ ആവശ്യമായ CSS ഇവിടെയാണ് ചേർക്കേണ്ടത് (ഈ ഭാഗത്ത് ശ്രദ്ധിക്കുക)
-    let styleText = `
-        <style>
-            .rack-pdf-item { padding: 0; margin: 0 auto; width: max-content; clear: both; display: block; }
-            .rack-pdf-item > div { border: 1px dotted rgba(0,0,0,0.10) !important; padding: 0.5cm !important; box-sizing: border-box !important; }
-        </style>
-    `;
-
-    let pdfFileName = 'Rack_Details_' + new Date().getTime() + '.pdf';
-
-    const opt = {
-        margin: [0.4, 0.2, 0.4, 0.2],
-        filename: pdfFileName,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['.rack-pdf-item'] }
-    };
-    
-    // ഇവിടെയാണ് styleText കൂടി ചേർത്ത് PDF സേവ് ചെയ്യുന്നത്
-    html2pdf().set(opt).from(styleText + tempDiv.innerHTML).save();
-}
 
 function printPerfectPDF_RackMain() {
     document.getElementById('sumteckAlertText').innerText = "PRINT എടുക്കണ്ടവർക്ക് ഇപ്പോൾ വരുന്ന വിൻഡോയിൽ നിങ്ങളുടെ 'PRINTER' സെലക്റ്റ് ചെയ്ത് PRINT എടുക്കാം.ഈ വിൻഡോയിൽ കാണുന്ന അതേ സ്റ്റൈലിൽ pdf വേണമെങ്കിൽ ഇപ്പോൾ വരുന്ന വിൻഡോയിലെ PRINTER തിരഞ്ഞെടുക്കുന്നതിനുള്ള Drop Down ബോക്സിൽ 'Save as PDF' എന്ന് നൽകി Save ചെയ്യുകയുമാവാം.";
@@ -9704,13 +9348,6 @@ function openCurrentViewRackDetails() {
     showMainRackDetailsPage('CURRENT_VIEW', 'MAIN');
 }
 
-// 3. 'Rack Details All' ബട്ടൺ അമർത്തുമ്പോൾ 
-function openRackDetailsPage() {
-    let currentSource = "MAIN"; 
-    if (document.getElementById('opSubStockDetailsPage').style.display === 'block') currentSource = "OP";
-    else if (document.getElementById('ipSubStockDetailsPage').style.display === 'block') currentSource = "IP";
-    showMainRackDetailsPage('DYNAMIC_ALL', currentSource);
-}
 
 // 4. നിലവിലുള്ള showMainRackDetailsPage ഫംഗ്ഷൻ 
 function showMainRackDetailsPage(mode = 'ALL', source = 'MAIN') {
@@ -16534,46 +16171,6 @@ if (pageContainer) {
 
 })();
 
-// 🌟 MULTI-LEVEL SORTING FUNCTION (Item -> Name -> Exp Date) 🌟
-function applyMultiLevelSort(dataArray) {
-    if (!dataArray || dataArray.length === 0) return dataArray;
-    
-    return dataArray.sort((a, b) => {
-        // 1. Medicine item (A to Z ക്രമത്തിൽ)
-        // (താങ്കളുടെ ഡാറ്റാബേസിലെ യഥാർത്ഥ കീ അനുസരിച്ച് a.item, a.medicineItem എന്നിവ മാറ്റാം)
-        let keyItemA = (a.item || a.medicine_item || a.medicineItem || a.category || "").toString().toLowerCase();
-        let keyItemB = (b.item || b.medicine_item || b.medicineItem || b.category || "").toString().toLowerCase();
-        if (keyItemA < keyItemB) return -1;
-        if (keyItemA > keyItemB) return 1;
-
-        // 2. NAME OF MEDICINE (A to Z ക്രമത്തിൽ)
-        let keyNameA = (a.medicineName || a.name || a.medicine_name || a.medName || "").toString().toLowerCase();
-        let keyNameB = (b.medicineName || b.name || b.medicine_name || b.medName || "").toString().toLowerCase();
-        if (keyNameA < keyNameB) return -1;
-        if (keyNameA > keyNameB) return 1;
-
-        // 3. Exp.Dt. (OLDEST to NEWEST ക്രമത്തിൽ)
-        // തീയതികളെ (MM/YYYY അല്ലെങ്കിൽ DD/MM/YYYY) സോർട്ട് ചെയ്യാൻ നമ്പറുകളാക്കി മാറ്റുന്നു
-        function parseDateForSort(dStr) {
-            if (!dStr) return 99999999; // തീയതി ഇല്ലെങ്കിൽ ടേബിളിന്റെ അവസാനം വരാൻ
-            let d = dStr.toString();
-            if (d.includes('/')) {
-                let p = d.split('/');
-                if (p.length === 2) return parseInt(p[1]) * 100 + parseInt(p[0]); // MM/YYYY -> YYYYMM
-                if (p.length === 3) return parseInt(p[2]) * 10000 + parseInt(p[1]) * 100 + parseInt(p[0]); // DD/MM/YYYY
-            }
-            if (d.includes('-')) {
-                let p = d.split('-');
-                return parseInt(p[0]) * 10000 + parseInt(p[1]) * 100 + (parseInt(p[2]) || 0); // YYYY-MM
-            }
-            return 99999999;
-        }
-        
-        let dateA = parseDateForSort(a.expDate || a.exp_date || a.expiry || a.expiryDate);
-        let dateB = parseDateForSort(b.expDate || b.exp_date || b.expiry || b.expiryDate);
-        return dateA - dateB;
-    });
-}
 // =====================================================================
 // 🌟 MULTI-LEVEL SORTING FIX FOR INDENT PREPARATION WINDOW 🌟
 // =====================================================================
