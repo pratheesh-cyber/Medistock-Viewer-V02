@@ -399,6 +399,34 @@
         body.printing-rack-details #mainRackDetailsPrintArea {
             position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 0 !important; background-color: white !important;
         }
+        /* BOOK LABEL GENERATOR Perfect Print Settings */
+        body.printing-book-label { background-color: #ffffff !important; }
+        body.printing-book-label * { visibility: hidden; }
+        body.printing-book-label #bookLabelPrintArea,
+        body.printing-book-label #bookLabelPrintArea * { visibility: visible; }
+        body.printing-book-label #bookLabelPrintArea {
+            position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 0 !important; background-color: white !important;
+        }
+        .book-label-pdf-item {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            -webkit-column-break-inside: avoid !important;
+            display: block !important;
+            width: 100% !important;
+            margin-bottom: 2px !important;
+        }
+        .book-label-pdf-item table {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .book-label-pdf-item tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-after: auto !important;
+        }
+        @media print {
+            .book-label-pdf-item { border: 1px dotted rgba(0,0,0,0.10) !important; }
+        }
         
         /* PDF എടുത്തു കഴിഞ്ഞാൽ പേജ് മുറിയാതിരിക്കാനുള്ള ആഗോള നിയമങ്ങൾ */
         .rack-pdf-item {
@@ -3407,11 +3435,12 @@ window.refreshAllPagesAfterRestore = function() {
         <button class="nav-btn" style="margin-bottom: 0; background: #2980b9;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD SAMPLE DATA</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> BOOK LABEL GENERATOR</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
         <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT DATA</button>
         <!-- 🌟 പുതിയതായി ചേർത്ത UNDO ബട്ടൺ: Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിലെ 
              ഏറ്റവും അവസാനത്തെ Add/Edit/Delete പ്രവർത്തനം തിരികെ എടുക്കാൻ 🌟 -->
-        <button class="nav-btn" style="margin-bottom: 0; background: #d35400;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO LAST ACTION</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #d35400;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO</button>
         <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Downloads ഫോൾഡറിലേക്കുള്ള Local Auto-Backup സജീവമാക്കാൻ 🌟 -->
         <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
@@ -3496,24 +3525,315 @@ window.refreshAllPagesAfterRestore = function() {
                 </tr>
                 <!-- പുതിയതായി ചേർത്ത മൂന്ന് വരികൾ -->
                 <tr>
-                    <td>ആദ്യം ഔഷധങ്ങളുടെ ഇൻവോയ്സിന്റെ പുറകുവശത്ത് എഴുതേണ്ട സർട്ടിഫിക്കറ്റ് മാതൃക</td>
+                    <td>M O സ്ഥാപനത്തിൽ ഇല്ലാത്ത ദിവസത്തെ ഔഷധ വിതരണം സംബന്ധിച്ച് വകുപ്പ് മേധാവിയുടെ സർക്കുലർ </td>
                     <td></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1UeUEdPt4E5PnMD-q5LYwu1S_Zrs79TV4/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1PaD90WPSjLVjLHbcqv0w5n7Efds2isxj/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
-                    <td>ഔഷധങ്ങളുടെ OP യിലെ സ്റ്റോക്ക് എടുക്കുന്നതിനുള്ള ലിസ്റ്റ് മാതൃക</td>
+                    <td>അവധി അപേക്ഷയുടെ മാതൃക (ഇത് ഔദ്യോഗിക മാതൃക അല്ല) </td>
                     <td></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1pajLu0yCmsZG6F64dtbHC4RmYJ9CmWCH/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1BvSnMEJK8P5okMXxCu33Yxq1uBUs2LNE/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
-                    <td>ഔഷധങ്ങളുടെ OPയിലെ സ്റ്റോക്ക് MO ക്ക് നൽകുന്നതിനുള്ള ലിസ്റ്റ് മാതൃക</td>
+                    <td>ഡിപ്പാർട്ട് മെന്റ് മാന്വൽ പകർപ്പ്</td>
                     <td></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1Yovir0YQrnseDW1aZ8v0LoO6HbKfkJi0/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/file/d/1GhifOx1HvPzhMBA27KpJZ3CzAa_J30iR/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- ========================================= -->
+<!-- 🌟 BOOK LABEL GENERATOR WINDOW 🌟 -->
+<!-- ========================================= -->
+<div id="bookLabelGeneratorPage" class="page-container index-page-wrapper full-width-wrapper" style="display: none; padding: 20px;">
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 20px; font-size: 35px; text-transform: uppercase;">BOOK LABEL GENERATOR</h1>
+
+    <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
+        <button class="index-btn bg-dark" onclick="goBackFromBookLabelGenerator()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+        <button class="index-btn bg-orange" onclick="showHomePage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+        <button class="index-btn bg-blue-main" onclick="printPerfectPDF_BookLabel()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-print"></i> <b>PRINT / PERFECT PDF</b></button>
+        <button class="index-btn bg-green" onclick="showMainStockIndex()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-list"></i> <b>GO TO MAIN STOCK INDEX</b></button>
+        <button class="index-btn bg-blue-light" onclick="openMainStockDetails()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-pills"></i> <b>GO TO MAIN STOCK</b></button>
+        <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+    </div>
+
+    <div class="soothing-box box-blue no-print" style="margin-bottom: 20px; padding: 15px;">
+        <h3 class="box-title" style="text-transform: uppercase; margin-bottom: 12px;">LABEL FORMAT SETTINGS</h3>
+
+        <div style="display:flex; flex-direction:column; gap:8px; background:#fff; padding:10px; border-radius:8px; border:1px dashed #3498db; margin-bottom:15px;">
+
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="blgTitlePrefix" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="flex:1; min-width:220px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgTitlePrefixFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+                <input type="checkbox" id="blgShowBookNo" checked title="Show BOOK No. on label" style="width:26px; height:26px; accent-color:#00bcd4; cursor:pointer;" onchange="window.renderBookLabelPreview()">
+                <span style="background:#fff59d; border:1px solid #333; padding:8px 10px; font-weight:bold; border-radius:4px;">BOOK No:</span>
+                <input type="text" id="blgBookNo" class="index-input" placeholder="eg:10" style="width:80px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgBookNoFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            </div>
+
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="blgRegisterName" class="index-input" placeholder="NAME OF REGISTER" style="flex:1; min-width:220px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgRegisterNameFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+                <input type="date" id="blgFromDate" class="index-input" title="from date" style="width:150px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" onchange="window.renderBookLabelPreview()">
+                <input type="date" id="blgToDate" class="index-input" title="to date" style="width:150px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" onchange="window.renderBookLabelPreview()">
+                <input type="number" id="blgDatesFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            </div>
+
+            <div style="display:flex; gap:6px; align-items:center; justify-content:flex-end; flex-wrap:wrap;">
+                <label style="font-size:12px; font-weight:bold; color:#2c3e50;">No. of Labels:</label>
+                <input type="number" id="blgCopies" value="3" min="1" max="30" style="width:60px; height:32px; text-align:center; font-weight:bold; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            </div>
+
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: stretch; justify-content: space-between; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px dashed #3498db; flex-wrap: wrap;">
+
+            <div style="border: 1px solid #e74c3c; border-radius: 6px; padding: 5px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fdedec;">
+                <span style="font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Select All</span>
+                <input type="checkbox" id="masterBookLabelCheckbox" checked style="margin:0; width:15px; height:15px; cursor: pointer; accent-color: #27ae60;" onchange="window.toggleAllBookLabelCheckboxes(this)">
+            </div>
+
+            <div style="border: 1px solid #8e44ad; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf4ff;">
+                <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-bottom: 4px; text-transform: uppercase; text-align: center;">DISPLAY COLUMNS</span>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold; color: black;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="radio" name="blgCategory" id="blgCategoryInstitution" value="INSTITUTION" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> INSTITUTION</label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="radio" name="blgCategory" id="blgCategoryAhwc" value="AHWC" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> AHWC</label>
+                </div>
+            </div>
+
+            <div style="border: 1px solid #27ae60; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #f4fcf7;">
+                <span style="font-size: 11px; font-weight: bold; color: #27ae60; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Font Color</span>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold;">
+                    <label style="cursor: pointer; color: black; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="black" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blk</label>
+                    <label style="cursor: pointer; color: red; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="#c0392b" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Red</label>
+                    <label style="cursor: pointer; color: green; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="#1e8449" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Grn</label>
+                    <label style="cursor: pointer; color: blue; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="#2980b9" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blu</label>
+                    <label style="cursor: pointer; color: #ff1493; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="#ff1493" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Pnk</label>
+                </div>
+            </div>
+
+            <div style="border: 1px solid #d35400; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf2e9;">
+                <span style="font-size: 11px; font-weight: bold; color: #d35400; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Column Color</span>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold;">
+                    <label style="cursor: pointer; color: black; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="black" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blk</label>
+                    <label style="cursor: pointer; color: red; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="#c0392b" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Red</label>
+                    <label style="cursor: pointer; color: green; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="#1e8449" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Grn</label>
+                    <label style="cursor: pointer; color: blue; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="#2980b9" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blu</label>
+                    <label style="cursor: pointer; color: #ff1493; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="#ff1493" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Pnk</label>
+                </div>
+            </div>
+
+            <div style="flex: 1; min-width: 150px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
+                <span style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Border Style</span>
+                <select id="blgBorderStyleSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="window.renderBookLabelPreview()">
+                    <option value="style1">Style 1: Simple Solid</option>
+                    <option value="style2">Style 2: Double Line</option>
+                    <option value="style3">Style 3: Dashed</option>
+                    <option value="style4">Style 4: Dotted</option>
+                    <option value="style5">Style 5: Rounded</option>
+                    <option value="style6">Style 6: Thick Left</option>
+                    <option value="style7">Style 7: Shadow Box</option>
+                    <option value="style8">Style 8: Inset</option>
+                    <option value="style9">Style 9: Outset</option>
+                    <option value="style10">Style 10: Two-Tone</option>
+                    <option value="style11">Style 11: 3 Line</option>
+                    <option value="style12" selected>Style 12: Thin 3 Line</option>
+                </select>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <button id="blgEditBtn" onclick="window.toggleBookLabelEditMode()" style="background: #3498db; color: white; border: none; padding: 0 15px; height: 100%; min-height: 40px; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 14px; box-shadow: 0 4px #2980b9; transition: all 0.2s; letter-spacing: 1px;"><i class="fa-solid fa-pen-to-square"></i> EDIT</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="bookLabelPrintArea" style="background: white; padding: 10px; color: black;">
+        <div id="bookLabelTableBody" style="display: block; width: 100%;"></div>
+    </div>
+</div>
+<script>
+// ========================================================
+// 🌟 BOOK LABEL GENERATOR JAVASCRIPT FUNCTIONS 🌟
+// ========================================================
+
+window.showBookLabelGeneratorPage = function() {
+    if (typeof hideAllPages === 'function') hideAllPages();
+    let pageEl = document.getElementById('bookLabelGeneratorPage');
+    if (pageEl) pageEl.style.display = 'block';
+    window.renderBookLabelPreview();
+    window.scrollTo(0, 0);
+};
+
+window.goBackFromBookLabelGenerator = function() {
+    if (typeof hideAllPages === 'function') hideAllPages();
+    let pageEl = document.getElementById('moreDetailsPage');
+    if (pageEl) pageEl.style.display = 'block';
+    window.scrollTo(0, 0);
+};
+
+let isBookLabelEditMode = false;
+window.toggleBookLabelEditMode = function() {
+    let btn = document.getElementById('blgEditBtn');
+    let items = document.querySelectorAll('.book-label-editable');
+
+    if (!isBookLabelEditMode) {
+        isBookLabelEditMode = true;
+        if (btn) {
+            btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE';
+            btn.style.background = '#27ae60';
+            btn.style.boxShadow = '0 4px #1e8449';
+        }
+        items.forEach(el => el.setAttribute('contenteditable', 'true'));
+    } else {
+        isBookLabelEditMode = false;
+        if (btn) {
+            btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> EDIT';
+            btn.style.background = '#3498db';
+            btn.style.boxShadow = '0 4px #2980b9';
+        }
+        items.forEach(el => el.removeAttribute('contenteditable'));
+    }
+};
+
+window.toggleAllBookLabelCheckboxes = function(source) {
+    let checkboxes = document.querySelectorAll('.book-label-row-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = source.checked;
+        window.toggleBookLabelRowVisibility(cb);
+    });
+};
+
+window.checkMasterBookLabelStatus = function(cb) {
+    let master = document.getElementById('masterBookLabelCheckbox');
+    let checkboxes = document.querySelectorAll('.book-label-row-checkbox');
+    let allChecked = Array.from(checkboxes).every(c => c.checked);
+    let noneChecked = Array.from(checkboxes).every(c => !c.checked);
+
+    if (master) {
+        master.checked = allChecked;
+        master.indeterminate = !allChecked && !noneChecked;
+    }
+    window.toggleBookLabelRowVisibility(cb);
+};
+
+window.toggleBookLabelRowVisibility = function(cb) {
+    let rowDiv = cb.closest('.book-label-pdf-item');
+    if (rowDiv) {
+        if (!cb.checked) {
+            rowDiv.classList.add('hide-rack-item');
+        } else {
+            rowDiv.classList.remove('hide-rack-item');
+        }
+    }
+};
+
+// 🌟 ലേബൽ പ്രിവ്യൂ / പ്രിന്റ് ഏരിയ വരയ്ക്കുന്ന പ്രധാന ഫംഗ്ഷൻ 🌟
+window.renderBookLabelPreview = function() {
+    try {
+        let getVal = (id) => { let el = document.getElementById(id); return el ? el.value : ''; };
+        let getChecked = (id) => { let el = document.getElementById(id); return el ? el.checked : false; };
+
+        let prefix = getVal('blgTitlePrefix').trim();
+        let prefixSize = getVal('blgTitlePrefixFontSize') || '36';
+        let showBookNo = getChecked('blgShowBookNo');
+        let bookNo = getVal('blgBookNo').trim();
+        let bookNoSize = getVal('blgBookNoFontSize') || '36';
+        let regName = getVal('blgRegisterName').trim();
+        let regNameSize = getVal('blgRegisterNameFontSize') || '36';
+        let fromDate = getVal('blgFromDate');
+        let toDate = getVal('blgToDate');
+        let dateSize = getVal('blgDatesFontSize') || '36';
+
+        let copies = parseInt(getVal('blgCopies') || '3', 10);
+        if (isNaN(copies) || copies < 1) copies = 1;
+
+        let fColorInput = document.querySelector('input[name="blgFontColor"]:checked');
+        let fColor = fColorInput ? fColorInput.value : 'black';
+
+        let cColorInput = document.querySelector('input[name="blgBorderColor"]:checked');
+        let cColor = cColorInput ? cColorInput.value : 'black';
+
+        let styleSelect = document.getElementById('blgBorderStyleSelect');
+        let chosenStyle = styleSelect ? styleSelect.value : 'style12';
+
+        let tbody = document.getElementById('bookLabelTableBody');
+        if (!tbody) return;
+
+        let line1 = prefix || 'REGISTER OF';
+        if (showBookNo) line1 += '&nbsp;&nbsp;&nbsp;BOOK No: ' + (bookNo || '____');
+        let line2 = regName || 'NAME OF REGISTER';
+        let line3 = (fromDate || toDate) ? ('From: ' + (fromDate || '____') + '&nbsp;&nbsp;&nbsp;To: ' + (toDate || '____')) : '';
+        // ഏറ്റവും വലിയ ഫോണ്ട് സൈസ് line3-ന് ഉപയോഗിക്കുന്നു (from/to date വരി)
+        void dateSize;
+
+        let tableStyle = '';
+        if (chosenStyle === 'style11') { tableStyle = `border-collapse: collapse; border: 2px solid ${cColor}; background: white; margin: 0 auto; width: max-content; box-shadow: 0 0 0 2px white, 0 0 0 6px ${cColor}, 0 0 0 8px white, 0 0 0 10px ${cColor};`; }
+        else if (chosenStyle === 'style12') { tableStyle = `border-collapse: collapse; border: 1px solid ${cColor}; background: white; margin: 0 auto; width: max-content; box-shadow: 0 0 0 2px white, 0 0 0 5px ${cColor}, 0 0 0 7px white, 0 0 0 8px ${cColor};`; }
+        else { tableStyle = `border-collapse: collapse; margin: 0 auto; width: max-content; border: 2px solid ${cColor};`; }
+
+        let finalHTML = '';
+        for (let i = 0; i < copies; i++) {
+            let isLast = (i === copies - 1);
+            let lineCSS = '1px dotted rgba(0,0,0,0.20)';
+            finalHTML += `
+                <div class="book-label-pdf-item" style="position: relative; margin: 0 !important; padding: 0 !important; width: 100%; clear: both; page-break-inside: avoid; break-inside: avoid; display: block; text-align: center; box-sizing: border-box;
+                            border-top: ${lineCSS} !important; border-bottom: ${isLast ? lineCSS + ' !important' : 'none !important'};">
+                    <div class="no-print" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                        <input type="checkbox" class="book-label-row-checkbox" checked style="width: 20px; height: 20px; cursor: pointer; accent-color: #27ae60;" onchange="window.checkMasterBookLabelStatus(this)">
+                    </div>
+                    <div class="book-label-inner-content" style="display: inline-block; box-sizing: border-box; padding: 0.5cm; vertical-align: top; border-left: ${lineCSS} !important; border-right: ${lineCSS} !important; background: white;">
+                        <table style="${tableStyle}"><tbody>
+                            <tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${prefixSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line1}</td></tr>
+                            <tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${regNameSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line2}</td></tr>
+                            ${line3 ? `<tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${bookNoSize}px; font-weight: 700; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line3}</td></tr>` : ''}
+                        </tbody></table>
+                    </div>
+                </div>
+            `;
+        }
+        tbody.innerHTML = finalHTML;
+    } catch (error) {
+        console.error('Book Label Preview Error: ', error);
+    }
+};
+
+function printPerfectPDF_BookLabel() {
+    document.getElementById('sumteckAlertText').innerText = "PRINT എടുക്കണ്ടവർക്ക് ഇപ്പോൾ വരുന്ന വിൻഡോയിൽ നിങ്ങളുടെ 'PRINTER' സെലക്റ്റ് ചെയ്ത് PRINT എടുക്കാം.ഈ വിൻഡോയിൽ കാണുന്ന അതേ സ്റ്റൈലിൽ pdf വേണമെങ്കിൽ ഇപ്പോൾ വരുന്ന വിൻഡോയിലെ PRINTER തിരഞ്ഞെടുക്കുന്നതിനുള്ള Drop Down ബോക്സിൽ 'Save as PDF' എന്ന് നൽകി Save ചെയ്യുകയുമാവാം.";
+    document.getElementById('modalOverlay').style.display = 'block';
+    const winAlert = document.getElementById('sumteckAlertWindow');
+    winAlert.style.display = 'block';
+
+    let oldOnClick = document.getElementById('sumteckAlertOk').onclick;
+
+    document.getElementById('sumteckAlertOk').onclick = function() {
+        winAlert.style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('sumteckAlertOk').onclick = oldOnClick;
+
+        let originalTitle = document.title;
+        let now = new Date();
+        let dateStr = now.toLocaleDateString('en-GB').replace(/\//g, '-');
+        let timeStr = now.toLocaleTimeString('en-GB').replace(/:/g, '-');
+        document.title = 'Book_Label_Generator_' + dateStr + '_' + timeStr;
+
+        document.body.classList.add('printing-book-label');
+        setTimeout(() => {
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('printing-book-label');
+                document.title = originalTitle;
+            }, 1000);
+        }, 300);
+    };
+}
+
+window.addEventListener('load', function() {
+    if (document.getElementById('bookLabelTableBody')) window.renderBookLabelPreview();
+});
+</script>
 
 <!-- ========================================= -->
 <!-- LOCAL AUTO-BACKUP FOLDER NOT SET - REMINDER MODAL -->
@@ -4624,7 +4944,8 @@ function hideAllPages() {
         'lastAddedOPStockPage', 'lastAddedIPStockPage',
         'preIndentSummaryPage',
         'indentedMedicinesMainPage', // 🌟 പുതിയതായി നിർമ്മിച്ച വിൻഡോ ഇതിൽ ചേർത്തിട്ടുണ്ട് 🌟
-        'smartScannerPage', 'pdfScannerPage', 'moreDetailsPage' // 🌟 Medistock Smart Scanner പേജ് 🌟
+        'smartScannerPage', 'pdfScannerPage', 'moreDetailsPage', // 🌟 Medistock Smart Scanner പേജ് 🌟
+        'bookLabelGeneratorPage' // 🌟 BOOK LABEL GENERATOR പേജ് 🌟
     ];
     
     allPages.forEach(function(pageId) {
@@ -17810,7 +18131,8 @@ window.openSmartPopUp = function() {
         'excelImportPage', 'helpDeskPage', 'indentGenPage', 'ipChargeListPage',
         'mainChargeListPage', 'mainRackDetailsPage',
         'lastAddedOPStockPage', 'lastAddedIPStockPage',
-        'preIndentSummaryPage', 'indentedMedicinesMainPage'
+        'preIndentSummaryPage', 'indentedMedicinesMainPage',
+        'bookLabelGeneratorPage'
     ];
 
     window.__lastActivePageBeforeHelpDesk = window.__lastActivePageBeforeHelpDesk || 'homePage';
@@ -17870,6 +18192,7 @@ window.openSmartPopUp = function() {
                 // തിരികെ വരുമ്പോൾ അതാത് പേജിലെ ടേബിളുകൾ തനിയെ റിഫ്രഷ് ചെയ്യാൻ
                 if (targetId === 'openingStockPage' && typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
                 else if (targetId === 'mainRackDetailsPage' && typeof renderMainRackDetailsTable === 'function') renderMainRackDetailsTable();
+                else if (targetId === 'bookLabelGeneratorPage' && typeof window.renderBookLabelPreview === 'function') window.renderBookLabelPreview();
                 else if (targetId === 'mainChargeListPage' && typeof renderMainChargeListTable === 'function') renderMainChargeListTable();
                 else if (targetId === 'opChargeListPage' && typeof renderOpChargeListTable === 'function') renderOpChargeListTable();
                 else if (targetId === 'ipChargeListPage' && typeof renderIpChargeListTable === 'function') renderIpChargeListTable();
