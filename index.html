@@ -3551,7 +3551,8 @@ window.refreshAllPagesAfterRestore = function() {
 <!-- 🌟 BOOK LABEL GENERATOR WINDOW 🌟 -->
 <!-- ========================================= -->
 <div id="bookLabelGeneratorPage" class="page-container index-page-wrapper full-width-wrapper" style="display: none; padding: 20px;">
-    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 20px; font-size: 35px; text-transform: uppercase;">BOOK LABEL GENERATOR</h1>
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 6px; font-size: 35px; text-transform: uppercase;">BOOK LABEL GENERATOR</h1>
+    <div class="no-print" style="text-align: center; color: red; font-size: 10px; font-weight: bold; margin-bottom: 14px;">കൂടുതൽ അറിയാൻ HAND BOOK നോക്കി മനസിലാക്കുക.HAND BOOK ഹെൽപ്പ് ഡെസ്ക്കിൽ നിന്നും ലഭിക്കും</div>
 
     <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
         <button class="index-btn bg-dark" onclick="goBackFromBookLabelGenerator()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
@@ -3569,7 +3570,9 @@ window.refreshAllPagesAfterRestore = function() {
         <!-- 🌟 3 ഗ്രൂപ്പുകൾ ഉൾക്കൊള്ളുന്ന കറുത്ത കോമൺ ബോക്സ് (ESTIMATED STOCK DAYS ബോക്സിന് സമാനം) 🌟 -->
         <div style="background-color: black; padding: 18px 15px; border-radius: 5px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 14px;">
 
-            <div class="blg-group" data-group="1" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+            <div style="border: 3px solid yellow; border-radius: 8px; padding: 10px 8px 8px 8px;">
+                <div style="text-align: center; color: yellow; font-weight: 900; font-size: 13px; letter-spacing: 1px; margin-bottom: 6px;">LABEL-1</div>
+                <div class="blg-group" data-group="1" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
                 <div style="position: relative; width: 100%;">
                     <input type="text" id="blgTitlePrefix1" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
                     <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix1').value=''; window.renderBookLabelPreview();"></i>
@@ -3587,9 +3590,12 @@ window.refreshAllPagesAfterRestore = function() {
                 <input type="text" id="blgFromDate1" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <input type="text" id="blgToDate1" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <select id="blgDatesFontSize1" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px; cursor: pointer;" onchange="window.renderBookLabelPreview()"><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option></select>
+                </div>
             </div>
 
-            <div class="blg-group" data-group="2" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+            <div style="border: 3px solid yellow; border-radius: 8px; padding: 10px 8px 8px 8px;">
+                <div style="text-align: center; color: yellow; font-weight: 900; font-size: 13px; letter-spacing: 1px; margin-bottom: 6px;">LABEL-2</div>
+                <div class="blg-group" data-group="2" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
                 <div style="position: relative; width: 100%;">
                     <input type="text" id="blgTitlePrefix2" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
                     <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix2').value=''; window.renderBookLabelPreview();"></i>
@@ -3607,9 +3613,12 @@ window.refreshAllPagesAfterRestore = function() {
                 <input type="text" id="blgFromDate2" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <input type="text" id="blgToDate2" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <select id="blgDatesFontSize2" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px; cursor: pointer;" onchange="window.renderBookLabelPreview()"><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option></select>
+                </div>
             </div>
 
-            <div class="blg-group" data-group="3" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+            <div style="border: 3px solid yellow; border-radius: 8px; padding: 10px 8px 8px 8px;">
+                <div style="text-align: center; color: yellow; font-weight: 900; font-size: 13px; letter-spacing: 1px; margin-bottom: 6px;">LABEL-3</div>
+                <div class="blg-group" data-group="3" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
                 <div style="position: relative; width: 100%;">
                     <input type="text" id="blgTitlePrefix3" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
                     <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix3').value=''; window.renderBookLabelPreview();"></i>
@@ -3627,6 +3636,7 @@ window.refreshAllPagesAfterRestore = function() {
                 <input type="text" id="blgFromDate3" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <input type="text" id="blgToDate3" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
                 <select id="blgDatesFontSize3" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px; cursor: pointer;" onchange="window.renderBookLabelPreview()"><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option></select>
+                </div>
             </div>
         </div>
 
@@ -3692,7 +3702,7 @@ window.refreshAllPagesAfterRestore = function() {
 
             <div style="min-width: 110px; border: 1px solid #16a085; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #e8f8f5;">
                 <span style="font-size: 10px; font-weight: bold; color: #16a085; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Line Spacing Selection</span>
-                <select id="blgLineSpacing" title="Line Spacing" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="window.renderBookLabelPreview()"><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option></select>
+                <select id="blgLineSpacing" title="Line Spacing" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px; text-align: center; text-align-last: center;" onchange="window.renderBookLabelPreview()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7" selected>7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option></select>
             </div>
 
             <div style="flex: 1; min-width: 120px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
@@ -3776,7 +3786,7 @@ window.refreshBookLabelGenerator = function() {
     }
     let instFont = document.getElementById('blgInstFontSize'); if (instFont) instFont.value = '12';
 
-    let lineSpacing = document.getElementById('blgLineSpacing'); if (lineSpacing) lineSpacing.value = '8';
+    let lineSpacing = document.getElementById('blgLineSpacing'); if (lineSpacing) lineSpacing.value = '7';
 
     window.renderBookLabelPreview();
 };
@@ -3873,8 +3883,8 @@ window.renderBookLabelPreview = function() {
         let styleSelect = document.getElementById('blgBorderStyleSelect');
         let chosenStyle = styleSelect ? styleSelect.value : 'style12';
 
-        let lineSpacing = parseInt(getVal('blgLineSpacing') || '8', 10);
-        if (isNaN(lineSpacing)) lineSpacing = 8;
+        let lineSpacing = parseInt(getVal('blgLineSpacing') || '7', 10);
+        if (isNaN(lineSpacing)) lineSpacing = 7;
 
         let fontSelect = document.getElementById('blgFontSelect');
         let fFamily = "'Noto Serif Malayalam', serif";
@@ -3898,9 +3908,20 @@ window.renderBookLabelPreview = function() {
         if (!tbody) return;
 
         let tableStyle = '';
-        if (chosenStyle === 'style11') { tableStyle = `border-collapse: collapse; border: 2px solid ${cColor}; background: white; margin: 0 auto; width: max-content; box-shadow: 0 0 0 2px white, 0 0 0 6px ${cColor}, 0 0 0 8px white, 0 0 0 10px ${cColor};`; }
-        else if (chosenStyle === 'style12') { tableStyle = `border-collapse: collapse; border: 1px solid ${cColor}; background: white; margin: 0 auto; width: max-content; box-shadow: 0 0 0 2px white, 0 0 0 5px ${cColor}, 0 0 0 7px white, 0 0 0 8px ${cColor};`; }
-        else { tableStyle = `border-collapse: collapse; margin: 0 auto; width: max-content; border: 2px solid ${cColor};`; }
+        let baseStyle = `border-collapse: collapse; background: white; margin: 0 auto; width: max-content;`;
+        if (chosenStyle === 'style1') { tableStyle = `${baseStyle} border: 3px solid ${cColor};`; }
+        else if (chosenStyle === 'style2') { tableStyle = `${baseStyle} border: 5px double ${cColor};`; }
+        else if (chosenStyle === 'style3') { tableStyle = `${baseStyle} border: 3px dashed ${cColor};`; }
+        else if (chosenStyle === 'style4') { tableStyle = `${baseStyle} border: 3px dotted ${cColor};`; }
+        else if (chosenStyle === 'style5') { tableStyle = `${baseStyle} border: 3px solid ${cColor}; border-radius: 18px;`; }
+        else if (chosenStyle === 'style6') { tableStyle = `${baseStyle} border: 1px solid ${cColor}; border-left: 10px solid ${cColor};`; }
+        else if (chosenStyle === 'style7') { tableStyle = `${baseStyle} border: 2px solid ${cColor}; box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.35);`; }
+        else if (chosenStyle === 'style8') { tableStyle = `${baseStyle} border: 5px inset ${cColor};`; }
+        else if (chosenStyle === 'style9') { tableStyle = `${baseStyle} border: 5px outset ${cColor};`; }
+        else if (chosenStyle === 'style10') { tableStyle = `${baseStyle} border: 3px solid ${cColor}; box-shadow: 0 0 0 3px white, 0 0 0 6px ${cColor};`; }
+        else if (chosenStyle === 'style11') { tableStyle = `${baseStyle} border: 2px solid ${cColor}; box-shadow: 0 0 0 2px white, 0 0 0 6px ${cColor}, 0 0 0 8px white, 0 0 0 10px ${cColor};`; }
+        else if (chosenStyle === 'style12') { tableStyle = `${baseStyle} border: 1px solid ${cColor}; box-shadow: 0 0 0 2px white, 0 0 0 5px ${cColor}, 0 0 0 7px white, 0 0 0 8px ${cColor};`; }
+        else { tableStyle = `${baseStyle} border: 2px solid ${cColor};`; }
 
         let finalHTML = '';
         let labelCount = 0;
