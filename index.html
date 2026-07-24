@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@100..800&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@300;400;500;700;800&family=Noto+Serif+Malayalam:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@300;400;500;700;800&family=Noto+Serif+Malayalam:wght@900&family=Baloo+Chettan+2:wght@400;500;600;700;800&family=Chilanka&display=swap" rel="stylesheet">
     <style>
         .btn-3d {
     background: #f3f710; color: rgb(14, 14, 14); font-weight: bold; border: none; border-radius: 8px;
@@ -3656,8 +3656,8 @@ window.refreshAllPagesAfterRestore = function() {
                     <option value="'Anek Malayalam', sans-serif" data-weight="500">Anek Malayalam Medium</option>
                     <option value="'Anek Malayalam', sans-serif" data-weight="700">Anek Malayalam Bold</option>
                     <option value="'Anek Malayalam', sans-serif" data-weight="800">Anek Malayalam Extra Bold</option>
-                    <option value="'Mlu-Payippad', sans-serif" data-weight="normal">Mlu-Payippad</option>
-                    <option value="'Mlu-Mamatha', sans-serif" data-weight="normal">Mlu-Mamatha</option>
+                    <option value="'Baloo Chettan 2', sans-serif" data-weight="700">Baloo Chettan 2 Bold</option>
+                    <option value="'Chilanka', cursive" data-weight="400">Chilanka Handwriting</option>
                     <option value="'Noto Serif Malayalam', serif" data-weight="900" selected>Noto Serif Malayalam Black</option>
                 </select>
             </div>
@@ -3665,12 +3665,12 @@ window.refreshAllPagesAfterRestore = function() {
 
         <div style="display: flex; gap: 8px; align-items: stretch; justify-content: space-between; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px dashed #3498db; flex-wrap: wrap;">
 
-            <div style="border: 1px solid #e74c3c; border-radius: 6px; padding: 5px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fdedec;">
+            <div style="border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fdedec;">
                 <span style="font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Select All</span>
                 <input type="checkbox" id="masterBookLabelCheckbox" checked style="margin:0; width:30px; height:30px; cursor: pointer; accent-color: #27ae60;" onchange="window.toggleAllBookLabelCheckboxes(this)">
             </div>
 
-            <div style="border: 1px solid #8e44ad; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf4ff;">
+            <div style="border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf4ff;">
                 <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-bottom: 4px; text-transform: uppercase; text-align: center;">DISPLAY COLUMNS</span>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold; color: black;">
                     <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="blgAhwcEng" style="margin:0; width:30px; height:30px; cursor: pointer;" onchange="window.handleBookLabelAhwcExclusive('blgAhwcEng')"> AHWC(Eng)</label>
@@ -3678,7 +3678,7 @@ window.refreshAllPagesAfterRestore = function() {
                 </div>
             </div>
 
-            <div style="border: 1px solid #27ae60; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #f4fcf7;">
+            <div style="border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #f4fcf7;">
                 <span style="font-size: 11px; font-weight: bold; color: #27ae60; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Font Color</span>
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold;">
                     <label style="cursor: pointer; color: black; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgFontColor" value="black" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blk</label>
@@ -3689,7 +3689,7 @@ window.refreshAllPagesAfterRestore = function() {
                 </div>
             </div>
 
-            <div style="border: 1px solid #d35400; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf2e9;">
+            <div style="border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf2e9;">
                 <span style="font-size: 11px; font-weight: bold; color: #d35400; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Column Color</span>
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold;">
                     <label style="cursor: pointer; color: black; display: flex; align-items: center; gap: 3px;"><input type="radio" name="blgBorderColor" value="black" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> Blk</label>
@@ -3700,12 +3700,12 @@ window.refreshAllPagesAfterRestore = function() {
                 </div>
             </div>
 
-            <div style="min-width: 110px; border: 1px solid #16a085; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #e8f8f5;">
+            <div style="min-width: 110px; border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #e8f8f5;">
                 <span style="font-size: 10px; font-weight: bold; color: #16a085; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Line Spacing Selection</span>
                 <select id="blgLineSpacing" title="Line Spacing" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px; text-align: center; text-align-last: center;" onchange="window.renderBookLabelPreview()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7" selected>7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option></select>
             </div>
 
-            <div style="flex: 1; min-width: 120px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
+            <div style="flex: 1; min-width: 120px; border: 2px solid #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
                 <span style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Border Style</span>
                 <select id="blgBorderStyleSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="window.renderBookLabelPreview()">
                     <option value="style1">Style 1: Simple Solid</option>
