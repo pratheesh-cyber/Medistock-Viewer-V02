@@ -3557,49 +3557,112 @@ window.refreshAllPagesAfterRestore = function() {
         <button class="index-btn bg-green" onclick="showMainStockIndex()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-list"></i> <b>GO TO MAIN STOCK INDEX</b></button>
         <button class="index-btn bg-blue-light" onclick="openMainStockDetails()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-pills"></i> <b>GO TO MAIN STOCK</b></button>
         <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+        <button class="index-btn" onclick="window.refreshBookLabelGenerator()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px; background: #e67e22; color: white;"><i class="fa-solid fa-rotate-right"></i> <b>REFRESH</b></button>
     </div>
 
     <div class="soothing-box box-blue no-print" style="margin-bottom: 20px; padding: 15px;">
         <h3 class="box-title" style="text-transform: uppercase; margin-bottom: 12px;">LABEL FORMAT SETTINGS</h3>
 
-        <div style="display:flex; flex-direction:column; gap:8px; background:#fff; padding:10px; border-radius:8px; border:1px dashed #3498db; margin-bottom:15px;">
+        <!-- 🌟 3 ഗ്രൂപ്പുകൾ ഉൾക്കൊള്ളുന്ന കറുത്ത കോമൺ ബോക്സ് (ESTIMATED STOCK DAYS ബോക്സിന് സമാനം) 🌟 -->
+        <div style="background-color: black; padding: 18px 15px; border-radius: 5px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 14px;">
 
-            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                <input type="text" id="blgTitlePrefix" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="flex:1; min-width:220px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
-                <input type="number" id="blgTitlePrefixFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
-                <input type="checkbox" id="blgShowBookNo" checked title="Show BOOK No. on label" style="width:26px; height:26px; accent-color:#00bcd4; cursor:pointer;" onchange="window.renderBookLabelPreview()">
-                <span style="background:#fff59d; border:1px solid #333; padding:8px 10px; font-weight:bold; border-radius:4px;">BOOK No:</span>
-                <input type="text" id="blgBookNo" class="index-input" placeholder="eg:10" style="width:80px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
-                <input type="number" id="blgBookNoFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            <div class="blg-group" data-group="1" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgTitlePrefix1" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix1').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgTitlePrefixFontSize1" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <div style="height: 38px; background: yellow; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; border-radius: 2px;">BOOK No:</div>
+                <input type="text" id="blgBookNo1" class="index-input" placeholder="eg:10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgBookNoFontSize1" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgRegisterName1" class="index-input" placeholder="NAME OF REGISTER" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgRegisterName1').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgRegisterNameFontSize1" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <input type="text" id="blgFromDate1" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="text" id="blgToDate1" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="number" id="blgDatesFontSize1" value="13" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
             </div>
 
-            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                <input type="text" id="blgRegisterName" class="index-input" placeholder="NAME OF REGISTER" style="flex:1; min-width:220px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" oninput="window.renderBookLabelPreview()">
-                <input type="number" id="blgRegisterNameFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
-                <input type="date" id="blgFromDate" class="index-input" title="from date" style="width:150px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" onchange="window.renderBookLabelPreview()">
-                <input type="date" id="blgToDate" class="index-input" title="to date" style="width:150px; height:38px; background:#fff59d; font-weight:bold; text-align:center; border:1px solid #333;" onchange="window.renderBookLabelPreview()">
-                <input type="number" id="blgDatesFontSize" value="36" min="8" max="120" title="Font Size" style="width:55px; height:38px; background:#27ae60; color:#fff; font-weight:bold; text-align:center; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            <div class="blg-group" data-group="2" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgTitlePrefix2" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix2').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgTitlePrefixFontSize2" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <div style="height: 38px; background: yellow; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; border-radius: 2px;">BOOK No:</div>
+                <input type="text" id="blgBookNo2" class="index-input" placeholder="eg:10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgBookNoFontSize2" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgRegisterName2" class="index-input" placeholder="NAME OF REGISTER" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgRegisterName2').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgRegisterNameFontSize2" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <input type="text" id="blgFromDate2" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="text" id="blgToDate2" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="number" id="blgDatesFontSize2" value="13" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
             </div>
 
-            <div style="display:flex; gap:6px; align-items:center; justify-content:flex-end; flex-wrap:wrap;">
-                <label style="font-size:12px; font-weight:bold; color:#2c3e50;">No. of Labels:</label>
-                <input type="number" id="blgCopies" value="3" min="1" max="30" style="width:60px; height:32px; text-align:center; font-weight:bold; border:1px solid #333; border-radius:4px;" onchange="window.renderBookLabelPreview()">
+            <div class="blg-group" data-group="3" style="display: grid; grid-template-columns: 1fr 65px minmax(110px,160px) minmax(110px,160px) 65px; gap: 6px; align-items: center;">
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgTitlePrefix3" class="index-input" placeholder="Title Prefix (Optional)  eg: REGISTER OF" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgTitlePrefix3').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgTitlePrefixFontSize3" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <div style="height: 38px; background: yellow; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; border-radius: 2px;">BOOK No:</div>
+                <input type="text" id="blgBookNo3" class="index-input" placeholder="eg:10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                <input type="number" id="blgBookNoFontSize3" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="blgRegisterName3" class="index-input" placeholder="NAME OF REGISTER" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.renderBookLabelPreview()">
+                    <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgRegisterName3').value=''; window.renderBookLabelPreview();"></i>
+                </div>
+                <input type="number" id="blgRegisterNameFontSize3" value="20" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+                <input type="text" id="blgFromDate3" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="text" id="blgToDate3" class="index-input blg-date-input" placeholder="DD/MM/YYYY" maxlength="10" style="height: 38px; width: 100%; box-sizing: border-box; background: yellow; font-weight: bold; text-align: center; border: 1px solid #333; color: black;" oninput="window.formatBookLabelDateInput(this); window.renderBookLabelPreview();">
+                <input type="number" id="blgDatesFontSize3" value="13" min="8" max="120" title="Font Size" style="height: 38px; width: 100%; box-sizing: border-box; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
             </div>
 
+        </div>
+
+        <!-- 🌟 NAME OF THE INSTITUTION + Select Font നിര 🌟 -->
+        <div style="display:flex; gap:6px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px dashed #3498db; margin-bottom:15px; flex-wrap: wrap;">
+            <div style="position: relative; flex: 1; min-width: 220px;">
+                <input type="text" id="blgInstName" class="index-input" placeholder="NAME OF THE INSTITUTION" style="height: 38px; width: 100%; box-sizing: border-box; padding-right: 30px; font-weight: bold; text-align: center; border: 1px solid #333;" oninput="window.blgInstitutionManuallyCleared = (this.value.trim()===''); window.renderBookLabelPreview();">
+                <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 8px; top: 11px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('blgInstName').value=''; window.blgInstitutionManuallyCleared = true; window.renderBookLabelPreview();"></i>
+            </div>
+            <input type="number" id="blgInstFontSize" value="12" min="8" max="120" title="Font Size" style="width: 65px; height: 38px; background: #27ae60; color: #fff; font-weight: bold; text-align: center; border: 1px solid #333; border-radius: 4px;" onchange="window.renderBookLabelPreview()">
+
+            <div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
+                <label style="font-size: 11px; font-weight: bold; color: #2c3e50;">Select Font</label>
+                <select id="blgFontSelect" class="index-input" style="height: 35px; width: 210px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.renderBookLabelPreview()">
+                    <option value="'Anek Malayalam', sans-serif" data-weight="300">Anek Malayalam Light</option>
+                    <option value="'Anek Malayalam', sans-serif" data-weight="400">Anek Malayalam Regular</option>
+                    <option value="'Anek Malayalam', sans-serif" data-weight="500">Anek Malayalam Medium</option>
+                    <option value="'Anek Malayalam', sans-serif" data-weight="700">Anek Malayalam Bold</option>
+                    <option value="'Anek Malayalam', sans-serif" data-weight="800">Anek Malayalam Extra Bold</option>
+                    <option value="'Mlu-Payippad', sans-serif" data-weight="normal">Mlu-Payippad</option>
+                    <option value="'Mlu-Mamatha', sans-serif" data-weight="normal">Mlu-Mamatha</option>
+                    <option value="'Noto Serif Malayalam', serif" data-weight="900" selected>Noto Serif Malayalam Black</option>
+                </select>
+            </div>
         </div>
 
         <div style="display: flex; gap: 8px; align-items: stretch; justify-content: space-between; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px dashed #3498db; flex-wrap: wrap;">
 
             <div style="border: 1px solid #e74c3c; border-radius: 6px; padding: 5px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fdedec;">
                 <span style="font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Select All</span>
-                <input type="checkbox" id="masterBookLabelCheckbox" checked style="margin:0; width:15px; height:15px; cursor: pointer; accent-color: #27ae60;" onchange="window.toggleAllBookLabelCheckboxes(this)">
+                <input type="checkbox" id="masterBookLabelCheckbox" checked style="margin:0; width:30px; height:30px; cursor: pointer; accent-color: #27ae60;" onchange="window.toggleAllBookLabelCheckboxes(this)">
             </div>
 
             <div style="border: 1px solid #8e44ad; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf4ff;">
                 <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-bottom: 4px; text-transform: uppercase; text-align: center;">DISPLAY COLUMNS</span>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold; color: black;">
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="radio" name="blgCategory" id="blgCategoryInstitution" value="INSTITUTION" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> INSTITUTION</label>
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="radio" name="blgCategory" id="blgCategoryAhwc" value="AHWC" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderBookLabelPreview()"> AHWC</label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="blgAhwcEng" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.handleBookLabelAhwcExclusive('blgAhwcEng')"> AHWC(Eng)</label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="blgAhwcMal" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.handleBookLabelAhwcExclusive('blgAhwcMal')"> AHWC(mal)</label>
                 </div>
             </div>
 
@@ -3625,7 +3688,7 @@ window.refreshAllPagesAfterRestore = function() {
                 </div>
             </div>
 
-            <div style="flex: 1; min-width: 150px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
+            <div style="flex: 1; min-width: 120px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
                 <span style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Border Style</span>
                 <select id="blgBorderStyleSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="window.renderBookLabelPreview()">
                     <option value="style1">Style 1: Simple Solid</option>
@@ -3656,13 +3719,23 @@ window.refreshAllPagesAfterRestore = function() {
 </div>
 <script>
 // ========================================================
-// 🌟 BOOK LABEL GENERATOR JAVASCRIPT FUNCTIONS 🌟
+// 🌟 BOOK LABEL GENERATOR JAVASCRIPT FUNCTIONS (v2) 🌟
 // ========================================================
+
+window.blgInstitutionManuallyCleared = false;
 
 window.showBookLabelGeneratorPage = function() {
     if (typeof hideAllPages === 'function') hideAllPages();
     let pageEl = document.getElementById('bookLabelGeneratorPage');
     if (pageEl) pageEl.style.display = 'block';
+
+    // NAME OF THE INSTITUTION ബോക്സ് സ്വയമേ ഫിൽ ചെയ്യുന്നു (മുൻപ് ക്ലിയർ ചെയ്തിട്ടില്ലെങ്കിൽ മാത്രം)
+    let instBox = document.getElementById('blgInstName');
+    if (instBox && !window.blgInstitutionManuallyCleared) {
+        let homeInst = document.getElementById('inp_inst');
+        instBox.value = homeInst ? homeInst.value : '';
+    }
+
     window.renderBookLabelPreview();
     window.scrollTo(0, 0);
 };
@@ -3672,6 +3745,53 @@ window.goBackFromBookLabelGenerator = function() {
     let pageEl = document.getElementById('moreDetailsPage');
     if (pageEl) pageEl.style.display = 'block';
     window.scrollTo(0, 0);
+};
+
+// 🌟 REFRESH ബട്ടൺ: ഫോണ്ട് ബോക്സ് ഒഴികെയുള്ള എല്ലാ ഇൻപുട്ട് ബോക്സുകളും ക്ലിയർ ചെയ്യുന്നു, ഫോണ്ട് സൈസ് ഡിഫോൾട്ടിലേക്ക് 🌟
+window.refreshBookLabelGenerator = function() {
+    [1, 2, 3].forEach(function(g) {
+        let ids = ['blgTitlePrefix' + g, 'blgBookNo' + g, 'blgRegisterName' + g, 'blgFromDate' + g, 'blgToDate' + g];
+        ids.forEach(function(id) { let el = document.getElementById(id); if (el) el.value = ''; });
+
+        let f1 = document.getElementById('blgTitlePrefixFontSize' + g); if (f1) f1.value = 20;
+        let f2 = document.getElementById('blgBookNoFontSize' + g); if (f2) f2.value = 20;
+        let f3 = document.getElementById('blgRegisterNameFontSize' + g); if (f3) f3.value = 20;
+        let f4 = document.getElementById('blgDatesFontSize' + g); if (f4) f4.value = 13;
+    });
+
+    let ahwcEng = document.getElementById('blgAhwcEng'); if (ahwcEng) ahwcEng.checked = false;
+    let ahwcMal = document.getElementById('blgAhwcMal'); if (ahwcMal) ahwcMal.checked = false;
+
+    window.blgInstitutionManuallyCleared = false;
+    let instBox = document.getElementById('blgInstName');
+    if (instBox) {
+        let homeInst = document.getElementById('inp_inst');
+        instBox.value = homeInst ? homeInst.value : '';
+    }
+    let instFont = document.getElementById('blgInstFontSize'); if (instFont) instFont.value = 12;
+
+    window.renderBookLabelPreview();
+};
+
+// 🌟 DD/MM/YYYY ഫോർമാറ്റിൽ സ്ലാഷ് സ്വയമേ ചേർക്കാൻ 🌟
+window.formatBookLabelDateInput = function(input) {
+    let digits = input.value.replace(/\D/g, '').slice(0, 8);
+    let formatted = digits;
+    if (digits.length > 4) {
+        formatted = digits.slice(0, 2) + '/' + digits.slice(2, 4) + '/' + digits.slice(4);
+    } else if (digits.length > 2) {
+        formatted = digits.slice(0, 2) + '/' + digits.slice(2);
+    }
+    input.value = formatted;
+};
+
+// 🌟 AHWC(Eng) / AHWC(mal) - ഒന്ന് മാത്രം സെലക്റ്റ് ചെയ്യാൻ (അല്ലെങ്കിൽ ഒന്നും വേണ്ട) 🌟
+window.handleBookLabelAhwcExclusive = function(changedId) {
+    let eng = document.getElementById('blgAhwcEng');
+    let mal = document.getElementById('blgAhwcMal');
+    if (changedId === 'blgAhwcEng' && eng && eng.checked && mal) mal.checked = false;
+    if (changedId === 'blgAhwcMal' && mal && mal.checked && eng) eng.checked = false;
+    window.renderBookLabelPreview();
 };
 
 let isBookLabelEditMode = false;
@@ -3733,22 +3853,8 @@ window.toggleBookLabelRowVisibility = function(cb) {
 // 🌟 ലേബൽ പ്രിവ്യൂ / പ്രിന്റ് ഏരിയ വരയ്ക്കുന്ന പ്രധാന ഫംഗ്ഷൻ 🌟
 window.renderBookLabelPreview = function() {
     try {
-        let getVal = (id) => { let el = document.getElementById(id); return el ? el.value : ''; };
+        let getVal = (id) => { let el = document.getElementById(id); return el ? el.value.trim() : ''; };
         let getChecked = (id) => { let el = document.getElementById(id); return el ? el.checked : false; };
-
-        let prefix = getVal('blgTitlePrefix').trim();
-        let prefixSize = getVal('blgTitlePrefixFontSize') || '36';
-        let showBookNo = getChecked('blgShowBookNo');
-        let bookNo = getVal('blgBookNo').trim();
-        let bookNoSize = getVal('blgBookNoFontSize') || '36';
-        let regName = getVal('blgRegisterName').trim();
-        let regNameSize = getVal('blgRegisterNameFontSize') || '36';
-        let fromDate = getVal('blgFromDate');
-        let toDate = getVal('blgToDate');
-        let dateSize = getVal('blgDatesFontSize') || '36';
-
-        let copies = parseInt(getVal('blgCopies') || '3', 10);
-        if (isNaN(copies) || copies < 1) copies = 1;
 
         let fColorInput = document.querySelector('input[name="blgFontColor"]:checked');
         let fColor = fColorInput ? fColorInput.value : 'black';
@@ -3759,15 +3865,26 @@ window.renderBookLabelPreview = function() {
         let styleSelect = document.getElementById('blgBorderStyleSelect');
         let chosenStyle = styleSelect ? styleSelect.value : 'style12';
 
+        let fontSelect = document.getElementById('blgFontSelect');
+        let fFamily = "'Noto Serif Malayalam', serif";
+        let fWeight = "900";
+        if (fontSelect && fontSelect.selectedIndex >= 0) {
+            fFamily = fontSelect.value;
+            fWeight = fontSelect.options[fontSelect.selectedIndex].getAttribute('data-weight') || "900";
+        }
+
+        // --- മൂന്ന് ലേബലിലും കോമൺ ആയി വരുന്ന ഭാഗങ്ങൾ ---
+        let instName = getVal('blgInstName');
+        let instFontSize = getVal('blgInstFontSize') || '12';
+
+        let ahwcEng = getChecked('blgAhwcEng');
+        let ahwcMal = getChecked('blgAhwcMal');
+        let ahwcText = '';
+        if (ahwcEng) ahwcText = 'AYUSH HEALTH & WELNESS CENTER';
+        else if (ahwcMal) ahwcText = 'ആയുഷ് ഹെൽത്ത് & വെൽനസ് സെന്റർ';
+
         let tbody = document.getElementById('bookLabelTableBody');
         if (!tbody) return;
-
-        let line1 = prefix || 'REGISTER OF';
-        if (showBookNo) line1 += '&nbsp;&nbsp;&nbsp;BOOK No: ' + (bookNo || '____');
-        let line2 = regName || 'NAME OF REGISTER';
-        let line3 = (fromDate || toDate) ? ('From: ' + (fromDate || '____') + '&nbsp;&nbsp;&nbsp;To: ' + (toDate || '____')) : '';
-        // ഏറ്റവും വലിയ ഫോണ്ട് സൈസ് line3-ന് ഉപയോഗിക്കുന്നു (from/to date വരി)
-        void dateSize;
 
         let tableStyle = '';
         if (chosenStyle === 'style11') { tableStyle = `border-collapse: collapse; border: 2px solid ${cColor}; background: white; margin: 0 auto; width: max-content; box-shadow: 0 0 0 2px white, 0 0 0 6px ${cColor}, 0 0 0 8px white, 0 0 0 10px ${cColor};`; }
@@ -3775,26 +3892,69 @@ window.renderBookLabelPreview = function() {
         else { tableStyle = `border-collapse: collapse; margin: 0 auto; width: max-content; border: 2px solid ${cColor};`; }
 
         let finalHTML = '';
-        for (let i = 0; i < copies; i++) {
-            let isLast = (i === copies - 1);
+        let labelCount = 0;
+
+        [1, 2, 3].forEach(function(g) {
+            let titlePrefix = getVal('blgTitlePrefix' + g);
+            let prefixSize = getVal('blgTitlePrefixFontSize' + g) || '20';
+            let bookNo = getVal('blgBookNo' + g);
+            let bookNoSize = getVal('blgBookNoFontSize' + g) || '20';
+            let regName = getVal('blgRegisterName' + g);
+            let regNameSize = getVal('blgRegisterNameFontSize' + g) || '20';
+            let fromDate = getVal('blgFromDate' + g);
+            let toDate = getVal('blgToDate' + g);
+            let dateSize = getVal('blgDatesFontSize' + g) || '13';
+
+            let hasData = titlePrefix || bookNo || regName || fromDate || toDate;
+            if (!hasData) return; // ഈ ഗ്രൂപ്പിൽ ഡാറ്റ ഇല്ലെങ്കിൽ ലേബൽ ഇല്ല
+
+            labelCount++;
+
+            let rowsHTML = '';
+            if (instName) {
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${instFontSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap;">${instName}</div>`;
+            }
+            if (ahwcText) {
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${instFontSize}px; font-weight: 700; color: ${fColor}; white-space: nowrap;">${ahwcText}</div>`;
+            }
+            if (titlePrefix) {
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${prefixSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap;">${titlePrefix}</div>`;
+            }
+            if (regName) {
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${regNameSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap;">${regName}</div>`;
+            }
+            if (bookNo) {
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${bookNoSize}px; font-weight: 700; color: ${fColor}; white-space: nowrap;">BOOK No: ${bookNo}</div>`;
+            }
+            if (fromDate || toDate) {
+                let fromTxt = fromDate || '......./......./...........';
+                let toTxt = toDate || '......./......./...........';
+                rowsHTML += `<div class="book-label-editable" style="padding: 6px 16px; font-size: ${dateSize}px; font-weight: 700; color: ${fColor}; white-space: nowrap;">FROM ${fromTxt} TO ${toTxt}</div>`;
+            }
+
+            let isLast = (g === 3);
             let lineCSS = '1px dotted rgba(0,0,0,0.20)';
+
             finalHTML += `
                 <div class="book-label-pdf-item" style="position: relative; margin: 0 !important; padding: 0 !important; width: 100%; clear: both; page-break-inside: avoid; break-inside: avoid; display: block; text-align: center; box-sizing: border-box;
                             border-top: ${lineCSS} !important; border-bottom: ${isLast ? lineCSS + ' !important' : 'none !important'};">
                     <div class="no-print" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index: 10;">
-                        <input type="checkbox" class="book-label-row-checkbox" checked style="width: 20px; height: 20px; cursor: pointer; accent-color: #27ae60;" onchange="window.checkMasterBookLabelStatus(this)">
+                        <input type="checkbox" class="book-label-row-checkbox" checked style="width: 30px; height: 30px; cursor: pointer; accent-color: #27ae60;" onchange="window.checkMasterBookLabelStatus(this)">
                     </div>
                     <div class="book-label-inner-content" style="display: inline-block; box-sizing: border-box; padding: 0.5cm; vertical-align: top; border-left: ${lineCSS} !important; border-right: ${lineCSS} !important; background: white;">
-                        <table style="${tableStyle}"><tbody>
-                            <tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${prefixSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line1}</td></tr>
-                            <tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${regNameSize}px; font-weight: 900; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line2}</td></tr>
-                            ${line3 ? `<tr style="background-color: white;"><td class="book-label-editable" style="border: 1px solid ${cColor}; padding: 8px 16px; text-align: center; font-size: ${bookNoSize}px; font-weight: 700; color: ${fColor}; white-space: nowrap; font-family: 'Noto Serif Malayalam', serif;">${line3}</td></tr>` : ''}
-                        </tbody></table>
+                        <div style="${tableStyle} display: inline-block; font-family: ${fFamily}; font-weight: ${fWeight};">
+                            ${rowsHTML}
+                        </div>
                     </div>
                 </div>
             `;
+        });
+
+        if (labelCount === 0) {
+            tbody.innerHTML = '';
+        } else {
+            tbody.innerHTML = finalHTML;
         }
-        tbody.innerHTML = finalHTML;
     } catch (error) {
         console.error('Book Label Preview Error: ', error);
     }
