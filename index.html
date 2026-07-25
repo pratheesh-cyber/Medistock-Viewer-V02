@@ -781,27 +781,22 @@
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
             <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
-~Medistock Viewer  is  an  independently  developed  Medicine  Management  Software  and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
+Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
-            <div id="g_id_onload"
-     data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
-
-<div style="display: flex; justify-content: center; width: 100%; margin-bottom: 20px;">
-    <div class="g_id_signin" 
-         data-type="standard"
-         data-shape="rectangular"
-         data-theme="filled_blue"
-         data-text="signin_with"
-         data-size="large"
-         data-logo_alignment="left"
-         data-width="320">
-    </div>
-</div>
+            <!-- 🌟 പുതിയത് (EXPERT ADDITION): മുൻപ് ഇവിടെ രണ്ട് വെവ്വേറെ ബട്ടണുകൾ ഉണ്ടായിരുന്നു —
+                 "Sign in with Google" (ആളാരാണെന്ന് മാത്രം അറിയാൻ) എന്നും, "Google Drive Backup 
+                 ബന്ധിപ്പിക്കുക" (Drive access-ന്) എന്നും. രണ്ടാമത്തേത് ഒറ്റയ്ക്ക് തന്നെ Login 
+                 + Drive Access രണ്ടും (userinfo API വഴി email/name ഉൾപ്പെടെ) നൽകുന്നതിനാൽ, 
+                 ആദ്യത്തെ ബട്ടൺ ഒഴിവാക്കി, ഇപ്പോൾ ഒരൊറ്റ ബട്ടൺ മാത്രമാക്കിയിരിക്കുന്നു. -->
+            <div style="margin-top: 4px; margin-bottom: 4px;">
+                <button id="medistockConnectDriveBtn" type="button" onclick="medistockConnectDriveManual()"
+                    style="width:320px; max-width:100%; background:#2980b9; color:white; border:none; padding:14px 16px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+                    <i class="fa-brands fa-google"></i> Google ഉപയോഗിച്ച് Sign In ചെയ്യുക
+                </button>
+                <div id="medistockConnectDriveStatusText" style="font-size:12px; color:#7f8c8d; margin-top:6px; font-weight:bold;">
+                    ☁️ Login + Google Drive Backup ഒരുമിച്ച് സജീവമാക്കാൻ ഈ ബട്ടൺ അമർത്തുക
+                </div>
+            </div>
             
             <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
                 <a href="https://drive.google.com/file/d/1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX/view?usp=sharing" target="_blank" style="color: #2980b9; text-decoration: none; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.color='#1abc9c'" onmouseout="this.style.color='#2980b9'">
@@ -1178,8 +1173,8 @@ window.onload = function() {
                     window.medistockEnsureSyncStatusBadge();
                 }
                 // 🌟 പുതിയത്: Drive access ലഭിച്ചു കഴിഞ്ഞാൽ, "Connect Drive" ഫോൾബാക്ക് ബട്ടൺ ഉടനെ മറയ്ക്കുന്നു
-                if (typeof window.medistockEnsureConnectDriveButton === 'function') {
-                    window.medistockEnsureConnectDriveButton();
+                if (typeof window.medistockRefreshConnectDriveUI === 'function') {
+                    window.medistockRefreshConnectDriveUI();
                 }
 
                 // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): 
@@ -19884,42 +19879,62 @@ window.clearLocalDraft = function() {
 </script>
 
 <!-- ================================================================================= -->
-<!-- 🌟 EXPERT ADDITION: ഉറപ്പായും Drive-ലേക്ക് കണക്ട് ചെയ്യാനുള്ള MANUAL FALLBACK ബട്ടൺ 🌟 -->
-<!-- മുകളിലെ ഓട്ടോ-ട്രിഗർ ബ്രൗസർ പോപ്പപ്പ്-ബ്ലോക്കർ കാരണം ചിലപ്പോൾ പ്രവർത്തിക്കാതെ വന്നേക്കാം. -->
-<!-- അതിനാൽ, accessToken ഇല്ലാത്തപ്പോൾ എപ്പോഴും ഒരു ഉറപ്പുള്ള മാനുവൽ ബട്ടൺ കാണിക്കുന്നു. -->
+<!-- 🌟 EXPERT ADDITION: Welcome സ്ക്രീനിലെ EMBEDDED "Google Drive Backup ബന്ധിപ്പിക്കുക" 🌟 -->
+<!-- ബട്ടണിന്റെ ക്ലിക്ക് ഹാൻഡ്‌ലർ. നേരിട്ടുള്ള HTML onclick ആയതിനാൽ ഒരു genuine user gesture -->
+<!-- ആയി ബ്രൗസർ കണക്കാക്കുന്നു — Google-ന്റെ Drive permission popup ബ്ലോക്ക് ആകാനുള്ള -->
+<!-- സാധ്യത ഇത് ഗണ്യമായി കുറയ്ക്കുന്നു. -->
 <!-- ================================================================================= -->
 <script>
-window.medistockEnsureConnectDriveButton = function() {
-    if (window.accessToken) {
-        // Drive already connected ആണെങ്കിൽ ബട്ടൺ ഉണ്ടെങ്കിൽ അത് നീക്കം ചെയ്യുന്നു
-        let existing = document.getElementById('medistockConnectDriveBtn');
-        if (existing) existing.remove();
+function medistockConnectDriveManual() {
+    let btn = document.getElementById('medistockConnectDriveBtn');
+    let statusText = document.getElementById('medistockConnectDriveStatusText');
+    if (typeof tokenClient === 'undefined' || !tokenClient) {
+        if (statusText) {
+            statusText.innerHTML = '❌ Google Sign-In സിസ്റ്റം ഇതുവരെ ലോഡ് ആയിട്ടില്ല. ഒരു നിമിഷം കാത്ത് വീണ്ടും ശ്രമിക്കുക.';
+            statusText.style.color = '#c0392b';
+        }
         return;
     }
-    if (document.getElementById('medistockConnectDriveBtn')) return; // ഇതിനകം ഉണ്ട്
-
-    let btn = document.createElement('button');
-    btn.id = 'medistockConnectDriveBtn';
-    btn.innerHTML = '<i class="fa-brands fa-google-drive"></i> Google Drive Backup ബന്ധിപ്പിക്കുക';
-    btn.style.cssText = "position:fixed; bottom:70px; right:20px; z-index:99997; background:#2980b9; color:white; border:none; padding:10px 16px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-size:13px; cursor:pointer;";
-    btn.onclick = function() {
-        if (typeof tokenClient !== 'undefined' && tokenClient) {
-            tokenClient.requestAccessToken({ prompt: 'consent' });
-        }
-    };
-    document.body.appendChild(btn);
-};
-// എല്ലാ 2 സെക്കൻഡിലും പരിശോധിച്ച്, accessToken ഇല്ലെങ്കിൽ ഈ ബട്ടൺ കാണിക്കുന്നു (login ന് ശേഷം മാത്രം)
-setInterval(function() {
-    let loginPg = document.getElementById('loginStartPage');
-    let stillOnLoginPage = loginPg && loginPg.style.display !== 'none';
-    if (!stillOnLoginPage) {
-        window.medistockEnsureConnectDriveButton();
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> കാത്തിരിക്കുക...'; }
+    if (statusText) {
+        statusText.innerHTML = 'ℹ️ ഒരു Google പോപ്പപ്പ് വിൻഡോ തുറക്കും — അക്കൗണ്ട് തിരഞ്ഞെടുത്ത് "Allow" ചെയ്യുക.';
+        statusText.style.color = '#2980b9';
     }
-}, 2000);
+    try {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+    } catch (e) {
+        console.error('Connect Drive Manual Error:', e);
+        if (statusText) {
+            statusText.innerHTML = '❌ പോപ്പപ്പ് തുറക്കാൻ കഴിഞ്ഞില്ല. ബ്രൗസറിന്റെ Popup Blocker ഓഫ് ചെയ്ത് വീണ്ടും ശ്രമിക്കുക.';
+            statusText.style.color = '#c0392b';
+        }
+    }
+    // 5 സെക്കൻഡ് കഴിഞ്ഞും accessToken ലഭിച്ചില്ലെങ്കിൽ, ബട്ടൺ വീണ്ടും സജീവമാക്കി, popup blocked ആയോ എന്ന് സൂചിപ്പിക്കുന്നു
+    setTimeout(function() {
+        if (!window.accessToken && btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-brands fa-google"></i> Google ഉപയോഗിച്ച് Sign In ചെയ്യുക';
+            if (statusText && statusText.style.color !== '#16a085') {
+                statusText.innerHTML = '⚠️ Popup കണ്ടില്ലേ? ബ്രൗസറിന്റെ അഡ്രസ് ബാറിനടുത്തുള്ള 🚫 Popup-blocked ഐക്കൺ നോക്കി "Always allow" ചെയ്ത് വീണ്ടും ബട്ടൺ അമർത്തുക.';
+                statusText.style.color = '#d35400';
+            }
+        }
+    }, 5000);
+}
+
+// ലോഗിൻ (Drive Access) വിജയിച്ചാൽ, Welcome സ്ക്രീനിലെ ബട്ടണിന്റെ/ടെക്സ്റ്റിന്റെ അവസ്ഥ പുതുക്കുന്നു
+window.medistockRefreshConnectDriveUI = function() {
+    let btn = document.getElementById('medistockConnectDriveBtn');
+    let statusText = document.getElementById('medistockConnectDriveStatusText');
+    if (window.accessToken) {
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Logged In (Drive Connected)'; btn.style.background = '#16a085'; }
+        if (statusText) { statusText.innerHTML = '✅ Login വിജയകരം — Google Drive Backup സജീവമാണ്.'; statusText.style.color = '#16a085'; }
+    }
+};
 </script>
 
 <!-- ================================================================================= -->
+
 <!-- 🌟 EXPERT ADDITION: UNIFIED SMART AUTO-BACKUP TRIGGER SYSTEM 🌟 -->
 <!-- നിലവിലുള്ള ഒരു ഫംഗ്ഷനും (saveData, smartAutoBackup, processAndSaveImage) നേരിട്ട് -->
 <!-- മാറ്റം വരുത്താതെ, അവയെ "Wrap" ചെയ്താണ് ഈ പുതിയ ഫീച്ചറുകൾ ചേർത്തിരിക്കുന്നത്. -->
