@@ -1138,7 +1138,15 @@ let accessToken = null;
 const MEDISTOCK_USAGE_LOG_URL = "PASTE_YOUR_DEPLOYED_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
-window.onload = function() {
+// 🌟 EXPERT FIX (ROOT CAUSE കണ്ടെത്തി): ഈ ഫയലിൽ താഴെ (ഏകദേശം line 8939) "window.onload = init;" 
+// എന്നൊരു ലൈൻ നേരത്തെ തന്നെ ഉണ്ടായിരുന്നു (Stock Entry Grid ഉണ്ടാക്കുന്ന അത്യാവശ്യ ഫംഗ്ഷൻ). 
+// JavaScript-ൽ "window.onload = X" ഒന്നിലധികം തവണ എഴുതിയാൽ ആദ്യത്തേത് പൂർണ്ണമായും 
+// overwrite ആയി മാഞ്ഞുപോകും — അതിനാൽ ഇവിടെയുള്ള tokenClient സെറ്റപ്പ് ഒരിക്കലും 
+// പ്രവർത്തിച്ചിട്ടേയില്ല (ഇതാണ് "Google Sign-In സിസ്റ്റം ലോഡ് ആയിട്ടില്ല" എന്ന പിശകിന്റെ 
+// യഥാർത്ഥ കാരണം). "window.onload =" എന്നതിന് പകരം "window.addEventListener('load', ...)" 
+// ഉപയോഗിച്ചാൽ, ഒന്നിലധികം handlers പരസ്പരം മായ്ക്കാതെ ഒരുമിച്ച് പ്രവർത്തിക്കും 
+// (ഈ ഫയലിൽ വേറെ 15+ സ്ഥലങ്ങളിൽ ഇതേ രീതി ഇതിനകം ഉപയോഗിച്ചിട്ടുള്ളത് കാണാം).
+window.addEventListener('load', function() {
     let loginPg = document.getElementById('loginStartPage');
     if(loginPg) loginPg.style.display = 'flex';
 
@@ -1195,7 +1203,7 @@ window.onload = function() {
             }
         },
     });
-};
+});
 
 // ബാക്ക്ഗ്രൗണ്ടിൽ ഗൂഗിൾ ഡ്രൈവ് ലോഡ് ചെയ്യാനുള്ള പുതിയ ഫംഗ്ഷൻ (ഇതും കൂടെ നൽകണം)
 async function restoreDataFromDriveSilent() {
