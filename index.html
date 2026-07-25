@@ -1135,7 +1135,7 @@ let accessToken = null;
 // ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
 // (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
 //  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
-const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbw4hXekZvBHFYkhsvTdCBpRmYR23dTHZHx2Jc37-PU4epp4VQev6fxFFwRzOkshz3NvLw/exec";
+const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbzAy4pWjr_s0IuQW2MtJodHfMA9A_1z9o1GGXZIux7-W2fWdIH_zfO0wMHrG-2oHzHeDw/exec";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 // 🌟 EXPERT FIX (ROOT CAUSE കണ്ടെത്തി): ഈ ഫയലിൽ താഴെ (ഏകദേശം line 8939) "window.onload = init;" 
@@ -1257,24 +1257,21 @@ async function restoreDataFromDriveSilent() {
 }
 
 // =====================================================================
-// 🌟 പുതിയത് (EXPERT ADDITION): എപ്പോഴും കാണാവുന്ന GOOGLE DRIVE SYNC STATUS ബാഡ്ജ് 🌟
-// മുൻപ് Backup/Restore വിജയിച്ചോ എന്ന് അറിയാൻ ക്ഷണികമായ (transient) toast മാത്രമേ ഉണ്ടായിരുന്നുള്ളൂ,
-// അത് കാണാൻ വൈകിയാൽ അല്ലെങ്കിൽ മറ്റെന്തെങ്കിലും കാരണത്താൽ പ്രത്യക്ഷപ്പെട്ടില്ലെങ്കിൽ ഒരു തെളിവും 
-// ബാക്കിയുണ്ടാകില്ലായിരുന്നു. ഇപ്പോൾ സ്ക്രീനിന്റെ താഴെ-വലതു കോണിൽ എപ്പോഴും ഒരു ചെറിയ ബാഡ്ജ് 
-// "അവസാന Backup / Restore" സമയവും സ്റ്റാറ്റസും കാണിക്കും. നിലവിലുള്ള ഒരു ഫംഗ്ഷനും/ബട്ടണും/പേജും 
-// ഇത് നീക്കം ചെയ്യുകയോ മാറ്റുകയോ ചെയ്യുന്നില്ല.
+// 🌟 പുതിയത് (EXPERT ADDITION): GOOGLE DRIVE SYNC STATUS ബോക്സ് 🌟
+// മുൻപ് Backup/Restore വിജയിച്ചോ എന്ന് അറിയാൻ ക്ഷണികമായ (transient) toast മാത്രമേ ഉണ്ടായിരുന്നുള്ളൂ.
+// ഇപ്പോൾ "MORE DETAILS" പേജിൽ (id="moreDetailsPage") മാത്രമായി, ഒരു സ്ഥിരം ബോക്സിൽ 
+// "അവസാന Backup / Restore" സമയവും സ്റ്റാറ്റസും കാണിക്കും. ഇത് ആ പേജിലെ HTML-ൽ തന്നെ 
+// നേരിട്ട് ചേർത്തിരിക്കുന്ന ഒരു box ആണ് (id="medistockSyncStatusBadge") — മറ്റ് പേജുകളിലൊന്നും 
+// ഇത് പ്രത്യക്ഷപ്പെടില്ല, ഒരു ഫ്ലോട്ടിംഗ്/ഫിക്സഡ് element ആയി ഇനി ഇത് ഉണ്ടാക്കുന്നില്ല.
 // =====================================================================
 window.__medistockSyncStatus = { backup: null, restore: null };
 
 window.medistockEnsureSyncStatusBadge = function() {
-    let badge = document.getElementById('medistockSyncStatusBadge');
-    if (badge) return badge;
-    badge = document.createElement('div');
-    badge.id = 'medistockSyncStatusBadge';
-    badge.style.cssText = "position:fixed; bottom:20px; right:20px; z-index:99998; background:rgba(255,255,255,0.97); border:2px solid #16a085; border-radius:12px; padding:8px 14px; font-size:12px; font-weight:bold; color:#2c3e50; box-shadow:0 4px 15px rgba(0,0,0,0.25); max-width:260px; line-height:1.5; font-family: 'Anek Malayalam', sans-serif;";
-    badge.innerHTML = '<div>☁️ Google Drive Sync Status</div><div id="medistockSyncStatusBackupLine">⏳ Backup: —</div><div id="medistockSyncStatusRestoreLine">⏳ Restore: —</div>';
-    document.body.appendChild(badge);
-    return badge;
+    // 🌟 EXPERT FIX: മുൻപ് ഇവിടെ document.body-യിലേക്ക് ഒരു "position:fixed" ബോക്സ് 
+    // JS വഴി ഉണ്ടാക്കി എല്ലാ പേജിലും ഒട്ടിച്ചു വെച്ചിരുന്നു. ഇപ്പോൾ ഈ ബോക്സ് 
+    // id="moreDetailsPage" എന്ന പേജിൽ HTML-ൽ തന്നെ സ്ഥിരമായി (static) ചേർത്തിട്ടുള്ളതിനാൽ, 
+    // ഇവിടെ ഒന്നും "create" ചെയ്യേണ്ടതില്ല — ഉണ്ടെങ്കിൽ അത് തന്നെ തിരികെ നൽകുന്നു.
+    return document.getElementById('medistockSyncStatusBadge');
 };
 
 // action = 'backup' | 'restore', success = true/false, message = ചെറിയ വിവരണം
@@ -1283,7 +1280,6 @@ window.medistockUpdateSyncStatus = function(action, success, message) {
         let now = new Date();
         let timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
         window.__medistockSyncStatus[action] = { success: success, message: message, time: timeStr };
-        window.medistockEnsureSyncStatusBadge();
         let lineEl = document.getElementById(action === 'backup' ? 'medistockSyncStatusBackupLine' : 'medistockSyncStatusRestoreLine');
         if (lineEl) {
             let icon = success ? '✅' : '❌';
@@ -3722,6 +3718,15 @@ async function medistockTestDriveRestoreNow() {
     }
 }
 </script>
+
+    <!-- 🌟 പുതിയത് (EXPERT ADDITION): Google Drive Sync Status — ഈ പേജിൽ (MORE DETAILS) മാത്രം, 
+         സ്ഥിരമായി (static), താഴെയുള്ള disclaimer ബോക്സിന്റെ അതേ വീതിയിൽ. മുൻപ് ഇത് എല്ലാ 
+         പേജിലും floating ആയി കാണിച്ചിരുന്നത് ഇപ്പോൾ ഇവിടെ മാത്രമായി ഒതുക്കിയിരിക്കുന്നു. 🌟 -->
+    <div id="medistockSyncStatusBadge" style="text-align: center; color: #2c3e50; font-family: 'Anek Malayalam', sans-serif; font-size: 13px; font-weight: bold; margin-bottom: 12px; padding: 12px 15px; background-color: #f0fdfa; border: 2px dashed #16a085; border-radius: 8px; line-height: 1.6;">
+        <div>☁️ Google Drive Sync Status</div>
+        <div id="medistockSyncStatusBackupLine" style="font-weight: normal; font-size: 12px;">⏳ Backup: —</div>
+        <div id="medistockSyncStatusRestoreLine" style="font-weight: normal; font-size: 12px;">⏳ Restore: —</div>
+    </div>
 
     <!-- പുതിയതായി ചേർത്ത വിവരണം -->
     <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
