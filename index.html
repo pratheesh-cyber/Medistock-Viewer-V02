@@ -399,7 +399,7 @@
         body.printing-rack-details #mainRackDetailsPrintArea {
             position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 0 !important; background-color: white !important;
         }
-        /* BOOK LABEL GENERATOR Perfect Print Settings */
+        /* REGISTER LABEL GENERATOR Perfect Print Settings */
         body.printing-book-label { background-color: #ffffff !important; }
         body.printing-book-label * { visibility: hidden; }
         body.printing-book-label #bookLabelPrintArea,
@@ -3442,7 +3442,7 @@ window.refreshAllPagesAfterRestore = function() {
         
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
         
-        <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> BOOK LABEL GENERATOR</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> REGISTER LABEL GENERATOR</button>
         
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; padding: 6px 12px; font-size: 13px;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
         
@@ -3559,14 +3559,14 @@ window.refreshAllPagesAfterRestore = function() {
 </div>
 
 <!-- ========================================= -->
-<!-- 🌟 BOOK LABEL GENERATOR WINDOW 🌟 -->
+<!-- 🌟 REGISTER LABEL GENERATOR WINDOW 🌟 -->
 <!-- ========================================= -->
 <div id="bookLabelGeneratorPage" class="page-container index-page-wrapper full-width-wrapper" style="display: none; padding: 20px;">
     <style>
-    /* 🌟 BOOK LABEL GENERATOR - Select Font ഡ്രോപ്പ്ഡൗണിൽ പുതുതായി ചേർത്ത ഫോണ്ടുകൾ, സിസ്റ്റത്തിൽ ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ലെങ്കിലും വർക്ക് ചെയ്യാൻ Google Fonts വഴി ലോഡ് ചെയ്യുന്നു 🌟 */
+    /* 🌟 REGISTER LABEL GENERATOR - Select Font ഡ്രോപ്പ്ഡൗണിൽ പുതുതായി ചേർത്ത ഫോണ്ടുകൾ, സിസ്റ്റത്തിൽ ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ലെങ്കിലും വർക്ക് ചെയ്യാൻ Google Fonts വഴി ലോഡ് ചെയ്യുന്നു 🌟 */
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Cinzel:wght@400;600;700;900&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@400;600;700;900&family=EB+Garamond:wght@400;600;700;800&family=PT+Serif:wght@400;700&family=Bitter:wght@400;600;700;900&display=swap');
     </style>
-    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 6px; font-size: 35px; text-transform: uppercase;">BOOK LABEL GENERATOR</h1>
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 6px; font-size: 35px; text-transform: uppercase;">REGISTER LABEL GENERATOR</h1>
     <div class="no-print" style="text-align: center; color: red; font-size: 10px; font-weight: bold; margin-bottom: 14px;">കൂടുതൽ അറിയാൻ HAND BOOK നോക്കി മനസിലാക്കുക.HAND BOOK ഹെൽപ്പ് ഡെസ്ക്കിൽ നിന്നും ലഭിക്കും</div>
 
     <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
@@ -3772,7 +3772,7 @@ window.refreshAllPagesAfterRestore = function() {
 </div>
 <script>
 // ========================================================
-// 🌟 BOOK LABEL GENERATOR JAVASCRIPT FUNCTIONS (v3) 🌟
+// 🌟 REGISTER LABEL GENERATOR JAVASCRIPT FUNCTIONS (v3) 🌟
 // ========================================================
 
 window.blgInstitutionManuallyCleared = false;
@@ -5164,7 +5164,7 @@ function hideAllPages() {
         'preIndentSummaryPage',
         'indentedMedicinesMainPage', // 🌟 പുതിയതായി നിർമ്മിച്ച വിൻഡോ ഇതിൽ ചേർത്തിട്ടുണ്ട് 🌟
         'smartScannerPage', 'pdfScannerPage', 'moreDetailsPage', // 🌟 Medistock Smart Scanner പേജ് 🌟
-        'bookLabelGeneratorPage' // 🌟 BOOK LABEL GENERATOR പേജ് 🌟
+        'bookLabelGeneratorPage' // 🌟 REGISTER LABEL GENERATOR പേജ് 🌟
     ];
     
     allPages.forEach(function(pageId) {
