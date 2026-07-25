@@ -1133,7 +1133,14 @@ const GOOGLE_CLIENT_ID = '509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.goo
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 let tokenClient;
+let silentRefreshTokenClient; // 🌟 പുതിയത്: ദീർഘനേരം സോഫ്റ്റ്‌വെയർ തുറന്നിരുന്നാലും access token കാലഹരണപ്പെടാതെ, യൂസറിന്റെ പേജിനെ ബാധിക്കാതെ, നിശബ്ദമായി മാത്രം token പുതുക്കാൻ
 let accessToken = null;
+
+// 🌟 പുതിയത്: LOGIN / SCAN USAGE ലോഗ് ചെയ്യാനുള്ള Google Apps Script Web App URL 🌟
+// ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
+// (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
+//  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
+const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbyQB9F9Y6eZYR9OPr1BHhxnYmfg59dxcVbG5f8ObR8hUe8qnZOwaorvlmTpk8QF0Mkw2Q/exec";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 window.onload = function() {
@@ -1165,6 +1172,27 @@ window.onload = function() {
                 
                 if(loginPg) loginPg.style.display = 'none';
                 if (typeof showHomePage === 'function') showHomePage();
+
+                // 🌟 പുതിയത്: ലോഗിൻ വിജയകരമായ ഉടനെ, എപ്പോഴും കാണാവുന്ന Google Drive Sync Status ബാഡ്ജ് ഉണ്ടാക്കുന്നു
+                if (typeof window.medistockEnsureSyncStatusBadge === 'function') {
+                    window.medistockEnsureSyncStatusBadge();
+                }
+
+                // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): 
+                // മുകളിലുള്ള ഒരു നിലവിലുള്ള ലോജിക്കും മാറ്റം വരുത്താതെ, ലോഗിൻ വിജയകരമായ ഉടനെ
+                // (Drive-ൽ നിന്നും Institution/Pharmacist പേരുകൾ restore ആയ ശേഷം) ആ വിവരങ്ങൾ 
+                // ഒരു Google Sheet-ലേക്ക് ലോഗ് ചെയ്യുന്നു. ഇത് പരാജയപ്പെട്ടാൽ പോലും (catch ഉള്ളതിനാൽ)
+                // login/restore/navigation പ്രവർത്തനത്തെ ഒരു തരത്തിലും ബാധിക്കില്ല.
+                if (typeof window.medistockLogUsageEvent === 'function') {
+                    window.medistockLogUsageEvent('login');
+                }
+
+                // 🌟 പുതിയത്: ദീർഘനേരം (1 മണിക്കൂറിൽ കൂടുതൽ) സോഫ്റ്റ്‌വെയർ തുറന്നിരുന്നാലും 
+                // Google Drive Backup/Restore നിർത്തിപ്പോകാതിരിക്കാൻ, access token നിശബ്ദമായി 
+                // ഓട്ടോമാറ്റിക്കായി പുതുക്കാനുള്ള ടൈമർ ഇവിടെ ഒരിക്കൽ മാത്രം ആരംഭിക്കുന്നു
+                if (typeof window.medistockStartSilentTokenRefresh === 'function') {
+                    window.medistockStartSilentTokenRefresh();
+                }
             }
         },
     });
@@ -1176,12 +1204,16 @@ async function restoreDataFromDriveSilent() {
         let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
             headers: { 'Authorization': 'Bearer ' + accessToken }
         });
+        // 🌟 EXPERT FIX: മുൻപ് ഇവിടെ response.ok പരിശോധിച്ചിരുന്നില്ല. ടോക്കൺ കാലഹരണപ്പെട്ടാലും/
+        // permission പ്രശ്നമുണ്ടായാലും ഇത് ഒരു എറർ കാണിക്കാതെ നിശബ്ദമായി പരാജയപ്പെട്ടിരുന്നു.
+        if (!searchRes.ok) throw new Error('Drive Search Failed: HTTP ' + searchRes.status);
         let searchData = await searchRes.json();
         if (searchData.files && searchData.files.length > 0) {
             let fileId = searchData.files[0].id;
             let dlRes = await fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media', {
                 headers: { 'Authorization': 'Bearer ' + accessToken }
             });
+            if (!dlRes.ok) throw new Error('Drive Download Failed: HTTP ' + dlRes.status);
             let data = await dlRes.json();
             
             for (let key in data) { localStorage.setItem(key, data[key]); }
@@ -1197,9 +1229,177 @@ async function restoreDataFromDriveSilent() {
             } else if (typeof renderDetailsTable === 'function') {
                 renderDetailsTable(); // ഫോൾബാക്ക് (പഴയ പെരുമാറ്റം)
             }
+            // 🌟 പുതിയത്: Restore വിജയിച്ചെന്ന് സ്ഥിരീകരിക്കുന്ന Sync Status ബാഡ്ജ് പുതുക്കുന്നു
+            if (typeof window.medistockUpdateSyncStatus === 'function') {
+                window.medistockUpdateSyncStatus('restore', true, 'Drive-ൽ നിന്നും ഡാറ്റ Restore ചെയ്തു');
+            }
+        } else {
+            // ഫയൽ ഇതുവരെ Drive-ൽ ഇല്ല (ആദ്യമായി ഈ അക്കൗണ്ട് ഉപയോഗിക്കുന്നത് ആകാം) — ഇതൊരു എറർ അല്ല
+            if (typeof window.medistockUpdateSyncStatus === 'function') {
+                window.medistockUpdateSyncStatus('restore', true, 'Drive-ൽ നിലവിൽ ബാക്കപ്പ് ഫയൽ കണ്ടെത്തിയില്ല (പുതിയ അക്കൗണ്ട് ആകാം)');
+            }
         }
-    } catch(e) { console.error("Restore Error:", e); }
+    } catch(e) {
+        console.error("Restore Error:", e);
+        // 🌟 പുതിയത്: മുൻപ് ഇവിടെ പരാജയം എവിടെയും കാണിച്ചിരുന്നില്ല (console.error മാത്രം) — 
+        // ഇപ്പോൾ Sync Status ബാഡ്ജിൽ വ്യക്തമായി കാണിക്കുന്നു
+        if (typeof window.medistockUpdateSyncStatus === 'function') {
+            window.medistockUpdateSyncStatus('restore', false, e.message || 'Restore പരാജയപ്പെട്ടു');
+        }
+    }
 }
+
+// =====================================================================
+// 🌟 പുതിയത് (EXPERT ADDITION): എപ്പോഴും കാണാവുന്ന GOOGLE DRIVE SYNC STATUS ബാഡ്ജ് 🌟
+// മുൻപ് Backup/Restore വിജയിച്ചോ എന്ന് അറിയാൻ ക്ഷണികമായ (transient) toast മാത്രമേ ഉണ്ടായിരുന്നുള്ളൂ,
+// അത് കാണാൻ വൈകിയാൽ അല്ലെങ്കിൽ മറ്റെന്തെങ്കിലും കാരണത്താൽ പ്രത്യക്ഷപ്പെട്ടില്ലെങ്കിൽ ഒരു തെളിവും 
+// ബാക്കിയുണ്ടാകില്ലായിരുന്നു. ഇപ്പോൾ സ്ക്രീനിന്റെ താഴെ-വലതു കോണിൽ എപ്പോഴും ഒരു ചെറിയ ബാഡ്ജ് 
+// "അവസാന Backup / Restore" സമയവും സ്റ്റാറ്റസും കാണിക്കും. നിലവിലുള്ള ഒരു ഫംഗ്ഷനും/ബട്ടണും/പേജും 
+// ഇത് നീക്കം ചെയ്യുകയോ മാറ്റുകയോ ചെയ്യുന്നില്ല.
+// =====================================================================
+window.__medistockSyncStatus = { backup: null, restore: null };
+
+window.medistockEnsureSyncStatusBadge = function() {
+    let badge = document.getElementById('medistockSyncStatusBadge');
+    if (badge) return badge;
+    badge = document.createElement('div');
+    badge.id = 'medistockSyncStatusBadge';
+    badge.style.cssText = "position:fixed; bottom:20px; right:20px; z-index:99998; background:rgba(255,255,255,0.97); border:2px solid #16a085; border-radius:12px; padding:8px 14px; font-size:12px; font-weight:bold; color:#2c3e50; box-shadow:0 4px 15px rgba(0,0,0,0.25); max-width:260px; line-height:1.5; font-family: 'Anek Malayalam', sans-serif;";
+    badge.innerHTML = '<div>☁️ Google Drive Sync Status</div><div id="medistockSyncStatusBackupLine">⏳ Backup: —</div><div id="medistockSyncStatusRestoreLine">⏳ Restore: —</div>';
+    document.body.appendChild(badge);
+    return badge;
+};
+
+// action = 'backup' | 'restore', success = true/false, message = ചെറിയ വിവരണം
+window.medistockUpdateSyncStatus = function(action, success, message) {
+    try {
+        let now = new Date();
+        let timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        window.__medistockSyncStatus[action] = { success: success, message: message, time: timeStr };
+        window.medistockEnsureSyncStatusBadge();
+        let lineEl = document.getElementById(action === 'backup' ? 'medistockSyncStatusBackupLine' : 'medistockSyncStatusRestoreLine');
+        if (lineEl) {
+            let icon = success ? '✅' : '❌';
+            let label = action === 'backup' ? 'Backup' : 'Restore';
+            lineEl.innerHTML = icon + ' ' + label + ': ' + timeStr + (message ? ' — ' + message : '');
+            lineEl.style.color = success ? '#16a085' : '#c0392b';
+        }
+    } catch (e) { console.error('Sync Status Badge Error:', e); }
+};
+
+// =====================================================================
+// 🌟 പുതിയത് (EXPERT ADDITION): SILENT ACCESS TOKEN AUTO-REFRESH 🌟
+// Google Identity Services നൽകുന്ന access token ഏകദേശം 1 മണിക്കൂർ കഴിഞ്ഞാൽ കാലഹരണപ്പെടും.
+// ഇത് പുതുക്കിയില്ലെങ്കിൽ, ദീർഘനേരം (ഒരു പകൽ മുഴുവൻ) സോഫ്റ്റ്‌വെയർ തുറന്നിരുന്നാൽ, ടോക്കൺ 
+// കാലഹരണപ്പെട്ട ശേഷമുള്ള എല്ലാ Backup ശ്രമങ്ങളും നിശബ്ദമായി പരാജയപ്പെടും — ഇതാണ് "Backup/Restore 
+// നടക്കുന്നില്ല" എന്ന പരാതിയുടെ ഏറ്റവും സാധ്യതയുള്ള കാരണം. ഇവിടെ, മുൻപത്തെ ലോഗിൻ ബട്ടണിനെയോ 
+// tokenClient-നെയോ തൊടാതെ, ഒരു പ്രത്യേക (silent) token client വഴി ഓരോ 45 മിനിറ്റിലും 
+// ബാക്ക്ഗ്രൗണ്ടിൽ token നിശബ്ദമായി പുതുക്കുന്നു. ഇത് പേജ് navigate ചെയ്യുകയോ, Home പേജിലേക്ക് 
+// തിരികെ കൊണ്ടുപോകുകയോ ചെയ്യില്ല — accessToken/window.accessToken മാത്രം പുതുക്കും.
+// =====================================================================
+window.__medistockSilentRefreshTimerId = null;
+window.medistockStartSilentTokenRefresh = function() {
+    if (window.__medistockSilentRefreshTimerId) return; // ഇതിനകം ആരംഭിച്ചിട്ടുണ്ടെങ്കിൽ വീണ്ടും തുടങ്ങേണ്ട
+    try {
+        if (!silentRefreshTokenClient && google && google.accounts && google.accounts.oauth2) {
+            silentRefreshTokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: SCOPES,
+                prompt: '', // silent
+                callback: (tokenResponse) => {
+                    if (tokenResponse && tokenResponse.access_token) {
+                        accessToken = tokenResponse.access_token;
+                        window.accessToken = accessToken;
+                        console.log('🔄 Access Token Silently Refreshed.');
+                    }
+                },
+            });
+        }
+        window.__medistockSilentRefreshTimerId = setInterval(function() {
+            try {
+                if (silentRefreshTokenClient) {
+                    silentRefreshTokenClient.requestAccessToken({ prompt: '' });
+                }
+            } catch (e) { console.error('Silent Refresh Error:', e); }
+        }, 45 * 60 * 1000); // 45 മിനിറ്റ്
+    } catch (e) { console.error('Silent Refresh Setup Error:', e); }
+};
+
+// =====================================================================
+// 🌟 പുതിയത് (EXPERT ADDITION): LOGIN / SCAN USAGE ലോഗിംഗ് 🌟
+// LOGIN ചെയ്യുന്ന ആളുടെ Mail ID, Institution പേര്, Pharmacist പേര് എന്നിവ, ഒപ്പം 
+// (സ്കാൻ ചെയ്യുമ്പോൾ) Smart Scanner ഉപയോഗിക്കുന്ന ആളുടെ അതേ വിവരങ്ങൾ, MEDISTOCK_USAGE_LOG_URL 
+// എന്ന Google Apps Script Web App-ലേക്ക് (വേറൊരു Google Sheet-ലേക്ക്) POST ചെയ്യുന്നു. 
+// ഇത് പൂർണ്ണമായും "fire-and-forget" ആണ് — പരാജയപ്പെട്ടാൽ പോലും (URL സെറ്റ് ചെയ്തിട്ടില്ലെങ്കിലും) 
+// സോഫ്റ്റ്‌വെയറിന്റെ മറ്റൊരു പ്രവർത്തനത്തെയും ഒരു തരത്തിലും ബാധിക്കില്ല.
+// =====================================================================
+window.medistockGetInstitutionAndPharmacist = function() {
+    let institution = '', pharmacist = '';
+    try {
+        // ആദ്യം DOM-ൽ നിന്ന് (പേജ് ലോഡ് ആയിക്കഴിഞ്ഞെങ്കിൽ) നേരിട്ട് വായിക്കുന്നു — ഏറ്റവും കൃത്യമായത്
+        let instEl = document.getElementById('inp_inst');
+        let phEl = document.getElementById('inp_pharm');
+        if (instEl && instEl.value) institution = instEl.value.trim();
+        if (phEl && phEl.value) pharmacist = phEl.value.trim();
+
+        // DOM-ൽ ഇല്ലെങ്കിൽ (പേജ് ഇതുവരെ റെൻഡർ ആയിട്ടില്ലെങ്കിൽ), localStorage-ൽ നിന്ന് നേരിട്ട് വായിക്കുന്നു
+        if (!institution || !pharmacist) {
+            let raw = localStorage.getItem('medistock_home_inputs');
+            if (raw) {
+                let arr = JSON.parse(raw);
+                if (!institution && arr[0]) institution = arr[0];
+                if (!pharmacist && arr[1]) pharmacist = arr[1];
+            }
+        }
+    } catch (e) { console.error('Get Institution/Pharmacist Error:', e); }
+    return { institution: institution, pharmacist: pharmacist };
+};
+
+window.medistockGetLoggedInEmail = async function() {
+    try {
+        let cached = localStorage.getItem('medistock_last_login_id');
+        if (cached) return cached;
+        if (!window.accessToken) return 'Unknown';
+        let res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { 'Authorization': 'Bearer ' + window.accessToken }
+        });
+        let info = await res.json();
+        if (info && info.email) {
+            localStorage.setItem('medistock_last_login_id', info.email);
+            return info.email;
+        }
+    } catch (e) { console.error('Get Email Error:', e); }
+    return 'Unknown';
+};
+
+// action = 'login' | 'scan'
+window.medistockLogUsageEvent = async function(action) {
+    try {
+        if (!MEDISTOCK_USAGE_LOG_URL || MEDISTOCK_USAGE_LOG_URL.indexOf('PASTE_YOUR_DEPLOYED') === 0) {
+            // URL ഇതുവരെ സെറ്റ് ചെയ്തിട്ടില്ല — നിശബ്ദമായി ഒന്നും ചെയ്യാതെ മടങ്ങുന്നു
+            return;
+        }
+        let email = await window.medistockGetLoggedInEmail();
+        let names = window.medistockGetInstitutionAndPharmacist();
+        let payload = {
+            action: action, // 'login' അല്ലെങ്കിൽ 'scan'
+            email: email,
+            institution: names.institution,
+            pharmacist: names.pharmacist,
+            timestamp: new Date().toISOString()
+        };
+        await fetch(MEDISTOCK_USAGE_LOG_URL, {
+            method: 'POST',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+    } catch (e) {
+        // 🌟 ലോഗിംഗ് പരാജയപ്പെട്ടാലും (ഉദാ: URL തെറ്റാണെങ്കിലും, ഇന്റർനെറ്റ് ഇല്ലെങ്കിലും) 
+        // സോഫ്റ്റ്‌വെയറിന്റെ മറ്റൊരു ഭാഗത്തെയും ബാധിക്കാതെ ഇവിടെ തന്നെ നിശബ്ദമായി കൈകാര്യം ചെയ്യുന്നു
+        console.error('Usage Log Error:', e);
+    }
+};
 
 // =====================================================================
 // 🌟 EXPERT ADDITION: AUTO-RESTORE-ന് ശേഷം എല്ലാ പേജുകളും പുതുക്കുന്ന യൂണിഫൈഡ് ഫംഗ്ഷൻ 🌟
@@ -3455,6 +3655,13 @@ window.refreshAllPagesAfterRestore = function() {
         <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Downloads ഫോൾഡറിലേക്കുള്ള Local Auto-Backup സജീവമാക്കാൻ 🌟 -->
         <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
         
+        <!-- 🌟 പുതിയത് (EXPERT ADDITION): GOOGLE DRIVE BACKUP/RESTORE നേരിട്ട് ടെസ്റ്റ് ചെയ്യാനുള്ള ബട്ടണുകൾ 🌟
+             ഇത് ക്ഷണികമായ toast-നെ മാത്രം ആശ്രയിക്കാതെ, ഒരു ക്ലിക്കിൽ Backup/Restore ശരിക്കും 
+             നടക്കുന്നുണ്ടോ എന്ന് വ്യക്തമായി ഉറപ്പുവരുത്താൻ വേണ്ടിയാണ്. -->
+        <button id="medistockTestBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #2980b9; padding: 6px 12px; font-size: 13px;" onclick="medistockTestDriveBackupNow()" title="ഇപ്പോൾ തന്നെ ഒരു Backup Google Drive-ലേക്ക് അയച്ച് ഫലം ഉടനെ കാണിക്കും">☁️ Google Drive Backup ടെസ്റ്റ് ചെയ്യുക</button>
+
+        <button id="medistockTestRestoreBtn" class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="medistockTestDriveRestoreNow()" title="Google Drive-ൽ നിന്നും ഇപ്പോൾ തന്നെ ഡാറ്റ Restore ചെയ്ത് ഫലം ഉടനെ കാണിക്കും">⬇️ Google Drive Restore ടെസ്റ്റ് ചെയ്യുക</button>
+        
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
@@ -3463,6 +3670,51 @@ window.refreshAllPagesAfterRestore = function() {
         <span id="medistockLocalBackupStatusText" style="font-size: 12px; font-weight: bold; color: #7f8c8d;">🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.</span>
     </div>
 </div>
+
+<script>
+// 🌟 പുതിയത് (EXPERT ADDITION): മുകളിലുള്ള രണ്ട് ടെസ്റ്റ് ബട്ടണുകൾക്കുള്ള ഫംഗ്ഷനുകൾ 🌟
+// ഇവ smartAutoBackup() / restoreDataFromDriveSilent() എന്നീ നിലവിലുള്ള ഫംഗ്ഷനുകളെ അതേപടി 
+// വിളിക്കുന്നു എന്നല്ലാതെ, അവയുടെ ലോജിക്കിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല — ഫലം alert ആയി വ്യക്തമായി 
+// കാണിക്കുക മാത്രമാണ് ഇവിടെ ചെയ്യുന്നത്.
+async function medistockTestDriveBackupNow() {
+    let btn = document.getElementById('medistockTestBackupBtn');
+    if (!window.accessToken) {
+        alert('⚠️ ആദ്യം Google ലോഗിൻ ചെയ്യുക. ലോഗിൻ ചെയ്യാതെ Backup സാധ്യമല്ല.');
+        return;
+    }
+    if (btn) { btn.disabled = true; btn.innerText = '⏳ Backup ചെയ്യുന്നു...'; }
+    window.__lastDriveBackupFailed = false;
+    await window.smartAutoBackup();
+    if (btn) { btn.disabled = false; btn.innerText = '☁️ Google Drive Backup ടെസ്റ്റ് ചെയ്യുക'; }
+    let now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+    if (window.__lastDriveBackupFailed) {
+        alert('❌ Backup പരാജയപ്പെട്ടു (' + now + '). ദയവായി ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിച്ച്, വീണ്ടും ലോഗിൻ ചെയ്ത് ശ്രമിക്കുക.');
+    } else {
+        alert('✅ Backup വിജയകരമായി Google Drive-ലേക്ക് അയച്ചു (' + now + ').\n\nസ്ഥിരീകരിക്കാൻ: drive.google.com തുറന്ന് "medistock_backup_data.json" എന്ന് search ചെയ്ത് "Last modified" സമയം നോക്കുക.');
+    }
+}
+
+async function medistockTestDriveRestoreNow() {
+    let btn = document.getElementById('medistockTestRestoreBtn');
+    if (!window.accessToken) {
+        alert('⚠️ ആദ്യം Google ലോഗിൻ ചെയ്യുക. ലോഗിൻ ചെയ്യാതെ Restore സാധ്യമല്ല.');
+        return;
+    }
+    if (!confirm('ഇത് Google Drive-ൽ ഉള്ള ബാക്കപ്പ് ഡാറ്റ ഈ ഡിവൈസിലേക്ക് തിരികെ കൊണ്ടുവരും (നിലവിലെ ഡാറ്റ overwrite ആയേക്കാം). തുടരണോ?')) return;
+    if (btn) { btn.disabled = true; btn.innerText = '⏳ Restore ചെയ്യുന്നു...'; }
+    let prevStatus = window.__medistockSyncStatus ? window.__medistockSyncStatus.restore : null;
+    await restoreDataFromDriveSilent();
+    if (btn) { btn.disabled = false; btn.innerText = '⬇️ Google Drive Restore ടെസ്റ്റ് ചെയ്യുക'; }
+    let latest = window.__medistockSyncStatus ? window.__medistockSyncStatus.restore : null;
+    if (latest && latest.success) {
+        alert('✅ ' + (latest.message || 'Restore വിജയകരം') + ' (' + latest.time + ')');
+    } else if (latest) {
+        alert('❌ Restore പരാജയപ്പെട്ടു: ' + (latest.message || '') + ' (' + latest.time + ')');
+    } else {
+        alert('ℹ️ Restore ശ്രമിച്ചു — Console (F12) നോക്കി കൂടുതൽ വിവരം കാണാം.');
+    }
+}
+</script>
 
     <!-- പുതിയതായി ചേർത്ത വിവരണം -->
     <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
@@ -19024,7 +19276,19 @@ window.loadScannedDataToExcelGrid = function() {
 
 // ബാക്കപ്പ് എടുക്കാനുള്ള പ്രധാന ഫംഗ്ഷൻ
 window.smartAutoBackup = async function() {
-    if (!accessToken) return; // ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ പ്രവർത്തിക്കില്ല
+    // 🌟 EXPERT FIX (ROOT CAUSE): മുൻപ് ഇവിടെ ഇടയ്ക്കിടെ ഇനിഷ്യലൈസ് ചെയ്ത bare "accessToken" 
+    // വേരിയബിളാണ് പരിശോധിച്ചിരുന്നത് — ഇത് window.accessToken-മായി സമന്വയിക്കാതെ പോയ സന്ദർഭങ്ങളിൽ 
+    // (ഉദാ: silent token refresh, മറ്റ് script ക്രമം പ്രശ്നങ്ങൾ) ഒരു toast/error പോലുമില്ലാതെ ഈ 
+    // ഫംഗ്ഷൻ നിശബ്ദമായി "return" ചെയ്ത് പുറത്ത് പോയിരുന്നു — ഇതാണ് "Backup verify ചെയ്യാൻ പറ്റുന്നില്ല" 
+    // എന്ന പരാതിയുടെ ഏറ്റവും സാധ്യതയുള്ള മൂലകാരണം. ഇപ്പോൾ എല്ലായിടത്തും window.accessToken 
+    // എന്ന ഒറ്റ, സ്ഥിരതയുള്ള reference മാത്രം ഉപയോഗിക്കുന്നു.
+    if (!window.accessToken) {
+        console.warn("⏭️ Smart Sync skipped: user not logged in yet (window.accessToken missing).");
+        if (typeof window.medistockUpdateSyncStatus === 'function') {
+            window.medistockUpdateSyncStatus('backup', false, 'Login ചെയ്തിട്ടില്ല');
+        }
+        return;
+    }
     
     console.log("☁️ Smart Sync: Backing up data to Google Drive...");
     const fileContent = JSON.stringify(localStorage);
@@ -19032,7 +19296,7 @@ window.smartAutoBackup = async function() {
     
     try {
         let searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='medistock_backup_data.json' and trashed=false", {
-            headers: { 'Authorization': 'Bearer ' + accessToken }
+            headers: { 'Authorization': 'Bearer ' + window.accessToken }
         });
         if (!searchRes.ok) {
             // 🌟 ടോക്കൺ കാലാവധി കഴിഞ്ഞതോ / അനുമതി പ്രശ്നമോ ആണെങ്കിൽ ഇവിടെ പിടിക്കപ്പെടും 🌟
@@ -19052,15 +19316,23 @@ window.smartAutoBackup = async function() {
         form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
         form.append('file', new Blob([fileContent], { type: 'application/json' }));
         
-        let uploadRes = await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + accessToken }, body: form });
+        let uploadRes = await fetch(url, { method: method, headers: { 'Authorization': 'Bearer ' + window.accessToken }, body: form });
         if (!uploadRes.ok) {
             throw new Error('Drive Upload Failed: HTTP ' + uploadRes.status);
         }
         console.log("✅ Smart Sync: Backup Successful!");
         window.__lastDriveBackupFailed = false;
+        // 🌟 പുതിയത്: എപ്പോഴും കാണാവുന്ന Sync Status ബാഡ്ജിലും വിജയം രേഖപ്പെടുത്തുന്നു (ക്ഷണിക toast-ന് പുറമെ)
+        if (typeof window.medistockUpdateSyncStatus === 'function') {
+            window.medistockUpdateSyncStatus('backup', true, 'Google Drive-ലേക്ക് ബാക്കപ്പ് ചെയ്തു');
+        }
     } catch(e) {
         console.error("Backup Error:", e);
         window.__lastDriveBackupFailed = true;
+        // 🌟 പുതിയത്: ക്ഷണിക toast മാത്രമല്ല, സ്ഥിരമായി കാണാവുന്ന Sync Status ബാഡ്ജിലും പരാജയം കാണിക്കുന്നു
+        if (typeof window.medistockUpdateSyncStatus === 'function') {
+            window.medistockUpdateSyncStatus('backup', false, e.message || 'Backup പരാജയപ്പെട്ടു');
+        }
         // 🌟 ബാക്കപ്പ് പരാജയപ്പെട്ടാൽ ഇത് നിശബ്ദമായി മറച്ചുവെക്കാതെ, സ്ക്രീനിൽ കാണിക്കുന്നു 🌟
         let old = document.getElementById('driveBackupFailToast');
         if (old) old.remove();
@@ -19992,6 +20264,14 @@ window.clearLocalDraft = function() {
             userIdentifier = prompt("ദയവായി നിങ്ങളുടെ ഇമെയിൽ ഐഡി അല്ലെങ്കിൽ സ്ഥാപനത്തിന്റെ പേര് നൽകുക:");
             if (userIdentifier && userIdentifier.trim() !== "") localStorage.setItem("medistock_user_id", userIdentifier.trim());
             else userIdentifier = "Anonymous User"; 
+        }
+
+        // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): മുകളിലുള്ള Gemini OCR സ്കാൻ ലോജിക്കിനെ ഒരു 
+        // തരത്തിലും ബാധിക്കാതെ, ഈ സ്കാൻ ചെയ്ത ആൾ ആരാണെന്ന് (Google Login email + Institution + 
+        // Pharmacist പേര്) ഒരു വേറെ Google Sheet-ലേക്ക് (Scan Log) മാത്രമായി, fire-and-forget ആയി 
+        // ലോഗ് ചെയ്യുന്നു. ഇത് പരാജയപ്പെട്ടാൽ പോലും സ്കാൻ ചെയ്യുന്ന പ്രവർത്തനത്തെ ബാധിക്കില്ല.
+        if (typeof window.medistockLogUsageEvent === 'function') {
+            window.medistockLogUsageEvent('scan');
         }
 
         try {
