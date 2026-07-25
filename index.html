@@ -781,7 +781,7 @@
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
             <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
-Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
+~Medistock Viewer  is  an  independently  developed  Medicine  Management  Software  and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
             <div id="g_id_onload"
      data-client_id="509379298464-2hdvkjsllt27soiuvmvd2lon4mtd3s2h.apps.googleusercontent.com"
@@ -1140,7 +1140,7 @@ let accessToken = null;
 // ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
 // (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
 //  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
-const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbyQB9F9Y6eZYR9OPr1BHhxnYmfg59dxcVbG5f8ObR8hUe8qnZOwaorvlmTpk8QF0Mkw2Q/exec";
+const MEDISTOCK_USAGE_LOG_URL = "PASTE_YOUR_DEPLOYED_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 window.onload = function() {
@@ -1176,6 +1176,10 @@ window.onload = function() {
                 // 🌟 പുതിയത്: ലോഗിൻ വിജയകരമായ ഉടനെ, എപ്പോഴും കാണാവുന്ന Google Drive Sync Status ബാഡ്ജ് ഉണ്ടാക്കുന്നു
                 if (typeof window.medistockEnsureSyncStatusBadge === 'function') {
                     window.medistockEnsureSyncStatusBadge();
+                }
+                // 🌟 പുതിയത്: Drive access ലഭിച്ചു കഴിഞ്ഞാൽ, "Connect Drive" ഫോൾബാക്ക് ബട്ടൺ ഉടനെ മറയ്ക്കുന്നു
+                if (typeof window.medistockEnsureConnectDriveButton === 'function') {
+                    window.medistockEnsureConnectDriveButton();
                 }
 
                 // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): 
@@ -19860,8 +19864,59 @@ window.clearLocalDraft = function() {
             } else {
                 alert("Error: loginStartPage എന്ന ഐഡി കണ്ടെത്താൻ കഴിഞ്ഞില്ല!");
             }
+
+            // 🌟 EXPERT FIX (യഥാർത്ഥ മൂലകാരണം ഇവിടെ പരിഹരിക്കുന്നു):
+            // മുകളിലെ "Sign in as ..." ബട്ടൺ ഒരു ID Token മാത്രമേ നൽകുന്നുള്ളൂ — ഇത് ആളെ 
+            // തിരിച്ചറിയാൻ മാത്രമേ ഉപകരിക്കൂ, Google Drive access അല്ല. Drive Backup/Restore 
+            // പ്രവർത്തിക്കാൻ ആവശ്യമായ access_token നേടാൻ, tokenClient.requestAccessToken() 
+            // എന്ന് വിളിക്കണം — ഇത് മുൻപ് കോഡിൽ എവിടെയും വിളിച്ചിരുന്നില്ല, അതാണ് Backup/Restore 
+            // ഒരിക്കലും പ്രവർത്തിക്കാതിരുന്നതിന്റെ യഥാർത്ഥ കാരണം. ഇവിടെ, Identity Login വിജയിച്ച 
+            // ഉടനെ തന്നെ, Drive permission ചോദിക്കുന്ന രണ്ടാമത്തെ (ചെറിയ) പോപ്പപ്പ് തനിയെ കാണിക്കുന്നു.
+            if (typeof tokenClient !== 'undefined' && tokenClient) {
+                try {
+                    tokenClient.requestAccessToken({ prompt: '' });
+                } catch (e) {
+                    console.error('Drive Access Token Request Error:', e);
+                }
+            }
         }
     }
+</script>
+
+<!-- ================================================================================= -->
+<!-- 🌟 EXPERT ADDITION: ഉറപ്പായും Drive-ലേക്ക് കണക്ട് ചെയ്യാനുള്ള MANUAL FALLBACK ബട്ടൺ 🌟 -->
+<!-- മുകളിലെ ഓട്ടോ-ട്രിഗർ ബ്രൗസർ പോപ്പപ്പ്-ബ്ലോക്കർ കാരണം ചിലപ്പോൾ പ്രവർത്തിക്കാതെ വന്നേക്കാം. -->
+<!-- അതിനാൽ, accessToken ഇല്ലാത്തപ്പോൾ എപ്പോഴും ഒരു ഉറപ്പുള്ള മാനുവൽ ബട്ടൺ കാണിക്കുന്നു. -->
+<!-- ================================================================================= -->
+<script>
+window.medistockEnsureConnectDriveButton = function() {
+    if (window.accessToken) {
+        // Drive already connected ആണെങ്കിൽ ബട്ടൺ ഉണ്ടെങ്കിൽ അത് നീക്കം ചെയ്യുന്നു
+        let existing = document.getElementById('medistockConnectDriveBtn');
+        if (existing) existing.remove();
+        return;
+    }
+    if (document.getElementById('medistockConnectDriveBtn')) return; // ഇതിനകം ഉണ്ട്
+
+    let btn = document.createElement('button');
+    btn.id = 'medistockConnectDriveBtn';
+    btn.innerHTML = '<i class="fa-brands fa-google-drive"></i> Google Drive Backup ബന്ധിപ്പിക്കുക';
+    btn.style.cssText = "position:fixed; bottom:70px; right:20px; z-index:99997; background:#2980b9; color:white; border:none; padding:10px 16px; border-radius:30px; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); font-size:13px; cursor:pointer;";
+    btn.onclick = function() {
+        if (typeof tokenClient !== 'undefined' && tokenClient) {
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        }
+    };
+    document.body.appendChild(btn);
+};
+// എല്ലാ 2 സെക്കൻഡിലും പരിശോധിച്ച്, accessToken ഇല്ലെങ്കിൽ ഈ ബട്ടൺ കാണിക്കുന്നു (login ന് ശേഷം മാത്രം)
+setInterval(function() {
+    let loginPg = document.getElementById('loginStartPage');
+    let stillOnLoginPage = loginPg && loginPg.style.display !== 'none';
+    if (!stillOnLoginPage) {
+        window.medistockEnsureConnectDriveButton();
+    }
+}, 2000);
 </script>
 
 <!-- ================================================================================= -->
