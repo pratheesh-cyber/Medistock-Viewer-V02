@@ -3433,20 +3433,28 @@ window.refreshAllPagesAfterRestore = function() {
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
     
     <!-- 2. ബട്ടണുകളുടെ സെക്ഷൻ ഹെഡിങ്ങിന് താഴെ നൽകുന്നു -->
-    <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+    <div class="no-print" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
         <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് 
              പരീക്ഷണം നടത്താനുള്ള SAMPLE DATA ഡൗൺലോഡ് ചെയ്യാൻ 🌟 -->
-        <button class="nav-btn" style="margin-bottom: 0; background: #2980b9;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD SAMPLE DATA</button>
-        <button class="nav-btn" style="margin-bottom: 0; background: #34495e;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
-        <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
-        <button class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> BOOK LABEL GENERATOR</button>
-        <button class="nav-btn" style="margin-bottom: 0; background: #27ae60;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
-        <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT DATA</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #2980b9; padding: 6px 12px; font-size: 13px;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD SAMPLE DATA</button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #34495e; padding: 6px 12px; font-size: 13px;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> BOOK LABEL GENERATOR</button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; padding: 6px 12px; font-size: 13px;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT DATA</button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c; padding: 6px 12px; font-size: 13px;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT DATA</button>
+        
         <!-- 🌟 പുതിയതായി ചേർത്ത UNDO ബട്ടൺ: Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിലെ 
              ഏറ്റവും അവസാനത്തെ Add/Edit/Delete പ്രവർത്തനം തിരികെ എടുക്കാൻ 🌟 -->
-        <button class="nav-btn" style="margin-bottom: 0; background: #d35400;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #d35400; padding: 6px 12px; font-size: 13px;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO</button>
+        
         <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Downloads ഫോൾഡറിലേക്കുള്ള Local Auto-Backup സജീവമാക്കാൻ 🌟 -->
-        <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
+        <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
+        
         <!-- മറഞ്ഞിരിക്കുന്ന File Input -->
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
@@ -3454,6 +3462,7 @@ window.refreshAllPagesAfterRestore = function() {
     <div style="text-align:center; margin-bottom: 15px;">
         <span id="medistockLocalBackupStatusText" style="font-size: 12px; font-weight: bold; color: #7f8c8d;">🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.</span>
     </div>
+</div>
 
     <!-- പുതിയതായി ചേർത്ത വിവരണം -->
     <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
