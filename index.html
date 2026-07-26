@@ -1135,7 +1135,7 @@ let accessToken = null;
 // ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
 // (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
 //  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
-const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbzAy4pWjr_s0IuQW2MtJodHfMA9A_1z9o1GGXZIux7-W2fWdIH_zfO0wMHrG-2oHzHeDw/exec";
+const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbx5cQa6VfvJ8HpO2tKvsN1Fn2GxFj9V-3WcT1Ljsy6P7ScxkCZnQwLvqO0lqKp4yTdCVg/exec";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 // 🌟 EXPERT FIX (ROOT CAUSE കണ്ടെത്തി): ഈ ഫയലിൽ താഴെ (ഏകദേശം line 8939) "window.onload = init;" 
@@ -1221,10 +1221,23 @@ async function restoreDataFromDriveSilent() {
                 headers: { 'Authorization': 'Bearer ' + accessToken }
             });
             if (!dlRes.ok) throw new Error('Drive Download Failed: HTTP ' + dlRes.status);
-            let data = await dlRes.json();
-            
-            for (let key in data) { localStorage.setItem(key, data[key]); }
-            console.log("☁️ Auto-Restore from Drive Successful!");
+            let data = await dlRes.json(); // ✅ ഡാറ്റ ആദ്യം പൂർണ്ണമായി ഡൗൺലോഡ് ചെയ്ത് സുരക്ഷിതമായി മെമ്മറിയിൽ വെക്കുന്നു (Network പരാജയപ്പെട്ടാൽ നിലവിലെ ഡാറ്റയ്ക്ക് ഒരു കേടും വരില്ല)
+
+            // 🌟 EXPERT FIX (USER REQUEST): Google Drive-ൽ നിന്നുള്ള പുതിയ ഡാറ്റ എഴുതുന്നതിന് മുൻപ്, 
+            // നിലവിലുള്ള മുഴുവൻ പേജിലേയും മുഴുവൻ ഡാറ്റയും (localStorage.clear()) ആദ്യം പൂർണ്ണമായി 
+            // ഡിലീറ്റ് ചെയ്യുന്നു. ഈ ഡിലീറ്റ് ചെയ്യുന്ന സമയത്ത് ഒരു auto-backup പോലും Google Drive-ലേക്ക് 
+            // പോകാതിരിക്കാൻ (അല്ലെങ്കിൽ ആ ശൂന്യമായ അവസ്ഥ Drive-ലേക്ക് save ആയി യഥാർത്ഥ ബാക്കപ്പ് 
+            // നശിപ്പിച്ചേക്കാം), ഒരു "guard flag" (window.__medistockRestoreInProgress) ഇവിടെ സെറ്റ് 
+            // ചെയ്യുന്നു — smartAutoBackup() ഈ ഫ്ലാഗ് നോക്കി ഈ സമയത്ത് സ്വയമേവ skip ചെയ്യും.
+            window.__medistockRestoreInProgress = true;
+            try {
+                localStorage.clear();
+                for (let key in data) { localStorage.setItem(key, data[key]); }
+                console.log("☁️ Auto-Restore from Drive Successful (Full Clear + Restore)!");
+            } finally {
+                // ✅ ക്ലിയർ+റീസ്റ്റോർ പൂർത്തിയായാലും പരാജയപ്പെട്ടാലും, ഗാർഡ് ഫ്ലാഗ് എപ്പോഴും തിരികെ മാറ്റുന്നു
+                window.__medistockRestoreInProgress = false;
+            }
             
             // 🌟 EXPERT FIX (Auto-Restore Completeness): localStorage-ൽ പുതിയ ഡാറ്റ വന്നാൽ മാത്രം പോരാ,
             // മെമ്മറിയിലുള്ള stockItems/customProjectsMap പോലുള്ള വേരിയബിളുകളും, id="indentAtItemPage",
@@ -19289,6 +19302,13 @@ window.loadScannedDataToExcelGrid = function() {
 
 // ബാക്കപ്പ് എടുക്കാനുള്ള പ്രധാന ഫംഗ്ഷൻ
 window.smartAutoBackup = async function() {
+    // 🌟 EXPERT FIX (USER REQUEST): Google Drive-ൽ നിന്നും Restore ചെയ്യുന്ന സമയത്ത് 
+    // localStorage.clear() ചെയ്യുന്നത്, ഒരു auto-backup trigger ആയി തെറ്റിദ്ധരിച്ച് ആ ശൂന്യമായ 
+    // അവസ്ഥ Drive-ലേക്ക് save ആകാതിരിക്കാൻ, Restore നടക്കുന്ന സമയത്ത് ബാക്കപ്പ് പൂർണ്ണമായി skip ചെയ്യുന്നു.
+    if (window.__medistockRestoreInProgress) {
+        console.warn("⏭️ Smart Sync skipped: Restore നടക്കുന്നതിനാൽ ബാക്കപ്പ് താൽക്കാലികമായി നിർത്തിവെച്ചു.");
+        return;
+    }
     // 🌟 EXPERT FIX (ROOT CAUSE): മുൻപ് ഇവിടെ ഇടയ്ക്കിടെ ഇനിഷ്യലൈസ് ചെയ്ത bare "accessToken" 
     // വേരിയബിളാണ് പരിശോധിച്ചിരുന്നത് — ഇത് window.accessToken-മായി സമന്വയിക്കാതെ പോയ സന്ദർഭങ്ങളിൽ 
     // (ഉദാ: silent token refresh, മറ്റ് script ക്രമം പ്രശ്നങ്ങൾ) ഒരു toast/error പോലുമില്ലാതെ ഈ 
@@ -20002,6 +20022,10 @@ window.medistockRefreshConnectDriveUI = function() {
     // ---------------------------------------------------------------
     let originalSmartAutoBackup = window.smartAutoBackup;
     window.smartAutoBackup = async function() {
+        // 🌟 EXPERT FIX (USER REQUEST): Restore നടക്കുന്ന സമയത്ത് (localStorage.clear() ചെയ്യുമ്പോൾ) 
+        // ഇവിടെയും ബാക്കപ്പ് പൂർണ്ണമായി skip ചെയ്യുന്നു — അല്ലെങ്കിൽ താഴെ ഒരു തെറ്റായ "Backup വിജയിച്ചു" 
+        // മെസേജ് കാണിച്ചേക്കാം.
+        if (window.__medistockRestoreInProgress) return;
         if (!window.accessToken) return;
         if (!localStorage.getItem('medistock_last_login_id')) {
             await fetchAndStoreLoginId();
