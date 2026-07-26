@@ -788,12 +788,12 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                  ബന്ധിപ്പിക്കുക" (Drive access-ന്) എന്നും. രണ്ടാമത്തേത് ഒറ്റയ്ക്ക് തന്നെ Login 
                  + Drive Access രണ്ടും (userinfo API വഴി email/name ഉൾപ്പെടെ) നൽകുന്നതിനാൽ, 
                  ആദ്യത്തെ ബട്ടൺ ഒഴിവാക്കി, ഇപ്പോൾ ഒരൊറ്റ ബട്ടൺ മാത്രമാക്കിയിരിക്കുന്നു. -->
-            <div style="margin-top: 4px; margin-bottom: 4px;">
+            <div style="margin-top: 4px; margin-bottom: 4px; display: flex; flex-direction: column; align-items: center;">
                 <button id="medistockConnectDriveBtn" type="button" onclick="medistockConnectDriveManual()"
-                    style="width:320px; max-width:100%; background:#2980b9; color:white; border:none; padding:14px 16px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+                    style="width:320px; max-width:100%; margin: 0 auto; background:#2980b9; color:white; border:none; padding:14px 16px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
                     <i class="fa-brands fa-google"></i> Google ഉപയോഗിച്ച് Sign In ചെയ്യുക
                 </button>
-                <div id="medistockConnectDriveStatusText" style="font-size:12px; color:#7f8c8d; margin-top:6px; font-weight:bold;">
+                <div id="medistockConnectDriveStatusText" style="font-size:12px; color:#7f8c8d; margin-top:6px; font-weight:bold; text-align:center;">
                     ☁️ Login + Google Drive Backup ഒരുമിച്ച് സജീവമാക്കാൻ ഈ ബട്ടൺ അമർത്തുക
                 </div>
             </div>
@@ -3669,10 +3669,9 @@ window.refreshAllPagesAfterRestore = function() {
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
     </div>
     
-    <div style="text-align:center; margin-bottom: 15px;">
+    <div style="text-align:center; margin-bottom: 1px;">
         <span id="medistockLocalBackupStatusText" style="font-size: 12px; font-weight: bold; color: #7f8c8d;">🔴 Local Auto-Backup ഇപ്പോൾ സജീവമല്ല. സജീവമാക്കാൻ ബട്ടൺ അമർത്തുക.</span>
     </div>
-</div>
 
 <script>
 // 🌟 പുതിയത് (EXPERT ADDITION): മുകളിലുള്ള രണ്ട് ടെസ്റ്റ് ബട്ടണുകൾക്കുള്ള ഫംഗ്ഷനുകൾ 🌟
@@ -3722,14 +3721,16 @@ async function medistockTestDriveRestoreNow() {
     <!-- 🌟 പുതിയത് (EXPERT ADDITION): Google Drive Sync Status — ഈ പേജിൽ (MORE DETAILS) മാത്രം, 
          സ്ഥിരമായി (static), താഴെയുള്ള disclaimer ബോക്സിന്റെ അതേ വീതിയിൽ. മുൻപ് ഇത് എല്ലാ 
          പേജിലും floating ആയി കാണിച്ചിരുന്നത് ഇപ്പോൾ ഇവിടെ മാത്രമായി ഒതുക്കിയിരിക്കുന്നു. 🌟 -->
-    <div id="medistockSyncStatusBadge" style="text-align: center; color: #2c3e50; font-family: 'Anek Malayalam', sans-serif; font-size: 13px; font-weight: bold; margin-bottom: 12px; padding: 12px 15px; background-color: #f0fdfa; border: 2px dashed #16a085; border-radius: 8px; line-height: 1.6;">
+    <div id="medistockSyncStatusBadge" style="text-align: center; color: #2c3e50; font-family: 'Anek Malayalam', sans-serif; font-size: 13px; font-weight: bold; margin-top: 1px; margin-bottom: 1px; padding: 12px 15px; background-color: #f0fdfa; border: 2px dashed #16a085; border-radius: 8px; line-height: 1.6;">
         <div>☁️ Google Drive Sync Status</div>
-        <div id="medistockSyncStatusBackupLine" style="font-weight: normal; font-size: 12px;">⏳ Backup: —</div>
-        <div id="medistockSyncStatusRestoreLine" style="font-weight: normal; font-size: 12px;">⏳ Restore: —</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+            <div id="medistockSyncStatusBackupLine" style="font-weight: normal; font-size: 12px; text-align: left;">⏳ Backup: —</div>
+            <div id="medistockSyncStatusRestoreLine" style="font-weight: normal; font-size: 12px; text-align: right;">⏳ Restore: —</div>
+        </div>
     </div>
 
     <!-- പുതിയതായി ചേർത്ത വിവരണം -->
-    <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-bottom: 25px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
+    <div style="text-align: center; color: #d35400; font-family: 'Anek Malayalam', sans-serif; font-size: 14px; font-weight: 400; margin-top: 0px; margin-bottom: 1px; padding: 15px; background-color: #fdf2e9; border: 2px dashed #e67e22; border-radius: 8px; line-height: 1.5;">
         ഈ വിൻഡോയിൽ നിന്നും ലഭിക്കുന്നത് ഔദ്യോഗിക രജിസ്റ്ററുകളുടെ ഫോർമാറ്റല്ല. പുറത്ത് നിന്നും രജിസ്റ്ററുകൾ വാങ്ങേണ്ടിവരുന്ന സാഹചര്യത്തിൽ നമ്മുടെ ഡ്യൂട്ടിയുടെ ഭാഗമായ രജിസ്റ്ററുകൾ വൃത്തിയായും എളുപ്പത്തിലും കൈകാര്യം ചെയ്യുന്നതിനുള്ള മാതൃകകൾ ആണിത്.<br>
         <span style="font-size: 10px; color: #2c3e50; font-weight: bold;">(കോട്ടയം ജില്ലയിലെ മുപ്പതോളം സ്ഥാപനങ്ങളിൽ ഈ മോഡൽ അനുസരിച്ച്  ഞങ്ങൾ ഒന്നിച്ച് print ചെയ്ത് എടുത്തിരുന്നു.അങ്ങനെ കുറച്ച് പേര് ചേർന്ന് ഒന്നിച്ച് Print ചെയ്താൽ തുക കുറഞ്ഞുകിട്ടും.)</span>
     </div>
@@ -20342,11 +20343,17 @@ window.medistockRefreshConnectDriveUI = function() {
         const resultArea = document.getElementById('resultArea');
         const scanBtn = document.querySelector('.btn-scan');
 
+        // 🌟 EXPERT FIX: മുൻപ് ഇവിടെ ഓരോ തവണയും "ഇമെയിൽ ഐഡി അല്ലെങ്കിൽ സ്ഥാപനത്തിന്റെ പേര് നൽകുക" 
+        // എന്ന prompt() പോപ്പപ്പ് സ്ക്രീനിൽ വന്നിരുന്നു. ഇപ്പോൾ Google Login ചെയ്ത യഥാർത്ഥ ഇമെയിൽ 
+        // ഓട്ടോമാറ്റിക്കായി ഉപയോഗിക്കുന്നു (medistockGetLoggedInEmail() വഴി) — ഇനി ഈ പോപ്പപ്പ് 
+        // സ്കാൻ ചെയ്യുമ്പോൾ ഒരിക്കലും വരില്ല.
         let userIdentifier = localStorage.getItem("medistock_user_id");
         if (!userIdentifier) {
-            userIdentifier = prompt("ദയവായി നിങ്ങളുടെ ഇമെയിൽ ഐഡി അല്ലെങ്കിൽ സ്ഥാപനത്തിന്റെ പേര് നൽകുക:");
-            if (userIdentifier && userIdentifier.trim() !== "") localStorage.setItem("medistock_user_id", userIdentifier.trim());
-            else userIdentifier = "Anonymous User"; 
+            if (typeof window.medistockGetLoggedInEmail === 'function') {
+                userIdentifier = await window.medistockGetLoggedInEmail();
+            }
+            if (!userIdentifier || userIdentifier === 'Unknown') userIdentifier = "Anonymous User";
+            localStorage.setItem("medistock_user_id", userIdentifier);
         }
 
         // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): മുകളിലുള്ള Gemini OCR സ്കാൻ ലോജിക്കിനെ ഒരു 
@@ -20895,7 +20902,22 @@ async function pdfScannerCallGeminiAPI(base64Image) {
     const scanBtn = document.querySelector('#pdfScannerPage .scan-btn-scan');
     // Uses the same API endpoint and user details as the image scanner
     const API_URL = "https://script.google.com/macros/s/AKfycbzFqhSiU0HUABnTwQ0zZqBJIqZUMWxlt4Lcnn1b4xlpxrQA3f9fi0mWnhwbwX1Shl_0rg/exec"; 
-    let userIdentifier = localStorage.getItem("medistock_user_id") || "Medistock User";
+    let userIdentifier = localStorage.getItem("medistock_user_id");
+    if (!userIdentifier) {
+        if (typeof window.medistockGetLoggedInEmail === 'function') {
+            userIdentifier = await window.medistockGetLoggedInEmail();
+        }
+        if (!userIdentifier || userIdentifier === 'Unknown') userIdentifier = "Medistock User";
+        localStorage.setItem("medistock_user_id", userIdentifier);
+    }
+
+    // 🌟 പുതിയത് (EXPERT ADDITION - ADDITIVE ONLY): Image Scanner-ൽ ചെയ്ത അതേ രീതിയിൽ, PDF 
+    // സ്കാൻ ചെയ്യുമ്പോഴും ഈ സ്കാൻ ചെയ്ത ആൾ ആരാണെന്ന് (Google Login email + Institution + 
+    // Pharmacist പേര്) "Scan Log" Google Sheet-ലേക്ക് fire-and-forget ആയി ലോഗ് ചെയ്യുന്നു. 
+    // ഇത് പരാജയപ്പെട്ടാൽ പോലും PDF സ്കാൻ ചെയ്യുന്ന പ്രവർത്തനത്തെ ബാധിക്കില്ല.
+    if (typeof window.medistockLogUsageEvent === 'function') {
+        window.medistockLogUsageEvent('scan');
+    }
 
     try {
         const response = await fetch(API_URL, {
