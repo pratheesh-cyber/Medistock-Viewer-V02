@@ -1135,7 +1135,7 @@ let accessToken = null;
 // ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
 // (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
 //  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
-const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbx5cQa6VfvJ8HpO2tKvsN1Fn2GxFj9V-3WcT1Ljsy6P7ScxkCZnQwLvqO0lqKp4yTdCVg/exec";
+const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbw2kPFxMp-Pp8LJ5HdRuTAZ5YOc8YBBVupL02qonHFN3qaWMRL0dvz0L_hqbTNEUuLbew/exec";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 // 🌟 EXPERT FIX (ROOT CAUSE കണ്ടെത്തി): ഈ ഫയലിൽ താഴെ (ഏകദേശം line 8939) "window.onload = init;" 
@@ -7049,6 +7049,47 @@ function updateMainDetailsRow(id) {
     };
 }
 
+// =====================================================================
+// 🌟 EXPERT ADDITION: "MEDICINE ARRANGE @ MEDICINE ITEM" ഉള്ള എല്ലാ പേജുകൾക്കും (Main Stock 
+// Details, OP/IP Sub Stock Details, Opening Stock, Rack Details മുതലായവ) പൊതുവായ, ഒരേ ക്രമീകരണ 
+// നിയമം നൽകാൻ ഒരൊറ്റ ഹെൽപ്പർ ഫംഗ്ഷൻ. ഇത് 3 തലങ്ങളിലായി ക്രമീകരിക്കുന്നു:
+//   1. Medicine Item (താഴെയുള്ള കസ്റ്റം മുൻഗണനാ ക്രമത്തിൽ — അക്ഷരമാലാക്രമമല്ല)
+//   2. അതിനുള്ളിൽ NAME OF MEDICINE (അക്ഷരമാലാക്രമത്തിൽ)
+//   3. ഒരേ NAME OF MEDICINE ആണെങ്കിൽ, Fund (അക്ഷരമാലാക്രമത്തിൽ)
+// മുൻപ് ഓരോ പേജിലും "Medicine Item" മാത്രം താരതമ്യം ചെയ്തിരുന്നതിനാൽ, ഒരേ വിഭാഗത്തിനുള്ളിലെ 
+// മരുന്നുകൾ ക്രമരഹിതമായി (original insertion order-ൽ) ഇടകലർന്ന് വന്നിരുന്നു.
+// =====================================================================
+window.MEDISTOCK_ITEM_CATEGORY_ORDER = [
+    "ARISHTASAVAM", "BHASMAM", "CHOORNAM", "GHRITHAM", "GULIKA", "KASHAYAM",
+    "KSC", "KC", "LEHYAM", "OINTMENT", "RASAKRIYA", "SYRUP", "THAILAM", "KANJIKOOTT"
+];
+window.medistockCompareByMedicineItem = function(a, b) {
+    let order = window.MEDISTOCK_ITEM_CATEGORY_ORDER;
+    let aItem = (a.item || "").toString().toUpperCase().trim();
+    let bItem = (b.item || "").toString().toUpperCase().trim();
+    let aIdx = order.indexOf(aItem);
+    let bIdx = order.indexOf(bItem);
+
+    if (aIdx === -1 && bIdx === -1) {
+        // രണ്ടും ലിസ്റ്റിൽ ഇല്ലാത്ത വിഭാഗങ്ങൾ ആണെങ്കിൽ, അവയെ സ്വന്തം അക്ഷരമാലാക്രമത്തിൽ ക്രമീകരിക്കുന്നു
+        let c = aItem.localeCompare(bItem);
+        if (c !== 0) return c;
+    } else if (aIdx === -1) {
+        return 1; // ലിസ്റ്റിൽ ഇല്ലാത്തവ, ലിസ്റ്റിലുള്ളവയ്ക്ക് ശേഷം വരും
+    } else if (bIdx === -1) {
+        return -1;
+    } else if (aIdx !== bIdx) {
+        return aIdx - bIdx; // കസ്റ്റം മുൻഗണനാ ക്രമം
+    }
+
+    // ഒരേ Medicine Item ആണെങ്കിൽ, NAME OF MEDICINE പ്രകാരം അക്ഷരമാലാക്രമത്തിൽ
+    let nameCompare = (a.name || "").toString().localeCompare((b.name || "").toString());
+    if (nameCompare !== 0) return nameCompare;
+
+    // ഒരേ NAME OF MEDICINE ആണെങ്കിൽ, Fund പ്രകാരം അക്ഷരമാലാക്രമത്തിൽ
+    return (a.fund || "").toString().localeCompare((b.fund || "").toString());
+};
+
 window.renderDetailsTable = function() {
     const fundFilter = document.getElementById('detailsFundInput') ? document.getElementById('detailsFundInput').value.trim() : "ALL PROJECT MEDICINES";
     const statusFilter = document.getElementById('detailsStatusInput') ? document.getElementById('detailsStatusInput').value.trim().toUpperCase() : "ALL MEDICINE";
@@ -7123,7 +7164,10 @@ window.renderDetailsTable = function() {
             let getVal = (d) => { let p = (d||"").split('/'); if(p.length===2) return p[1]+p[0]; return d; };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeFilter === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item||"").localeCompare(b.item||"");
+            // 🌟 EXPERT FIX: Medicine Item (കസ്റ്റം മുൻഗണനാ ക്രമത്തിൽ) → NAME OF MEDICINE 
+            // (അക്ഷരമാലാക്രമത്തിൽ) → Fund (അക്ഷരമാലാക്രമത്തിൽ) എന്നിങ്ങനെ 3 തലങ്ങളിൽ ക്രമീകരിക്കുന്ന 
+            // പൊതു ഹെൽപ്പർ ഫംഗ്ഷൻ ഉപയോഗിക്കുന്നു (എല്ലാ പേജിലും ഒരേ ക്രമീകരണ നിയമം ഉറപ്പാക്കാൻ).
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund||"").localeCompare(b.fund||"");
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PAGE No") {
@@ -7324,7 +7368,8 @@ window.renderOpDetailsTable = function() {
             let getVal = (d) => { let p = (d||"").split('/'); return p.length===2 ? p[1]+p[0] : (d||"999999"); };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeFilter === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item||"").localeCompare(b.item||"");
+            // EXPERT FIX: പൊതു 3-തല (Item order -> Name -> Fund) comparator ഉപയോഗിക്കുന്നു
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund||"").localeCompare(b.fund||"");
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PAGE No") {
@@ -7550,7 +7595,8 @@ window.renderIpDetailsTable = function() {
             let getVal = (d) => { let p = (d||"").split('/'); return p.length===2 ? p[1]+p[0] : (d||"999999"); };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeFilter === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item||"").localeCompare(b.item||"");
+            // EXPERT FIX: പൊതു 3-തല (Item order -> Name -> Fund) comparator ഉപയോഗിക്കുന്നു
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund||"").localeCompare(b.fund||"");
         } else if (arrangeFilter === "MEDICINE ARRANGE @ PAGE No") {
@@ -8891,7 +8937,8 @@ function renderOpChargeListTable() {
             let getVal = (d) => { let p = (d || "").split('/'); return p.length === 2 ? p[1] + p[0] : (d || "999999"); };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeOrder === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item || "").localeCompare(b.item || "");
+            // EXPERT FIX: പൊതു 3-തല (Item order -> Name -> Fund) comparator ഉപയോഗിക്കുന്നു
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeOrder === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund || "").localeCompare(b.fund || "");
         } else if (arrangeOrder === "MEDICINE ARRANGE @ PAGE No") {
@@ -9916,7 +9963,8 @@ function renderIpChargeListTable() {
             let getVal = (d) => { let p = (d || "").split('/'); return p.length === 2 ? p[1] + p[0] : "999999"; };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeOrder === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item || "").localeCompare(b.item || "");
+            // EXPERT FIX: പൊതു 3-തല (Item order -> Name -> Fund) comparator ഉപയോഗിക്കുന്നു
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeOrder === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund || "").localeCompare(b.fund || "");
         }
@@ -10052,7 +10100,8 @@ function renderMainChargeListTable() {
             let getVal = (d) => { let p = (d || "").split('/'); return p.length === 2 ? p[1] + p[0] : (d || "999999"); };
             return getVal(a.exp).localeCompare(getVal(b.exp));
         } else if (arrangeOrder === "MEDICINE ARRANGE @ MEDICINE ITEM") {
-            return (a.item || "").localeCompare(b.item || "");
+            // EXPERT FIX: പൊതു 3-തല (Item order -> Name -> Fund) comparator ഉപയോഗിക്കുന്നു
+            return window.medistockCompareByMedicineItem(a, b);
         } else if (arrangeOrder === "MEDICINE ARRANGE @ PROJECT") {
             return (a.fund || "").localeCompare(b.fund || "");
         } else if (arrangeOrder === "MEDICINE ARRANGE @ PAGE No") {
@@ -10668,7 +10717,7 @@ window.renderMainRackDetailsTable = function() {
                 let getVal = (d) => { let p = (d || "").split('/'); return p.length === 2 ? p[1] + p[0] : (d || "999999"); };
                 return getVal(a.exp).localeCompare(getVal(b.exp));
             } 
-            else if (order === "MEDICINE ARRANGE @ MEDICINE ITEM") { return (a.item || "").localeCompare(b.item || ""); }
+            else if (order === "MEDICINE ARRANGE @ MEDICINE ITEM") { return window.medistockCompareByMedicineItem(a, b); }
             return 0;
         });
 
