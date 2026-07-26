@@ -1135,7 +1135,7 @@ let accessToken = null;
 // ⚠️ ഇവിടെ താങ്കൾ സ്വന്തമായി ഡിപ്ലോയ് ചെയ്ത Apps Script Web App-ന്റെ URL പേസ്റ്റ് ചെയ്യുക.
 // (ഈ ഫയലിനൊപ്പം നൽകുന്ന USAGE_LOG_APPS_SCRIPT.gs.txt എന്ന ഫയലിലെ നിർദ്ദേശങ്ങൾ പ്രകാരം
 //  ഒരു Google Sheet ഉണ്ടാക്കി, അതിൽ Apps Script ചേർത്ത്, Web App ആയി Deploy ചെയ്ത് URL എടുക്കുക)
-const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbw2kPFxMp-Pp8LJ5HdRuTAZ5YOc8YBBVupL02qonHFN3qaWMRL0dvz0L_hqbTNEUuLbew/exec";
+const MEDISTOCK_USAGE_LOG_URL = "https://script.google.com/macros/s/AKfycbx5cQa6VfvJ8HpO2tKvsN1Fn2GxFj9V-3WcT1Ljsy6P7ScxkCZnQwLvqO0lqKp4yTdCVg/exec";
 
 // സിസ്റ്റം ലോഡ് ആകുമ്പോൾ ഗൂഗിൾ ഐഡന്റിറ്റി സെറ്റ് ചെയ്യുന്നു (NEW AUTO-RESTORE)
 // 🌟 EXPERT FIX (ROOT CAUSE കണ്ടെത്തി): ഈ ഫയലിൽ താഴെ (ഏകദേശം line 8939) "window.onload = init;" 
@@ -9316,6 +9316,13 @@ const workerCode = `
         return str.toLowerCase().replace(/[^a-z0-9]/g, ' ').split(' ').filter(Boolean);
     }
 
+    // 🌟 EXPERT ADDITION (USER REQUEST): ഒന്നോ അതിലധികമോ SPACE (അധിക സ്പേസ്, കാണാതെ പോയ സ്പേസ് 
+    // മുതലായവ) മാത്രമാണ് വ്യത്യാസമെങ്കിൽ, ആ വ്യത്യാസം അവഗണിച്ച് താരതമ്യം ചെയ്യാൻ വേണ്ടിയുള്ള ഹെൽപ്പർ.
+    // (എല്ലാ SPACE-ഉം നീക്കം ചെയ്ത്, ചെറിയ അക്ഷരത്തിലാക്കി താരതമ്യം ചെയ്യുന്നു)
+    function normalizeSpaces(str) {
+        return str.replace(/\s+/g, '').toLowerCase();
+    }
+
     self.onmessage = function(e) {
         const { rows, medicineData } = e.data;
         
@@ -9348,6 +9355,16 @@ const workerCode = `
             let exactMatch = db.find(d => d.originalName.toLowerCase() === inputName.toLowerCase());
             if (exactMatch) {
                 results.push({ index: row.index, exact: true, match: exactMatch.originalName, cat: exactMatch.cat });
+                return;
+            }
+
+            // 1.5 🌟 EXPERT ADDITION (USER REQUEST): SPACE മാത്രമാണ് വ്യത്യാസമെങ്കിൽ (അധിക സ്പേസ്/
+            // കാണാതെ പോയ സ്പേസ്), അത് ഒരു "സാമ്യമില്ലായ്മ" ആയി കണക്കാക്കാതെ, തെറ്റ് സ്വയമേവ ശരിയാക്കി 
+            // ശരിയായ പേരിലേക്കും Item-ലേക്കും മാറ്റുന്നു (95%+ autofix പോലെ, സാധാരണ വെള്ള നിറത്തിൽ) — 
+            // Levenshtein സ്കോർ കണക്കാക്കുന്നതിന് മുൻപ് തന്നെ ഇത് പരിശോധിക്കുന്നു.
+            let spaceOnlyMatch = db.find(d => normalizeSpaces(d.originalName) === normalizeSpaces(inputName));
+            if (spaceOnlyMatch) {
+                results.push({ index: row.index, exact: false, autofix: true, match: spaceOnlyMatch.originalName, cat: spaceOnlyMatch.cat });
                 return;
             }
 
@@ -9706,8 +9723,9 @@ function importExtractedData() {
     // 2.5 പകർത്തിക്കഴിഞ്ഞാൽ id="excelImportPage" പേജിലെ പട്ടികയിലെ ഡാറ്റ പൂർണ്ണമായും ഡിലീറ്റ് ചെയ്യുന്നു
     clearExcelImportData();
 
-    // 3. കുറച്ചു സമയത്തിന് ശേഷം വാണിംഗ് ലൂപ്പ് ആരംഭിക്കുന്നു
-    setTimeout(validateImportedData, 500); 
+    // 🌟 EXPERT FIX (USER REQUEST): validateImportedData() എന്ന പരിശോധന id="stockPage"-ലെ 
+    // "ADD TO STOCK" ബട്ടൺ അമർത്തുമ്പോൾ ഇതിനകം തന്നെ നടക്കുന്നുണ്ട്. അതിനാൽ ഇവിടെ "Import 
+    // Extracted Data" ബട്ടണിൽ ഈ പരിശോധന ആവർത്തിക്കേണ്ട ആവശ്യമില്ല — ഒഴിവാക്കിയിരിക്കുന്നു.
 }
 
 function validateImportedData() {
