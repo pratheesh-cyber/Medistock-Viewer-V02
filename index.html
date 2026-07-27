@@ -3667,6 +3667,9 @@ window.refreshAllPagesAfterRestore = function() {
         <!-- 🌟 പുതിയതായി ചേർത്ത UNDO ബട്ടൺ: Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിലെ 
              ഏറ്റവും അവസാനത്തെ Add/Edit/Delete പ്രവർത്തനം തിരികെ എടുക്കാൻ 🌟 -->
         <button class="nav-btn" style="margin-bottom: 0; background: #d35400; padding: 6px 12px; font-size: 13px;" onclick="medistockUndoLastAction()" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> UNDO</button>
+
+        <!-- 🌟 പുതിയതായി ചേർത്ത REDO ബട്ടൺ (USER REQUEST): UNDO ചെയ്തത് തിരിച്ച് മാറ്റം വരുത്താൻ 🌟 -->
+        <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockRedoLastAction()" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> REDO</button>
         
         <!-- 🌟 പുതിയതായി ചേർത്ത ബട്ടൺ: Downloads ഫോൾഡറിലേക്കുള്ള Local Auto-Backup സജീവമാക്കാൻ 🌟 -->
         <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
@@ -5228,6 +5231,10 @@ const categoryColors = {
         const MEDISTOCK_UNDO_KEY = 'medistock_undo_stack';
         const MEDISTOCK_UNDO_MAX_STEPS = 15;
         const MEDISTOCK_UNDO_GROUP_WINDOW_MS = 4000; // ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായ തുടർച്ചയായ സേവുകളെ ഒറ്റ Undo സ്റ്റെപ്പ് ആക്കുന്നു
+        // 🌟 പുതിയത് (USER REQUEST): REDO സ്റ്റാക്ക് — UNDO ചെയ്തത് തിരിച്ച് മാറ്റം വരുത്താൻ (Redo) വേണ്ടി.
+        // ഇത് UNDO സ്റ്റാക്കിന്റെ അതേ TRACKED_KEYS തന്നെ ഉപയോഗിക്കുന്നു, പക്ഷേ വേറെ ഒരു localStorage 
+        // കീയിൽ (medistock_redo_stack) പ്രത്യേകമായി സൂക്ഷിക്കുന്നു.
+        const MEDISTOCK_REDO_KEY = 'medistock_redo_stack';
         const MEDISTOCK_UNDO_TRACKED_KEYS = [
             'medistock_items', 'medistock_projects', 'medistock_last_indent',
             'medistock_indent_history', 'medistock_last_transaction',
@@ -5246,6 +5253,13 @@ const categoryColors = {
         function medistockPushUndoSnapshot() {
             try {
                 if (medistockUndoRestoring) return;
+
+                // 🌟 പുതിയത് (USER REQUEST): ഒരു പുതിയ യഥാർത്ഥ മാറ്റം (Add/Edit/Delete) വരുത്തിയാൽ, 
+                // മുൻപ് ശേഖരിച്ചുവെച്ച REDO ചരിത്രം ഇനി പ്രസക്തമല്ലാത്തതിനാൽ ഒഴിവാക്കുന്നു 
+                // (സാധാരണ Undo/Redo സോഫ്റ്റ്‌വെയറുകളിലെ അതേ പെരുമാറ്റം — Word, Excel മുതലായവയിൽ 
+                // കാണുന്നത് പോലെ, ഒരു പുതിയ മാറ്റം വരുത്തിയാൽ Redo ചെയ്യാൻ ഒന്നും ബാക്കി കാണില്ല).
+                try { localStorage.removeItem(MEDISTOCK_REDO_KEY); } catch(e) {}
+
                 let now = Date.now();
                 // അടുത്ത നിമിഷങ്ങളിൽ തന്നെ (ഒരേ പ്രവർത്തനത്തിന്റെ ഭാഗമായി) വീണ്ടും ട്രാക്ക് ചെയ്യുന്ന ഒരു കീ 
                 // എഴുതുന്നതാണെങ്കിൽ, ആദ്യമെടുത്ത Snapshot തന്നെ നിലനിർത്തുന്നു
@@ -5300,6 +5314,21 @@ const categoryColors = {
                 let doRestore = function() {
                     let last = stack.pop();
                     localStorage.setItem(MEDISTOCK_UNDO_KEY, JSON.stringify(stack));
+
+                    // 🌟 പുതിയത് (USER REQUEST): Undo ചെയ്യുന്നതിന് മുൻപ്, നിലവിലെ (Undo ചെയ്യാൻ പോകുന്ന) 
+                    // അവസ്ഥ REDO സ്റ്റാക്കിൽ സൂക്ഷിക്കുന്നു — ഇത് പിന്നീട് REDO ബട്ടൺ വഴി തിരികെ 
+                    // കൊണ്ടുവരാൻ വേണ്ടിയാണ്.
+                    try {
+                        let redoSnapshot = { time: Date.now(), data: {} };
+                        MEDISTOCK_UNDO_TRACKED_KEYS.forEach(function(k) {
+                            redoSnapshot.data[k] = localStorage.getItem(k);
+                        });
+                        let redoStackRaw = localStorage.getItem(MEDISTOCK_REDO_KEY);
+                        let redoStack = redoStackRaw ? JSON.parse(redoStackRaw) : [];
+                        redoStack.push(redoSnapshot);
+                        if (redoStack.length > MEDISTOCK_UNDO_MAX_STEPS) redoStack = redoStack.slice(redoStack.length - MEDISTOCK_UNDO_MAX_STEPS);
+                        localStorage.setItem(MEDISTOCK_REDO_KEY, JSON.stringify(redoStack));
+                    } catch (e) { console.error("Redo Snapshot Save Error:", e); }
 
                     medistockUndoRestoring = true; // പുനഃസ്ഥാപിക്കുന്ന ഈ എഴുത്തുകൾ പുതിയ Snapshot ആയി എടുക്കാതിരിക്കാൻ
                     try {
@@ -5374,6 +5403,106 @@ const categoryColors = {
             } catch (e) {
                 console.error("Undo Error:", e);
                 alert("Undo ചെയ്യുന്നതിനിടെ ഒരു പിശക് സംഭവിച്ചു.");
+            }
+        }
+
+        // 🌟 പുതിയത് (USER REQUEST): "MORE DETAILS" പേജിലെ "REDO" ബട്ടൺ അമർത്തുമ്പോൾ പ്രവർത്തിക്കുന്ന 
+        // ഫംഗ്ഷൻ — UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരിച്ച് (Redo) മാറ്റം വരുത്താൻ. ഇത് 
+        // medistockUndoLastAction()-ന്റെ അതേ ലോജിക് തന്നെ, എതിർദിശയിൽ (REDO സ്റ്റാക്കിൽ നിന്ന് 
+        // എടുത്ത്, UNDO സ്റ്റാക്കിലേക്ക് നിലവിലെ അവസ്ഥ തിരികെ വെക്കുന്നു).
+        function medistockRedoLastAction() {
+            try {
+                let redoStackRaw = localStorage.getItem(MEDISTOCK_REDO_KEY);
+                let redoStack = redoStackRaw ? JSON.parse(redoStackRaw) : [];
+                if (redoStack.length === 0) {
+                    if (typeof showCustomConfirm === 'function') {
+                        showCustomConfirm("Redo ചെയ്യാൻ Undo ചെയ്ത പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.", function(){}, function(){});
+                    } else {
+                        alert("Redo ചെയ്യാൻ Undo ചെയ്ത പ്രവർത്തനങ്ങളൊന്നും ഇപ്പോൾ ലഭ്യമല്ല.");
+                    }
+                    return;
+                }
+
+                let doRedo = function() {
+                    let last = redoStack.pop();
+                    localStorage.setItem(MEDISTOCK_REDO_KEY, JSON.stringify(redoStack));
+
+                    // 🌟 Redo ചെയ്യുന്നതിന് മുൻപ്, നിലവിലെ അവസ്ഥ വീണ്ടും UNDO സ്റ്റാക്കിലേക്ക് തിരികെ 
+                    // വെക്കുന്നു — ഇത് ഈ Redo-യെ വീണ്ടും Undo ചെയ്യാൻ വേണ്ടിയാണ്.
+                    try {
+                        let undoSnapshot = { time: Date.now(), data: {} };
+                        MEDISTOCK_UNDO_TRACKED_KEYS.forEach(function(k) {
+                            undoSnapshot.data[k] = localStorage.getItem(k);
+                        });
+                        let undoStackRaw = localStorage.getItem(MEDISTOCK_UNDO_KEY);
+                        let undoStack = undoStackRaw ? JSON.parse(undoStackRaw) : [];
+                        undoStack.push(undoSnapshot);
+                        if (undoStack.length > MEDISTOCK_UNDO_MAX_STEPS) undoStack = undoStack.slice(undoStack.length - MEDISTOCK_UNDO_MAX_STEPS);
+                        localStorage.setItem(MEDISTOCK_UNDO_KEY, JSON.stringify(undoStack));
+                    } catch (e) { console.error("Undo Snapshot Save (from Redo) Error:", e); }
+
+                    medistockUndoRestoring = true; // പുനഃസ്ഥാപിക്കുന്ന ഈ എഴുത്തുകൾ പുതിയ Snapshot ആയി എടുക്കാതിരിക്കാൻ
+                    try {
+                        MEDISTOCK_UNDO_TRACKED_KEYS.forEach(function(k) {
+                            let v = last.data ? last.data[k] : undefined;
+                            if (v !== null && v !== undefined) localStorage.setItem(k, v); else localStorage.removeItem(k);
+                        });
+                    } finally {
+                        medistockUndoRestoring = false;
+                    }
+                    medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
+
+                    // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു 
+                    // (Undo-യിൽ ഉപയോഗിക്കുന്ന അതേ റീഫ്രഷ് ക്രമം)
+                    if (typeof loadData === 'function') loadData();
+
+                    if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                        window.refreshAllPagesAfterRestore();
+                    } else {
+                        if (typeof renderTable === 'function') renderTable();
+                        if (typeof renderDetailsTable === 'function') renderDetailsTable();
+                        if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
+                        if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
+                        if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
+                        if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+                        if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
+                        if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
+                        if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
+                        if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
+                        if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+                    }
+
+                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
+                        window.restoreIndentViewPagesFromStorage();
+                    }
+
+                    let histPageEl = document.getElementById('indentHistoryPage');
+                    if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
+                        window.showIndentHistory();
+                    }
+
+                    document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ Undo പ്രവർത്തനം വിജയകരമായി Redo ചെയ്തിരിക്കുന്നു.";
+                    document.getElementById('modalOverlay').style.display = 'block';
+                    const winAlert = document.getElementById('sumteckAlertWindow');
+                    winAlert.style.display = 'block';
+                    document.getElementById('sumteckAlertOk').onclick = function() {
+                        winAlert.style.display = 'none';
+                        document.getElementById('modalOverlay').style.display = 'none';
+                    };
+                };
+
+                if (typeof showCustomConfirm === 'function') {
+                    showCustomConfirm(
+                        "ഏറ്റവും അവസാനം Undo ചെയ്ത പ്രവർത്തനം തിരികെ (Redo) വരുത്താൻ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+                        doRedo,
+                        function() {}
+                    );
+                } else if (confirm("ഏറ്റവും അവസാനം Undo ചെയ്തത് Redo ചെയ്യണോ?")) {
+                    doRedo();
+                }
+            } catch (e) {
+                console.error("Redo Error:", e);
+                alert("Redo ചെയ്യുന്നതിനിടെ ഒരു പിശക് സംഭവിച്ചു.");
             }
         }
 
