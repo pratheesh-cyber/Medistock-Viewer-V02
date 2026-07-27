@@ -9499,9 +9499,40 @@ const workerCode = `
                     originalName: med, 
                     cat: cat, 
                     num: extractNumbers(med),
-                    tokens: tokenize(med)
+                    tokens: tokenize(med),
+                    normName: normalizeSpaces(med) // 🌟 space ഒഴിവാക്കിയ പേര് (Tier-3 / Tier-4 പരിശോധനകൾക്ക്)
                 });
             });
+        }
+
+        // 🌟 EXPERT ADDITION (USER REQUEST — Tier 3 & 4): താഴെപ്പറയുന്ന പ്രത്യേക മരുന്നുകളുടെ 
+        // "ബേസ് പേരുകൾ" (അളവ്/GM/ML മുതലായവ ഒഴിവാക്കി). ഒരു ഡാറ്റാബേസ് എൻട്രിയുടെ space-normalized 
+        // പേര്, ഈ ബേസ് പേരുകളിൽ ഏതെങ്കിലും ഒന്നിൽ തുടങ്ങുന്നുവെങ്കിൽ (startsWith), ആ എൻട്രി ഈ 
+        // "പ്രത്യേക പട്ടിക"യിൽ പെട്ടതായി കണക്കാക്കുന്നു.
+        const SPECIAL_MED_BASE_NAMES = [
+            'ABHAYA CHOORNAM',
+            'ABHAYADI CHOORANAM',
+            'PANCHAKOLA CHOORNAM',
+            'PANCHAKOLADI CHOORNAM',
+            'CHOORNAM',
+            'THRIVATH CHOORNAM',
+            'BALAGULUCHYADHI KASHAYAM',
+            'VASAGULUCHYADHI KASHAYAM',
+            'VACHA CHOORNAM',
+            'VARA CHOORNAM',
+            'AMAYA CHOORNAM',
+            'ASANA CHOORNAM',
+            'ASHTA CHOORNAM'
+        ].map(normalizeSpaces);
+
+        function isSpecialListMedicine(normDbName) {
+            return SPECIAL_MED_BASE_NAMES.some(base => normDbName.indexOf(base) === 0);
+        }
+
+        // 🌟 EXPERT ADDITION (USER REQUEST — Tier 4): "KSC", "KC" എന്നീ വിഭാഗങ്ങൾ (categories)
+        const KSC_KC_CATEGORIES = ['ksc', 'kc'];
+        function isKscKcCategory(cat) {
+            return KSC_KC_CATEGORIES.indexOf((cat || '').toString().toLowerCase()) !== -1;
         }
 
         let results = [];
@@ -9530,6 +9561,38 @@ const workerCode = `
             let spaceOnlyMatch = db.find(d => normalizeSpaces(d.originalName) === normalizeSpaces(inputName));
             if (spaceOnlyMatch) {
                 results.push({ index: row.index, exact: false, autofix: true, match: spaceOnlyMatch.originalName, cat: spaceOnlyMatch.cat });
+                return;
+            }
+
+            let inputNorm = normalizeSpaces(inputName);
+
+            // 1.6 🌟 EXPERT ADDITION (USER REQUEST — Tier 3): "space" ഒഴിവാക്കിയ ശേഷം, ചുവടെയുള്ള 
+            // "പ്രത്യേക പട്ടിക"യിലെ (CHOORNAM / KASHAYAM മുതലായവ) മരുന്നുകളുമായി ഒരക്ഷരത്തിന്റെ 
+            // (edit-distance ≤ 1) വ്യത്യാസം മാത്രമേ ഉള്ളൂ എങ്കിൽ, അത് 100% Exact Match ആയി കണക്കാക്കി 
+            // സ്വയമേവ ശരിയാക്കുന്നു (Autofix, സാധാരണ വെള്ള നിറം).
+            let tier3Match = null, tier3Dist = Infinity;
+            db.forEach(d => {
+                if (!isSpecialListMedicine(d.normName)) return;
+                let dist = editDistance(inputNorm, d.normName);
+                if (dist <= 1 && dist < tier3Dist) { tier3Dist = dist; tier3Match = d; }
+            });
+            if (tier3Match) {
+                results.push({ index: row.index, exact: false, autofix: true, match: tier3Match.originalName, cat: tier3Match.cat });
+                return;
+            }
+
+            // 1.7 🌟 EXPERT ADDITION (USER REQUEST — Tier 4): "space" ഒഴിവാക്കിയ ശേഷം, "KSC", "KC" 
+            // വിഭാഗങ്ങളിലെ മരുന്നുകൾക്കും, മേൽപ്പറഞ്ഞ "പ്രത്യേക പട്ടിക"യിലെ മരുന്നുകൾക്കും ഒന്ന്, 
+            // രണ്ട്, അല്ലെങ്കിൽ മൂന്ന് അക്ഷരത്തിന്റെ (edit-distance ≤ 3) വ്യത്യാസം വരെ അനുവദിച്ച്, 
+            // 100% Exact Match ആയി കണക്കാക്കി സ്വയമേവ ശരിയാക്കുന്നു (Autofix, സാധാരണ വെള്ള നിറം).
+            let tier4Match = null, tier4Dist = Infinity;
+            db.forEach(d => {
+                if (!(isKscKcCategory(d.cat) || isSpecialListMedicine(d.normName))) return;
+                let dist = editDistance(inputNorm, d.normName);
+                if (dist <= 3 && dist < tier4Dist) { tier4Dist = dist; tier4Match = d; }
+            });
+            if (tier4Match) {
+                results.push({ index: row.index, exact: false, autofix: true, match: tier4Match.originalName, cat: tier4Match.cat });
                 return;
             }
 
