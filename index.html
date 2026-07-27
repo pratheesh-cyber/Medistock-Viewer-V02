@@ -961,8 +961,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
           </tr>
           <tfoot>
               <tr>
-                  <td colspan="3" style="background-color: #8a2be2; color: #00ffff; text-align: center; font-weight: bold; font-size: 12px; padding: 0px 0; letter-spacing: 0px; border: none !important;">
-                      Designed  &  Developed  by  Pratheesh M P
+                  <td colspan="3" style="background-color: #8a2be2; color: #00ffff; text-align: center; font-weight: bold; font-size: 10px; padding: 0px 0; letter-spacing: 0px; border: none !important;">
+                      Designed & Developed by Pratheesh M P
                   </td>
               </tr>
           </tfoot>
@@ -3722,7 +3722,7 @@ async function medistockTestDriveRestoreNow() {
         alert('⚠️ ആദ്യം Google ലോഗിൻ ചെയ്യുക. ലോഗിൻ ചെയ്യാതെ Restore സാധ്യമല്ല.');
         return;
     }
-    if (!confirm('ഇത് Google Drive-ൽ ഉള്ള ബാക്കപ്പ് ഡാറ്റ ഈ ഡിവൈസിലേക്ക് തിരികെ കൊണ്ടുവരും (നിലവിലെ ഡാറ്റ ഡിലീറ്റ് ആയതിന് ശേഷം). തുടരണോ?')) return;
+    if (!confirm('ഇത് Google Drive-ൽ ഉള്ള ബാക്കപ്പ് ഡാറ്റ ഈ ഡിവൈസിലേക്ക് തിരികെ കൊണ്ടുവരും (നിലവിലെ ഡാറ്റ overwrite ആയേക്കാം). തുടരണോ?')) return;
     if (btn) { btn.disabled = true; btn.innerText = '⏳ Restore ചെയ്യുന്നു...'; }
     let prevStatus = window.__medistockSyncStatus ? window.__medistockSyncStatus.restore : null;
     await restoreDataFromDriveSilent();
@@ -4285,7 +4285,7 @@ window.renderBookLabelPreview = function() {
 
             finalHTML += `
                 <div class="no-print" style="text-align: center; font-weight: 900; color: #2c3e50; font-size: 13px; letter-spacing: 1px; margin-top: 10px; margin-bottom: 4px;">LABEL-${labelCount}</div>
-                <div class="book-label-pdf-item" style="position: relative; margin: 0 !important; padding: 0 !important; width: 100%; clear: both; page-break-inside: avoid; break-inside: avoid; display: block; text-align: center; box-sizing: border-box;"> 
+                <div class="book-label-pdf-item" style="position: relative; margin: 0 !important; padding: 0 !important; width: 100%; clear: both; page-break-inside: avoid; break-inside: avoid; display: block; text-align: center; box-sizing: border-box;">
                     <div class="no-print" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); z-index: 10;">
                         <input type="checkbox" class="book-label-row-checkbox" checked style="width: 30px; height: 30px; cursor: pointer; accent-color: #27ae60;" onchange="window.checkMasterBookLabelStatus(this)">
                     </div>
@@ -5922,7 +5922,7 @@ loadData();
             row.innerHTML = `
                 <input type="text" id="xl_sino_${i}" disabled style="background-color: #e2e8f0; cursor: not-allowed; text-align: center; font-weight: bold; color: black;">
                 <input list="category-list" id="xl_cat_${i}" style="text-align: center; font-weight: bold;" oninput="handleCategoryInput(this, ${i})">
-                <input list="medicine-list" id="xl_med_${i}" style="text-align:left;" oninput="autoFillExcelColumns(); refreshExcelGridLockState();">
+                <input list="medicine-list" id="xl_med_${i}" style="text-align:left;" oninput="showExcelMedCprFlash(); autoFillExcelColumns(); refreshExcelGridLockState();">
                 <input type="text" id="xl_bat_${i}" oninput="refreshExcelGridLockState()">
                 <input type="text" id="xl_exp_${i}" oninput="refreshExcelGridLockState()">
                 <input type="text" id="xl_qty_${i}" oninput="refreshExcelGridLockState()">
@@ -9398,6 +9398,11 @@ function handleExcelPaste(e) {
             }
         }
     }
+    // 🌟 EXPERT ADDITION (USER REQUEST): "Name of Medicine" കോളത്തിലേക്ക് ആണ് പേസ്റ്റ് ചെയ്യുന്നതെങ്കിൽ 
+    // മാത്രം, ബാക്ക്ഗ്രൗണ്ട് AI സ്കാൻ നടക്കുന്ന 2 സെക്കന്റ് നേരത്തേക്ക് ഫുൾ സ്ക്രീൻ CPR STEP IMAGE കാണിക്കുന്നു
+    if (colNames[startColIdx] === 'med' && typeof showExcelMedCprFlash === 'function') {
+        showExcelMedCprFlash();
+    }
     // എക്സലിൽ നിന്നും പേസ്റ്റ് ചെയ്ത ഉടനെ SI No ഉം കാറ്റഗറിയും തനിയെ ഫിൽ ചെയ്യാൻ
     autoFillExcelColumns();
     // 🌟 പേസ്റ്റ് ചെയ്ത ഡാറ്റ അനുസരിച്ച് ലോക്ക്/അൺലോക്ക് അവസ്ഥ പുതുക്കുന്നു
@@ -9499,9 +9504,40 @@ const workerCode = `
                     originalName: med, 
                     cat: cat, 
                     num: extractNumbers(med),
-                    tokens: tokenize(med)
+                    tokens: tokenize(med),
+                    normName: normalizeSpaces(med) // 🌟 space ഒഴിവാക്കിയ പേര് (Tier-3 / Tier-4 പരിശോധനകൾക്ക്)
                 });
             });
+        }
+
+        // 🌟 EXPERT ADDITION (USER REQUEST — Tier 3 & 4): താഴെപ്പറയുന്ന പ്രത്യേക മരുന്നുകളുടെ 
+        // "ബേസ് പേരുകൾ" (അളവ്/GM/ML മുതലായവ ഒഴിവാക്കി). ഒരു ഡാറ്റാബേസ് എൻട്രിയുടെ space-normalized 
+        // പേര്, ഈ ബേസ് പേരുകളിൽ ഏതെങ്കിലും ഒന്നിൽ തുടങ്ങുന്നുവെങ്കിൽ (startsWith), ആ എൻട്രി ഈ 
+        // "പ്രത്യേക പട്ടിക"യിൽ പെട്ടതായി കണക്കാക്കുന്നു.
+        const SPECIAL_MED_BASE_NAMES = [
+            'ABHAYA CHOORNAM',
+            'ABHAYADI CHOORANAM',
+            'PANCHAKOLA CHOORNAM',
+            'PANCHAKOLADI CHOORNAM',
+            'CHOORNAM',
+            'THRIVATH CHOORNAM',
+            'BALAGULUCHYADHI KASHAYAM',
+            'VASAGULUCHYADHI KASHAYAM',
+            'VACHA CHOORNAM',
+            'VARA CHOORNAM',
+            'AMAYA CHOORNAM',
+            'ASANA CHOORNAM',
+            'ASHTA CHOORNAM'
+        ].map(normalizeSpaces);
+
+        function isSpecialListMedicine(normDbName) {
+            return SPECIAL_MED_BASE_NAMES.some(base => normDbName.indexOf(base) === 0);
+        }
+
+        // 🌟 EXPERT ADDITION (USER REQUEST — Tier 4): "KSC", "KC" എന്നീ വിഭാഗങ്ങൾ (categories)
+        const KSC_KC_CATEGORIES = ['ksc', 'kc'];
+        function isKscKcCategory(cat) {
+            return KSC_KC_CATEGORIES.indexOf((cat || '').toString().toLowerCase()) !== -1;
         }
 
         let results = [];
@@ -9530,6 +9566,41 @@ const workerCode = `
             let spaceOnlyMatch = db.find(d => normalizeSpaces(d.originalName) === normalizeSpaces(inputName));
             if (spaceOnlyMatch) {
                 results.push({ index: row.index, exact: false, autofix: true, match: spaceOnlyMatch.originalName, cat: spaceOnlyMatch.cat });
+                return;
+            }
+
+            let inputNorm = normalizeSpaces(inputName);
+
+            // 1.6 🌟 EXPERT ADDITION (USER REQUEST — Tier 3): "space" ഒഴിവാക്കിയ ശേഷം, ചുവടെയുള്ള 
+            // "പ്രത്യേക പട്ടിക"യിലെ (CHOORNAM / KASHAYAM മുതലായവ) മരുന്നുകളുമായി ഒരക്ഷരത്തിന്റെ 
+            // (edit-distance ≤ 1) വ്യത്യാസം മാത്രമേ ഉള്ളൂ എങ്കിൽ, അത് 100% Exact Match ആയി കണക്കാക്കി 
+            // സ്വയമേവ ശരിയാക്കുന്നു (Autofix, സാധാരണ വെള്ള നിറം).
+            let tier3Match = null, tier3Dist = Infinity;
+            db.forEach(d => {
+                if (!isSpecialListMedicine(d.normName)) return;
+                let dist = editDistance(inputNorm, d.normName);
+                if (dist <= 1 && dist < tier3Dist) { tier3Dist = dist; tier3Match = d; }
+            });
+            if (tier3Match) {
+                results.push({ index: row.index, exact: false, autofix: true, match: tier3Match.originalName, cat: tier3Match.cat });
+                return;
+            }
+
+            // 1.7 🌟 EXPERT ADDITION (USER REQUEST — Tier 4, പുതുക്കിയത്): "KSC", "KC" വിഭാഗങ്ങളും 
+            // (ഇവയിൽ "S" പോലുള്ള ഒരൊറ്റ അക്ഷരം മാറിയാൽ പോലും മരുന്ന് പൂർണ്ണമായും മാറും എന്നതിനാൽ 
+            // ഇവ ഒഴിവാക്കുന്നു — KSC/KC-ക്ക് 1.5-ലെ "space മാത്രം" പരിശോധന മാത്രമേ ബാധകമാകൂ), 
+            // മുകളിലെ Tier-3 "പ്രത്യേക പട്ടിക"യും (ഇത് ഇതിനകം 1.6-ൽ പരിശോധിച്ചു) ഒഴികെയുള്ള 
+            // ഡാറ്റാബേസിലെ മറ്റെല്ലാ മരുന്നുകൾക്കും, space ഒഴിവാക്കിയ ശേഷം ഒന്ന്, രണ്ട്, അല്ലെങ്കിൽ 
+            // മൂന്ന് അക്ഷരത്തിന്റെ (edit-distance ≤ 3) വ്യത്യാസം വരെ അനുവദിച്ച്, 100% Exact Match 
+            // ആയി കണക്കാക്കി സ്വയമേവ ശരിയാക്കുന്നു (Autofix, സാധാരണ വെള്ള നിറം).
+            let tier4Match = null, tier4Dist = Infinity;
+            db.forEach(d => {
+                if (isKscKcCategory(d.cat) || isSpecialListMedicine(d.normName)) return;
+                let dist = editDistance(inputNorm, d.normName);
+                if (dist <= 3 && dist < tier4Dist) { tier4Dist = dist; tier4Match = d; }
+            });
+            if (tier4Match) {
+                results.push({ index: row.index, exact: false, autofix: true, match: tier4Match.originalName, cat: tier4Match.cat });
                 return;
             }
 
@@ -21239,7 +21310,7 @@ function pdfScannerConvertToDataEntryForm(markdownText) {
         if (cols.length < 4) continue; 
         let pageNo = cols.length >= 5 ? medistockSanitizeScannedPageNo(cols[0]) : ""; let medName = cols.length >= 5 ? cols[1] : cols[0];
         let batch = cols.length >= 5 ? cols[2] : cols[1]; let expiry = cols.length >= 5 ? cols[3] : cols[2]; let qty = cols.length >= 5 ? cols[4] : cols[3];
-        html += `<tr><td><input type="text" value="${pageNo}"></td><td><input type="text" value="${medName}"></td><td><input type="text" value="${batch}"></td><td><input type="text" value="${expiry}"></td><td><input type="text" value="${qty}"></td></tr>`; 
+        html += `<tr><td><input type="text" value="${pageNo}"></td><td><input type="text" value="${medName}"></td><td><input type="text" value="${batch}"></td><td><input type="text" value="${expiry}"></td><td><input type="text" value="${qty}"></td></tr>`;
     }
     return html + `</tbody></table>`;
 }
@@ -21599,6 +21670,53 @@ function validateAndAddAllToStock() {
     if (typeof confirmAddAllToStock === 'function') {
         confirmAddAllToStock();
     }
+}
+</script>
+
+<!-- 🌟 EXPERT ADDITION (USER REQUEST): "Name of Medicine" കോളത്തിൽ ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുമ്പോൾ, 
+     ബാക്ക്ഗ്രൗണ്ട് AI സ്കാൻ നടക്കുന്ന 2 സെക്കന്റ് നേരത്തേക്ക് കാണിക്കുന്ന, മറ്റ് പേജുകളെ ബാധിക്കാത്ത, 
+     സ്വതന്ത്രമായ ഫുൾ സ്ക്രീൻ CPR STEP IMAGE ലോഡർ. body-യുടെ നേരിട്ടുള്ള child ആയതിനാൽ, മറ്റ് 
+     പേജ്-റാപ്പറുകൾ (display:none) ഇതിനെ മറയ്ക്കില്ല. -->
+<div id="excelMedCprLoader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:999999; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="width:92%; max-width:900px; margin:0 auto 20px auto;">
+        <img id="excelMedCprImage" class="cpr-infographic-img" alt="CPR Steps" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.15); background:#fff;">
+    </div>
+</div>
+<script>
+// 🌟 EXPERT ADDITION (USER REQUEST): excelMedCprLoader ഇമേജിന് നിലവിലുള്ള CPR ഇൻഫോഗ്രാഫിക് 
+// ഇമേജിന്റെ (cprImage / pdfCprImage / histCprImage) അതേ base64 സോഴ്‌സ് നൽകുന്നു — ഫയലിൽ ഇത് 
+// വീണ്ടും ഡ്യൂപ്ലിക്കേറ്റ് ചെയ്യാതെ.
+(function() {
+    function copyExcelMedCprSrc() {
+        var sourceIds = ['cprImage', 'pdfCprImage', 'histCprImage'];
+        var src = '';
+        for (var i = 0; i < sourceIds.length; i++) {
+            var el = document.getElementById(sourceIds[i]);
+            if (el && el.src) { src = el.src; break; }
+        }
+        var target = document.getElementById('excelMedCprImage');
+        if (target && src) target.src = src;
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', copyExcelMedCprSrc);
+    } else {
+        copyExcelMedCprSrc();
+    }
+})();
+
+// 🌟 EXPERT ADDITION (USER REQUEST): "Name of Medicine" കോളത്തിൽ ടൈപ്പ് ചെയ്യുന്ന/പേസ്റ്റ് ചെയ്യുന്ന 
+// നിമിഷം മുതൽ, ബാക്ക്ഗ്രൗണ്ട് AI സ്കാൻ നടക്കുന്ന 2 സെക്കന്റ് നേരത്തേക്ക് ഫുൾ സ്ക്രീൻ CPR STEP IMAGE 
+// കാണിക്കുകയും, 2 സെക്കന്റിന് ശേഷം സ്വയമേവ അപ്രത്യക്ഷമാക്കുകയും ചെയ്യുന്നു. തുടർച്ചയായി ടൈപ്പ് 
+// ചെയ്യുമ്പോൾ ഓരോ തവണയും ടൈമർ പുതുക്കുന്നു (2 സെക്കന്റ് സ്ഥിരമായി നിലനിർത്താൻ).
+let excelMedCprHideTimer = null;
+function showExcelMedCprFlash() {
+    let loader = document.getElementById('excelMedCprLoader');
+    if (!loader) return;
+    loader.style.display = 'flex';
+    if (excelMedCprHideTimer) clearTimeout(excelMedCprHideTimer);
+    excelMedCprHideTimer = setTimeout(function() {
+        loader.style.display = 'none';
+    }, 2000);
 }
 </script>
 </body>
