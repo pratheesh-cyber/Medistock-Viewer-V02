@@ -5341,54 +5341,73 @@ const categoryColors = {
                     }
                     medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
 
-                    // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
-                    if (typeof loadData === 'function') loadData();
+                    // 🌟 EXPERT FIX: താഴെയുള്ള ഓരോ റീഫ്രഷ് ഘട്ടവും ഇപ്പോൾ അതിന്റേതായ try/catch-ൽ ആണ്.
+                    // ഈ doRestore() മുഴുവനും showCustomConfirm-ന്റെ ഒരു ASYNC callback ആയതിനാൽ, ഇത് 
+                    // medistockUndoLastAction()-ന്റെ പുറത്തെ try/catch-ന്റെ പരിരക്ഷയിൽ അല്ല execute 
+                    // ചെയ്യുന്നത്. അതിനാൽ, മുൻപ് ഈ റീഫ്രഷ് ഘട്ടങ്ങളിൽ ഏതെങ്കിലും ഒന്നിൽ (ഉദാ: ഏതെങ്കിലും 
+                    // ഒരു പേജിന്റെ render ഫംഗ്ഷനിൽ) പിശക് വന്നാൽ, ബാക്കിയുള്ള റീഫ്രഷ് ഘട്ടങ്ങളും 
+                    // (അവസാനത്തെ "✅ Undo വിജയിച്ചു" മെസേജ് പോലും!) നിശബ്ദമായി മുടങ്ങുമായിരുന്നു — ഡാറ്റ 
+                    // യഥാർത്ഥത്തിൽ ശരിയായി തിരികെ മാറിയാലും സ്ക്രീനിൽ ഒന്നും കാണാതെ "Undo പ്രവർത്തിക്കുന്നില്ല" 
+                    // എന്ന് തോന്നിക്കും. ഇപ്പോൾ ഓരോ ഘട്ടവും ഒറ്റപ്പെടുത്തിയതിനാൽ, ഏതെങ്കിലും ഒന്ന് 
+                    // പരാജയപ്പെട്ടാലും ബാക്കിയുള്ളവ (success മെസേജ് ഉൾപ്പെടെ) തുടർന്നും പ്രവർത്തിക്കും.
+                    try {
+                        // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു
+                        if (typeof loadData === 'function') loadData();
+                    } catch (e) { console.error("Undo Refresh Error (loadData):", e); }
 
-                    if (typeof window.refreshAllPagesAfterRestore === 'function') {
-                        // ഇത് നിലവിൽ Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / 
-                        // Pre-Indent Summary / Indent @ Item / Indent @ Page No / Last Added (Main, OP, IP) 
-                        // എന്നിവയെല്ലാം പുതുക്കുന്നു
-                        window.refreshAllPagesAfterRestore();
-                    } else {
-                        if (typeof renderTable === 'function') renderTable();
-                        if (typeof renderDetailsTable === 'function') renderDetailsTable();
-                        if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
-                        if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
-                        if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
-                        if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
-                        if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
-                        if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
-                        if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
-                        if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
-                        if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
-                    }
+                    try {
+                        if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                            // ഇത് നിലവിൽ Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / 
+                            // Pre-Indent Summary / Indent @ Item / Indent @ Page No / Last Added (Main, OP, IP) 
+                            // എന്നിവയെല്ലാം പുതുക്കുന്നു
+                            window.refreshAllPagesAfterRestore();
+                        } else {
+                            if (typeof renderTable === 'function') renderTable();
+                            if (typeof renderDetailsTable === 'function') renderDetailsTable();
+                            if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
+                            if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
+                            if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
+                            if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+                            if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
+                            if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
+                            if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
+                            if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
+                            if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+                        }
+                    } catch (e) { console.error("Undo Refresh Error (pages):", e); }
 
-                    // 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ നിലവിൽ 
-                    // കാണിക്കുന്ന ഇൻഡന്റ്, Undo ചെയ്ത ശേഷം localStorage-ലേക്ക് പുനഃസ്ഥാപിച്ച 
-                    // (restore ചെയ്ത) പഴയ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച് തന്നെ വീണ്ടും കാണിക്കുന്നു. 
-                    // ഇത് ഏറ്റവും അവസാനം വിളിക്കുന്നു, അതുകൊണ്ട് മുകളിലെ റീഫ്രഷ് ഫംഗ്ഷനുകളൊന്നും ഈ 
-                    // രണ്ട് പേജുകളിലെയും ടേബിളുകൾ (ജനറേറ്റ് ചെയ്ത കൃത്യമായ പഴയ ഇൻഡന്റ്) തിരുത്തി 
-                    // എഴുതില്ല 🌟
-                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
-                        window.restoreIndentViewPagesFromStorage();
-                    }
+                    try {
+                        // 🌟 id="indentAtItemPage", id="indentAtPagePage" എന്നീ പേജുകളിൽ നിലവിൽ 
+                        // കാണിക്കുന്ന ഇൻഡന്റ്, Undo ചെയ്ത ശേഷം localStorage-ലേക്ക് പുനഃസ്ഥാപിച്ച 
+                        // (restore ചെയ്ത) പഴയ ഇൻഡന്റ് ഡാറ്റ ഉപയോഗിച്ച് തന്നെ വീണ്ടും കാണിക്കുന്നു. 
+                        // ഇത് ഏറ്റവും അവസാനം വിളിക്കുന്നു, അതുകൊണ്ട് മുകളിലെ റീഫ്രഷ് ഫംഗ്ഷനുകളൊന്നും ഈ 
+                        // രണ്ട് പേജുകളിലെയും ടേബിളുകൾ (ജനറേറ്റ് ചെയ്ത കൃത്യമായ പഴയ ഇൻഡന്റ്) തിരുത്തി 
+                        // എഴുതില്ല 🌟
+                        if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
+                            window.restoreIndentViewPagesFromStorage();
+                        }
+                    } catch (e) { console.error("Undo Refresh Error (indent view):", e); }
 
-                    // 🌟 id="indentHistoryPage" നിലവിൽ തുറന്നിരിക്കുകയാണെങ്കിൽ മാത്രം അതും പുതുക്കുന്നു 
-                    // (ഈ പേജിന്റെ റെൻഡർ ഫംഗ്ഷൻ പേജ് നാവിഗേഷൻ കൂടി ചെയ്യുന്നതിനാൽ, മറ്റൊരു പേജിൽ 
-                    //  ആയിരിക്കുമ്പോൾ അബദ്ധത്തിൽ ഈ പേജിലേക്ക് മാറാതിരിക്കാൻ ഈ ചെക്ക് ആവശ്യമാണ്)
-                    let histPageEl = document.getElementById('indentHistoryPage');
-                    if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
-                        window.showIndentHistory();
-                    }
+                    try {
+                        // 🌟 id="indentHistoryPage" നിലവിൽ തുറന്നിരിക്കുകയാണെങ്കിൽ മാത്രം അതും പുതുക്കുന്നു 
+                        // (ഈ പേജിന്റെ റെൻഡർ ഫംഗ്ഷൻ പേജ് നാവിഗേഷൻ കൂടി ചെയ്യുന്നതിനാൽ, മറ്റൊരു പേജിൽ 
+                        //  ആയിരിക്കുമ്പോൾ അബദ്ധത്തിൽ ഈ പേജിലേക്ക് മാറാതിരിക്കാൻ ഈ ചെക്ക് ആവശ്യമാണ്)
+                        let histPageEl = document.getElementById('indentHistoryPage');
+                        if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
+                            window.showIndentHistory();
+                        }
+                    } catch (e) { console.error("Undo Refresh Error (indent history):", e); }
 
-                    document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ പ്രവർത്തനം വിജയകരമായി Undo ചെയ്തിരിക്കുന്നു.";
-                    document.getElementById('modalOverlay').style.display = 'block';
-                    const winAlert = document.getElementById('sumteckAlertWindow');
-                    winAlert.style.display = 'block';
-                    document.getElementById('sumteckAlertOk').onclick = function() {
-                        winAlert.style.display = 'none';
-                        document.getElementById('modalOverlay').style.display = 'none';
-                    };
+                    try {
+                        document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ പ്രവർത്തനം വിജയകരമായി Undo ചെയ്തിരിക്കുന്നു.";
+                        document.getElementById('modalOverlay').style.display = 'block';
+                        const winAlert = document.getElementById('sumteckAlertWindow');
+                        winAlert.style.display = 'block';
+                        document.getElementById('sumteckAlertOk').onclick = function() {
+                            winAlert.style.display = 'none';
+                            document.getElementById('modalOverlay').style.display = 'none';
+                        };
+                    } catch (e) { console.error("Undo Success Message Error:", e); }
                 };
 
                 if (typeof showCustomConfirm === 'function') {
@@ -5452,43 +5471,56 @@ const categoryColors = {
                     }
                     medistockLastUndoPushTime = 0; // അടുത്ത സേവ് പുതിയൊരു Undo സ്റ്റെപ്പ് ആയി തന്നെ എടുക്കാൻ
 
-                    // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു 
-                    // (Undo-യിൽ ഉപയോഗിക്കുന്ന അതേ റീഫ്രഷ് ക്രമം)
-                    if (typeof loadData === 'function') loadData();
+                    // 🌟 EXPERT FIX: Undo-യിൽ ചെയ്തത് പോലെ, ഇവിടെയും ഓരോ റീഫ്രഷ് ഘട്ടവും അതിന്റേതായ 
+                    // try/catch-ൽ ഒറ്റപ്പെടുത്തിയിരിക്കുന്നു — ഒരു ഘട്ടം പരാജയപ്പെട്ടാലും ബാക്കിയുള്ളവ 
+                    // (success മെസേജ് ഉൾപ്പെടെ) തുടർന്നും പ്രവർത്തിക്കും.
+                    try {
+                        // മെമ്മറി വേരിയബിളുകളും (stockItems മുതലായവ) എല്ലാ പേജുകളിലെ ടേബിളുകളും പുതുക്കുന്നു 
+                        // (Undo-യിൽ ഉപയോഗിക്കുന്ന അതേ റീഫ്രഷ് ക്രമം)
+                        if (typeof loadData === 'function') loadData();
+                    } catch (e) { console.error("Redo Refresh Error (loadData):", e); }
 
-                    if (typeof window.refreshAllPagesAfterRestore === 'function') {
-                        window.refreshAllPagesAfterRestore();
-                    } else {
-                        if (typeof renderTable === 'function') renderTable();
-                        if (typeof renderDetailsTable === 'function') renderDetailsTable();
-                        if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
-                        if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
-                        if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
-                        if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
-                        if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
-                        if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
-                        if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
-                        if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
-                        if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
-                    }
+                    try {
+                        if (typeof window.refreshAllPagesAfterRestore === 'function') {
+                            window.refreshAllPagesAfterRestore();
+                        } else {
+                            if (typeof renderTable === 'function') renderTable();
+                            if (typeof renderDetailsTable === 'function') renderDetailsTable();
+                            if (typeof renderOpDetailsTable === 'function') renderOpDetailsTable();
+                            if (typeof renderIpDetailsTable === 'function') renderIpDetailsTable();
+                            if (typeof renderOpeningStockTable === 'function') renderOpeningStockTable();
+                            if (typeof renderPreIndentSummaryTable === 'function') renderPreIndentSummaryTable();
+                            if (typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();
+                            if (typeof window.renderIndentRightTable === 'function') window.renderIndentRightTable();
+                            if (typeof window.renderLastAddedTable === 'function') window.renderLastAddedTable();
+                            if (typeof window.renderLastAddedOPTable === 'function') window.renderLastAddedOPTable();
+                            if (typeof window.renderLastAddedIPTable === 'function') window.renderLastAddedIPTable();
+                        }
+                    } catch (e) { console.error("Redo Refresh Error (pages):", e); }
 
-                    if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
-                        window.restoreIndentViewPagesFromStorage();
-                    }
+                    try {
+                        if (typeof window.restoreIndentViewPagesFromStorage === 'function') {
+                            window.restoreIndentViewPagesFromStorage();
+                        }
+                    } catch (e) { console.error("Redo Refresh Error (indent view):", e); }
 
-                    let histPageEl = document.getElementById('indentHistoryPage');
-                    if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
-                        window.showIndentHistory();
-                    }
+                    try {
+                        let histPageEl = document.getElementById('indentHistoryPage');
+                        if (histPageEl && histPageEl.style.display !== 'none' && typeof window.showIndentHistory === 'function') {
+                            window.showIndentHistory();
+                        }
+                    } catch (e) { console.error("Redo Refresh Error (indent history):", e); }
 
-                    document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ Undo പ്രവർത്തനം വിജയകരമായി Redo ചെയ്തിരിക്കുന്നു.";
-                    document.getElementById('modalOverlay').style.display = 'block';
-                    const winAlert = document.getElementById('sumteckAlertWindow');
-                    winAlert.style.display = 'block';
-                    document.getElementById('sumteckAlertOk').onclick = function() {
-                        winAlert.style.display = 'none';
-                        document.getElementById('modalOverlay').style.display = 'none';
-                    };
+                    try {
+                        document.getElementById('sumteckAlertText').innerText = "✅ അവസാനത്തെ Undo പ്രവർത്തനം വിജയകരമായി Redo ചെയ്തിരിക്കുന്നു.";
+                        document.getElementById('modalOverlay').style.display = 'block';
+                        const winAlert = document.getElementById('sumteckAlertWindow');
+                        winAlert.style.display = 'block';
+                        document.getElementById('sumteckAlertOk').onclick = function() {
+                            winAlert.style.display = 'none';
+                            document.getElementById('modalOverlay').style.display = 'none';
+                        };
+                    } catch (e) { console.error("Redo Success Message Error:", e); }
                 };
 
                 if (typeof showCustomConfirm === 'function') {
