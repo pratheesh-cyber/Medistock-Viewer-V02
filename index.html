@@ -9486,10 +9486,10 @@ function getSimilarity(s1, s2) {
 const workerCode = `
     // 🌟 EXPERT ADDITION (DIAGNOSTIC MARKER — USER REQUEST): ഈ Worker ഉണ്ടാക്കുമ്പോൾ തന്നെ ഒരു 
     // പ്രത്യേക (harmless) Console സന്ദേശം കാണിക്കുന്നു. ബ്രൗസറിൽ (F12 → Console) ഈ സന്ദേശം 
-    // "KC_KSC_CATEGORY_LOCK_V1" എന്നതോടെ കാണുന്നുണ്ടെങ്കിൽ, ലൈവ് സൈറ്റിൽ ഏറ്റവും പുതിയ KC/KSC 
+    // "KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX" എന്നതോടെ കാണുന്നുണ്ടെങ്കിൽ, ലൈവ് സൈറ്റിൽ ഏറ്റവും പുതിയ KC/KSC 
     // Category-Lock കോഡ് തന്നെയാണ് പ്രവർത്തിക്കുന്നത് എന്ന് ഉറപ്പിക്കാം. ഈ സന്ദേശം കാണുന്നില്ലെങ്കിൽ, 
     // ബ്രൗസർ ഇപ്പോഴും പഴയ (Cache ചെയ്ത) ഫയൽ ആണ് ലോഡ് ചെയ്തിരിക്കുന്നത് എന്നാണ് അർത്ഥം.
-    console.log("🏷️ Medistock Excel AI Worker Version: KC_KSC_CATEGORY_LOCK_V1 (loaded)");
+    console.log("🏷️ Medistock Excel AI Worker Version: KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX (loaded)");
 
     // സ്പെല്ലിംഗ് സാമ്യം കണ്ടുപിടിക്കാനുള്ള ഫംഗ്ഷൻ (Levenshtein Distance)
     function editDistance(s1, s2) {
@@ -9530,11 +9530,22 @@ const workerCode = `
         return str.toLowerCase().replace(/[^a-z0-9]/g, ' ').split(' ').filter(Boolean);
     }
 
+    // 🌟 EXPERT ADDITION (ROBUSTNESS FIX): Excel ഫയലിൽ നിന്നോ, മറ്റ് സ്രോതസ്സുകളിൽ നിന്നോ 
+    // copy-paste ചെയ്യുമ്പോൾ ചിലപ്പോൾ കണ്ണിൽ കാണാത്ത Unicode അക്ഷരങ്ങൾ (zero-width space, 
+    // byte-order-mark, soft hyphen, zero-width joiner മുതലായവ) ടെക്സ്റ്റിനുള്ളിൽ കയറിവന്നേക്കാം. 
+    // ഇവ സാധാരണ space അല്ലാത്തതിനാൽ താഴെയുള്ള normalizeSpaces()-ന്റെ \s+ പരിശോധനയ്ക്ക് ഇവ 
+    // നീക്കം ചെയ്യാൻ കഴിയാതെ വരികയും, അതുവഴി യഥാർത്ഥത്തിൽ ഒരേ പേരായ രണ്ട് സ്ട്രിംഗുകൾ 
+    // (ദൃശ്യപരമായി ഒരേപോലെ ഇരുന്നാലും) വ്യത്യസ്തമായി തോന്നുകയും ചെയ്യാം. ഈ ഫംഗ്ഷൻ അത്തരം 
+    // അദൃശ്യ അക്ഷരങ്ങൾ കൂടി മുൻകൂട്ടി നീക്കം ചെയ്യുന്നു.
+    function stripInvisibleChars(str) {
+        return str.replace(/[\u200B-\u200D\uFEFF\u00AD\u2060]/g, '');
+    }
+
     // 🌟 EXPERT ADDITION (USER REQUEST): ഒന്നോ അതിലധികമോ SPACE (അധിക സ്പേസ്, കാണാതെ പോയ സ്പേസ് 
     // മുതലായവ) മാത്രമാണ് വ്യത്യാസമെങ്കിൽ, ആ വ്യത്യാസം അവഗണിച്ച് താരതമ്യം ചെയ്യാൻ വേണ്ടിയുള്ള ഹെൽപ്പർ.
-    // (എല്ലാ SPACE-ഉം നീക്കം ചെയ്ത്, ചെറിയ അക്ഷരത്തിലാക്കി താരതമ്യം ചെയ്യുന്നു)
+    // (എല്ലാ SPACE-ഉം, അദൃശ്യ അക്ഷരങ്ങളും നീക്കം ചെയ്ത്, ചെറിയ അക്ഷരത്തിലാക്കി താരതമ്യം ചെയ്യുന്നു)
     function normalizeSpaces(str) {
-        return str.replace(/\s+/g, '').toLowerCase();
+        return stripInvisibleChars(str).replace(/\s+/g, '').toLowerCase();
     }
 
     // 🌟 EXPERT ADDITION (USER REQUEST - Tier 3): താഴെ പറയുന്ന 13 മരുന്നുകൾക്ക് മാത്രമായി 
@@ -9568,7 +9579,7 @@ const workerCode = `
     // അക്ഷരങ്ങൾ മാത്രമുള്ളത് ആണെന്ന് കൂടി ഉറപ്പാക്കുന്നു). "KSC" ആദ്യം പരിശോധിക്കുന്നു (അതില്ലെങ്കിൽ 
     // മാത്രം "KC") — അതുവഴി "KSC" എന്നതിലെ "KC" ഭാഗം തെറ്റായി "KC" ആയി തിരിച്ചറിയാതിരിക്കും.
     function detectKcKscCategoryToken(str) {
-        let words = str.trim().split(/\s+/);
+        let words = stripInvisibleChars(str).trim().split(/\s+/);
         function tryFind(target) {
             for (let i = 0; i < words.length; i++) {
                 for (let len = target.length; len >= 1; len--) {
@@ -9738,9 +9749,9 @@ const workerCode = `
 const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
 const aiWorker = new Worker(URL.createObjectURL(workerBlob));
 // 🌟 EXPERT ADDITION (DIAGNOSTIC MARKER — USER REQUEST): ഈ ലൈൻ പ്രധാന (main thread) സ്ക്രിപ്റ്റിൽ 
-// നിന്നും തന്നെ ഒരു Console സന്ദേശം കാണിക്കുന്നു. ഇത് കൂടി "KC_KSC_CATEGORY_LOCK_V1" എന്നതോടെ 
+// നിന്നും തന്നെ ഒരു Console സന്ദേശം കാണിക്കുന്നു. ഇത് കൂടി "KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX" എന്നതോടെ 
 // Console-ൽ കണ്ടാൽ, ബ്രൗസർ പുതിയ index.html ഫയൽ തന്നെയാണ് ലോഡ് ചെയ്തിരിക്കുന്നത് എന്ന് ഉറപ്പാണ്.
-console.log("🏷️ Medistock Main Script Version: KC_KSC_CATEGORY_LOCK_V1 (excelImportPage AI script loaded)");
+console.log("🏷️ Medistock Main Script Version: KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX (excelImportPage AI script loaded)");
 
 // 🌟 EXPERT ADDITION (USER REQUEST): "Name of Medicine" കോളത്തിൽ ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുന്ന നിമിഷം മുതൽ 
 // 2 സെക്കന്റ് നേരത്തേക്ക് ഫുൾ സ്ക്രീൻ CPR STEP IMAGE കാണിക്കുകയും, തുടർച്ചയായി ടൈപ്പ് ചെയ്യുകയാണെങ്കിൽ 
