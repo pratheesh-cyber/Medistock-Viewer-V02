@@ -9774,6 +9774,95 @@ function showXlCprOverlay() {
 // അടുത്ത തവണ ആദ്യം ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുമ്പോൾ വീണ്ടും ഒരിക്കൽ കാണിക്കും.
 let xlTableHasAnyData = false;
 
+// 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): ഇത് Worker-നെ ബൈപാസ് ചെയ്ത്, ഇപ്പോൾ (ഈ നിമിഷം) 
+// മെയിൻ ത്രെഡിൽ ഉള്ള medicineData ഉപയോഗിച്ച് നേരിട്ട് ഒരു ടെക്സ്റ്റ് ക്ലാസിഫൈ ചെയ്ത് നോക്കാൻ. 
+// Console-ൽ ഇങ്ങനെ വിളിക്കാം: medistockDebugClassify("RASNERANDATHI K C 1000GM")
+// ഇത് Worker postMessage-ന്റെ ഏതെങ്കിലും race/timing പ്രശ്നം ഒഴിവാക്കി, തത്സമയത്തെ medicineData 
+// ശരിക്കും എന്താണ് എന്ന് നേരിട്ട് ഉറപ്പിക്കാൻ സഹായിക്കുന്നു. UI-യിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല.
+window.medistockDebugClassify = function(inputNameRaw) {
+    function stripInvisibleCharsDbg(str) {
+        return str.replace(/[\u200B-\u200D\uFEFF\u00AD\u2060]/g, '');
+    }
+    function normalizeSpacesDbg(str) {
+        return stripInvisibleCharsDbg(str).replace(/\s+/g, '').toLowerCase();
+    }
+    function editDistanceDbg(s1, s2) {
+        let costs = [];
+        for (let i = 0; i <= s1.length; i++) {
+            let lastValue = i;
+            for (let j = 0; j <= s2.length; j++) {
+                if (i === 0) { costs[j] = j; }
+                else if (j > 0) {
+                    let newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    }
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+            if (i > 0) costs[s2.length] = lastValue;
+        }
+        return costs[s2.length];
+    }
+    function detectKcKscCategoryTokenDbg(str) {
+        let words = stripInvisibleCharsDbg(str).trim().split(/\s+/);
+        function tryFind(target) {
+            for (let i = 0; i < words.length; i++) {
+                for (let len = target.length; len >= 1; len--) {
+                    if (i + len <= words.length) {
+                        let slice = words.slice(i, i + len);
+                        let ok = slice.every(function(t) {
+                            let stripped = t.replace(/[.]/g, '');
+                            return stripped.length >= 1 && stripped.length <= 3 && /^[A-Za-z]+$/.test(stripped);
+                        });
+                        if (!ok) continue;
+                        let combined = slice.map(function(t) { return t.replace(/[.]/g, ''); }).join('').toUpperCase();
+                        if (combined === target) return true;
+                    }
+                }
+            }
+            return false;
+        }
+        if (tryFind('KSC')) return 'KSC';
+        if (tryFind('KC')) return 'KC';
+        return null;
+    }
+
+    let db = [];
+    for (let cat in medicineData) {
+        medicineData[cat].forEach(function(med) {
+            db.push({ originalName: med, cat: cat });
+        });
+    }
+    console.log("🧪 [DEBUG] medicineData categories:", Object.keys(medicineData).length, "| total medicines:", db.length);
+
+    let inputName = inputNameRaw.trim();
+
+    let exactMatch = db.find(function(d) { return d.originalName.toLowerCase() === inputName.toLowerCase(); });
+    if (exactMatch) { console.log("🧪 [DEBUG] Tier 1 EXACT MATCH:", exactMatch.originalName); return; }
+
+    let spaceOnlyMatch = db.find(function(d) { return normalizeSpacesDbg(d.originalName) === normalizeSpacesDbg(inputName); });
+    if (spaceOnlyMatch) { console.log("🧪 [DEBUG] Tier 2 SPACE-ONLY MATCH:", spaceOnlyMatch.originalName); return; }
+
+    let normalizedInput = normalizeSpacesDbg(inputName);
+    let detectedCat = detectKcKscCategoryTokenDbg(inputName);
+    console.log("🧪 [DEBUG] detected KC/KSC category token:", detectedCat);
+
+    if (detectedCat) {
+        let best = null, bestDist = 4;
+        db.forEach(function(d) {
+            if (d.cat !== detectedCat) return;
+            let dist = editDistanceDbg(normalizedInput, normalizeSpacesDbg(d.originalName));
+            if (dist <= 3 && dist < bestDist) { bestDist = dist; best = d; }
+        });
+        if (best) { console.log("🧪 [DEBUG] Tier 1.8 KC/KSC MATCH (dist=" + bestDist + "):", best.originalName); return; }
+        console.log("🧪 [DEBUG] Tier 1.8: category detected but NO match within editDistance<=3 in that category's db list.");
+    }
+
+    console.log("🧪 [DEBUG] No match found in any tier — would show YELLOW (lowConfidence).");
+};
+
 // 3. മെയിൻ ഫംഗ്ഷൻ (UI ൽ നിന്നും ഡാറ്റ എടുത്ത് വർക്കറിന് നൽകുന്നു)
 function autoFillExcelColumns() {
     let rowsData = [];
