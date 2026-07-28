@@ -9603,7 +9603,7 @@ const workerCode = `
     }
 
     self.onmessage = function(e) {
-        const { rows, medicineData } = e.data;
+        const { rows, medicineData, seq } = e.data;
         
         // ഡാറ്റാബേസ് സെറ്റ് ചെയ്യുന്നു
         let db = [];
@@ -9741,7 +9741,11 @@ const workerCode = `
             }
         });
 
-        self.postMessage(results);
+        // 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): results-നൊപ്പം അതേ request-ന്റെ 
+        // seq നമ്പറും തിരികെ അയക്കുന്നു. ഇത് വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ ഉണ്ടാകുന്ന ഒന്നിലധികം 
+        // postMessage-കളുടെ മറുപടികൾ ക്രമം തെറ്റി എത്തിയാൽ, മെയിൻ ത്രെഡിന് പഴയ (stale) മറുപടികൾ 
+        // തിരിച്ചറിഞ്ഞ് അവഗണിക്കാൻ സഹായിക്കുന്നു.
+        self.postMessage({ seq: seq, results: results });
     };
 `;
 
@@ -9864,6 +9868,9 @@ window.medistockDebugClassify = function(inputNameRaw) {
 };
 
 // 3. മെയിൻ ഫംഗ്ഷൻ (UI ൽ നിന്നും ഡാറ്റ എടുത്ത് വർക്കറിന് നൽകുന്നു)
+let xlDebounceTimer = null;
+let xlRequestSeq = 0;
+
 function autoFillExcelColumns() {
     let rowsData = [];
     let xlAnyNonEmptyNow = false;
@@ -9885,21 +9892,48 @@ function autoFillExcelColumns() {
     }
     xlTableHasAnyData = xlAnyNonEmptyNow;
 
-    // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): വർക്കറിലേക്ക് അയക്കുന്നതിന് തൊട്ടുമുൻപ്, 
-    // ശൂന്യമല്ലാത്ത വരികളുടെ കൃത്യമായ ടെക്സ്റ്റും, medicineData-യിലെ വിഭാഗങ്ങളുടെ എണ്ണവും 
-    // Console-ൽ കാണിക്കുന്നു — അയക്കുന്ന ഡാറ്റ കൃത്യമാണോ എന്ന് പരിശോധിക്കാൻ. UI-യിൽ മാറ്റമില്ല.
-    let xlNonEmptyForLog = rowsData.filter(function(r) { return r.medName !== ""; });
-    if (xlNonEmptyForLog.length > 0) {
-        console.log("📤 [XL-SEND] rows:", JSON.stringify(xlNonEmptyForLog), "| medicineData categories:", Object.keys(medicineData).length, Object.keys(medicineData));
-    }
+    // 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): തുടർച്ചയായി വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ 
+    // ഓരോ അക്ഷരത്തിനും ഉടനെ Worker-ലേക്ക് അയക്കാതെ, ടൈപ്പിംഗ് ഏകദേശം 300 മില്ലിസെക്കന്റ് നിർത്തിയ 
+    // ശേഷം മാത്രം അയക്കുന്നു (debounce). ഇത് ഒന്നിലധികം postMessage-കൾ ഒരേസമയം "in-flight" 
+    // ആകുന്നതും, അവയുടെ മറുപടികൾ ക്രമം തെറ്റി വരുന്നതും ഗണ്യമായി കുറയ്ക്കുന്നു. കൂടാതെ, ഓരോ 
+    // request-നും ഒരു അനുക്രമ (seq) നമ്പർ നൽകി, aiWorker.onmessage-ൽ അതിലും പഴയ (stale) ഒരു 
+    // മറുപടി വന്നാൽ അത് അവഗണിക്കാൻ സഹായിക്കുന്നു — ഇത് race condition പൂർണ്ണമായും ഇല്ലാതാക്കുന്നു.
+    if (xlDebounceTimer) clearTimeout(xlDebounceTimer);
+    xlDebounceTimer = setTimeout(function() {
+        let mySeq = ++xlRequestSeq;
 
-    // പശ്ചാത്തലത്തിൽ പ്രോസസ്സ് ചെയ്യാൻ വർക്കറിലേക്ക് അയക്കുന്നു
-    aiWorker.postMessage({ rows: rowsData, medicineData: medicineData });
+        // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): വർക്കറിലേക്ക് അയക്കുന്നതിന് തൊട്ടുമുൻപ്, 
+        // ശൂന്യമല്ലാത്ത വരികളുടെ കൃത്യമായ ടെക്സ്റ്റും, medicineData-യിലെ വിഭാഗങ്ങളുടെ എണ്ണവും 
+        // Console-ൽ കാണിക്കുന്നു — അയക്കുന്ന ഡാറ്റ കൃത്യമാണോ എന്ന് പരിശോധിക്കാൻ. UI-യിൽ മാറ്റമില്ല.
+        let xlNonEmptyForLog = rowsData.filter(function(r) { return r.medName !== ""; });
+        if (xlNonEmptyForLog.length > 0) {
+            console.log("📤 [XL-SEND] seq:" + mySeq, "rows:", JSON.stringify(xlNonEmptyForLog), "| medicineData categories:", Object.keys(medicineData).length, Object.keys(medicineData));
+        }
+
+        // പശ്ചാത്തലത്തിൽ പ്രോസസ്സ് ചെയ്യാൻ വർക്കറിലേക്ക് അയക്കുന്നു
+        aiWorker.postMessage({ rows: rowsData, medicineData: medicineData, seq: mySeq });
+    }, 300);
 }
 
 // 4. വർക്കറിൽ നിന്നും തിരികെ വരുന്ന റിസൾട്ട് വെച്ച് UI അപ്ഡേറ്റ് ചെയ്യുന്നു
+// 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ ഒന്നിലധികം 
+// postMessage-കൾ Worker-ലേക്ക് പോകുകയും, അവയുടെ മറുപടികൾ ചിലപ്പോൾ ക്രമം തെറ്റി തിരിച്ചെത്തുകയും 
+// ചെയ്താൽ, ഒരു പഴയ (stale) മറുപടി ഏറ്റവും പുതിയ ശരിയായ ഫലത്തിന് മുകളിൽ വന്ന് തെറ്റായി മഞ്ഞ/വെള്ള 
+// കാണിക്കുന്നത് ഒഴിവാക്കാൻ, ഏറ്റവും ഒടുവിൽ പ്രയോഗിച്ച seq നമ്പർ ട്രാക്ക് ചെയ്യുന്നു.
+let xlLastAppliedSeq = 0;
 aiWorker.onmessage = function(e) {
-    let results = e.data;
+    let incomingSeq = (e.data && typeof e.data.seq !== 'undefined') ? e.data.seq : null;
+    let results = (e.data && e.data.results) ? e.data.results : e.data;
+
+    if (incomingSeq !== null) {
+        if (incomingSeq < xlLastAppliedSeq) {
+            // ഇത് ഒരു പഴയ (stale/out-of-order) മറുപടിയാണ് — അവഗണിക്കുന്നു
+            console.log("⏭️ [XL-CLASSIFY] Stale response ignored (seq " + incomingSeq + " < " + xlLastAppliedSeq + ")");
+            return;
+        }
+        xlLastAppliedSeq = incomingSeq;
+    }
+
     let currentSiNo = 1;
 
     // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): Worker തിരികെ നൽകുന്ന ഓരോ ഫലവും (ശൂന്യമല്ലാത്ത 
