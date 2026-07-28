@@ -5434,6 +5434,16 @@ const categoryColors = {
                             document.getElementById('modalOverlay').style.display = 'none';
                         };
                     } catch (e) { console.error("Undo Success Message Error:", e); }
+
+                    // 🌟 EXPERT ADDITION (USER REQUEST): UNDO പ്രവർത്തനം പൂർത്തിയായ ശേഷം, ഈ മാറ്റം 
+                    // Google Drive ബാക്കപ്പിലേക്കും "Downloads" ഫോൾഡറിലെ "Medistock back-up.json" 
+                    // ഫയലിലേക്കും ഉടനെ തന്നെ സേവ് ചെയ്യുന്നു.
+                    try {
+                        if (typeof window.smartAutoBackup === 'function') window.smartAutoBackup();
+                    } catch (e) { console.error("Undo Google Drive Backup Error:", e); }
+                    try {
+                        if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
+                    } catch (e) { console.error("Undo Local Backup Error:", e); }
                 };
 
                 if (typeof showCustomConfirm === 'function') {
@@ -5547,6 +5557,16 @@ const categoryColors = {
                             document.getElementById('modalOverlay').style.display = 'none';
                         };
                     } catch (e) { console.error("Redo Success Message Error:", e); }
+
+                    // 🌟 EXPERT ADDITION (USER REQUEST): REDO പ്രവർത്തനം പൂർത്തിയായ ശേഷം, ഈ മാറ്റം 
+                    // Google Drive ബാക്കപ്പിലേക്കും "Downloads" ഫോൾഡറിലെ "Medistock back-up.json" 
+                    // ഫയലിലേക്കും ഉടനെ തന്നെ സേവ് ചെയ്യുന്നു.
+                    try {
+                        if (typeof window.smartAutoBackup === 'function') window.smartAutoBackup();
+                    } catch (e) { console.error("Redo Google Drive Backup Error:", e); }
+                    try {
+                        if (typeof window.medistockWriteLocalBackupNow === 'function') window.medistockWriteLocalBackupNow();
+                    } catch (e) { console.error("Redo Local Backup Error:", e); }
                 };
 
                 if (typeof showCustomConfirm === 'function') {
@@ -9665,20 +9685,34 @@ function showXlCprOverlay() {
     }, 2000);
 }
 
+// 🌟 EXPERT ADDITION (USER REQUEST): പട്ടികയിൽ (excelGrid) ഇപ്പോൾ എന്തെങ്കിലും ഡാറ്റ ഉണ്ടോ എന്ന് 
+// ട്രാക്ക് ചെയ്യാൻ. പട്ടിക പൂർണ്ണമായും ശൂന്യമായ അവസ്ഥയിൽ നിന്നും ആദ്യമായി ഡാറ്റ വരുമ്പോൾ മാത്രമേ 
+// CPR STEP IMAGE കാണിക്കാവൂ — അതിന് ശേഷം (പട്ടികയിൽ ഡാറ്റ ഉള്ള അവസ്ഥയിൽ) വരുത്തുന്ന ഒരു 
+// മാറ്റത്തിനും ഇത് വീണ്ടും കാണിക്കരുത്. പട്ടിക പിന്നീട് പൂർണ്ണമായും ശൂന്യമായാൽ (ഉദാ: Clear All), 
+// അടുത്ത തവണ ആദ്യം ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുമ്പോൾ വീണ്ടും ഒരിക്കൽ കാണിക്കും.
+let xlTableHasAnyData = false;
+
 // 3. മെയിൻ ഫംഗ്ഷൻ (UI ൽ നിന്നും ഡാറ്റ എടുത്ത് വർക്കറിന് നൽകുന്നു)
 function autoFillExcelColumns() {
     let rowsData = [];
+    let xlAnyNonEmptyNow = false;
     for (let i = 1; i <= 300; i++) {
         let medInput = document.getElementById('xl_med_' + i);
         if (medInput && medInput.value.trim() !== "") {
             rowsData.push({ index: i, medName: medInput.value });
+            xlAnyNonEmptyNow = true;
         } else if (medInput) {
             rowsData.push({ index: i, medName: "" }); // ശൂന്യമായ വരികളും അയക്കുന്നു (മായ്ക്കാൻ)
         }
     }
 
-    // 🌟 ബാക്ക്ഗ്രൗണ്ട് സ്കാൻ തുടങ്ങുന്നതിനൊപ്പം 2 സെക്കന്റ് നേരത്തേക്ക് CPR STEP IMAGE ഫുൾ സ്ക്രീനിൽ കാണിക്കുന്നു
-    showXlCprOverlay();
+    // 🌟 പട്ടിക പൂർണ്ണമായും ശൂന്യമായിരുന്ന അവസ്ഥയിൽ നിന്നും ഇപ്പോൾ ആദ്യമായി ഡാറ്റ വന്നാൽ മാത്രം 
+    // 2 സെക്കന്റ് നേരത്തേക്ക് CPR STEP IMAGE ഫുൾ സ്ക്രീനിൽ കാണിക്കുന്നു. പട്ടികയിൽ നേരത്തെ തന്നെ 
+    // ഡാറ്റ ഉണ്ടെങ്കിൽ (xlTableHasAnyData true ആണെങ്കിൽ) ഇനി വരുത്തുന്ന മാറ്റങ്ങൾക്ക് ഇത് വരില്ല.
+    if (!xlTableHasAnyData && xlAnyNonEmptyNow) {
+        showXlCprOverlay();
+    }
+    xlTableHasAnyData = xlAnyNonEmptyNow;
 
     // പശ്ചാത്തലത്തിൽ പ്രോസസ്സ് ചെയ്യാൻ വർക്കറിലേക്ക് അയക്കുന്നു
     aiWorker.postMessage({ rows: rowsData, medicineData: medicineData });
