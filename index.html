@@ -9796,6 +9796,14 @@ function autoFillExcelColumns() {
     }
     xlTableHasAnyData = xlAnyNonEmptyNow;
 
+    // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): വർക്കറിലേക്ക് അയക്കുന്നതിന് തൊട്ടുമുൻപ്, 
+    // ശൂന്യമല്ലാത്ത വരികളുടെ കൃത്യമായ ടെക്സ്റ്റും, medicineData-യിലെ വിഭാഗങ്ങളുടെ എണ്ണവും 
+    // Console-ൽ കാണിക്കുന്നു — അയക്കുന്ന ഡാറ്റ കൃത്യമാണോ എന്ന് പരിശോധിക്കാൻ. UI-യിൽ മാറ്റമില്ല.
+    let xlNonEmptyForLog = rowsData.filter(function(r) { return r.medName !== ""; });
+    if (xlNonEmptyForLog.length > 0) {
+        console.log("📤 [XL-SEND] rows:", JSON.stringify(xlNonEmptyForLog), "| medicineData categories:", Object.keys(medicineData).length, Object.keys(medicineData));
+    }
+
     // പശ്ചാത്തലത്തിൽ പ്രോസസ്സ് ചെയ്യാൻ വർക്കറിലേക്ക് അയക്കുന്നു
     aiWorker.postMessage({ rows: rowsData, medicineData: medicineData });
 }
@@ -9804,6 +9812,15 @@ function autoFillExcelColumns() {
 aiWorker.onmessage = function(e) {
     let results = e.data;
     let currentSiNo = 1;
+
+    // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): Worker തിരികെ നൽകുന്ന ഓരോ ഫലവും (ശൂന്യമല്ലാത്ത 
+    // വരികൾക്ക്) Console-ൽ കാണിക്കുന്നു — ഏത് Tier ആണ് match ചെയ്തത് (exact/autofix/lowConfidence), 
+    // എന്ത് match ആണ് കിട്ടിയത് എന്നിവ നേരിട്ട് പരിശോധിക്കാൻ. ഇത് UI-യിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല.
+    results.forEach(function(r) {
+        if (!r.empty) {
+            console.log("🔍 [XL-CLASSIFY] row " + r.index + ":", JSON.stringify(r));
+        }
+    });
 
     results.forEach(res => {
         let medInput = document.getElementById('xl_med_' + res.index);
