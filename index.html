@@ -815,7 +815,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             
             <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
                 <a href="https://drive.google.com/file/d/1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX/view?usp=sharing" target="_blank" style="color: #2980b9; text-decoration: none; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.color='#1abc9c'" onmouseout="this.style.color='#2980b9'">
-                    <i class="fa-solid fa-book-open"></i> 2Medistock Viewer എന്താണെന്ന് പൂർണ്ണമായി മനസ്സിലാക്കാൻ Hand Book Download ചെയ്യുക
+                    <i class="fa-solid fa-book-open"></i> Medistock Viewer എന്താണെന്ന് പൂർണ്ണമായി മനസ്സിലാക്കാൻ Hand Book Download ചെയ്യുക
                 </a>
             </div>
             </div>
@@ -9477,10 +9477,21 @@ function getSimilarity(s1, s2) {
 }
 
 
+// --- 3. മെയിൻ ഓട്ടോ ഫിൽ ഫംഗ്ഷൻ ---
+// ==============================================================================
+// ADVANCED AI AUTO-CORRECTION WITH WEB WORKERS, TOKENIZATION & NUMBER PROTECTION
+// ==============================================================================
+
 // 1. വെബ് വർക്കർ കോഡ് (ബ്രൗസർ സ്ലോ ആകാതിരിക്കാൻ ബാക്ക്ഗ്രൗണ്ടിൽ പ്രവർത്തിക്കാൻ)
 const workerCode = `
+    // 🌟 EXPERT ADDITION (DIAGNOSTIC MARKER — USER REQUEST): ഈ Worker ഉണ്ടാക്കുമ്പോൾ തന്നെ ഒരു 
+    // പ്രത്യേക (harmless) Console സന്ദേശം കാണിക്കുന്നു. ബ്രൗസറിൽ (F12 → Console) ഈ സന്ദേശം 
+    // "KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX" എന്നതോടെ കാണുന്നുണ്ടെങ്കിൽ, ലൈവ് സൈറ്റിൽ ഏറ്റവും പുതിയ KC/KSC 
+    // Category-Lock കോഡ് തന്നെയാണ് പ്രവർത്തിക്കുന്നത് എന്ന് ഉറപ്പിക്കാം. ഈ സന്ദേശം കാണുന്നില്ലെങ്കിൽ, 
+    // ബ്രൗസർ ഇപ്പോഴും പഴയ (Cache ചെയ്ത) ഫയൽ ആണ് ലോഡ് ചെയ്തിരിക്കുന്നത് എന്നാണ് അർത്ഥം.
     console.log("🏷️ Medistock Excel AI Worker Version: KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX (loaded)");
 
+    // സ്പെല്ലിംഗ് സാമ്യം കണ്ടുപിടിക്കാനുള്ള ഫംഗ്ഷൻ (Levenshtein Distance)
     function editDistance(s1, s2) {
         let costs = new Array();
         for (let i = 0; i <= s1.length; i++) {
@@ -9508,23 +9519,40 @@ const workerCode = `
         return ((longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)) * 100;
     }
 
+    // അക്കങ്ങൾ മാത്രം വേർതിരിച്ചെടുക്കാൻ (Number Protection)
     function extractNumbers(str) {
         let matches = str.match(/\\d+/g);
         return matches ? matches.join('') : '';
     }
 
+    // ടോക്കണൈസേഷൻ (വാക്കുകളെ മുറിച്ച് പരിശോധിക്കാൻ)
     function tokenize(str) {
         return str.toLowerCase().replace(/[^a-z0-9]/g, ' ').split(' ').filter(Boolean);
     }
 
+    // 🌟 EXPERT ADDITION (ROBUSTNESS FIX): Excel ഫയലിൽ നിന്നോ, മറ്റ് സ്രോതസ്സുകളിൽ നിന്നോ 
+    // copy-paste ചെയ്യുമ്പോൾ ചിലപ്പോൾ കണ്ണിൽ കാണാത്ത Unicode അക്ഷരങ്ങൾ (zero-width space, 
+    // byte-order-mark, soft hyphen, zero-width joiner മുതലായവ) ടെക്സ്റ്റിനുള്ളിൽ കയറിവന്നേക്കാം. 
+    // ഇവ സാധാരണ space അല്ലാത്തതിനാൽ താഴെയുള്ള normalizeSpaces()-ന്റെ \s+ പരിശോധനയ്ക്ക് ഇവ 
+    // നീക്കം ചെയ്യാൻ കഴിയാതെ വരികയും, അതുവഴി യഥാർത്ഥത്തിൽ ഒരേ പേരായ രണ്ട് സ്ട്രിംഗുകൾ 
+    // (ദൃശ്യപരമായി ഒരേപോലെ ഇരുന്നാലും) വ്യത്യസ്തമായി തോന്നുകയും ചെയ്യാം. ഈ ഫംഗ്ഷൻ അത്തരം 
+    // അദൃശ്യ അക്ഷരങ്ങൾ കൂടി മുൻകൂട്ടി നീക്കം ചെയ്യുന്നു.
     function stripInvisibleChars(str) {
-        return str.replace(/[\\u200B-\\u200D\\uFEFF\\u00AD\\u2060]/g, '');
+        return str.replace(/[\u200B-\u200D\uFEFF\u00AD\u2060]/g, '');
     }
 
+    // 🌟 EXPERT ADDITION (USER REQUEST): ഒന്നോ അതിലധികമോ SPACE (അധിക സ്പേസ്, കാണാതെ പോയ സ്പേസ് 
+    // മുതലായവ) മാത്രമാണ് വ്യത്യാസമെങ്കിൽ, ആ വ്യത്യാസം അവഗണിച്ച് താരതമ്യം ചെയ്യാൻ വേണ്ടിയുള്ള ഹെൽപ്പർ.
+    // (എല്ലാ SPACE-ഉം, അദൃശ്യ അക്ഷരങ്ങളും നീക്കം ചെയ്ത്, ചെറിയ അക്ഷരത്തിലാക്കി താരതമ്യം ചെയ്യുന്നു)
     function normalizeSpaces(str) {
-        return stripInvisibleChars(str).replace(/\\s+/g, '').toLowerCase();
+        return stripInvisibleChars(str).replace(/\s+/g, '').toLowerCase();
     }
 
+    // 🌟 EXPERT ADDITION (USER REQUEST - Tier 3): താഴെ പറയുന്ന 13 മരുന്നുകൾക്ക് മാത്രമായി 
+    // "space ഒഴിവാക്കിയിട്ട് editDistance <= 1 (ഒരക്ഷരത്തിന്റെ വ്യത്യാസം വരെ)" എന്ന പ്രത്യേക ടോളറൻസ് 
+    // അനുവദിക്കുന്നു. ഇത് ഈ 13 മരുന്നുകൾക്ക് മാത്രമേ ബാധകമാകൂ — KSC/KC അടക്കം മറ്റൊരു മരുന്നിനും 
+    // (ഈ പട്ടികയിൽ ഇല്ലാത്തതിനും) ഈ 1-അക്ഷര ടോളറൻസ് ബാധകമല്ല; അവയ്ക്ക് മേൽ പറഞ്ഞ "space-only" 
+    // (Tier 2, editDistance 0) ചെക്ക് മാത്രമേ ബാധകമാകൂ.
     const PRIORITY_TOLERANCE_MEDICINES = [
         "ABHAYA CHOORNAM",
         "ABHAYADI CHOORANAM",
@@ -9541,8 +9569,17 @@ const workerCode = `
         "ASHTA CHOORNAM"
     ].map(n => normalizeSpaces(n));
 
+    // 🌟 EXPERT ADDITION (USER REQUEST - KC/KSC Category-Lock): "KC", "KSC" എന്നീ രണ്ട് 
+    // വിഭാഗങ്ങൾക്കും (space ഒഴിവാക്കിയ ശേഷം) 1-3 അക്ഷര ടോളറൻസ് അനുവദിക്കുമ്പോൾ, ഇവ രണ്ടും 
+    // തമ്മിൽ (KC ↔ KSC, ഇവ തമ്മിലുള്ള വ്യത്യാസം വെറും ഒരു "S" മാത്രമാണ്) തെറ്റായി മാറിപ്പോകാതിരിക്കാൻ, 
+    // ആദ്യം ഇൻപുട്ടിൽ നിന്ന് തന്നെ ഏത് വിഭാഗമാണ് ("KC" അല്ലെങ്കിൽ "KSC") ടൈപ്പ്/പേസ്റ്റ് ചെയ്തതിൽ 
+    // ഉദ്ദേശിച്ചത് എന്ന് കൃത്യമായി കണ്ടെത്തുന്നു — "K C", "K.C", "K S C" പോലുള്ള space/dot 
+    // വ്യത്യാസങ്ങൾ കൂടി പരിഗണിച്ച് (word-token അടിസ്ഥാനത്തിൽ, ക്രമരഹിതമായി എവിടെയെങ്കിലും വരുന്ന 
+    // "K", "C" അക്ഷരങ്ങളെ തെറ്റായി വിഭാഗമായി കണക്കാക്കാതിരിക്കാൻ ഓരോ ടോക്കണും 1-3 അക്ഷരമുള്ള, 
+    // അക്ഷരങ്ങൾ മാത്രമുള്ളത് ആണെന്ന് കൂടി ഉറപ്പാക്കുന്നു). "KSC" ആദ്യം പരിശോധിക്കുന്നു (അതില്ലെങ്കിൽ 
+    // മാത്രം "KC") — അതുവഴി "KSC" എന്നതിലെ "KC" ഭാഗം തെറ്റായി "KC" ആയി തിരിച്ചറിയാതിരിക്കും.
     function detectKcKscCategoryToken(str) {
-        let words = stripInvisibleChars(str).trim().split(/\\s+/);
+        let words = stripInvisibleChars(str).trim().split(/\s+/);
         function tryFind(target) {
             for (let i = 0; i < words.length; i++) {
                 for (let len = target.length; len >= 1; len--) {
@@ -9568,6 +9605,7 @@ const workerCode = `
     self.onmessage = function(e) {
         const { rows, medicineData, seq } = e.data;
         
+        // ഡാറ്റാബേസ് സെറ്റ് ചെയ്യുന്നു
         let db = [];
         for (let cat in medicineData) {
             medicineData[cat].forEach(med => {
@@ -9592,23 +9630,30 @@ const workerCode = `
             let inputNum = extractNumbers(inputName);
             let inputTokens = tokenize(inputName);
 
-            // Tier 1: 100% Exact Match
+            // 1. 100% Exact Match പരിശോധന
             let exactMatch = db.find(d => d.originalName.toLowerCase() === inputName.toLowerCase());
             if (exactMatch) {
                 results.push({ index: row.index, exact: true, match: exactMatch.originalName, cat: exactMatch.cat });
                 return;
             }
 
-            // Tier 2: Space Only Match
+            // 1.5 🌟 EXPERT ADDITION (USER REQUEST): SPACE മാത്രമാണ് വ്യത്യാസമെങ്കിൽ (അധിക സ്പേസ്/
+            // കാണാതെ പോയ സ്പേസ്), അത് ഒരു "സാമ്യമില്ലായ്മ" ആയി കണക്കാക്കാതെ, തെറ്റ് സ്വയമേവ ശരിയാക്കി 
+            // ശരിയായ പേരിലേക്കും Item-ലേക്കും മാറ്റുന്നു (95%+ autofix പോലെ, സാധാരണ വെള്ള നിറത്തിൽ) — 
+            // Levenshtein സ്കോർ കണക്കാക്കുന്നതിന് മുൻപ് തന്നെ ഇത് പരിശോധിക്കുന്നു.
             let spaceOnlyMatch = db.find(d => normalizeSpaces(d.originalName) === normalizeSpaces(inputName));
             if (spaceOnlyMatch) {
                 results.push({ index: row.index, exact: false, autofix: true, match: spaceOnlyMatch.originalName, cat: spaceOnlyMatch.cat });
                 return;
             }
 
-            // Tier 3: Priority Medicines Tolerance
+            // 1.75 🌟 EXPERT ADDITION (USER REQUEST - Tier 3): Exact Match, Space-only Match എന്നിവ 
+            // പരാജയപ്പെട്ടാൽ, PRIORITY_TOLERANCE_MEDICINES പട്ടികയിൽ ഉള്ള (13) മരുന്നുകൾക്ക് മാത്രമായി 
+            // "space ഒഴിവാക്കിയിട്ട് editDistance <= 1" ടോളറൻസ് പരിശോധിക്കുന്നു. ഈ ടോളറൻസ് ഈ 13 
+            // മരുന്നുകൾക്ക് മാത്രമേ ബാധകമാകൂ (KSC/KC ഉൾപ്പെടെ മറ്റെല്ലാ മരുന്നുകൾക്കും ഇത് ബാധകമല്ല — 
+            // അവയ്ക്ക് മുകളിലെ Tier 1 & Tier 2 മാത്രമേ ബാധകമാകൂ).
             let normalizedInput = normalizeSpaces(inputName);
-            let priorityMatch = null, priorityBestDist = 2;
+            let priorityMatch = null, priorityBestDist = 2; // 0-ഉം 1-ഉം മാത്രം സ്വീകാര്യം
             db.forEach(d => {
                 let normalizedDbName = normalizeSpaces(d.originalName);
                 if (PRIORITY_TOLERANCE_MEDICINES.includes(normalizedDbName)) {
@@ -9624,12 +9669,19 @@ const workerCode = `
                 return;
             }
 
-            // Tier 1.8: KC/KSC Category Lock
+            // 1.8 🌟 EXPERT ADDITION (USER REQUEST - KC/KSC Category-Lock Tier): Tier 1, 2, 3 
+            // പരാജയപ്പെട്ട ശേഷം, ഇൻപുട്ടിൽ "KC" അല്ലെങ്കിൽ "KSC" എന്ന വിഭാഗ-ടോക്കൺ വ്യക്തമായി 
+            // കണ്ടെത്തിയാൽ മാത്രം, ആ വിഭാഗത്തിലെ ഡാറ്റാബേസ് മരുന്നുകളുമായി മാത്രം (മറ്റേ വിഭാഗവുമായി 
+            // ഒരിക്കലും അല്ല) space ഒഴിവാക്കിയിട്ട് editDistance <= 3 ടോളറൻസ് പരിശോധിക്കുന്നു. ഇത് 
+            // KC ↔ KSC ഇടയിൽ (edit distance വളരെ അടുത്തതാണെങ്കിലും) തെറ്റായി മാറിപ്പോകുന്നത് 
+            // പൂർണ്ണമായും തടയുന്നു — candidate പൂൾ തന്നെ കണ്ടെത്തിയ വിഭാഗത്തിലേക്ക് "പൂട്ടി" (locked) 
+            // വെച്ചിരിക്കുന്നതിനാൽ. വിഭാഗം വ്യക്തമല്ലെങ്കിൽ (ടോക്കൺ കണ്ടെത്താൻ കഴിഞ്ഞില്ലെങ്കിൽ), 
+            // ഊഹിക്കാൻ ശ്രമിക്കാതെ ഈ ടയർ ഒന്നും ചെയ്യാതെ കടന്നുപോകുന്നു (സുരക്ഷിതമായി മഞ്ഞയിൽ തുടരും).
             let detectedKcKscCat = detectKcKscCategoryToken(inputName);
             if (detectedKcKscCat) {
-                let kcKscBestMatch = null, kcKscBestDist = 4;
+                let kcKscBestMatch = null, kcKscBestDist = 4; // 0, 1, 2, 3 മാത്രം സ്വീകാര്യം
                 db.forEach(d => {
-                    if (d.cat !== detectedKcKscCat) return;
+                    if (d.cat !== detectedKcKscCat) return; // കണ്ടെത്തിയ വിഭാഗം അല്ലാത്ത ഒന്നിനെയും പരിഗണിക്കുന്നില്ല
                     let normalizedDbName = normalizeSpaces(d.originalName);
                     let dist = editDistance(normalizedInput, normalizedDbName);
                     if (dist <= 3 && dist < kcKscBestDist) {
@@ -9643,12 +9695,18 @@ const workerCode = `
                 }
             }
 
-            // Tier 4: General Fuzzy Match
-            let tier4BestMatch = null, tier4BestDist = 4;
+            // 1.85 🌟 EXPERT ADDITION (USER REQUEST - Tier 4): Tier 1, 2, 3, 1.8 (KC/KSC Category-Lock) 
+            // എല്ലാം പരാജയപ്പെട്ടാൽ (അല്ലെങ്കിൽ ബാധകമല്ലെങ്കിൽ), "KSC" / "KC" വിഭാഗങ്ങളും 
+            // PRIORITY_TOLERANCE_MEDICINES (13 മരുന്നുകൾ)-ഉം ഒഴിവാക്കിയ ബാക്കി എല്ലാ ഡാറ്റാബേസ് 
+            // മരുന്നുകളുമായി, space ഒഴിവാക്കിയിട്ട് editDistance <= 3 (1, 2 അല്ലെങ്കിൽ 3 അക്ഷര 
+            // വ്യത്യാസം) ടോളറൻസ് പരിശോധിക്കുന്നു. KSC/KC-ക്ക് ഇവിടെ ഈ പൊതു ടയറിൽ ഒരു ടോളറൻസും 
+            // ബാധകമല്ല — അവയ്ക്ക് മുകളിലെ പ്രത്യേക "Category-Lock" ടയർ (1.8) മാത്രമേ ബാധകമാകൂ, 
+            // അത് KC ↔ KSC ഇടയിൽ തെറ്റായി മാറിപ്പോകാതെ സുരക്ഷിതമായി കൈകാര്യം ചെയ്യുന്നു.
+            let tier4BestMatch = null, tier4BestDist = 4; // 0, 1, 2, 3 മാത്രം സ്വീകാര്യം
             db.forEach(d => {
-                if (d.cat === 'KSC' || d.cat === 'KC') return;
+                if (d.cat === 'KSC' || d.cat === 'KC') return; // KSC/KC വിഭാഗങ്ങൾ ഇവിടെ ഒഴിവാക്കുന്നു (അവയ്ക്ക് മുകളിലെ 1.8 ടയർ മാത്രം ബാധകം)
                 let normalizedDbName = normalizeSpaces(d.originalName);
-                if (PRIORITY_TOLERANCE_MEDICINES.includes(normalizedDbName)) return;
+                if (PRIORITY_TOLERANCE_MEDICINES.includes(normalizedDbName)) return; // 13 മരുന്നുകൾ ഒഴിവാക്കുന്നു (Tier 3-ൽ ഇതിനകം കൈകാര്യം ചെയ്തു)
                 let dist = editDistance(normalizedInput, normalizedDbName);
                 if (dist <= 3 && dist < tier4BestDist) {
                     tier4BestDist = dist;
@@ -9660,10 +9718,11 @@ const workerCode = `
                 return;
             }
 
-            // Number Protection Filter & Best Similarity Match
+            // 2. Number Protection Filter (എക്സലിലെ അക്കങ്ങളും ഡാറ്റാബേസിലെ അക്കങ്ങളും ഒന്നാണെങ്കിൽ മാത്രം ഒത്തുനോക്കും)
             let validDb = inputNum ? db.filter(d => d.num === inputNum) : db;
             if (validDb.length === 0) validDb = db;
 
+            // 3. ഏറ്റവും കൂടുതൽ സാമ്യമുള്ള ഒരൊറ്റ മരുന്ന് കണ്ടെത്തുന്നു
             let bestMatch = null, bestSim = -1;
             validDb.forEach(d => {
                 let sim = getSimilarity(inputName.toLowerCase(), d.originalName.toLowerCase());
@@ -9674,23 +9733,33 @@ const workerCode = `
             });
 
             if (bestMatch && bestSim >= 95) {
+                // 95% അല്ലെങ്കിൽ അതിൽ കൂടുതൽ സാമ്യം ഉണ്ടെങ്കിൽ തനിയെ കൃത്യമായ പേരിലേക്ക് മാറ്റുന്നു
                 results.push({ index: row.index, exact: false, autofix: true, match: bestMatch.originalName, cat: bestMatch.cat });
             } else {
+                // 95%-ൽ താഴെയാണ് സാമ്യമെങ്കിൽ ഒന്നും മാറ്റാതെ, ബോക്സ് മഞ്ഞ നിറമാക്കാൻ വേണ്ടി മാത്രം അറിയിക്കുന്നു
                 results.push({ index: row.index, exact: false, lowConfidence: true, original: inputName });
             }
         });
 
+        // 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): results-നൊപ്പം അതേ request-ന്റെ 
+        // seq നമ്പറും തിരികെ അയക്കുന്നു. ഇത് വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ ഉണ്ടാകുന്ന ഒന്നിലധികം 
+        // postMessage-കളുടെ മറുപടികൾ ക്രമം തെറ്റി എത്തിയാൽ, മെയിൻ ത്രെഡിന് പഴയ (stale) മറുപടികൾ 
+        // തിരിച്ചറിഞ്ഞ് അവഗണിക്കാൻ സഹായിക്കുന്നു.
         self.postMessage({ seq: seq, results: results });
     };
 `;
 
 // 2. വെബ് വർക്കർ ആരംഭിക്കുന്നു (Inline Blob ഉപയോഗിച്ച്)
-const blobUrl = URL.createObjectURL(new Blob([workerCode], { type: 'application/javascript' }));
-const aiWorker = new Worker(blobUrl);
-URL.revokeObjectURL(blobUrl); // Memory Leak തടയാൻ
-
+const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+const aiWorker = new Worker(URL.createObjectURL(workerBlob));
+// 🌟 EXPERT ADDITION (DIAGNOSTIC MARKER — USER REQUEST): ഈ ലൈൻ പ്രധാന (main thread) സ്ക്രിപ്റ്റിൽ 
+// നിന്നും തന്നെ ഒരു Console സന്ദേശം കാണിക്കുന്നു. ഇത് കൂടി "KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX" എന്നതോടെ 
+// Console-ൽ കണ്ടാൽ, ബ്രൗസർ പുതിയ index.html ഫയൽ തന്നെയാണ് ലോഡ് ചെയ്തിരിക്കുന്നത് എന്ന് ഉറപ്പാണ്.
 console.log("🏷️ Medistock Main Script Version: KC_KSC_CATEGORY_LOCK_V2_INVISIBLE_CHAR_FIX (excelImportPage AI script loaded)");
 
+// 🌟 EXPERT ADDITION (USER REQUEST): "Name of Medicine" കോളത്തിൽ ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുന്ന നിമിഷം മുതൽ 
+// 2 സെക്കന്റ് നേരത്തേക്ക് ഫുൾ സ്ക്രീൻ CPR STEP IMAGE കാണിക്കുകയും, തുടർച്ചയായി ടൈപ്പ് ചെയ്യുകയാണെങ്കിൽ 
+// ഓരോ തവണയും ടൈമർ പുതുക്കുകയും (അവസാനത്തെ ടൈപ്പിന് ശേഷം കൃത്യം 2 സെക്കന്റ് കഴിഞ്ഞ് അപ്രത്യക്ഷമാവുകയും) ചെയ്യുന്നു.
 let xlCprHideTimer = null;
 function showXlCprOverlay() {
     let overlay = document.getElementById('xlCprLoader');
@@ -9702,11 +9771,25 @@ function showXlCprOverlay() {
     }, 2000);
 }
 
+// 🌟 EXPERT ADDITION (USER REQUEST): പട്ടികയിൽ (excelGrid) ഇപ്പോൾ എന്തെങ്കിലും ഡാറ്റ ഉണ്ടോ എന്ന് 
+// ട്രാക്ക് ചെയ്യാൻ. പട്ടിക പൂർണ്ണമായും ശൂന്യമായ അവസ്ഥയിൽ നിന്നും ആദ്യമായി ഡാറ്റ വരുമ്പോൾ മാത്രമേ 
+// CPR STEP IMAGE കാണിക്കാവൂ — അതിന് ശേഷം (പട്ടികയിൽ ഡാറ്റ ഉള്ള അവസ്ഥയിൽ) വരുത്തുന്ന ഒരു 
+// മാറ്റത്തിനും ഇത് വീണ്ടും കാണിക്കരുത്. പട്ടിക പിന്നീട് പൂർണ്ണമായും ശൂന്യമായാൽ (ഉദാ: Clear All), 
+// അടുത്ത തവണ ആദ്യം ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുമ്പോൾ വീണ്ടും ഒരിക്കൽ കാണിക്കും.
 let xlTableHasAnyData = false;
 
+// 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): ഇത് Worker-നെ ബൈപാസ് ചെയ്ത്, ഇപ്പോൾ (ഈ നിമിഷം) 
+// മെയിൻ ത്രെഡിൽ ഉള്ള medicineData ഉപയോഗിച്ച് നേരിട്ട് ഒരു ടെക്സ്റ്റ് ക്ലാസിഫൈ ചെയ്ത് നോക്കാൻ. 
+// Console-ൽ ഇങ്ങനെ വിളിക്കാം: medistockDebugClassify("RASNERANDATHI K C 1000GM")
+// ഇത് Worker postMessage-ന്റെ ഏതെങ്കിലും race/timing പ്രശ്നം ഒഴിവാക്കി, തത്സമയത്തെ medicineData 
+// ശരിക്കും എന്താണ് എന്ന് നേരിട്ട് ഉറപ്പിക്കാൻ സഹായിക്കുന്നു. UI-യിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല.
 window.medistockDebugClassify = function(inputNameRaw) {
-    function stripInvisibleCharsDbg(str) { return str.replace(/[\u200B-\u200D\uFEFF\u00AD\u2060]/g, ''); }
-    function normalizeSpacesDbg(str) { return stripInvisibleCharsDbg(str).replace(/\s+/g, '').toLowerCase(); }
+    function stripInvisibleCharsDbg(str) {
+        return str.replace(/[\u200B-\u200D\uFEFF\u00AD\u2060]/g, '');
+    }
+    function normalizeSpacesDbg(str) {
+        return stripInvisibleCharsDbg(str).replace(/\s+/g, '').toLowerCase();
+    }
     function editDistanceDbg(s1, s2) {
         let costs = [];
         for (let i = 0; i <= s1.length; i++) {
@@ -9752,11 +9835,14 @@ window.medistockDebugClassify = function(inputNameRaw) {
 
     let db = [];
     for (let cat in medicineData) {
-        medicineData[cat].forEach(function(med) { db.push({ originalName: med, cat: cat }); });
+        medicineData[cat].forEach(function(med) {
+            db.push({ originalName: med, cat: cat });
+        });
     }
     console.log("🧪 [DEBUG] medicineData categories:", Object.keys(medicineData).length, "| total medicines:", db.length);
 
     let inputName = inputNameRaw.trim();
+
     let exactMatch = db.find(function(d) { return d.originalName.toLowerCase() === inputName.toLowerCase(); });
     if (exactMatch) { console.log("🧪 [DEBUG] Tier 1 EXACT MATCH:", exactMatch.originalName); return; }
 
@@ -9775,15 +9861,16 @@ window.medistockDebugClassify = function(inputNameRaw) {
             if (dist <= 3 && dist < bestDist) { bestDist = dist; best = d; }
         });
         if (best) { console.log("🧪 [DEBUG] Tier 1.8 KC/KSC MATCH (dist=" + bestDist + "):", best.originalName); return; }
+        console.log("🧪 [DEBUG] Tier 1.8: category detected but NO match within editDistance<=3 in that category's db list.");
     }
 
     console.log("🧪 [DEBUG] No match found in any tier — would show YELLOW (lowConfidence).");
 };
 
+// 3. മെയിൻ ഫംഗ്ഷൻ (UI ൽ നിന്നും ഡാറ്റ എടുത്ത് വർക്കറിന് നൽകുന്നു)
 let xlDebounceTimer = null;
 let xlRequestSeq = 0;
 
-// 3. മെയിൻ ഫംഗ്ഷൻ (UI ൽ നിന്നും ഡാറ്റ എടുത്ത് വർക്കറിന് നൽകുന്നു)
 function autoFillExcelColumns() {
     let rowsData = [];
     let xlAnyNonEmptyNow = false;
@@ -9793,35 +9880,54 @@ function autoFillExcelColumns() {
             rowsData.push({ index: i, medName: medInput.value });
             xlAnyNonEmptyNow = true;
         } else if (medInput) {
-            rowsData.push({ index: i, medName: "" });
+            rowsData.push({ index: i, medName: "" }); // ശൂന്യമായ വരികളും അയക്കുന്നു (മായ്ക്കാൻ)
         }
     }
 
+    // 🌟 പട്ടിക പൂർണ്ണമായും ശൂന്യമായിരുന്ന അവസ്ഥയിൽ നിന്നും ഇപ്പോൾ ആദ്യമായി ഡാറ്റ വന്നാൽ മാത്രം 
+    // 2 സെക്കന്റ് നേരത്തേക്ക് CPR STEP IMAGE ഫുൾ സ്ക്രീനിൽ കാണിക്കുന്നു. പട്ടികയിൽ നേരത്തെ തന്നെ 
+    // ഡാറ്റ ഉണ്ടെങ്കിൽ (xlTableHasAnyData true ആണെങ്കിൽ) ഇനി വരുത്തുന്ന മാറ്റങ്ങൾക്ക് ഇത് വരില്ല.
     if (!xlTableHasAnyData && xlAnyNonEmptyNow) {
         showXlCprOverlay();
     }
     xlTableHasAnyData = xlAnyNonEmptyNow;
 
+    // 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): തുടർച്ചയായി വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ 
+    // ഓരോ അക്ഷരത്തിനും ഉടനെ Worker-ലേക്ക് അയക്കാതെ, ടൈപ്പിംഗ് ഏകദേശം 300 മില്ലിസെക്കന്റ് നിർത്തിയ 
+    // ശേഷം മാത്രം അയക്കുന്നു (debounce). ഇത് ഒന്നിലധികം postMessage-കൾ ഒരേസമയം "in-flight" 
+    // ആകുന്നതും, അവയുടെ മറുപടികൾ ക്രമം തെറ്റി വരുന്നതും ഗണ്യമായി കുറയ്ക്കുന്നു. കൂടാതെ, ഓരോ 
+    // request-നും ഒരു അനുക്രമ (seq) നമ്പർ നൽകി, aiWorker.onmessage-ൽ അതിലും പഴയ (stale) ഒരു 
+    // മറുപടി വന്നാൽ അത് അവഗണിക്കാൻ സഹായിക്കുന്നു — ഇത് race condition പൂർണ്ണമായും ഇല്ലാതാക്കുന്നു.
     if (xlDebounceTimer) clearTimeout(xlDebounceTimer);
     xlDebounceTimer = setTimeout(function() {
         let mySeq = ++xlRequestSeq;
+
+        // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): വർക്കറിലേക്ക് അയക്കുന്നതിന് തൊട്ടുമുൻപ്, 
+        // ശൂന്യമല്ലാത്ത വരികളുടെ കൃത്യമായ ടെക്സ്റ്റും, medicineData-യിലെ വിഭാഗങ്ങളുടെ എണ്ണവും 
+        // Console-ൽ കാണിക്കുന്നു — അയക്കുന്ന ഡാറ്റ കൃത്യമാണോ എന്ന് പരിശോധിക്കാൻ. UI-യിൽ മാറ്റമില്ല.
         let xlNonEmptyForLog = rowsData.filter(function(r) { return r.medName !== ""; });
         if (xlNonEmptyForLog.length > 0) {
-            console.log("📤 [XL-SEND] seq:" + mySeq, "rows:", JSON.stringify(xlNonEmptyForLog));
+            console.log("📤 [XL-SEND] seq:" + mySeq, "rows:", JSON.stringify(xlNonEmptyForLog), "| medicineData categories:", Object.keys(medicineData).length, Object.keys(medicineData));
         }
+
+        // പശ്ചാത്തലത്തിൽ പ്രോസസ്സ് ചെയ്യാൻ വർക്കറിലേക്ക് അയക്കുന്നു
         aiWorker.postMessage({ rows: rowsData, medicineData: medicineData, seq: mySeq });
     }, 300);
 }
 
-let xlLastAppliedSeq = 0;
-
 // 4. വർക്കറിൽ നിന്നും തിരികെ വരുന്ന റിസൾട്ട് വെച്ച് UI അപ്ഡേറ്റ് ചെയ്യുന്നു
+// 🌟 EXPERT ADDITION (RACE-CONDITION FIX — USER REQUEST): വേഗത്തിൽ ടൈപ്പ് ചെയ്യുമ്പോൾ ഒന്നിലധികം 
+// postMessage-കൾ Worker-ലേക്ക് പോകുകയും, അവയുടെ മറുപടികൾ ചിലപ്പോൾ ക്രമം തെറ്റി തിരിച്ചെത്തുകയും 
+// ചെയ്താൽ, ഒരു പഴയ (stale) മറുപടി ഏറ്റവും പുതിയ ശരിയായ ഫലത്തിന് മുകളിൽ വന്ന് തെറ്റായി മഞ്ഞ/വെള്ള 
+// കാണിക്കുന്നത് ഒഴിവാക്കാൻ, ഏറ്റവും ഒടുവിൽ പ്രയോഗിച്ച seq നമ്പർ ട്രാക്ക് ചെയ്യുന്നു.
+let xlLastAppliedSeq = 0;
 aiWorker.onmessage = function(e) {
     let incomingSeq = (e.data && typeof e.data.seq !== 'undefined') ? e.data.seq : null;
     let results = (e.data && e.data.results) ? e.data.results : e.data;
 
     if (incomingSeq !== null) {
         if (incomingSeq < xlLastAppliedSeq) {
+            // ഇത് ഒരു പഴയ (stale/out-of-order) മറുപടിയാണ് — അവഗണിക്കുന്നു
             console.log("⏭️ [XL-CLASSIFY] Stale response ignored (seq " + incomingSeq + " < " + xlLastAppliedSeq + ")");
             return;
         }
@@ -9829,27 +9935,39 @@ aiWorker.onmessage = function(e) {
     }
 
     let currentSiNo = 1;
+
+    // 🌟 EXPERT ADDITION (DIAGNOSTIC — USER REQUEST): Worker തിരികെ നൽകുന്ന ഓരോ ഫലവും (ശൂന്യമല്ലാത്ത 
+    // വരികൾക്ക്) Console-ൽ കാണിക്കുന്നു — ഏത് Tier ആണ് match ചെയ്തത് (exact/autofix/lowConfidence), 
+    // എന്ത് match ആണ് കിട്ടിയത് എന്നിവ നേരിട്ട് പരിശോധിക്കാൻ. ഇത് UI-യിൽ ഒരു മാറ്റവും വരുത്തുന്നില്ല.
+    results.forEach(function(r) {
+        if (!r.empty) {
+            console.log("🔍 [XL-CLASSIFY] row " + r.index + ":", JSON.stringify(r));
+        }
+    });
+
     results.forEach(res => {
         let medInput = document.getElementById('xl_med_' + res.index);
         let catInput = document.getElementById('xl_cat_' + res.index);
         let sinoInput = document.getElementById('xl_sino_' + res.index);
 
-        if (!medInput || !catInput) return;
-
         if (res.empty) {
             if (sinoInput) sinoInput.value = "";
-            catInput.value = "";
-            catInput.style.backgroundColor = "white";
-            catInput.style.border = "1px solid #cbd5e0";
-            catInput.style.color = "black";
+            if (catInput) {
+                catInput.value = "";
+                catInput.style.backgroundColor = "white";
+                catInput.style.border = "1px solid #cbd5e0";
+                catInput.style.color = "black";
+            }
             medInput.style.backgroundColor = "white";
             medInput.style.border = "1px solid #cbd5e0";
             return;
         }
 
+        // ക്രമത്തിൽ SI No നൽകുന്നു
         if (sinoInput) sinoInput.value = currentSiNo++;
 
-        if (res.exact || res.autofix) {
+        if (res.exact) {
+            // A. 100% കൃത്യമായ മാച്ച് — ഒന്നും മാറ്റാതെ നിലനിർത്തുന്നു
             catInput.value = res.cat;
             medInput.value = res.match;
             catInput.style.backgroundColor = categoryColors[res.cat] || "white";
@@ -9857,10 +9975,26 @@ aiWorker.onmessage = function(e) {
             catInput.style.color = "black";
             medInput.style.backgroundColor = "white";
             medInput.style.border = "1px solid #cbd5e0";
+            medInput.removeAttribute('list');
             medInput.setAttribute('list', 'medicine-list');
-        } else if (res.lowConfidence) {
-            medInput.style.backgroundColor = "#ffeb3b";
-            catInput.style.backgroundColor = "#ffeb3b";
+        }
+        else if (res.autofix) {
+            // B. 95% അല്ലെങ്കിൽ അതിൽ കൂടുതൽ സാമ്യം — തനിയെ കൃത്യമായ പേരിലേക്ക് മാറ്റുന്നു (സാധാരണ നിറം)
+            catInput.value = res.cat;
+            medInput.value = res.match;
+            catInput.style.backgroundColor = categoryColors[res.cat] || "white";
+            catInput.style.border = "1px solid #cbd5e0";
+            catInput.style.color = "black";
+            medInput.style.backgroundColor = "white";
+            medInput.style.border = "1px solid #cbd5e0";
+            medInput.removeAttribute('list');
+            medInput.setAttribute('list', 'medicine-list');
+        }
+        else if (res.lowConfidence) {
+            // C. 95%-ൽ താഴെയാണ് സാമ്യമെങ്കിൽ ഒന്നും മാറ്റാതെ, ബോക്സുകൾ YELLOW ആക്കുന്നു
+            // (Name of Medicine, Medicine Item എന്നിവയുടെ നിലവിലെ മൂല്യം അതേപടി നിലനിർത്തുന്നു)
+            medInput.style.backgroundColor = "#ffeb3b"; // YELLOW
+            catInput.style.backgroundColor = "#ffeb3b"; // YELLOW
             medInput.style.border = "2px solid #f9a825";
             catInput.style.border = "2px solid #f9a825";
             medInput.setAttribute('list', 'medicine-list');
