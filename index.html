@@ -2130,17 +2130,16 @@ window.refreshAllPagesAfterRestore = function() {
     <button class="index-btn bg-red-main" onclick="generateQuickPDF_OPDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-file-pdf"></i> <b>GENERATE QUICK PDF</b></button>
     <button id="opViewSelectedBtn" class="index-btn bg-orange3" onclick="toggleViewSelectedOp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-filter"></i> <b>View Selected</b></button>
     <button class="index-btn bg-blue-light2" onclick="openLastAddedOPStock()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Details of Last Added Medicines</b></button>
+    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 
     <button class="index-btn bg-orange" onclick="openMainStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
     <button class="index-btn bg-blue-main" onclick="openIpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-bed-pulse"></i> <b>go to IP SUB STOCK</b></button>
     <button class="index-btn bg-orange4" onclick="openRackForLastAddedOP()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-layer-group"></i> <b>Rack Details of Last Added Medicines</b></button>
-
     <button class="index-btn bg-maroon" onclick="confirmOpRemoveEmpty()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: white;"><i class="fa-solid fa-eraser"></i> <b>Remove Empty Qty Item</b></button>
     <button class="index-btn bg-maroon" onclick="confirmOpDeleteSelected()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
     <button class="index-btn bg-red" onclick="confirmOpDeleteExpired()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
     <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
     <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
-    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 </div>
 
 <div class="no-print">
@@ -2314,17 +2313,16 @@ window.refreshAllPagesAfterRestore = function() {
     <button class="index-btn bg-red-main" onclick="generateQuickPDF_IPDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-file-pdf"></i> <b>GENERATE QUICK PDF</b></button>
     <button class="index-btn bg-red-light" onclick="openIndentAtItemPage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-file-invoice"></i> <b>Last Indent</b></button>
     <button class="index-btn bg-blue-light2" onclick="openLastAddedIPStock()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Details of Last Added Medicines</b></button>
+    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 
     <button class="index-btn bg-orange" onclick="openMainStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
     <button class="index-btn bg-blue-main" onclick="openOpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-truck-medical"></i> <b>go to OP SUB STOCK</b></button>
     <button class="index-btn bg-orange4" onclick="openRackForLastAddedIP()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-layer-group"></i> <b>Rack Details of Last Added Medicines</b></button>
-
     <button class="index-btn bg-maroon" onclick="confirmIpRemoveEmpty()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: white;"><i class="fa-solid fa-eraser"></i> <b>Remove Empty Qty Item</b></button>
     <button class="index-btn bg-maroon" onclick="confirmIpDeleteSelected()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
     <button class="index-btn bg-red" onclick="confirmIpDeleteExpired()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
     <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
     <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
-    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 </div>
 
 <div class="no-print">
