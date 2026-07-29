@@ -2912,6 +2912,14 @@ window.refreshAllPagesAfterRestore = function() {
             <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad;" onclick="openSmartScanner()"><i class="fa-solid fa-file-image"></i> Open Image Scanner</button>
             <button class="nav-btn" style="margin-bottom: 0; background: #218c74;" onclick="showStockPage()"><i class="fa-solid fa-box"></i> Sheet for Adding to Stock</button>
             <button class="nav-btn" style="margin-bottom: 0; background: #e67e22;" onclick="openPdfScanner()"><i class="fa-solid fa-file-pdf"></i> Open PDF Scanner</button>
+            <button class="nav-btn" style="margin-bottom: 0; background: #16a085;" onclick="medistockCopyExtractionPrompt()"><i class="fa-solid fa-copy"></i> Copy Prompt</button>
+        </div>
+        
+        <!-- 🌟 EXPERT ADDITION: "Copy Prompt" ബട്ടൺ അമർത്തുമ്പോൾ, കുറച്ചു നേരത്തേക്ക് സ്ക്രീനിന്റെ 
+             നടുവിൽ കാണിച്ച് തനിയെ അപ്രത്യക്ഷമാകുന്ന ഒരു ചെറിയ confirmation toast. മറ്റൊരു പേജിലും 
+             ഇടപെടാതിരിക്കാൻ ഇത് ഒരു fixed, ഉയർന്ന z-index ഉള്ള, സ്വതന്ത്ര element ആണ്. -->
+        <div id="medistockCopyPromptToast" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(22,160,133,0.97); color:white; padding:22px 45px; border-radius:14px; font-size:20px; font-weight:900; box-shadow:0 10px 35px rgba(0,0,0,0.35); z-index:1000000; text-align:center; letter-spacing:0.5px;">
+            <i class="fa-solid fa-circle-check"></i> Prompt Copied to Clipboard
         </div>
         
         <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 20px; font-size: 35px; text-transform: uppercase;">Load from Excel Sheet & Extract</h1>
@@ -21471,6 +21479,69 @@ let pdfNaturalW = 0, pdfNaturalH = 0;
 let pdfCropRect = { left: 0, top: 0, width: 0, height: 0 };
 let pdfCropConfirmed = false;
 let pdfCprInterval;
+
+// =====================================================================
+// 🌟 EXPERT ADDITION: "Copy Prompt" ബട്ടൺ — AI ഇമേജ്/PDF Extraction-ന് 
+// ഉപയോഗിക്കുന്ന standard prompt ഒറ്റ ക്ലിക്കിൽ clipboard-ലേക്ക് copy ചെയ്യാൻ.
+// navigator.clipboard API പിന്തുണയ്ക്കാത്ത/അനുവദിക്കാത്ത പഴയ ബ്രൗസറുകൾക്കോ 
+// http (non-secure) contexts-നോ വേണ്ടി ഒരു fallback (execCommand) കൂടി ഉൾപ്പെടുത്തിയിട്ടുണ്ട്.
+// =====================================================================
+const MEDISTOCK_EXTRACTION_PROMPT = `Extract the data from the provided images and organize it into an Excel sheet based on the following strict rules:
+Column Mapping:
+Data under the 'Item' or 'Name of Medicines' column in the image should be placed in the 'Name of Medicines' column in the Excel sheet.
+Data under the 'Batch' column in the image should be placed in the 'Batch' column in the Excel sheet.
+Data under the 'Exp.Dt' column in the image should be placed in the 'Exp.Dt' column in the Excel sheet.
+Data under the 'Qty' column in the image should be placed in the 'Qty' column in the Excel sheet.
+Data under the 'S. No' or 'Sl. No' column in the image should be placed in the 'S. No' column in the Excel sheet.
+The handwritten text/numbers present on the right side of each row in the image should be placed in a new column named 'Page No' in the Excel sheet.
+Ignore Other Data: Do not extract or include data from any other columns present in the image.
+Capitalization: All extracted data in the Excel sheet must be strictly in CAPITAL LETTERS (UPPERCASE).
+Formatting: The Excel sheet should only contain the specified column headers. Do not add any extra titles, headings, or text in the sheet.
+Consolidated Output: If multiple images are provided together, extract and combine the data from all of them into a single, directly downloadable Excel sheet.
+Persistent Instruction: Treat this as a common/default prompt for all subsequent images provided in this conversation.`;
+
+function medistockShowCopyPromptToast() {
+    let toast = document.getElementById('medistockCopyPromptToast');
+    if (!toast) return;
+    toast.style.display = 'block';
+    clearTimeout(window.__medistockCopyPromptToastTimer);
+    window.__medistockCopyPromptToastTimer = setTimeout(function() {
+        toast.style.display = 'none';
+    }, 1800);
+}
+
+function medistockCopyExtractionPrompt() {
+    // മുൻഗണന: ആധുനിക navigator.clipboard API (https / localhost-ൽ മാത്രം ലഭ്യം)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(MEDISTOCK_EXTRACTION_PROMPT).then(function() {
+            medistockShowCopyPromptToast();
+        }).catch(function(err) {
+            console.error('Clipboard copy failed, trying fallback:', err);
+            medistockCopyPromptFallback();
+        });
+    } else {
+        // Fallback: പഴയ ബ്രൗസറുകൾക്കോ non-secure (http) context-കൾക്കോ വേണ്ടി
+        medistockCopyPromptFallback();
+    }
+}
+
+function medistockCopyPromptFallback() {
+    try {
+        let ta = document.createElement('textarea');
+        ta.value = MEDISTOCK_EXTRACTION_PROMPT;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        medistockShowCopyPromptToast();
+    } catch (e) {
+        console.error('Copy Prompt Fallback Error:', e);
+        alert('Prompt copy ചെയ്യാൻ കഴിഞ്ഞില്ല. ദയവായി manual ആയി select ചെയ്ത് copy ചെയ്യുക.');
+    }
+}
 
 // SPA Navigation
 function openPdfScanner() {
