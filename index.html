@@ -829,6 +829,22 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 <div id="medistockConnectDriveStatusText" style="font-size:12px; color:#7f8c8d; margin-top:6px; font-weight:bold; text-align:center;">
                     ☁️ Login + Google Drive Backup ഒരുമിച്ച് സജീവമാക്കാൻ ഈ ബട്ടൺ അമർത്തുക
                 </div>
+                <script>
+                (function(){
+                    var medistockPopupHelpText = '⚠️ 10 സെക്കന്റിന് ശേഷവും Medistock Viewer v.02 തുറന്നു വരുന്നില്ലങ്കിൽ  ബ്രൗസറിന്റെ അഡ്രസ് ബാറിനടുത്തുള്ള Popup-blocked ഐക്കൺ വന്നിട്ടുണ്ടോ എന്ന് നോക്കി അതിൽ "Always allow" ചെയ്ത് വീണ്ടും ബട്ടൺ അമർത്തുക!.';
+                    var medistockStatusEl = document.getElementById('medistockConnectDriveStatusText');
+                    if(!medistockStatusEl) return;
+                    var medistockStatusObserver = new MutationObserver(function(){
+                        if(medistockStatusEl.textContent.indexOf('Popup') !== -1 && medistockStatusEl.textContent.trim() !== medistockPopupHelpText.trim()){
+                            medistockStatusObserver.disconnect();
+                            medistockStatusEl.style.color = '#e74c3c';
+                            medistockStatusEl.innerHTML = medistockPopupHelpText;
+                            medistockStatusObserver.observe(medistockStatusEl, {childList:true, characterData:true, subtree:true});
+                        }
+                    });
+                    medistockStatusObserver.observe(medistockStatusEl, {childList:true, characterData:true, subtree:true});
+                })();
+                </script>
             </div>
             
             <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
@@ -3333,8 +3349,8 @@ document.write(new Date().toLocaleDateString())
                 
                  <tr>
                     <td>അവധി അപേക്ഷയുടെ മാതൃക (ഇത് ഔദ്യോഗിക മാതൃക അല്ല) </td>
-                    <td></td>
-                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1BvSnMEJK8P5okMXxCu33Yxq1uBUs2LNE/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1UzDwgEi82w7MdBqcCRGW4Bl8bTTmHEWK/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> FEMALE LEAVE APPLICATION</button></td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1cmCcX_LAV6mFiFSoqKSnCqLfffGIevc3/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> MALE LEAVE APPLICATION</button></td>
                 </tr>
                 
                 <tr>
@@ -3387,7 +3403,11 @@ document.write(new Date().toLocaleDateString())
                     <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1N50XAlc_SlJ2ciGqxDfyhZ48TuEmiU4_/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td></td>
                 </tr>
-                
+                <tr>
+                    <td>റാക്ക് നമ്പർ മാതൃക</td>
+                    <td style="text-align: center;"><button class="dl-pdf-btn dl-orange" onclick="window.open('https://drive.google.com/file/d/1FMV3FYLWB535ewl1dRO4JB1WDJmdoBJ_/view?usp=sharing', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td>M O സ്ഥാപനത്തിൽ ഇല്ലാത്ത ദിവസത്തെ ഔഷധ വിതരണം സംബന്ധിച്ച് വകുപ്പ് മേധാവിയുടെ സർക്കുലർ </td>
                     <td></td>
