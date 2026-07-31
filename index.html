@@ -3287,6 +3287,8 @@ document.write(new Date().toLocaleDateString())
         
         <button class="nav-btn" style="margin-bottom: 0; background: #2980b9; padding: 6px 12px; font-size: 13px;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD SAMPLE DATA</button>
         
+        <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="confirmDownloadSampleExcelFile()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള EXCEL സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-file-excel"></i> DOWNLOAD SAMPLE EXCEL FILE</button>
+        
         <button class="nav-btn" style="margin-bottom: 0; background: #34495e; padding: 6px 12px; font-size: 13px;" onclick="showHomePage()"><i class="fa-solid fa-house"></i> HOME</button>
         
         <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
@@ -3684,6 +3686,35 @@ document.write(new Date().toLocaleDateString())
         </div>
     </div>
 </div>
+
+
+
+
+<div id="sampleExcelDataWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(22, 160, 133, 0.95); z-index:10056; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box; overflow-y: auto;">
+    <div style="max-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
+        <i class="fa-solid fa-file-excel" style="font-size: 80px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+        <h1 style="font-size: 28px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">DOWNLOAD SAMPLE EXCEL FILE</h1>
+        <p style="font-size: 17px; font-weight: bold; max-width: 850px; line-height: 1.7; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #16a085; text-align: left;">
+            ഇത് Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള EXCEL സാമ്പിൾ ഡാറ്റ Download ചെയ്യുന്നതിനുള്ള ബട്ടൺ ആണ്. ഇത് ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നതിന് മാത്രം ഉപയോഗിക്കുക. ഈ ബട്ടൺ ഉപയോഗിച്ചാൽ EXCEL SAMPLE DATA DOWNLOAD ആകും.പിന്നീട് "Load from Excel Sheet &amp; Extract" പേജിലെ Import From Excel എന്ന ബോക്സിൽ Choose Excel Sheet എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഈ SAMPLE DATA Software ൽ ലോഡ് ചെയ്യാൻ സാധിക്കും ശേഷം ഇതേ ബോക്സിലെ SCAN EXCEL SHEET ഉപയോഗിച്ചാൽ Software ൽ ചേർക്കാൻ സാധിക്കും.<br><br>
+            പഠിച്ച് കഴിഞ്ഞിട്ട് HOME പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
+            കൂടുതൽ അറിയാൻ HAND BOOK 23-29 പേജുകൾ വായിക്കുക എന്നിട്ടും സംശയം വന്നാൽ HELP DESK<br><br>
+            <span style="color: #f1c40f; display: block; text-align: center; font-size: 19px;">ഇതുമായി മുന്നോട്ട് പോകാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?</span>
+        </p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <button onclick="executeDownloadSampleExcelFile()" style="background: #27ae60; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">YES, IMPORT</button>
+            <button onclick="document.getElementById('sampleExcelDataWarningModal').style.display='none';" style="background: #e74c3c; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">NO, CANCEL</button>
+        </div>
+    </div>
+</div>
+<script>
+    function confirmDownloadSampleExcelFile(){
+        document.getElementById('sampleExcelDataWarningModal').style.display='flex';
+    }
+    function executeDownloadSampleExcelFile(){
+        window.open('https://docs.google.com/spreadsheets/d/1FPNhxI2PBms8z0OBBdVbR__L-4n6amji/edit?usp=sharing&ouid=115271001528343122661&rtpof=true&sd=true', '_blank');
+        document.getElementById('sampleExcelDataWarningModal').style.display='none';
+    }
+</script>
 
 
 
