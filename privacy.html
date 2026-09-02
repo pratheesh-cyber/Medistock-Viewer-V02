@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <h1>Privacy Policy for Medistock Viewer</h1>
-        <p><strong>Effective Date:</strong> July 08, 2026</p>
+        <p><strong>Effective Date:</strong> July 08, 2026 &nbsp;|&nbsp; <strong>Last Updated:</strong> August 22, 2026</p>
 
         <p>Welcome to Medistock Viewer. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains what information we collect, how we use it, and what rights you have in relation to it.</p>
 
@@ -34,21 +34,33 @@
         <ul>
             <li><strong>What we DO NOT collect:</strong> We do NOT read, store, intercept, or share your actual medicine stock data, inventory, bills, or any other files from your Google Drive.</li>
             <li>Your backup file is stored locally on your device and inside your own Google Drive. Our servers do not have access to this backup file.</li>
+            <li>If you choose to use your own Google Gemini API key with our AI-scanning features, that key is stored securely inside your own personal Google Drive account. We never transmit, view, or store your API key on our own servers.</li>
         </ul>
 
-        <h2>3. How We Use Your Information</h2>
+        <h2>3. AI-Powered Bill / Invoice Scanning (Gemini API)</h2>
+        <p>To save you time, Medistock Viewer offers an optional feature that automatically reads medicine details (name, batch, quantity, expiry date, etc.) from a photo or PDF of your bill or invoice, using Google's Gemini AI service.</p>
+        <ul>
+            <li><strong>You are always in control:</strong> This feature is entirely optional. You choose which file to scan, and you can always type in your stock details manually instead.</li>
+            <li><strong>What happens to the image:</strong> When you choose to scan a bill, that specific image or PDF is sent securely to Google's Gemini API for the sole, one-time purpose of extracting the medicine details you see on screen. It is processed in real time and is not retained by us afterwards.</li>
+            <li><strong>Who processes it:</strong> Depending on which scanning option you use, this is done either (a) directly from your device using your own API key, which uses your own Google/Gemini account and quota, or (b) via our secure backend, which simply relays the file to Google's Gemini API and returns the extracted result to you.</li>
+            <li>We do not keep a separate copy of your scanned bills or invoices after the extraction is complete.</li>
+            <li><strong>Prefer to keep everything fully offline?</strong> The "Scan Excel Sheet" option is different — with this option, your invoice/medicine data is never sent to Google's Gemini API, to us, or to any other server. It stays entirely on your own device.</li>
+        </ul>
+
+        <h2>4. Usage & Scan Activity Logs</h2>
         <p>The limited administrative information we collect (Email ID, Institution Name, Pharmacist Name, Officer Name) is logged securely and used solely for:</p>
         <ul>
             <li>Authenticating users and preventing unauthorized access.</li>
             <li>Understanding the demographics of institutions using our software.</li>
-            <li>Tracking daily usage statistics (who is using the app and when) to improve software performance.</li>
+            <li>Tracking daily usage statistics (who is using the app and when), including basic scan activity such as the type of scan performed and whether it succeeded, to help us monitor and improve software performance and reliability.</li>
             <li>Ensuring proper functionality for official medical record keeping.</li>
         </ul>
+        <p>This usage information is stored in secure, access-restricted Google Sheets, accessible only to the developer, strictly for support, monitoring, and improvement purposes.</p>
 
-        <h2>4. Information Sharing</h2>
-        <p>We do not sell, rent, or trade your personal information, email address, or Google data to any third parties.</p>
+        <h2>5. Information Sharing</h2>
+        <p>We do not sell, rent, or trade your personal information, email address, or Google data to any third parties. Your data is only shared with Google's services (such as the Gemini API) as described above, solely to provide the features you choose to use.</p>
 
-        <h2>5. Contact Us</h2>
+        <h2>6. Contact Us</h2>
         <p>If you have questions or comments about this policy, you may contact the developer of this application.</p>
     </div>
 </body>
