@@ -239,6 +239,18 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        /* 🌟 EXPERT FIX (USER REQUEST — "delete button miss-sorting"): മുകളിലെ ellipsis റൂൾ, "Act"
+           കോളത്തിന്റെ ഇടുങ്ങിയ വീതി (6ch) കാരണം അതിനുള്ളിലെ edit + delete എന്നീ 2 ഐക്കണുകളിൽ
+           രണ്ടാമത്തേത് (delete/trash ഐക്കൺ) മുറിച്ചുമാറ്റി പകരം "..." കാണിക്കുന്നതിന് ഇടയാക്കിയിരുന്നു —
+           ഇതുകൊണ്ടാണ് id="ipSubStockDetailsPage"-ൽ കാണുന്നത് പോലെ delete ബട്ടൺ id="mainStockDetailsPage"-ൽ
+           കാണാതെ പോയത് (ബട്ടണും onclick ഫങ്ഷനും കോഡിൽ എപ്പോഴും ശരിയായി തന്നെ ഉണ്ടായിരുന്നു). "Act"
+           കോളത്തിന് (എപ്പോഴും അവസാന കോളം) മാത്രം ഈ ellipsis/hidden ക്ലിപ്പിംഗ് ഒഴിവാക്കുന്നു — മറ്റൊരു
+           കോളത്തിന്റെയും വീതി/ellipsis സ്വഭാവത്തിൽ ഒരു മാറ്റവുമില്ല. */
+        #mainStockDetailsPage #detailsTableBody td:last-child {
+            overflow: visible;
+            text-overflow: clip;
+            white-space: nowrap;
+        }
         #mainStockDetailsPage #detailsTable thead input[type="checkbox"],
         #mainStockDetailsPage #detailsTableBody input[type="checkbox"] {
             transform: scale(0.5) !important;
@@ -1373,7 +1385,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             
             <div style="margin-top: 15px; border-top: 1px solid #ecf0f1; padding-top: 20px;">
                 <a href="https://drive.google.com/uc?export=download&id=1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX" target="_blank" style="color: #2980b9; text-decoration: none; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.color='#1abc9c'" onmouseout="this.style.color='#2980b9'">
-                    <i class="fa-solid fa-book-open"></i> Medistock Viewer എന്താണെന്ന് പൂർണ്ണമായി മനസ്സിലാക്കാൻ Hand Book Download ചെയ്യുക.
+                    <i class="fa-solid fa-book-open"></i> Medistock Viewer എന്താണെന്ന് പൂർണ്ണമായി മനസ്സിലാക്കാൻ Hand Book Download ചെയ്യുക
                 </a>
             </div>
             </div>
@@ -4281,7 +4293,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
     
     
-    <div class="no-print" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+    
+    <div class="no-print" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
         
         <button class="nav-btn" style="margin-bottom: 0; background: #2980b9; padding: 6px 12px; font-size: 13px;" onclick="confirmDownloadSampleData()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-vial-circle-check"></i> DOWNLOAD -SAMPLE DATA</button>
 
@@ -4296,7 +4310,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; padding: 6px 12px; font-size: 13px;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT - DATA</button>
         
         <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c; padding: 6px 12px; font-size: 13px;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT - DATA</button>
-        
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
         
         <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
         
@@ -4313,6 +4328,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
         
         <input type="file" id="importJsonFileInput" accept=".json" style="display:none" onchange="processImportFile(event)">
+      </div>
     </div>
 
     <div style="text-align:center; margin-bottom: 1px;">
