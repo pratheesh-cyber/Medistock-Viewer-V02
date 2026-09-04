@@ -50,8 +50,7 @@
         #homePage { display: block; width: 95%; max-width: 1350px; min-height: 900px; background-color: #f3f0df; margin: 20px auto; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); padding: 40px; position: relative; }
         .home-header { text-align: center; border-bottom: 4px solid #005088; padding-bottom: 5px; margin-bottom: 10px; }
         .home-header h1 { 
-    font-family: 'Algerian', 'Rye', cursive, serif; /* 🌟 UPDATED (USER REQUEST): Algerian ഇല്ലാത്തവർക്കും
-        കാണാൻ, നിയമപരമായി സൗജന്യമായ 'Rye' (Google Font, SIL OFL ലൈസൻസ്) ഫോൾബാക്ക് ആയി ചേർത്തു 🌟 */
+    font-family: 'Algerian', 'Rye', cursive, serif; 
     font-size: 50px !important; 
     color: #c53030; 
     margin: 0; 
@@ -64,7 +63,7 @@
     border-collapse: collapse; 
     margin-bottom: 10px; 
     background-color: #8a2be2; 
-    border: 1px solid #8a2be2 !important; /* ടേബിളിന്റെ പുറത്തെ ബോർഡർ 1px ആക്കി മാറ്റി */
+    border: 1px solid #8a2be2 !important; 
 }
 
 .info-table caption { 
@@ -75,7 +74,7 @@
     margin: 0; 
     font-size: 15px; 
     letter-spacing: 1px; 
-    border: 2px solid #f85c08; /* ക്യാപ്ഷന്റെ ഭാഗത്തും 1px ബോർഡർ നൽകി */
+    border: 2px solid #f85c08; 
     border-bottom: 6px solid #8a2be2 !important;
 }
 
@@ -92,7 +91,7 @@
     background-color: #f2ed65; 
 }
 
-/* --- ടേബിളിന്റെ ഇടത്തും വലത്തും 1px പർപ്പിൾ ബോർഡർ കൃത്യമായി വരാനുള്ള പുതിയ കോഡ് --- */
+
 .info-table tr td:first-child {
     border-left: 6px solid #8a2be2 !important;
 }
@@ -102,7 +101,7 @@
 }
         .yellow-input { 
     background-color: transparent; 
-    border: none !important; /* ഡോട്ടഡ് ലൈൻ പൂർണ്ണമായി നീക്കം ചെയ്യുന്നു */
+    border: none !important; 
     border-radius: 2; 
     width: 98%; 
     height: 25px; 
@@ -173,17 +172,9 @@
         .bg-orange { background-color: #ffa500 !important; color: black !important; }
         .bg-yellow { background-color: #ffff00 !important; color: black !important; }
         .bg-green { background-color: #00ff00 !important; color: black !important; }
-        /* 🌟 EXPERT FIX: STATUS കോളത്തിലെ "BELOW 3 MONTH" (.bg-orange) എന്ന ക്ലാസ്, മറ്റ് പല
-           ബട്ടണുകൾക്കും പൊതുവായ ഗ്രേഡിയന്റ് സ്റ്റൈലിന്റെ അതേ പേരിലുള്ളതിനാൽ ആ ഗ്രേഡിയന്റ്
-           ഇമേജ് ഈ സോളിഡ് ഓറഞ്ച് നിറത്തിന് മുകളിൽ വന്ന് മറച്ചിരുന്നു. ഇത് സ്റ്റാറ്റസ് സെല്ലുകളിൽ
-           മാത്രം (ബട്ടണുകളെ ബാധിക്കാതെ) പരിഹരിച്ച്, MAIN STOCK WINDOW സ്ക്രീനിലും PRINT/PDF-ലും
-           ഒരേ ഓറഞ്ച് നിറം തന്നെ വരുത്തുന്നു 🌟 */
+        
         .status-cell.bg-orange { background: #ffa500 !important; color: black !important; }
-        /* 🌟 EXPERT FIX (ADDITIONAL): id="indentPrepPage"-ലെ ഇടത് വശം പട്ടികയിൽ (indLeftTableBody)
-           STATUS കോളത്തിലെ td-യിൽ നിന്ന് "status-cell" ക്ലാസ് നീക്കം ചെയ്ത ശേഷമാണ് "bg-orange" മാത്രം
-           ചേർക്കുന്നത് (td class="bg-orange"). അതിനാൽ മുകളിലെ ".status-cell.bg-orange" റൂൾ ഈ td-യിൽ
-           പ്രവർത്തിക്കില്ല, പഴയ ഗ്രേഡിയന്റ് (.bg-orange ബട്ടൺ സ്റ്റൈൽ) തന്നെ കാണിക്കും. അതുകൊണ്ട്
-           "status-cell" ക്ലാസ് ഇല്ലാതെ തന്നെ td.bg-orange-നും ഈ പരിഹാരം ബാധകമാക്കുന്നു 🌟 */
+        
         td.bg-orange { background: #ffa500 !important; color: black !important; }
         .table-responsive { overflow-x: auto; overflow-y: auto; width: 100%; white-space: nowrap; margin-top: 0; max-height: 60vh; }
         table { width: 100%; border-collapse: collapse; background: white; margin-top: 0; }
@@ -205,32 +196,12 @@
         .rack-btn { padding: 8px 15px; font-weight: bold; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .print-only-footer { display: none; margin-top: 50px; float: right; text-align: left; padding-right: 50px; font-weight: bold; font-size: 16px; line-height: 1.5; }
 
-        /* SELECTION BOX REDUCTION - پകുതി വലുപ്പം */
+        
         input[type="checkbox"] { transform: scale(0.5); margin: 0; cursor: pointer; }
 
-        /* 🌟 USER REQUEST: id="mainStockDetailsPage" (#detailsTable), id="opSubStockDetailsPage" (#opDetailsTable) എന്നീ
-           രണ്ട് പേജുകളിലെയും കോളം വീതി, റോ ഉയരം, TICK BOX വലുപ്പം എന്നിവ id="ipSubStockDetailsPage" (#ipDetailsTable)-ലെ
-           പട്ടികയ്ക്ക് സമമാക്കണം എന്നായിരുന്നു ആവശ്യം — #ipDetailsTable ഒരിക്കലും തൊട്ടിട്ടില്ല, അതിന്റെ TICK BOX എപ്പോഴും
-           ഗ്ലോബൽ റൂൾ (മുകളിൽ, line ~199: transform: scale(0.5)) മാത്രമാണ് ഉപയോഗിക്കുന്നത്. അതുകൊണ്ട് #detailsTable,
-           #opDetailsTable എന്നിവയ്ക്ക് നൽകിയിരുന്ന എല്ലാ പ്രത്യേക (20px) override-കളും പൂർണ്ണമായി നീക്കം ചെയ്തു —
-           ഇപ്പോൾ mainStockDetailsPage, opSubStockDetailsPage, ipSubStockDetailsPage എന്നീ മൂന്ന് പേജുകളും ഒരേ പൊതു
-           (shared) CSS റൂളുകൾ മാത്രം ഉപയോഗിക്കുന്നതിനാൽ കോളം വീതി, റോ ഉയരം, TICK BOX വലുപ്പം എന്നിവ കൃത്യമായി തുല്യമാണ്.
-           [TICK_BOX-12 പ്രകാരം സ്ഥിരീകരിച്ചത്: id="ipSubStockDetailsPage" ശരിയായാണ് വരുന്നത്, അത് ഒരിക്കലും തൊടരുത്;
-           #mainStockDetailsPage #detailsTable-ന് (TICK_BOX-10-ൽ) നൽകിയിരുന്ന 20px checkbox override വീണ്ടും പൂർണ്ണമായി
-           നീക്കം ചെയ്തു — ഇപ്പോൾ mainStockDetailsPage-ഉം ipSubStockDetailsPage-ഉം കോളം വീതി, റോ ഉയരം, അക്ഷര വലുപ്പം,
-           TICK BOX വലുപ്പം എന്നിവയിൽ ഒരേ global CSS റൂളുകൾ വഴി തന്നെ കൃത്യമായി തുല്യമാണ്.] */
+        
 
-        /* 🌟 EXPERT FIX (TICK_BOX-12): th/td-കൾക്ക് ഒരേ ch-വീതികളും ഒരേ font-size/padding/TICK BOX
-           റൂളുകളും ഉണ്ടെങ്കിലും, #detailsTable സ്വതേ table-layout: auto ഉപയോഗിക്കുന്നതിനാൽ, ബ്രൗസർ
-           ഓരോ കോളത്തിന്റെയും യഥാർത്ഥ വീതി ആ കോളത്തിലെ ഡാറ്റയുടെ ഉള്ളടക്കം (എത്ര നീളമുള്ള മരുന്ന്
-           പേരുകൾ/ബാച്ച് നമ്പറുകൾ etc. ഉണ്ട് എന്നത്) അനുസരിച്ച് വീണ്ടും കണക്കുകൂട്ടുന്നു. #detailsTable-ലും
-           #ipDetailsTable-ലും ഡാറ്റ വ്യത്യസ്തമായതിനാൽ ഇത് കോളം വീതി, റോ ഉയരം, TICK BOX ദൃശ്യ വലുപ്പം
-           എന്നിവയിൽ വ്യത്യാസം ഉണ്ടാക്കുന്നു — ഇപ്പോൾ #detailsTable-ന് മാത്രം (#ipDetailsTable-നെ
-           ഒട്ടും ബാധിക്കാതെ) table-layout: fixed നൽകി, th-കളിൽ നൽകിയ ch വീതികൾ ഡാറ്റ എന്ത് തന്നെ
-           ആയാലും കൃത്യമായി നടപ്പിലാക്കുന്നു; അതിനൊപ്പം നീണ്ട ടെക്സ്റ്റ് അടുത്ത കോളത്തിലേക്ക് ഓവർഫ്ലോ
-           ആയി പോകാതിരിക്കാൻ ellipsis നൽകുന്നു, TICK BOX-ന് ഗ്ലോബൽ റൂളിന്റെ (scale 0.5) അതേ വലുപ്പം
-           തന്നെ ഉയർന്ന specificity-യിൽ ഉറപ്പാക്കുന്നു. ഇത് #ipDetailsTable, മറ്റ് പേജുകൾ, ബട്ടണുകൾ,
-           ഫങ്ഷനുകൾ എന്നിവയെ ഒട്ടും ബാധിക്കുന്നില്ല. */
+        
         #mainStockDetailsPage #detailsTable {
             table-layout: fixed !important;
         }
@@ -239,13 +210,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST — "delete button miss-sorting"): മുകളിലെ ellipsis റൂൾ, "Act"
-           കോളത്തിന്റെ ഇടുങ്ങിയ വീതി (6ch) കാരണം അതിനുള്ളിലെ edit + delete എന്നീ 2 ഐക്കണുകളിൽ
-           രണ്ടാമത്തേത് (delete/trash ഐക്കൺ) മുറിച്ചുമാറ്റി പകരം "..." കാണിക്കുന്നതിന് ഇടയാക്കിയിരുന്നു —
-           ഇതുകൊണ്ടാണ് id="ipSubStockDetailsPage"-ൽ കാണുന്നത് പോലെ delete ബട്ടൺ id="mainStockDetailsPage"-ൽ
-           കാണാതെ പോയത് (ബട്ടണും onclick ഫങ്ഷനും കോഡിൽ എപ്പോഴും ശരിയായി തന്നെ ഉണ്ടായിരുന്നു). "Act"
-           കോളത്തിന് (എപ്പോഴും അവസാന കോളം) മാത്രം ഈ ellipsis/hidden ക്ലിപ്പിംഗ് ഒഴിവാക്കുന്നു — മറ്റൊരു
-           കോളത്തിന്റെയും വീതി/ellipsis സ്വഭാവത്തിൽ ഒരു മാറ്റവുമില്ല. */
+        
         #mainStockDetailsPage #detailsTableBody td:last-child {
             overflow: visible;
             text-overflow: clip;
@@ -258,7 +223,7 @@
             cursor: pointer;
         }
 
-        /* CUSTOM YES/NO DIALOG STYLE */
+        
         .custom-confirm-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 10020; text-align: center; max-width: 500px; width: 90%; }
         .custom-confirm-modal p { font-weight: bold; font-size: 16px; line-height: 1.6; color: #2c3e50; margin-top: 0; margin-bottom: 20px; }
         .custom-confirm-btn-container { display: flex; justify-content: center; gap: 15px; }
@@ -272,7 +237,7 @@
         color-adjust: exact !important;
     }
     
-    /* പേജിന്റെ ബാക്ക്ഗ്രൗണ്ട് പൂർണ്ണമായും വെള്ളയാക്കാൻ ഈ കോഡ് സഹായിക്കും */
+    
     body.printing-op-charge,
     body.printing-ip-charge {
         background-color: #ffffff !important;
@@ -282,7 +247,7 @@
     body.printing-ip-charge * {
         visibility: hidden;
     }
-/* പഴയ OP പ്രിന്റ് റൂളിനൊപ്പം IP കൂടി ചേർക്കുന്നു */
+
     body.printing-op-charge #opChargeListPrintArea, 
     body.printing-ip-charge #ipChargeListPrintArea,
     body.printing-op-charge #opChargeListPrintArea *,
@@ -298,33 +263,30 @@
         width: 100%;
         box-sizing: border-box;
         padding: 0 !important;
-        background-color: white !important; /* പ്രിന്റ് ഏരിയ വെള്ളയാക്കാൻ */
+        background-color: white !important; 
     }
     @page {
         size: A4 portrait;
-        margin: 0.5cm 0.02cm; /* മാർജിൻ കൃത്യം പകുതിയാക്കി */
+        margin: 0.5cm 0.02cm; 
     }
-    /* ടേബിൾ ഹെഡിങ് എല്ലാ പേജിലും വരാനും, വരികൾ മുറിയാതിരിക്കാനും */
+    
     table {
         page-break-inside: auto !important;
     }
     thead {
-        display: table-header-group !important; /* ഹെഡിങ് എല്ലാ പേജിലും ആവർത്തിക്കാൻ */
+        display: table-header-group !important; 
     }
     tfoot {
         display: table-footer-group !important;
     }
     tr, td, th {
-        page-break-inside: avoid !important; /* വരികൾ മുറിയാതിരിക്കാൻ */
+        page-break-inside: avoid !important; 
         break-inside: avoid !important;
     }
 }
 
-        /* 🌟 NEW: A4 MEDICINE LIST STYLING 🌟 */
-        /* 🌟 NEW (USER REQUEST): #ipA4MedListSheet ഉം #ipA4MedListBoxesContainer ഉം (IP SUB
-           STOCK-ന്റെ A4 MEDICINE LIST പേജ്) OP പേജിലെ അതേ ID-സ്പെസിഫിക് സ്റ്റൈലിംഗ് പങ്കിടാൻ
-           വേണ്ടി, താഴെയുള്ള റൂളുകളിലേക്ക് ചേർത്തിട്ടുണ്ട്. ക്ലാസ്-അടിസ്ഥാനത്തിലുള്ള
-           (.a4-cat-box മുതലായവ) റൂളുകൾ ഇതിനകം രണ്ട് പേജുകൾക്കും ബാധകമാണ്. 🌟 */
+        
+        
         #a4MedListSheet, #ipA4MedListSheet {
             width: 210mm;
             min-height: 297mm;
@@ -364,10 +326,7 @@
             box-sizing: border-box;
             margin: 0 0 var(--a4-box-gap, 2.5mm) 0;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST): KSC / KC / KASHAYAM ബോക്സിന്റെ ഹെഡിങ്ങ്
-           ഒഴിവാക്കി KC/KSC/Bl ഹെഡ് റോ തന്നെ ഹെഡിങ്ങ് ആക്കിയപ്പോൾ, ആ ബോക്സിന്റെ
-           ഏറ്റവും വലത് വശത്തുള്ള പൊതു outer border (Bl കോളത്തിന്റെ സ്വന്തം border-left
-           ന് തൊട്ടടുത്തുള്ളത്) ആവർത്തന രേഖയായി തോന്നാതിരിക്കാൻ ഒഴിവാക്കുന്നു. 🌟 */
+        
         .a4-cat-box.a4-kashayam-box {
             border-right: none;
         }
@@ -405,12 +364,7 @@
             font-weight: 900;
             font-size: 0.85em;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST): KC / KSC / Bl ഹെഡിങ്ങുകളുടെ Row height, fill colour
-           എന്നിവ "ഗുളിക (GULIKA)" ബോക്സിന്റെ ഹെഡിങ്ങ് (.a4-cat-title) row-ന് കൃത്യമായി
-           സമാനമാക്കാൻ, അതേ padding / font-size / font-family / line-height ഇവിടെയും
-           നൽകുന്നു. കൂടാതെ table-th-ന് ബാധകമായ പൊതു th{} റൂൾ (dark fill, white text,
-           25px fixed height, sticky) ഈ ഹെഡിങ്ങുകളിൽ പ്രവർത്തിക്കാതിരിക്കാൻ അവയും ഇവിടെ
-           override ചെയ്യുന്നു. 🌟 */
+        
         .a4-cat-table th.a4-blank-col,
         .a4-cat-table th.a4-name-col {
             font-family: 'Anek Malayalam', sans-serif;
@@ -427,25 +381,20 @@
             background: #eef6ff !important;
             color: #000 !important;
         }
-        /* 🌟 MOVE MODE (replaces old EXPORT EXCEL button) 🌟 */
+        
         .a4-move-mode-box {
             cursor: move;
         }
         .a4-move-mode-box:hover {
             outline: 2px dashed #27ae60;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST): ഡ്രാഗ് ചെയ്യുന്ന ബോക്സിന് മാത്രം ഉയർന്ന
-           z-index-ഉം ഒരു ഷാഡോയും നൽകുന്നു (മറ്റൊരു ബോക്സിനെയും ഇത് ബാധിക്കില്ല). 🌟 */
+        
         .a4-cat-box.a4-dragging {
             z-index: 500;
             box-shadow: 0 8px 20px rgba(0,0,0,0.35);
             cursor: grabbing !important;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST): move Mode ON ആയിരിക്കുമ്പോൾ, ആവശ്യമില്ലാത്ത
-           ബോക്സുകൾ പേപ്പറിന് പുറത്തേക്ക് വലിച്ചിട്ടാൽ അത് സ്ക്രീനിൽ കാണാൻ വേണ്ടി
-           ഷീറ്റിന്റെ overflow ഇവിടെ visible ആക്കുന്നു. PDF/PRINT export സമയത്ത് ഇത്
-           എപ്പോഴും തിരികെ hidden ആയി നിർബന്ധമായി സെറ്റ് ചെയ്യപ്പെടുന്നു (JS-ൽ), അതിനാൽ
-           പുറത്തുള്ള ബോക്സുകൾ PDF/PRINT-ൽ ഒരിക്കലും വരില്ല. 🌟 */
+        
         #a4MedListSheet.a4-move-mode-sheet,
         #ipA4MedListSheet.a4-move-mode-sheet {
             overflow: visible;
@@ -455,15 +404,7 @@
             font-style: italic;
             text-align: center;
         }
-        /* 🌟 SINGLE LINE VIEW (USER REQUEST): "Single Line View ON" ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ,
-           രണ്ട് വരികളായി wrap ആയി കാണിക്കുന്ന മരുന്നിന്റെ പേരുകൾ ഒരു വരിയിൽ മാത്രം
-           (രണ്ടാമത്തെ wrap ചെയ്ത ഭാഗം പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്തത് പോലെ ഒളിപ്പിച്ച്) കാണിക്കുന്നു.
-           table-layout: fixed നൽകുന്നതിനാൽ കോളങ്ങളുടെ വീതി (a4-blank-col-ന്റെ നിശ്ചിത 2ch
-           വീതി അടിസ്ഥാനമാക്കി a4-name-col ബാക്കി സ്ഥലം എടുക്കുന്ന അതേ അനുപാതം) മാറാതെ
-           തുടരും — മരുന്നിന്റെ പേര് കോളം വലത്തേക്ക് വലുതാവുകയോ, രണ്ടാമത്തെ വരിയിലെ
-           ടെക്സ്റ്റ് ഒന്നാമത്തെ വരിയിലേക്ക് ഞെരുങ്ങി കയറുകയോ ചെയ്യില്ല; പകരം അത്
-           പൂർണ്ണമായി മറയും. "OFF" ചെയ്താൽ ഈ ക്ലാസ് നീക്കം ചെയ്ത് പഴയപടി (2 വരി) wrap
-           ചെയ്യുന്ന അവസ്ഥയിലേക്ക് മടങ്ങുന്നു. 🌟 */
+        
         #a4MedListBoxesContainer.a4-single-line-active .a4-cat-table,
         #ipA4MedListBoxesContainer.a4-single-line-active .a4-cat-table {
             table-layout: fixed;
@@ -480,8 +421,7 @@
         #ipA4MedListBoxesContainer .a4-cat-box[data-a4-editing="true"] {
             outline: 1.5px dashed #d35400;
         }
-        /* 🌟 NEW: A4 MEDICINE LIST (OP & IP) — BOLD / ITALIC / SELECT ALL / DESELECT ALL /
-           FONT SIZE / FONT COLOUR ടൂൾബാർ (രണ്ടാമത്തെ ബട്ടൺ നിര) 🌟 */
+        
         .a4-format-toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -514,14 +454,7 @@
                 height: auto !important;
             }
 
-            /* 🌟 EXPERT FIX (USER REQUEST): PRINT A4 ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ ബോക്സുകളിലെ
-               മരുന്നിന്റെ പേരുകൾ ശൂന്യമായി വരുന്ന പ്രശ്നം പരിഹരിക്കുന്നു. #a4MedListSheet-നും
-               മറ്റ് പേജുകൾ (ഇൻഡന്റ് റിപ്പോർട്ട് മുതലായവ) ഉപയോഗിക്കുന്ന അതേ ".print-pdf-active"
-               ക്ലാസ് ഉള്ളതിനാൽ, ആ പേജുകൾക്ക് വേണ്ടി മാത്രം ഉദ്ദേശിച്ച
-               "tbody td:nth-last-child(2)/(4) { display:none }" എന്ന റൂൾ അബദ്ധത്തിൽ
-               #a4MedListSheet-നുള്ളിലെ .a4-cat-table-കളിലെ (2 / 4 കോളങ്ങൾ മാത്രമുള്ള) പേര്
-               കോളവും KSC കോളവും ഹൈഡ് ചെയ്യുകയായിരുന്നു. താഴെയുള്ള റൂൾ അത് #a4MedListSheet-ന്റെ
-               പരിധിക്കുള്ളിൽ മാത്രം റദ്ദാക്കുന്നു (മറ്റൊരു പേജിനെയും ബാധിക്കില്ല). 🌟 */
+            
             #a4MedListSheet.print-pdf-active tbody td:nth-last-child(2),
             #a4MedListSheet.print-pdf-active tbody td:nth-last-child(4),
             #a4MedListSheet.print-pdf-active thead tr:nth-child(2) th:nth-last-child(2),
@@ -533,9 +466,7 @@
                 display: table-cell !important;
             }
 
-            /* PDF (html2pdf) ഔട്ട്പുട്ടിലേത് പോലെ തന്നെ ഷീറ്റിന്റെ സ്ഥാനവും പാഡിങ്ങും
-               PRINT A4-ലും വരാൻ, മറ്റ് പേജുകൾക്ക് വേണ്ടിയുള്ള പൊതു ".print-pdf-active"
-               position/padding override ഇവിടെ #a4MedListSheet-ന് മാത്രമായി തിരുത്തുന്നു. */
+            
             body.print-mode #a4MedListSheet.print-pdf-active,
             body.print-mode #ipA4MedListSheet.print-pdf-active {
                 position: relative !important;
@@ -546,12 +477,7 @@
             }
         }
 
-        /* 🌟 EXPERT FIX (USER REQUEST): id="opSubStockDetailsPage"-ലെ PRINT / PERFECT PDF
-           ഫൂട്ടറിന് സമാനമായി, id="a4MedicineListPage"-ന്റെ PRINT / DOWNLOAD PDF ഔട്ട്പുട്ടിലും
-           താഴെ ഒരു ഫൂട്ടർ (ഇടത്: Medistock Viewer v.02 @50% opacity, നടുവിൽ: antsworld.in,
-           വലത്: Generated On: dd/mm/yyyy) കാണിക്കാൻ. #a4MedListSheet-ന്റെ ഉള്ളിൽ തന്നെ
-           സ്ഥിരമായി വരയ്ക്കുന്നതിനാൽ ഇത് "PRINT A4" (native browser print) ലും
-           "DOWNLOAD PDF" (html2pdf/html2canvas) ലും ഒരേപോലെ പതിയും. 🌟 */
+        
         .a4-print-footer {
             position: absolute;
             left: 8mm;
@@ -570,7 +496,7 @@
         .a4-print-footer .a4-footer-center { text-align: center; flex: 1; opacity: 0.5; }
         .a4-print-footer .a4-footer-right { text-align: right; }
 
-        /* UNIFIED SUMTECK MODAL STYLING */
+        
         .sumteck-modal-container { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10050; text-align: center; max-width: 500px; width: 90%; border: 2px solid #3498db; }
         .sumteck-header { text-align: center; font-weight: bold; color: #7f8c8d; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 18px; letter-spacing: 0.5px; font-family: sans-serif; }
         .sumteck-body-text { font-weight: bold; font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 22px; }
@@ -578,16 +504,14 @@
         .sumteck-btn-yes { background: #27ae60; color: white; border: none; padding: 10px 35px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px #1e8449; font-size: 14px; }
         .sumteck-btn-no { background: #e74c3c; color: white; border: none; padding: 10px 35px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px #c0392b; font-size: 14px; }
         .sumteck-btn-ok { background: #3498db; color: white; border: none; padding: 10px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px #2980b9; font-size: 14px; }
-    /* =========================================================
-           CUSTOM ALIGNMENT AND COLORS FOR ADD STOCK GRID 
-           ========================================================= */
+    
         
-        /* 1. Scrollbar alignment fix for Header */
+        
         .sticky-header {
             padding-right: 27px !important; 
         }
 
-        /* 2. Shape headers exactly like input boxes */
+        
         .sticky-header .header-item {
             display: flex;
             align-items: center;
@@ -600,30 +524,30 @@
             margin: 0;
         }
 
-        /* 3. Name of Medicine (Column 3) */
+        
         input[id^="med_"] { background-color: #ffe0b2 !important; }
         .sticky-header .header-item:nth-child(3) { background-color: #ffe0b2 !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
 
-        /* 4. Batch No (Column 4) */
+        
         input[id^="bat_"] { background-color: #b3e5fc !important; }
         .sticky-header .header-item:nth-child(4) { background-color: #b3e5fc !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
 
-        /* 5. Exp Date (Column 5) */
+        
         input[id^="exp_"] { background-color: #ffcdd2 !important; }
         .sticky-header .header-item:nth-child(5) { background-color: #ffcdd2 !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
 
-        /* 6. Qty (Column 6) */
+        
         input[id^="qty_"] { background-color: #c8e6c9 !important; }
         .sticky-header .header-item:nth-child(6) { background-color: #c8e6c9 !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
 
-        /* 7. Page No (Column 7) */
+        
         input[id^="pag_"] { background-color: #fff59d !important; }
         .sticky-header .header-item:nth-child(7) { background-color: #fff59d !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
 
-        /* 8. Rack No (Column 8) */
+        
         input[id^="rac_"] { background-color: #e1bee7 !important; }
         .sticky-header .header-item:nth-child(8) { background-color: #e1bee7 !important; color: #000 !important; border: 1px solid #cbd5e0 !important; }
-        /* Qty Indent ബോക്സുകൾക്കുള്ളിലെ ആരോ മാർക്കുകൾ ഒഴിവാക്കാൻ */
+        
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -632,11 +556,11 @@
         input[type=number] {
             -moz-appearance: textfield; 
         }
-        /* 1. Medistock Viewer പേരിന്റെ മാർജിനും പാഡിങ്ങും കുറയ്ക്കാൻ */
+        
 .home-header { text-align: center; border-bottom: 2px solid #005088; padding-bottom: 0px; margin-bottom: 2px; margin-top: -25px; }
 .home-header h1 { font-size: 50px !important; color: #c53030; margin: 0; letter-spacing: 2px; font-weight: 900; line-height: 0.9; }
 
-/* 2. Gradient Background (ഇടത് - വെള്ള - വലത് നിറങ്ങൾ) */
+
 .gradient-bg {text-align: center;  
     background: linear-gradient(to top, #cce5ff, #ffffff, #cce5ff) !important; 
 }
@@ -647,17 +571,17 @@
     background: linear-gradient(to top, #c696f1, #ffffff, #c696f1) !important; 
 }
 
-/* 3. 3D ബട്ടൺ സ്റ്റൈൽ */
+
 .btn-3d {
     background: #4a90e2; color: rgb(12, 12, 12); font-weight: bold; border: none; border-radius: 8px;
     cursor: pointer; box-shadow: 0 5px #2a65a3; transition: all 0.1s; height: 42px; width: 100%;
     display: flex; align-items: center; justify-content: center;
 }
 .btn-3d:active { box-shadow: 0 2px #2a65a3; transform: translateY(3px); }
-/* OP Charge List Print Settings (A4 Portrait) */
+
 @media print {
 @page {
-        /* പേജ് Landscape ആയി സെറ്റ് ചെയ്യുന്നു */
+        
         size: A4 landscape; 
         margin: 10mm;
     }
@@ -677,18 +601,18 @@
         display: none !important;
     }
 }
-/* OP Charge List ടേബിളിലെ വരകളുടെ കട്ടി കുറയ്ക്കാനും കറുപ്പ് നിറമാക്കാനും */
+
 #opChargeListPrintArea table, 
 #opChargeListPrintArea table th, 
 #opChargeListPrintArea table td {
     border: 1px solid #000000 !important;
 }
-/* ടേബിളിലെ വരികൾ പേജിനവസാനം മുറിഞ്ഞു പോകാതിരിക്കാൻ */
+
 #opChargeListPrintArea table tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }
-/* MAIN, OP, IP വിൻഡോകളിലെ എല്ലാ ടേബിളുകളിലെയും അക്ഷരങ്ങൾ പൂർണ്ണമായും BOLD ആക്കാൻ */
+
         #detailsTableBody td,
         #chargeListTableBody td,
         #quarterStatementTableBody td,
@@ -700,11 +624,11 @@
         #ipChargeListTableBody td {
             font-weight: bold !important;
         }
-        /* മെയിൻ സ്റ്റോക്ക് സ്റ്റേറ്റ്മെന്റ് ടേബിളിലെ അക്ഷരങ്ങൾ പൂർണ്ണമായും BOLD ആക്കാൻ */
+        
         #mainChargeListTableBody td {
             font-weight: bold !important;
         }
-        /* MAIN STOCK STATEMENT Print Settings */
+        
         body.printing-main-charge { background-color: #ffffff !important; }
         body.printing-main-charge * { visibility: hidden; }
         body.printing-main-charge #mainChargeListPrintArea, 
@@ -714,7 +638,7 @@
         }
         #mainChargeListPrintArea table, #mainChargeListPrintArea table th, #mainChargeListPrintArea table td { border: 1px solid #000000 !important; }
         #mainChargeListPrintArea table tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-/* RACK DETAILS OF MAIN STOCK MEDICINES Perfect Print Settings */
+
         body.printing-rack-details { background-color: #ffffff !important; }
         body.printing-rack-details * { visibility: hidden; }
         body.printing-rack-details #mainRackDetailsPrintArea, 
@@ -722,7 +646,7 @@
         body.printing-rack-details #mainRackDetailsPrintArea {
             position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 0 !important; background-color: white !important;
         }
-        /* REGISTER LABEL GENERATOR Perfect Print Settings */
+        
         body.printing-book-label { background-color: #ffffff !important; }
         body.printing-book-label * { visibility: hidden; }
         body.printing-book-label #bookLabelPrintArea,
@@ -751,14 +675,14 @@
             .book-label-pdf-item { border: 1px dotted rgba(0,0,0,0.10) !important; }
         }
         
-        /* PDF എടുത്തു കഴിഞ്ഞാൽ പേജ് മുറിയാതിരിക്കാനുള്ള ആഗോള നിയമങ്ങൾ */
+        
         .rack-pdf-item {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             -webkit-column-break-inside: avoid !important;
             display: block !important;
             width: 100% !important;
-            margin: 0 !important; /* ബോക്സുകൾ തമ്മിലുള്ള 0.8cm ഗ്യാപ്പ് .rack-inner-content-ന്റെ 0.4cm പാഡിങ് വഴി മാത്രം */
+            margin: 0 !important; 
             border: none !important;
         }
         .rack-pdf-item table {
@@ -770,16 +694,16 @@
             break-inside: avoid !important;
             page-break-after: auto !important;
         }
-        /* ബട്ടൺ ക്ലിക്ക് ചെയ്യുമ്പോൾ അമർന്നതായി തോന്നാനുള്ള സ്റ്റൈൽ */
+        
 .index-btn {
     transition: all 0.1s ease;
-    border: 2px solid rgba(0,0,0,0.1); /* ബട്ടണിന് ചെറിയൊരു ബോർഡർ നൽകുന്നു */
+    border: 2px solid rgba(0,0,0,0.1); 
 }
 
 .index-btn:active {
-    transform: translateY(2px); /* ബട്ടൺ 2 പിക്സൽ താഴേക്ക് അമരുന്നു */
-    box-shadow: inset 0 3px 5px rgba(0,0,0,0.3); /* ഉള്ളിലേക്ക് അമർന്ന പോലെയുള്ള ഷാഡോ */
-    filter: brightness(0.9); /* നിറം അല്പം ഇരുണ്ടതാകുന്നു */
+    transform: translateY(2px); 
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.3); 
+    filter: brightness(0.9); 
 }
 .style12-border {
     border: 1px solid black !important;
@@ -789,24 +713,17 @@
     background: white !important;
 }
 
-/* 🌟 FIX (USER REQUEST): mainRackDetailsPage-ൽ കട്ടിങ് ലൈനുകൾ (മുകൾ/താഴെ/ഇടത്/വലത്
-   ഡോട്ടഡ് ഗൈഡ്‌ലൈനുകൾ) VIEW-ൽ നിന്നും PRINT/PDF-ൽ നിന്നും പൂർണ്ണമായി ഒഴിവാക്കിയിരിക്കുന്നു.
-   മുൻപ് ഈ ലൈനുകൾ വരച്ചിരുന്ന ".rack-cut-line" എലമെന്റും അതിന്റെ ഇൻസേർഷൻ ലോജിക്കും
-   (renderMainRackDetailsTable, printPerfectPDF_RackMain എന്നിവയിൽ) നീക്കം ചെയ്തു.
-   ബോക്സുകൾ തമ്മിലുള്ള 0.8cm അകലം ഇപ്പോൾ ".rack-inner-content"-ന്റെ 0.4cm പാഡിങ്
-   (ഓരോ ബോക്സിന്റെയും മുകളിലും താഴെയും) വഴി മാത്രമാണ് ഉറപ്പാക്കുന്നത് — ഒരു ബോക്സിന്റെ
-   താഴെയുള്ള 0.4cm + അടുത്ത ബോക്സിന്റെ മുകളിലെ 0.4cm = കൃത്യം 0.8cm ഗ്യാപ്പ്, ലൈൻ
-   ഇല്ലാതെ തന്നെ ഗണിതപരമായി ഉറപ്പ്. 🌟 */
+
 @media print {
     .rack-pdf-item {
         border: none !important;
     }
 }
-/* ഫൂട്ടർ എല്ലാ പേജിലും വരാനുള്ള പുതിയ കോഡ് */
+
 @media print {
     .medistock-fixed-footer {
         position: fixed;
-        bottom: 5px; /* പേജിന്റെ താഴെ ഉറപ്പിച്ചു നിർത്താൻ */
+        bottom: 5px; 
         left: 0;
         width: 100%;
         display: flex;
@@ -818,23 +735,14 @@
         z-index: 9999;
     }
     .medistock-fixed-footer .left-footer {
-        opacity: 0.10; /* Medistock Viewer-ന് 10% Opacity */
+        opacity: 0.10; 
         color: #000000;
     }
     .medistock-fixed-footer .right-footer {
-        opacity: 1.0; /* വലതുവശത്തെ പേജ് നമ്പറിന് 100% Opacity */
+        opacity: 1.0; 
         color: #000000;
     }
-    /* 🌟 FIX (BUG): മുൻപ് ഇവിടെ ഉണ്ടായിരുന്ന സ്കോപ്പ് ചെയ്യാത്ത "table { margin-bottom:
-       30px !important; }" എന്ന ആഗോള റൂൾ, പ്രിന്റ്/PDF എടുക്കുന്ന ഏത് പേജിലെയും ഏത്
-       <table> എലമെന്റിനെയും ബാധിച്ചിരുന്നു — ഇത് Rack Details പേജിലെ ബോക്സുകൾക്കിടയിലെ
-       അകലം VIEW-ലും PDF-ലും വ്യത്യസ്തമാകാനും, PORTRAIT PDF-ൽ ഓരോ പേജിന്റെയും അടിയിൽ
-       അനാവശ്യമായി സ്ഥലം ഒഴിഞ്ഞു കിടക്കാനും കാരണമായിരുന്നു. ഈ റൂൾ യഥാർത്ഥത്തിൽ
-       ".medistock-fixed-footer" ഉപയോഗിക്കുന്ന മൂന്ന് Charge List പ്രിന്റ് ഏരിയകൾക്ക്
-       (#mainChargeListPrintArea, #opChargeListPrintArea, #ipChargeListPrintArea) വേണ്ടി
-       മാത്രമായിരുന്നു ഉദ്ദേശിച്ചത് — അതിനാൽ ഇപ്പോൾ അതേ മൂന്ന് ഏരിയകളിലേക്ക് മാത്രമായി
-       സ്കോപ്പ് ചെയ്തിരിക്കുന്നു. ഈ ഫീച്ചറിന്റെ യഥാർത്ഥ പ്രവർത്തനത്തിന് ഒരു മാറ്റവുമില്ല,
-       പക്ഷേ ഇനി മറ്റൊരു പേജിലെയും ടേബിളിനെയും ഇത് ബാധിക്കില്ല. 🌟 */
+    
     #mainChargeListPrintArea table,
     #opChargeListPrintArea table,
     #ipChargeListPrintArea table {
@@ -843,35 +751,35 @@
 }
 @media screen {
     .medistock-fixed-footer {
-        display: none; /* സോഫ്റ്റ്‌വെയർ ഉപയോഗിക്കുമ്പോൾ സ്ക്രീനിൽ കാണാതിരിക്കാൻ */
+        display: none; 
     }
 }
-/* RACK DETAILS EDIT & CHECKBOX STYLES */
+
 .rack-editable-table td {
     transition: all 0.2s ease;
 }
 .rack-edit-mode-active td {
-    background-color: #fff9c4 !important; /* എഡിറ്റ് ചെയ്യുമ്പോൾ തിരിച്ചറിയാൻ മഞ്ഞ നിറം */
+    background-color: #fff9c4 !important; 
     outline: 2px dashed #f39c12 !important;
     outline-offset: -2px;
     cursor: text;
 }
 @media print {
-    /* ടിക്ക് ചെയ്യാത്തവ പ്രിന്റിൽ വരാതിരിക്കാൻ */
+    
     .hide-rack-on-print {
         display: none !important;
     }
 }
-/* RACK DETAILS പേജിലെ എല്ലാ ടിക്ക് ബോക്സുകളും വലുതാക്കാൻ */
+
 #mainRackDetailsPage input[type="checkbox"] {
     width: 12px !important;
     height: 12px !important;
-    transform: scale(1.1) !important; /* പഴയ scale(0.5) മറികടന്ന് വലുതാക്കാൻ */
+    transform: scale(1.1) !important; 
     cursor: pointer !important;
-    accent-color: #1606f5 !important; /* ടിക്ക് ചെയ്യുമ്പോൾ പച്ച നിറം വരാൻ */
+    accent-color: #1606f5 !important; 
     margin: 2px !important;
 }
-/* ടിക്ക് മാറ്റുമ്പോൾ മരുന്നുകളുടെ ബോക്സുകൾ സ്ക്രീനിൽ നിന്നും പ്രിന്റിൽ നിന്നും പൂർണ്ണമായി മറയാൻ */
+
 .hide-rack-item .rack-inner-content {
     display: none !important;
 }
@@ -881,7 +789,7 @@
 .hide-rack-item {
     border: none !important;
 }
-/* 🌟 MAIN STOCK DETAILS PRINT & PDF STYLES 🌟 */
+
 @media print {
     body.printing-main-details { background-color: #ffffff !important; }
     body.printing-main-details * { visibility: hidden; }
@@ -891,7 +799,7 @@
         position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 0 !important; background-color: white !important; display: block !important;
     }
     
-    /* ഫൂട്ടർ ക്രമീകരണങ്ങൾ */
+    
     .main-details-fixed-footer {
         position: fixed;
         bottom: 5px;
@@ -907,15 +815,15 @@
         color: #000;
         z-index: 9999;
     }
-    /* ഇടത് വശത്തെ ടെക്സ്റ്റിന് 6% Opacity */
+    
     .main-details-fixed-footer .left-footer {
         opacity: 0.06 !important;
     }
-    /* നടുവിലെ പേജ് നമ്പറിന് 100% Opacity */
+    
     .main-details-fixed-footer .center-footer {
         opacity: 1.0 !important;
     }
-    /* വലത് വശത്തെ തീയതിക്ക് 100% Opacity */
+    
     .main-details-fixed-footer .right-footer {
         opacity: 0.50 !important;
     }
@@ -923,46 +831,30 @@
 @media screen {
     .main-details-fixed-footer { display: none; }
 }
-  /* ========================================= */
-/* --- MEDISTOCK SMART PDF SCANNER CSS --- */
-/* ========================================= */
+  
+
+
 #pdfScannerPage { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f5f6fa; z-index: 100000; flex-direction: column; }
 .pdf-main-content { display: flex; height: calc(100vh - 160px); width: 100vw; box-sizing: border-box; }
 .pdf-left-panel { flex: 0.5; background: #ecf0f1; border-right: 2px solid #bdc3c7; display: flex; flex-direction: column; padding: 15px; height: 100%; box-sizing: border-box; overflow-y: auto; }
-/* 🌟 പരിഹാരം (BUG FIX): മുൻപ് ഇവിടെ align-items:center; justify-content:center; ഉണ്ടായിരുന്നത് 
-   മൂലമാണ് ZOOM ചെയ്യുമ്പോൾ PDF-ന്റെ മുകൾ ഭാഗവും ഇടത് ഭാഗവും സ്ക്രോൾ ചെയ്ത് കാണാൻ 
-   സാധിക്കാതിരുന്നത് (ബ്രൗസറിന്റെ അറിയപ്പെടുന്ന "centered flexbox overflow" പ്രശ്നം - 
-   overflow:auto ഉള്ള ഒരു flex കണ്ടെയ്നറിൽ align-items/justify-content: center ഉപയോഗിച്ചാൽ, 
-   ഉള്ളടക്കം കണ്ടെയ്നറിനെക്കാൾ വലുതാകുമ്പോൾ centre-ന് മുകളിലേക്കും/ഇടത്തേക്കും ഉള്ള ഭാഗത്തേക്ക് 
-   സ്ക്രോൾ ചെയ്യാൻ സാധിക്കില്ല). ഇപ്പോൾ .pdf-center-panel-ന് column ദിശയിൽ ടൂൾബാർ + സ്ക്രോൾ ഏരിയ 
-   എന്നിങ്ങനെ ലളിതമായ flex ലേഔട്ട് നൽകി, യഥാർത്ഥ centering #pdfCanvasWrapper-ന്റെ 
-   margin:auto (താഴെ കാണുക) വഴി ചെയ്യുന്നു - ഇത് സ്ക്രോൾ എല്ലാ ദിശയിലും (മുകളിലേക്കും 
-   ഇടത്തേക്കും അടക്കം) കൃത്യമായി പ്രവർത്തിക്കാൻ അനുവദിക്കുന്നു 🌟 */
+
 .pdf-center-panel { flex: 1.5; background: #34495e; border-right: 2px solid #bdc3c7; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .pdf-right-panel { flex: 1; padding: 20px; background: white; display: flex; flex-direction: column; height: 100%; box-sizing: border-box; overflow: hidden; }
 
-/* 🌟 NEW: PDF ദൃശ്യമാകുന്ന ഭാഗത്തിന് മുകളിലായി, ഒരിക്കലും PDF-ന് മുകളിൽ ഓവർലാപ്പ് ചെയ്യാത്ത 
-   സ്ഥിരമായ ടൂൾബാർ നിര (id="smartScannerPage"-ലെ .image-controls പോലെ) 🌟 */
-/* 🌟 പരിഹാരം (USER FEEDBACK): ടൂൾബാറിന്റെ പശ്ചാത്തല നിറം id="smartScannerPage"-ലെ 
-   (.left-panel: #ecf0f1) പോലെ ഇളം നിറത്തിലേക്ക് മാറ്റി, Zoom In / Zoom Out ബട്ടണുകൾക്ക് 
-   ഇരുണ്ട നിറം (#34495e - smartScannerPage-ലെ അതേ ബട്ടൺ നിറം) നൽകി - ഇനി ബട്ടണും 
-   പശ്ചാത്തലവും തമ്മിൽ വ്യക്തമായ contrast ഉള്ളതിനാൽ ബട്ടൺ ആണെന്ന് എളുപ്പം തിരിച്ചറിയാം 🌟 */
+
+
 .pdf-zoom-toolbar { flex-shrink: 0; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px; background: #ecf0f1; border-bottom: 2px solid #bdc3c7; width: 100%; box-sizing: border-box; }
 .pdf-zoom-toolbar .index-btn { padding: 7px 14px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; color: white; }
 #pdfCropStatus { flex-shrink: 0; text-align: center; font-weight: bold; padding: 4px 10px; min-height: 18px; background: #2c3e50; color: white; }
 
-/* 🌟 NEW: യഥാർത്ഥ സ്ക്രോൾ ചെയ്യാവുന്ന ഏരിയ - ടൂൾബാറിന് താഴെ, ബാക്കി ഉയരം മുഴുവൻ എടുക്കുന്നു. 
-   ZOOM ചെയ്യുമ്പോൾ ഇവിടെ മാത്രമാണ് സ്ക്രോൾ ബാർ വരുന്നത്, മുകളിലേക്കും ഇടത്തേക്കും അടക്കം 
-   PDF-ന്റെ ഏത് ഭാഗവും ഇനി കൃത്യമായി സ്ക്രോൾ ചെയ്ത് കാണാൻ സാധിക്കും 🌟 */
+
 .pdf-canvas-scroll-area { flex: 1 1 auto; width: 100%; overflow: auto; display: flex; }
 
 .pdf-thumbnail { width: 100%; margin-bottom: 15px; cursor: pointer; border: 3px solid transparent; border-radius: 5px; transition: 0.2s; background: white;}
 .pdf-thumbnail.active { border-color: #e74c3c; box-shadow: 0 0 10px rgba(231, 76, 60, 0.6); }
 .pdf-thumbnail-label { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #2c3e50;}
 
-/* 🌟 പരിഹാരം: margin: auto ചേർത്തു - ഉള്ളടക്കം കണ്ടെയ്നറിനെക്കാൾ ചെറുതാകുമ്പോൾ നടുവിൽ 
-   തന്നെ കാണിക്കും, വലുതാകുമ്പോൾ (ZOOM ചെയ്യുമ്പോൾ) മുകൾ/ഇടത് ഭാഗങ്ങളിലേക്കും സ്ക്രോൾ 
-   ചെയ്യാൻ അനുവദിക്കും 🌟 */
+
 #pdfCanvasWrapper { position: relative; display: inline-block; margin: auto; transform-origin: center center; transition: transform 0.25s ease; }
 #pdfMainCanvas { display: block; max-width: none !important; filter: grayscale(100%) contrast(160%) brightness(110%); background: white;}
 
@@ -973,13 +865,7 @@
 .pdf-crop-handle[data-dir="sw"] { left: -9px; bottom: -9px; cursor: nesw-resize; }
 .pdf-crop-handle[data-dir="se"] { right: -9px; bottom: -9px; cursor: nwse-resize; }  
 
-    /* =========================================================
-       🌟 NEW (USER REQUEST): id="stockPage" ROW-SELECT CHECKBOX COLUMN 🌟
-       ഇത് #stockPage-ന് മാത്രമായി സ്കോപ്പ് ചെയ്തിരിക്കുന്നു (checkbox cell, .entry-grid-layout-നു
-       പുറത്ത് ഒരു sibling flex-item ആയി ചേർക്കുന്നു), അതിനാൽ .entry-grid-layout / .header-item /
-       .entry-row പോലുള്ള മറ്റ് പേജുകൾ (excelImportPage, indentPrepPage തുടങ്ങിയവ) പങ്കിടുന്ന ക്ലാസുകൾക്ക്
-       യാതൊരു മാറ്റവും വരുന്നില്ല.
-       ========================================================= */
+    
     #stockPage .stock-chk-col { width: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
     #stockPage .stock-header-row-wrapper { display: flex; align-items: stretch; position: sticky; top: 0; z-index: 100; background: #34495e; }
     #stockPage .stock-header-row-wrapper .stock-chk-col { color: white; }
@@ -988,13 +874,7 @@
     #stockPage .stock-header-row-wrapper .entry-grid-layout { flex: 1; min-width: 0; }
     #stockPage .stock-row-checkbox, #stockPage #stockSelectAllCheckbox { width: 30px; height: 30px; cursor: pointer; }
 
-    /* =========================================================
-       🌟 NEW (USER REQUEST): id="excelImportPage" ROW-SELECT CHECKBOX COLUMN 🌟
-       id="stockPage"-ലേത് അതേ pattern തന്നെ, പക്ഷേ പൂർണ്ണമായും വേറിട്ട class നാമങ്ങൾ
-       (xl-chk-col, xl-header-row-wrapper, xl-body-row-wrapper) ഉപയോഗിച്ച്, #excelImportPage-ന്
-       മാത്രം സ്കോപ്പ് ചെയ്തിരിക്കുന്നു. ഇത് #stockPage-ന്റെയോ മറ്റ് പേജുകളുടെയോ
-       .entry-grid-layout / .header-item / .entry-row ക്ലാസുകളെ ഒട്ടും ബാധിക്കുന്നില്ല.
-       ========================================================= */
+    
     #excelImportPage .xl-chk-col { width: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
     #excelImportPage .xl-header-row-wrapper { display: flex; align-items: stretch; position: sticky; top: 0; z-index: 100; background: #34495e; }
     #excelImportPage .xl-header-row-wrapper .xl-chk-col { color: white; }
@@ -1003,17 +883,17 @@
     #excelImportPage .xl-header-row-wrapper .entry-grid-layout { flex: 1; min-width: 0; }
     #excelImportPage .xl-row-checkbox, #excelImportPage #excelSelectAllCheckbox { width: 30px; height: 30px; cursor: pointer; }
 
-    /* 🌟 NEW (USER REQUEST): id="stockPage" ലെ പുതിയ രണ്ടാമത്തെ ബട്ടൺ നിര */
+    
     #stockPage .stock-second-btn-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1px; margin-bottom: 1px; width: 100%; }
     #stockPage .stock-second-btn-row button { padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer; color: white; }
     </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
     <style>
-        /* ============================================================= */
-        /* 🌟 MEDISTOCK SMART SCANNER PAGE STYLES (#smartScannerPage-ൽ    */
-        /*    മാത്രം സ്കോപ്പ് ചെയ്തിരിക്കുന്നു, ബാക്കിയുള്ള ആപ്പിനെ ബാധിക്കില്ല) 🌟 */
-        /* ============================================================= */
+        
+        
+        
+        
         #smartScannerPage {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -1060,7 +940,7 @@
 
         #smartScannerPage .main-content {
             display: flex;
-            height: calc(100vh - 140px); /* Adjusted for top bar height */
+            height: calc(100vh - 140px); 
             width: 100%;
             box-sizing: border-box;
         }
@@ -1088,11 +968,11 @@
             overflow: hidden;
         }
 
-        /* സ്ക്രോൾ ബാർ സെറ്റിങ്സ് */
+        
         #smartScannerPage .image-preview-container {
             flex: 1;
             width: 100%;
-            overflow: auto !important; /* Forces scrollbar when zoomed */
+            overflow: auto !important; 
             position: relative;
             background: #34495e;
             text-align: center;
@@ -1104,7 +984,7 @@
         #smartScannerPage #resultArea {
             flex: 1;
             width: 100%;
-            overflow: auto !important; /* Forces scrollbar for table */
+            overflow: auto !important; 
             background: #fff;
             padding-bottom: 20px;
         }
@@ -1131,7 +1011,7 @@
 
         #smartScannerPage #statusMessage { margin-top: 10px; font-weight: bold; text-align: center; }
 
-        /* Crop Box */
+        
         #smartScannerPage #cropBox {
             position: absolute;
             box-sizing: border-box;
@@ -1157,20 +1037,15 @@
 
         #smartScannerPage #cropStatus { text-align: center; font-size: 13px; margin-top: 4px; margin-bottom: 4px; min-height: 16px; color: #7f8c8d; font-weight: bold;}
 
-        /* Table */
+        
         #smartScannerPage .medistock-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
         #smartScannerPage .medistock-table th { background-color: #2c3e50; color: white; padding: 10px 5px; text-align: left; border: 1px solid #ddd; position: sticky; top: 0; z-index: 5;}
         #smartScannerPage .medistock-table td { padding: 8px 5px; border: 1px solid #ddd; vertical-align: middle; }
         #smartScannerPage .medistock-table input[type="text"] { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         #smartScannerPage .queue-alert { color: #c0392b; font-size: 16px; }
 
-        /* 🌟 EXPERT ADDITION (USER REQUEST): "Load from Excel Sheet & Extract" പേജിൽ "Name of Medicine" 
-           കോളത്തിൽ ടൈപ്പ്/പേസ്റ്റ് ചെയ്യുമ്പോൾ ബാക്ക്ഗ്രൗണ്ട് സ്കാൻ നടക്കുന്ന 2 സെക്കന്റ് സമയത്തേക്ക് 
-           കാണിക്കുന്ന ഫുൾ സ്ക്രീൻ CPR STEP IMAGE ഓവർലേ. ഇത് #smartScannerPage-ന്റെ ലോഡറിൽ നിന്നും 
-           പൂർണ്ണമായും സ്വതന്ത്രമാണ്, മറ്റൊരു പേജിനെയും ബാധിക്കില്ല. */
-        /* 🌟 EXPERT FIX (USER REQUEST): #xlCprLoader ഇനി "✅ Excel ഷീറ്റിൽ നിന്നും ഡാറ്റ വിജയകരമായി
-           ചേർത്തിരിക്കുന്നു!" പോലുള്ള sumteck.in ഗ്ലോബൽ മെസേജ് ബോക്സിന്റെ (#medistockGlobalAlertWindow,
-           z-index:9999999) അടിയിൽ ഒന്നിച്ച് വരാതെ, അതിന് മുകളിൽ വരുന്ന വിധം z-index ഉയർത്തിയിരിക്കുന്നു. */
+        
+        
         #xlCprLoader {
             display: none;
             position: fixed;
@@ -1182,14 +1057,7 @@
             justify-content: center;
         }
 
-        /* 🌟 BUG FIX (USER REPORT): പഴയ #cprLoader, id="smartScannerPage" എന്ന പേജിന്റെ ഉള്ളിൽ
-           നെസ്റ്റഡ് ആയതിനാൽ, ആ പേജ് നിലവിൽ display:none ആയിരിക്കുമ്പോൾ (അതായത് excelImportPage-ൽ
-           നിന്നുകൊണ്ട് SCAN PDF FILE ഉപയോഗിക്കുമ്പോൾ) അതിനുള്ളിലെ #cprLoader-ന്റെ സ്വന്തം
-           display:flex സെറ്റ് ചെയ്താലും ഒന്നും സ്ക്രീനിൽ കാണില്ല - parent display:none ആയാൽ
-           child എത്ര തന്നെ fixed/flex ആയാലും മറഞ്ഞിരിക്കും. ഇത് പരിഹരിക്കാൻ, id="excelImportPage"-ന്റെ
-           തന്നെ ഭാഗമായി (ഒരു പേജ്-വൈഡ് wrapper-ന്റെയും ഉള്ളിൽ hidden ആകാത്ത വിധം) ഒരു പുതിയ,
-           സ്വതന്ത്രമായ ഫുൾ-സ്ക്രീൻ overlay ഉണ്ടാക്കുന്നു - #xlPdfCprLoader. നിലവിലുള്ള #cprLoader-നെ
-           ഒട്ടും തൊട്ടിട്ടില്ല. */
+        
         #xlPdfCprLoader {
             display: none;
             position: fixed;
@@ -1201,7 +1069,7 @@
             justify-content: center;
         }
 
-        /* Loader */
+        
         #smartScannerPage #loadingOverlay {
             display: none;
             position: fixed;
@@ -1212,9 +1080,7 @@
             align-items: center;
             justify-content: center;
         }
-        /* 🌟 EXPERT FIX (USER REQUEST): #cprLoader ഇനി ഗ്ലോബൽ മെസേജ് ബോക്സിന്റെ (z-index:9999999)
-           അടിയിൽ ഒന്നിച്ച് വരാതെ, അതിന് മുകളിൽ വരുന്ന വിധം z-index ഉയർത്തിയിരിക്കുന്നു.
-           #loadingOverlay-യുടെ z-index ഇത് ഒരു തരത്തിലും ബാധിക്കുന്നില്ല. */
+        
         #smartScannerPage #cprLoader {
             display: none;
             position: fixed;
@@ -1228,21 +1094,14 @@
         #smartScannerPage .cpr-heart { font-size: 80px; display: inline-block; animation: cprCompress 0.6s infinite; }
         @keyframes cprCompress { 0% { transform: scale(1); } 50% { transform: scale(0.75); text-shadow: 0 0 20px red; } 100% { transform: scale(1); } }
         .cpr-infographic-img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); background: #fff; }
-        /* 🌟 EXPERT UPDATE (USER REQUEST): CPR STEP IMAGE ഇനി തുടക്കം മുതൽ തന്നെ ഫുൾ സ്ക്രീനിൽ കാണിക്കുന്നു
-             (ക്ലിപ്-പാത്ത് വഴിയുള്ള കുറേശ്ശെയുള്ള reveal ഇല്ല). image-ന്റെ ഉള്ളിൽ തന്നെ "കാത്തിരിക്കുക...
-             PDF-ൽ നിന്നും വിവരങ്ങൾ വേർതിരിക്കുന്നു......." എന്ന് എഴുതിയിരിക്കുന്ന നിരയ്ക്ക് തൊട്ട്
-             താഴെയായി, നിലവിൽ പ്രവർത്തിക്കുന്ന അതേ PROGRESS BAR (പച്ച നിറത്തിലുള്ള ഭാഗം) ഒരു overlay
-             ആയി മാത്രം കാണിക്കുന്നു - ബാറിന്റെ 0%-100% ലോജിക്കിന് ഒരു മാറ്റവുമില്ല. */
+        
         .cpr-image-wrap { position: relative; width: 92%; max-width: 900px; margin: 0 auto 20px auto; }
         .cpr-progress-overlay { position: absolute; top: 81%; left: 50%; transform: translateX(-50%); width: 52%; height: 5%; min-height: 18px; background: #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
         .cpr-progress-fill { width: 0%; height: 100%; background: #27ae60; text-align: center; color: white; font-weight: bold; line-height: 1.6; font-size: 0.85em; transition: width 0.4s; white-space: nowrap; }
         #smartScannerPage .progress-container { width: 40%; background-color: #ecf0f1; border-radius: 10px; margin-top: 25px; overflow: hidden; border: 2px solid #bdc3c7; }
         #smartScannerPage .progress-bar { height: 25px; width: 0%; background-color: #27ae60; text-align: center; line-height: 25px; color: white; font-weight: bold; transition: width 0.4s ease; }
 
-        /* 🌟 EXPERT ADDITION: loginStartPage (Sign In card) ദൃശ്യമാകുന്ന സമയത്ത് മാത്രം,
-           professional software ലോഡാകുന്നത് പോലെ തോന്നിക്കുന്ന ആകർഷകമായ ആനിമേഷനുകൾ.
-           "Google ഉപയോഗിച്ച് Sign In ചെയ്യുക" എന്ന ടെക്സ്റ്റോ ബട്ടണിന്റെ പ്രവർത്തനമോ
-           (onclick="medistockConnectDriveManual()") ഒട്ടും മാറ്റുന്നില്ല — വിഷ്വൽ സ്റ്റൈൽ മാത്രം. 🌟 */
+        
         #loginStartPage { animation: loginBgFadeIn 0.5s ease; }
         #loginStartPage .login-card {
             animation: loginCardEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1281,9 +1140,30 @@
 
     
     <style>
-        /* ---- ടാബ്‌ലെറ്റ്/ഫോൺ വീതി: 768px വരെ ---- */
+        
+        @media (max-width: 1024px) {
+            .master-container {
+                min-width: unset !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            .entry-container {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        
         @media (max-width: 768px) {
-            /* പേജ് wrapper-കൾക്ക് സ്ക്രീനിന്റെ പൂർണ്ണ വീതി, കുറഞ്ഞ padding */
+            
+            html, body {
+                overflow-x: hidden;
+                max-width: 100%;
+            }
+
+            
             .index-page-wrapper {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -1299,24 +1179,48 @@
                 box-sizing: border-box;
             }
 
-            /* 4-കോളം / 3-കോളം ബട്ടൺ ഗ്രിഡുകൾ ഫോണിൽ 2 കോളം ആയി stack ചെയ്യുന്നു */
+            
+            .logo-box {
+                position: static !important;
+                width: 90px !important;
+                height: 90px !important;
+                margin: 0 auto 10px auto !important;
+                font-size: 12px !important;
+            }
+            .home-header h1 {
+                font-size: 30px !important;
+            }
+
+            
             .home-btn-container,
             .bottom-buttons-grid-3 {
                 grid-template-columns: 1fr 1fr !important;
             }
 
-            /* ഫിക്സഡ് 27ch വീതിയുള്ള ഇൻപുട്ട് ഗ്രിഡ് ഫ്ലെക്സിബിൾ ആക്കുന്നു */
+            
             .op-input-grid {
                 grid-template-columns: 1fr 1fr !important;
             }
 
-            /* ടേബിൾ scroll ചെയ്യുമ്പോൾ iOS/Android-ൽ smooth touch scrolling */
+            
+            [style*="grid-template-columns: repeat(4, 1fr)"],
+            [style*="grid-template-columns: repeat(3, 1fr)"] {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            [style*="grid-template-columns: 1fr 2fr 1fr"],
+            [style*="grid-template-columns: 1fr 1fr 1fr 1.5fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            .blg-group {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            
             .table-responsive {
                 -webkit-overflow-scrolling: touch;
             }
 
-            /* Checkbox, Edit/Delete ഐക്കണുകൾ വിരൽ കൊണ്ട് കൃത്യമായി അമർത്താൻ 
-               tap-area വലുതാക്കുന്നു (ദൃശ്യ വലുപ്പം വലിയ വ്യത്യാസമില്ലാതെ) */
+            
             input[type="checkbox"].row-checkbox,
             input[type="checkbox"].row-checkbox-op,
             input[type="checkbox"].row-checkbox-ip {
@@ -1330,9 +1234,9 @@
             }
         }
 
-        /* ---- ചെറിയ ഫോൺ വീതി: 480px വരെ ---- */
+        
         @media (max-width: 480px) {
-            /* ഏറ്റവും ചെറിയ ഫോണിൽ ബട്ടൺ ഗ്രിഡുകൾ ഒറ്റ കോളം ആയി stack ചെയ്യുന്നു */
+            
             .home-btn-container,
             .bottom-buttons-grid-3,
             .bottom-buttons-grid-2,
@@ -1340,16 +1244,42 @@
                 grid-template-columns: 1fr !important;
             }
 
+            
+            [style*="grid-template-columns: repeat(4, 1fr)"],
+            [style*="grid-template-columns: repeat(3, 1fr)"],
+            [style*="grid-template-columns: repeat(2, 1fr)"] {
+                grid-template-columns: 1fr !important;
+            }
+            .blg-group {
+                grid-template-columns: 1fr !important;
+            }
+
             .index-page-wrapper {
                 padding: 10px !important;
             }
 
-            /* മരുന്ന് ലിസ്റ്റ് ടേബിളിന്റെ font അല്പം കൂട്ടി വായന എളുപ്പമാക്കുന്നു */
+            .home-header h1 {
+                font-size: 24px !important;
+            }
+
+            
             #detailsTableBody td, #openingTableBody td, #openingNewRowsBody td,
             #tableBody td, #opDetailsTableBody td, #ipDetailsTableBody td,
             #indLeftTableBody td, #indRightTableBody td {
                 font-size: 15px !important;
                 padding: 4px 3px !important;
+            }
+
+            
+            .register-table th, .register-table td {
+                font-size: 15px !important;
+                padding: 8px 10px !important;
+            }
+            .yellow-input {
+                font-size: 13px !important;
+            }
+            .info-table .label-cell {
+                font-size: 12px !important;
             }
         }
     </style>
@@ -1537,10 +1467,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         }
         #indentDateModalOkBtn:active { transform: translateY(3px); box-shadow: none; }
 
-        /* NEW (INDENT DATE MODAL): "INDENT DATE:" ന് വലത് വശം വരുന്ന DATE
-           ഒരു തുടർച്ചയായ ടെക്സ്റ്റ് ആയി തോന്നിക്കാൻ ("INDENT DATE:DD/MM/YYYY"
-           എന്ന് ഒന്നിച്ച് ടൈപ്പ് ചെയ്തപോലെ), പക്ഷെ എപ്പോളും എഡിറ്റ് ചെയ്യാവുന്ന
-           വിധത്തിൽ ഉള്ള ഇൻപുട്ട് ഫീൽഡ്. */
+        
         .indent-date-edit-field {
             border: none;
             background: transparent;
@@ -3957,7 +3884,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     #indentItemTable, #pageNoTable { 
         font-family: 'Anek Malayalam', sans-serif !important; 
         font-weight: 500; 
-        width: 100%; /* ടേബിൾ സ്ക്രീനിന്റെ മുഴുവൻ വീതിയിലും വരാൻ */
+        width: 100%; 
         table-layout: auto;
     }
     
@@ -3965,17 +3892,17 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         color: black !important; 
     }
 
-    /* 🌟 Status കോളത്തിനകത്ത് വരുന്ന ഡാറ്റകൾക്ക് സൈസ് 10 ഉം വീതി 115 ഉം നൽകാൻ 🌟 */
-    /* (താങ്കളുടെ ജാവാസ്ക്രിപ്റ്റിലും ഇത് 10px ആണ് നൽകിയിട്ടുള്ളത്, ഇത് ഒരു അധിക സുരക്ഷയാണ്) */
+    
+    
     .col-status-data div, #indentItemTable tbody td:nth-last-child(2) div, #pageNoTable tbody td:nth-last-child(2) div {
         font-size: 10px !important;
         width: 115px !important;
         max-width: 115px !important;
         margin: 0 auto;
     }
-    /* ========================================= */
-/* --- MORE DETAILS PAGE CSS --- */
-/* ========================================= */
+    
+
+
 .register-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-family: 'Anek Malayalam', sans-serif; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .register-table th { padding: 15px; border-bottom: 2px solid #ddd; }
 .register-table td { padding: 12px 15px; border-bottom: 1px dashed #eee; font-size: 22px; font-weight: 600; color: #c0392b; vertical-align: middle; }
@@ -4193,7 +4120,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     #indentItemTable, #pageNoTable { 
         font-family: 'Anek Malayalam', sans-serif !important; 
         font-weight: 500; 
-        width: 100%; /* ടേബിൾ സ്ക്രീനിന്റെ മുഴുവൻ വീതിയിലും വരാൻ */
+        width: 100%; 
         table-layout: auto;
     }
     
@@ -4201,8 +4128,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         color: black !important; 
     }
 
-    /* 🌟 Status കോളത്തിനകത്ത് വരുന്ന ഡാറ്റകൾക്ക് സൈസ് 10 ഉം വീതി 115 ഉം നൽകാൻ 🌟 */
-    /* (താങ്കളുടെ ജാവാസ്ക്രിപ്റ്റിലും ഇത് 10px ആണ് നൽകിയിട്ടുള്ളത്, ഇത് ഒരു അധിക സുരക്ഷയാണ്) */
+    
+    
     .col-status-data div, #indentItemTable tbody td:nth-last-child(2) div, #pageNoTable tbody td:nth-last-child(2) div {
         font-size: 10px !important;
         width: 115px !important;
@@ -4470,7 +4397,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
 <div id="bookLabelGeneratorPage" class="page-container index-page-wrapper full-width-wrapper" style="display: none; padding: 20px;">
     <style>
-    /* 🌟 REGISTER LABEL GENERATOR - Select Font ഡ്രോപ്പ്ഡൗണിൽ പുതുതായി ചേർത്ത ഫോണ്ടുകൾ, സിസ്റ്റത്തിൽ ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ലെങ്കിലും വർക്ക് ചെയ്യാൻ Google Fonts വഴി ലോഡ് ചെയ്യുന്നു 🌟 */
+    
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Cinzel:wght@400;600;700;900&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@400;600;700;900&family=EB+Garamond:wght@400;600;700;800&family=PT+Serif:wght@400;700&family=Bitter:wght@400;600;700;900&display=swap');
     </style>
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 6px; font-size: 35px; text-transform: uppercase;">REGISTER LABEL GENERATOR</h1>
@@ -4750,7 +4677,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <i class="fa-solid fa-folder-plus" style="font-size: 90px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
     <h1 style="font-size: 30px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">ഓർമ്മപ്പെടുത്തൽ</h1>
     <p style="font-size: 18px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #16a085;">
-        Software തുറക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി Local Auto-Backup ഫയൽ നിർമ്മിച്ച് അതിൽ സേവ് ചെയ്യുന്നതിനായി, MORE DETAILS എന്ന പേജിലെ Local Auto-Backup സജീവമാക്കുക എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട് ചെയ്ത ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക.
+        Software പ്രവർത്തിക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി നമ്മുടെ Google Drive-ൽ Save ചെയ്യുന്നത് കൂടാതെ അധിക സുരക്ഷക്കായി Medistock Viewer നമ്മളുപയോഗിക്കുന്ന സിസ്റ്റത്തിൽ കൂടി സേവ് ചെയ്യുന്നുണ്ട്.  അങ്ങനെ സേവ് ചെയ്യുന്നതിനായി, MORE DETAILS എന്ന പേജിലെ "Local Auto-Backup സജീവമാക്കുക" എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട്  Medistock Viewer ന് കാണിച്ച് കൊടുക്കണം. അതിന് ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക. ഈ ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ വരുന്ന Popup Window ൽ "Allow on every visit" എന്ന് കൂടി കൊടുത്താൽ പിന്നീട് ഈ പ്രവർത്തനം തനിയെ നടക്കും
     </p>
     <label style="font-weight: 900; cursor: pointer; color: #16274a; display: flex; align-items: center; gap: 8px; font-size: 15px; background: white; padding: 8px 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 25px;">
         <input type="checkbox" id="dontShowBackupReminderToday" style="width: 20px; height: 20px; cursor: pointer; accent-color: #16a085; margin: 0;">
@@ -4848,14 +4775,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         margin: auto;
         overflow: hidden;
         animation: sim1-pop .35s cubic-bezier(.2,.9,.3,1.2);
-        /* 🌟 BUG FIX (താഴെയുള്ള Learn More / Continue Scanning ബട്ടണുകൾ കാണാൻ സാധിക്കാതിരുന്ന പ്രശ്നം):
-           ഈ കാർഡ്, overflow-y:auto ഉള്ള ഒരു flex കണ്ടെയ്നറിന്റെ (#scannerInfoModal1) കുട്ടിയാണ്.
-           flex-shrink ഡിഫോൾട്ടായി 1 ആയതിനാൽ, ഉള്ളടക്കം viewport-നേക്കാൾ ഉയരമുള്ളപ്പോൾ ബ്രൗസർ ഈ
-           കാർഡിനെ ലഭ്യമായ സ്ഥലത്തിന് അനുസരിച്ച് ചുരുക്കുകയും, overflow:hidden ആയതിനാൽ താഴെയുള്ള
-           sim1-foot (ബട്ടണുകൾ) പൂർണ്ണമായും മുറിഞ്ഞ്/മറഞ്ഞ് പോവുകയും ചെയ്തിരുന്നു — സ്ക്രോൾ ചെയ്താലും
-           ബട്ടണുകൾ കാണാൻ കഴിയാതെ വന്നു. flex-shrink:0 നൽകി കാർഡ് അതിന്റെ യഥാർത്ഥ ഉള്ളടക്ക ഉയരത്തിൽ
-           തന്നെ നിലനിർത്തുന്നു, അധികമുള്ള ഭാഗം പുറത്തെ കണ്ടെയ്നറിന്റെ overflow-y:auto വഴി സ്ക്രോൾ
-           ചെയ്ത് കാണാൻ സാധിക്കും. */
+        
         flex-shrink: 0;
     }
     @keyframes sim1-pop { from { opacity:0; transform: translateY(14px) scale(.97);} to {opacity:1; transform: translateY(0) scale(1);} }
