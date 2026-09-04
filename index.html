@@ -4673,19 +4673,22 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
 
 
-<div id="medistockBackupReminderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(22, 160, 133, 0.95); z-index:10055; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box;">
-    <i class="fa-solid fa-folder-plus" style="font-size: 90px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
-    <h1 style="font-size: 30px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">ഓർമ്മപ്പെടുത്തൽ</h1>
-    <p style="font-size: 18px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #16a085;">
-        Software പ്രവർത്തിക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി നമ്മുടെ Google Drive-ൽ Save ചെയ്യുന്നത് കൂടാതെ അധിക സുരക്ഷക്കായി Medistock Viewer നമ്മളുപയോഗിക്കുന്ന സിസ്റ്റത്തിൽ കൂടി സേവ് ചെയ്യുന്നുണ്ട്.  അങ്ങനെ സേവ് ചെയ്യുന്നതിനായി, MORE DETAILS എന്ന പേജിലെ "Local Auto-Backup സജീവമാക്കുക" എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട്  Medistock Viewer ന് കാണിച്ച് കൊടുക്കണം. അതിന് ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക. ഈ ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ വരുന്ന Popup Window ൽ "Allow on every visit" എന്ന് കൂടി കൊടുത്താൽ പിന്നീട് ഈ പ്രവർത്തനം തനിയെ നടക്കും
-    </p>
-    <label style="font-weight: 900; cursor: pointer; color: #16274a; display: flex; align-items: center; gap: 8px; font-size: 15px; background: white; padding: 8px 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 25px;">
-        <input type="checkbox" id="dontShowBackupReminderToday" style="width: 20px; height: 20px; cursor: pointer; accent-color: #16a085; margin: 0;">
-        ഇന്ന് ഇനി ഈ മെസ്സേജ് കാണിക്കേണ്ട (Do not show this again today)
-    </label>
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-        <button onclick="closeMedistockBackupReminderModal(); medistockGoToMoreDetailsFromReminder();" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">📁 MORE DETAILS പേജിലേക്ക് പോകുക</button>
-        <button onclick="closeMedistockBackupReminderModal();" style="background: #7f8c8d; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
+
+<div id="medistockBackupReminderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(22, 160, 133, 0.95); z-index:10055; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box; overflow-y: auto;">
+    <div style="max-height: 95vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
+        <i class="fa-solid fa-folder-plus" style="font-size: 90px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8); flex-shrink: 0;"></i>
+        <h1 style="font-size: 30px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); flex-shrink: 0;">ഓർമ്മപ്പെടുത്തൽ</h1>
+        <p style="font-size: 18px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #16a085; flex-shrink: 0;">
+            Software പ്രവർത്തിക്കുമ്പോൾ software ലെ ഡാറ്റ സുരക്ഷിതമായി നമ്മുടെ Google Drive-ൽ Save ചെയ്യുന്നത് കൂടാതെ അധിക സുരക്ഷക്കായി Medistock Viewer നമ്മളുപയോഗിക്കുന്ന സിസ്റ്റത്തിൽ കൂടി സേവ് ചെയ്യുന്നുണ്ട്.  അങ്ങനെ സേവ് ചെയ്യുന്നതിനായി, MORE DETAILS എന്ന പേജിലെ "Local Auto-Backup സജീവമാക്കുക" എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഫോൾഡർ ഒരിക്കൽ സെലക്ട്  Medistock Viewer ന് കാണിച്ച് കൊടുക്കണം. അതിന് ശേഷം മാത്രം ഉപയോഗിച്ച് തുടങ്ങുക. ഈ ബട്ടൺ ഉപയോഗിക്കുമ്പോൾ വരുന്ന Popup Window ൽ "Allow on every visit" എന്ന് കൂടി കൊടുത്താൽ പിന്നീട് ഈ പ്രവർത്തനം തനിയെ നടക്കും
+        </p>
+        <label style="font-weight: 900; cursor: pointer; color: #16274a; display: flex; align-items: center; gap: 8px; font-size: 15px; background: white; padding: 8px 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 25px; flex-shrink: 0;">
+            <input type="checkbox" id="dontShowBackupReminderToday" style="width: 20px; height: 20px; cursor: pointer; accent-color: #16a085; margin: 0;">
+            ഇന്ന് ഇനി ഈ മെസ്സേജ് കാണിക്കേണ്ട (Do not show this again today)
+        </label>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; flex-shrink: 0;">
+            <button onclick="closeMedistockBackupReminderModal(); medistockGoToMoreDetailsFromReminder();" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">📁 MORE DETAILS പേജിലേക്ക് പോകുക</button>
+            <button onclick="closeMedistockBackupReminderModal();" style="background: #7f8c8d; color: white; border: 3px solid white; padding: 12px 30px; border-radius: 10px; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
+        </div>
     </div>
 </div>
 
