@@ -205,6 +205,58 @@
         #mainStockDetailsPage #detailsTable {
             table-layout: fixed !important;
         }
+        
+        @media (max-width: 1024px) {
+            #mainStockDetailsPage #detailsTable {
+                width: max-content !important;
+                min-width: 100% !important;
+            }
+            #mainStockDetailsPage #detailsTable th[style*="width: auto"] {
+                min-width: 22ch !important;
+            }
+
+            
+            #mainIndentPanelOuterRow {
+                align-items: flex-start !important;
+                flex-wrap: wrap !important;
+            }
+            #mainIndentPanelColumn {
+                overflow: visible !important;
+                min-width: 220px !important;
+            }
+            #mainIndentPanelInnerRow {
+                flex-wrap: wrap !important;
+            }
+            #mainIndentPanelInnerRow > .input-wrapper {
+                flex: 1 1 140px !important;
+            }
+
+            
+            #dangerWarningModal, #subStockConfirmModal, #excelFirstPasteInfoModal,
+            #medistockGlobalAlertOverlay, #mainDeleteSelectedModal, #mainDeleteExpiredModal,
+            #opDeleteSelectedModal, #opDeleteExpiredModal, #opRemoveEmptyModal,
+            #a4NoSelectionWarningModal, #ipDeleteSelectedModal, #ipDeleteExpiredModal,
+            #ipRemoveEmptyModal, #ipA4NoSelectionWarningModal, #medistockImageLimitWarningModal,
+            #medistockBackupReminderModal, #medistockFirstTimeGuideModal, #sampleDataWarningModal,
+            #sampleExcelWarningModal, #scannerInfoModal1, #copyPromptPasswordModal,
+            #scannerInfoModal2, #scannerInfoPdfDownloadedModal, #pdfScannerInfoModal1,
+            #importWarningModal, #addIndexWarningModal, #medistockFundWarningModal,
+            #dataEntryMethodsModal, #expiryWarningModal, #printOrientationConfirmModal {
+                overflow-y: auto !important;
+                align-items: safe center !important;
+                padding-top: 16px !important;
+                padding-bottom: 16px !important;
+                box-sizing: border-box !important;
+            }
+
+            
+            #preIndentSearchRow, #opSearchRow {
+                flex-wrap: wrap !important;
+            }
+            #preIndentSearchWrapper, #opSearchWrapper {
+                min-width: 120px !important;
+            }
+        }
         #mainStockDetailsPage #detailsTable th,
         #mainStockDetailsPage #detailsTableBody td {
             overflow: hidden;
@@ -1153,6 +1205,45 @@
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
             }
+
+            
+            #stockCustomFundOuterRow,
+            #stockPage .row-top,
+            #stockPage .stock-header-row-wrapper,
+            #excelImportPage .xl-header-row-wrapper {
+                width: max-content !important;
+                min-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            #stockColumnDeletePanel {
+                width: max-content !important;
+                box-sizing: border-box !important;
+            }
+            #stockPage .custom-data-box {
+                flex: 0 0 auto !important;
+                width: max-content !important;
+                box-sizing: border-box !important;
+            }
+            
+            #stockProjectNameGroup,
+            #stockFundDescGroup {
+                flex: 0 0 auto !important;
+                width: 20ch !important;
+            }
+            #stockCustomFundInnerRow {
+                width: auto !important;
+            }
+
+            
+            #excelImportTopGrid .input-group,
+            #excelImportTopGrid button {
+                flex-shrink: 1 !important;
+                min-width: 0 !important;
+                white-space: normal !important;
+            }
+            #excelImportTopGrid button {
+                text-align: center !important;
+            }
         }
 
         
@@ -1820,7 +1911,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
     </div>
 
-   <div class="no-print" style="display: flex; gap: 10px; align-items: stretch; margin-bottom: 2px; width: 100%;">
+   <div id="mainIndentPanelOuterRow" class="no-print" style="display: flex; gap: 10px; align-items: stretch; margin-bottom: 2px; width: 100%;">
 
         <button onclick="if(typeof hideAllPages === 'function') hideAllPages(); document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);" 
                 style="width: 17ch; flex-shrink: 0; background: #8e44ad; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px #732d91; transition: 0.1s; padding: 5px; margin: 8px 0 12px 0;" 
@@ -1831,12 +1922,12 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             <span style="font-size: 14px; line-height: 1.4; text-align: center;">PAGE No</span>
         </button>
 
-        <div style="flex: 1; display: flex; flex-direction: column; margin: 0 0 4px 0; overflow: hidden;">
+        <div id="mainIndentPanelColumn" style="flex: 1; display: flex; flex-direction: column; margin: 0 0 4px 0; overflow: hidden;">
             
             <div class="soothing-box" style="flex: 1; display: flex; flex-direction: column; justify-content: center; background-color: #f0bbf2; border: 1px solid #f1c40f; border-radius: 8px; padding: 10px 15px; margin: 0; width: 100%; box-sizing: border-box; box-shadow: 0 4px rgba(0,0,0,0.1);">
                 <h3 class="box-title" style="text-align: center; border: none; padding-bottom: 0; margin-bottom: 5px;">INDENT PREPARATION PANEL</h3>
                 
-                <div style="display: flex; gap: 8px; align-items: flex-end; justify-content: space-between;">
+                <div id="mainIndentPanelInnerRow" style="display: flex; gap: 8px; align-items: flex-end; justify-content: space-between;">
                     <div class="input-wrapper" style="width: 140px; gap: 2px; flex-shrink: 0;">
                         <label>Select Fund Type</label>
                         <input list="fund-list" id="mainIndentFundInput" class="index-input" value="LSGD" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='LSGD'; if(typeof updateMainIndentDynamicText === 'function') updateMainIndentDynamicText(); }" onchange="updateMainIndentDynamicText()" oninput="updateMainIndentDynamicText()" style="height: 35px;">
@@ -1958,13 +2049,13 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
             </div>
             
-            <div style="display: flex; gap: 15px; width: 100%; align-items: flex-end;">
+            <div id="preIndentSearchRow" style="display: flex; gap: 15px; width: 100%; align-items: flex-end;">
                 <div class="input-wrapper">
                     <button onclick="resetPreIndentFilters()" style="height: 38px; background: #e67e22; color: white; border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #d35400; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #d35400';">
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
-                <div class="input-wrapper" style="flex: 1; position: relative;">
+                <div id="preIndentSearchWrapper" class="input-wrapper" style="flex: 1; position: relative;">
                     <input type="text" id="preIndentSearch" class="index-input" placeholder="Search Anything..." oninput="renderPreIndentSummaryTable()" style="height: 38px; border: 2px solid #34495e; width: 100%; padding-right: 35px; box-sizing: border-box; text-align: center;">
                     <span onclick="document.getElementById('preIndentSearch').value=''; renderPreIndentSummaryTable();" style="position: absolute; right: 10px; top: 10px; cursor: pointer; color: #e74c3c; font-weight: bold; font-size: 16px;" title="Clear Search">✖</span>
                 </div>
@@ -2500,13 +2591,16 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     </div>
 
     
-    <div id="a4NoSelectionWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(41, 128, 185, 0.97); z-index:10070; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(6px);">
-        <i class="fa-solid fa-circle-info" style="font-size: 90px; margin-bottom: 20px; color: #f1c40f;"></i>
-        <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 18px 0; text-transform: uppercase;">മരുന്നുകൾ സെലക്റ്റ് ചെയ്തിട്ടില്ല!</h1>
-        <p style="font-size: 19px; font-weight: bold; max-width: 850px; line-height: 1.7; margin: 0 30px 35px 30px; background: rgba(0,0,0,0.3); padding: 22px; border-radius: 10px; border: 2px dashed #f1c40f;">
+    
+    <div id="a4NoSelectionWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(41, 128, 185, 0.97); z-index:10070; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(6px); overflow-y:auto; padding: 20px; box-sizing: border-box;">
+      <div style="max-height: 95vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
+        <i class="fa-solid fa-circle-info" style="font-size: 90px; margin-bottom: 20px; color: #f1c40f; flex-shrink: 0;"></i>
+        <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 18px 0; text-transform: uppercase; flex-shrink: 0;">മരുന്നുകൾ സെലക്റ്റ് ചെയ്തിട്ടില്ല!</h1>
+        <p style="font-size: 19px; font-weight: bold; max-width: 850px; line-height: 1.7; margin: 0 30px 35px 30px; background: rgba(0,0,0,0.3); padding: 22px; border-radius: 10px; border: 2px dashed #f1c40f; flex-shrink: 0;">
             മുഴുവൻ ഔഷധങ്ങളുടെ ലിസ്റ്റ് വേണ്ടവർ SI No എന്ന ടേബിൽ ഹെഡിങ്ങിന് മുൻപിലുള്ള ടിക്ക് ബോക്സ് സെലക്റ്റ് ചെയ്ത ശേഷം ശ്രമിക്കുക. Medical Camp പോലുള്ളവക്ക് വേണ്ടിയുള്ള ലിസ്റ്റ് വേണ്ടവർ ആവശ്യമായ മരുന്നുകൾ മാത്രം സെലക്റ്റ് ചെയ്ത ശേഷം ശ്രമിക്കുക. ഔഷധങ്ങളുടെ എണ്ണക്കൂടുതൽ കാരണം ഒന്നിൽ കൂടുതൽ പേജുകളിലേക്ക് ലിസ്റ്റ് വന്നാൽ, SI No എന്ന ടേബിൽ ഹെഡിങ്ങിന് മുൻപിലുള്ള ടിക്ക് ബോക്സ് സെലക്റ്റ് ചെയ്ത ശേഷം, ലിസ്റ്റ് കൊടുക്കാതെ തന്നെ മെഡിക്കൽ ഓഫീസർക്ക് അറിയാവുന്ന ഔഷധങ്ങളുടെ മുൻപിലുള്ള ടിക്ക് മാർക്ക് ഒഴിവാക്കിയ ശേഷം ശ്രമിക്കുക (സ്ഥിരമായി ഉപയോഗിക്കുന്നവ മെഡിക്കൽ ഓഫീസർക്ക് അറിവുള്ളതിനാൽ; ഒരു പേജിൽ വരുന്നതാണ് തിരക്കുള്ള സ്ഥാപനങ്ങൾക്ക് ഉത്തമം). ഒന്നിലധികം പേജുകൾ വന്നാൽ പ്രശ്നം ഇല്ലാത്തവർ അങ്ങനെ ശ്രമിക്കുക.
         </p>
-        <button onclick="document.getElementById('a4NoSelectionWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 14px 55px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer;">OK</button>
+        <button onclick="document.getElementById('a4NoSelectionWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 14px 55px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; flex-shrink: 0;">OK</button>
+      </div>
     </div>
 
     
@@ -2756,13 +2850,16 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     </div>
 
     
-    <div id="ipA4NoSelectionWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(41, 128, 185, 0.97); z-index:10070; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(6px);">
-        <i class="fa-solid fa-circle-info" style="font-size: 90px; margin-bottom: 20px; color: #f1c40f;"></i>
-        <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 18px 0; text-transform: uppercase;">മരുന്നുകൾ സെലക്റ്റ് ചെയ്തിട്ടില്ല!</h1>
-        <p style="font-size: 19px; font-weight: bold; max-width: 850px; line-height: 1.7; margin: 0 30px 35px 30px; background: rgba(0,0,0,0.3); padding: 22px; border-radius: 10px; border: 2px dashed #f1c40f;">
+    
+    <div id="ipA4NoSelectionWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(41, 128, 185, 0.97); z-index:10070; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(6px); overflow-y:auto; padding: 20px; box-sizing: border-box;">
+      <div style="max-height: 95vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
+        <i class="fa-solid fa-circle-info" style="font-size: 90px; margin-bottom: 20px; color: #f1c40f; flex-shrink: 0;"></i>
+        <h1 style="font-size: 34px; font-weight: 900; margin: 0 0 18px 0; text-transform: uppercase; flex-shrink: 0;">മരുന്നുകൾ സെലക്റ്റ് ചെയ്തിട്ടില്ല!</h1>
+        <p style="font-size: 19px; font-weight: bold; max-width: 850px; line-height: 1.7; margin: 0 30px 35px 30px; background: rgba(0,0,0,0.3); padding: 22px; border-radius: 10px; border: 2px dashed #f1c40f; flex-shrink: 0;">
             മുഴുവൻ ഔഷധങ്ങളുടെ ലിസ്റ്റ് വേണ്ടവർ SI No എന്ന ടേബിൽ ഹെഡിങ്ങിന് മുൻപിലുള്ള ടിക്ക് ബോക്സ് സെലക്റ്റ് ചെയ്ത ശേഷം ശ്രമിക്കുക. Medical Camp പോലുള്ളവക്ക് വേണ്ടിയുള്ള ലിസ്റ്റ് വേണ്ടവർ ആവശ്യമായ മരുന്നുകൾ മാത്രം സെലക്റ്റ് ചെയ്ത ശേഷം ശ്രമിക്കുക. ഔഷധങ്ങളുടെ എണ്ണക്കൂടുതൽ കാരണം ഒന്നിൽ കൂടുതൽ പേജുകളിലേക്ക് ലിസ്റ്റ് വന്നാൽ, SI No എന്ന ടേബിൽ ഹെഡിങ്ങിന് മുൻപിലുള്ള ടിക്ക് ബോക്സ് സെലക്റ്റ് ചെയ്ത ശേഷം, ലിസ്റ്റ് കൊടുക്കാതെ തന്നെ മെഡിക്കൽ ഓഫീസർക്ക് അറിയാവുന്ന ഔഷധങ്ങളുടെ മുൻപിലുള്ള ടിക്ക് മാർക്ക് ഒഴിവാക്കിയ ശേഷം ശ്രമിക്കുക (സ്ഥിരമായി ഉപയോഗിക്കുന്നവ മെഡിക്കൽ ഓഫീസർക്ക് അറിവുള്ളതിനാൽ; ഒരു പേജിൽ വരുന്നതാണ് തിരക്കുള്ള സ്ഥാപനങ്ങൾക്ക് ഉത്തമം). ഒന്നിലധികം പേജുകൾ വന്നാൽ പ്രശ്നം ഇല്ലാത്തവർ അങ്ങനെ ശ്രമിക്കുക.
         </p>
-        <button onclick="document.getElementById('ipA4NoSelectionWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 14px 55px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer;">OK</button>
+        <button onclick="document.getElementById('ipA4NoSelectionWarningModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 14px 55px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; flex-shrink: 0;">OK</button>
+      </div>
     </div>
 
     
@@ -2818,8 +2915,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
     </div>
     
-    <div style="display: flex; gap: 20px; align-items: stretch;">
-        <div class="input-wrapper" style="flex: 1; justify-content: flex-end;">
+    <div id="opSearchRow" style="display: flex; gap: 20px; align-items: stretch;">
+        <div id="opSearchWrapper" class="input-wrapper" style="flex: 1; justify-content: flex-end;">
             <label>Search Medicine</label>
             <div style="position: relative; width: 100%;">
                 <input type="text" id="opSearchInput" oninput="renderOpeningStockTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px;">
@@ -3208,7 +3305,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         
         <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 20px; font-size: 35px; text-transform: uppercase;">INVOICE DATA EXTRACTION</h1>
         
-        <div class="no-print" style="display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 15px; margin-bottom: 20px; width: 100%; align-items: stretch;">
+        <div id="excelImportTopGrid" class="no-print" style="display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 15px; margin-bottom: 20px; width: 100%; align-items: stretch;">
 
             <div style="grid-column: 1; grid-row: 1; border: 2px dashed #e74c3c; background: #fdf2e9; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; align-items: stretch; box-sizing: border-box;">
                 <div style="font-size: 13px; font-weight: 900; color: #c0392b; margin-bottom: 6px; text-transform: uppercase; text-align: center;">Column-wise Delete Panel</div>
@@ -3526,16 +3623,16 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
         
 <div id="addMedicinePanel" class="master-container">
-<div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; width: 100%;">
+<div id="stockCustomFundOuterRow" style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; width: 100%;">
                 
                 <div class="custom-data-box" style="flex: 1; margin-bottom: 0; padding: 10px 15px;">
-                    <div style="display:flex; gap:10px; width:100%; align-items: flex-end;">
+                    <div id="stockCustomFundInnerRow" style="display:flex; gap:10px; width:100%; align-items: flex-end;">
                         <div class="input-group" style="width: 15ch; flex-shrink: 0;">
                             <label style="color:#3498db;">CUSTOM FUND CODE</label>
                             <input type="text" id="customFundCode" maxlength="20" oninput="validateCode(this); enforceCustomFundCodeLimit(this); updateFundDesc();" onblur="saveCustomFund()" placeholder="Code" style="width:100%;">
                         </div>
                         
-                        <div class="input-group" style="flex:1;">
+                        <div id="stockProjectNameGroup" class="input-group" style="flex:1;">
                             <label style="color:#3498db;">FULL NAME OF PROJECT</label>
                             <input type="text" id="projectName" style="width:100%;" oninput="updateFundDesc();" onblur="saveCustomFund()" placeholder="Enter project name...">
                         </div>
@@ -3556,7 +3653,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
     </div>
 
-                <div style="border: 2px dashed #e74c3c; background: #fdf2e9; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
+                <div id="stockColumnDeletePanel" style="border: 2px dashed #e74c3c; background: #fdf2e9; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
                     <div style="font-size: 13px; font-weight: 900; color: #c0392b; margin-bottom: 6px; text-transform: uppercase; text-align: center;">Column-wise Delete Panel</div>
                     
                     <div style="display: flex; gap: 2mm; justify-content: center;">
@@ -3580,7 +3677,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                   <label>SELECT FUND TYPE</label>
                   <input list="fund-list" id="fundInput" oninput="updateFundDesc(); if(typeof medistockUpdateStockPageButtonGating==='function'){medistockUpdateStockPageButtonGating();}" placeholder="..." style="width:12ch;" onclick="this.value=''; if(typeof medistockUpdateStockPageButtonGating==='function'){medistockUpdateStockPageButtonGating();}" onfocus="this.value=''; if(typeof medistockUpdateStockPageButtonGating==='function'){medistockUpdateStockPageButtonGating();}">
                </div>
-               <div class="input-group" style="flex: 1;">
+               <div id="stockFundDescGroup" class="input-group" style="flex: 1;">
                   <label>FUND DESCRIPTION</label>
                    <input type="text" id="fundDescDisplay" readonly style="width:100%; background:#e2e8f0;">
                </div>
@@ -5062,7 +5159,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <div>LAST ADDED TIME: <span id="lastAddTime" style="color: blue;"></span></div>
                 </div>
             </div> <h2 style="text-align: center; margin: 10px 0 20px 0; font-size: 22px; font-weight: 900;">DETAILS OF MEDICINES LAST ADDED TO MAIN STOCK</h2>
-            <div class="table-responsive" style="max-height: none; overflow: visible;">
+            <div class="table-responsive" style="margin-top: 0;">
                 <table style="width: 100%; border-collapse: collapse; text-align: center; border: 2px solid #000;">
                     <thead>
                         <tr>
@@ -5114,7 +5211,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <div>LAST ADDED TIME: <span id="lastAddOPTime" style="color: blue;"></span></div>
                 </div>
             </div> <h2 style="text-align: center; margin: 10px 0 20px 0; font-size: 22px; font-weight: 900;">DETAILS OF MEDICINES LAST ADDED TO OP SUB STOCK</h2>
-            <div class="table-responsive" style="max-height: none; overflow: visible;">
+            <div class="table-responsive" style="margin-top: 0;">
                 <table style="width: 100%; border-collapse: collapse; text-align: center; border: 2px solid #000;">
                     <thead>
                         <tr>
@@ -5167,7 +5264,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             </div> 
             
             <h2 style="text-align: center; margin: 10px 0 20px 0; font-size: 22px; font-weight: 900;">DETAILS OF MEDICINES LAST ADDED TO IP SUB STOCK</h2>
-            <div class="table-responsive" style="max-height: none; overflow: visible;">
+            <div class="table-responsive" style="margin-top: 0;">
                 <table style="width: 100%; border-collapse: collapse; text-align: center; border: 2px solid #000;">
                     <thead>
                         <tr>
