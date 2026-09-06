@@ -1810,9 +1810,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <i class="fa-solid fa-headset"></i><b>HELP DESK</b>
     </button>
     
-    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { confirmResetAllData(); }">
-        <i class="fa-solid fa-trash-can" style="font-size: 22px; margin-bottom: -5px;"></i>
-        <b>RESET ALL<br>CURRENT DATA</b>
+    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { showServiceHelpFilesPage(); }">
+        <i class="fa-solid fa-book-medical" style="font-size: 22px; margin-bottom: -5px;"></i>
+        <b>SERVICE HELP FILES<br>DR MANESH KUMAR E</b>
     </button>
     
     <button class="btn-large bg-dark" onclick="if(checkMandatoryHomeInputs()) { showIndentGenPage(); }">
@@ -4319,6 +4319,13 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
     
     
+    <div class="no-print" style="display: flex; justify-content: center; margin-bottom: 10px;">
+        <button class="nav-btn" style="margin-bottom: 0; background: #c0392b; padding: 8px 24px; font-size: 14px;" onclick="confirmResetAllData()">
+            <i class="fa-solid fa-trash-can" style="font-size: 16px; margin-right: 6px;"></i>RESET ALL CURRENT DATA
+        </button>
+    </div>
+
+    
     
     <div class="no-print" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
       <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
@@ -4765,6 +4772,49 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <div id="bookLabelTableBody" style="display: block; width: 100%;"></div>
     </div>
 </div>
+
+
+
+
+
+<div id="serviceHelpFilesPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
+
+    <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">SERVICE HELP FILES</h1>
+    <div style="text-align: center; color: #7f8c8d; font-weight: bold; font-size: 15px; margin-bottom: 16px; font-style: italic;">Prepared by Dr. Manesh Kumar E</div>
+
+    <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 18px; width: 100%;">
+        <button class="index-btn bg-dark" onclick="goBackFromServiceHelpFiles()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+        <button class="index-btn bg-orange" onclick="showHomePage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+        <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-headset"></i> <b>HELPDESK</b></button>
+    </div>
+
+    <div class="soothing-box box-blue no-print" style="padding: 12px 15px; margin-bottom: 18px;">
+        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+            <div style="position: relative; flex: 1; min-width: 220px;">
+                <input type="text" id="shfSearchInput" class="index-input" placeholder="🔍 Search Help Files..." style="padding-right: 34px;" oninput="filterServiceHelpFiles()">
+                <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('shfSearchInput').value=''; filterServiceHelpFiles();" title="Clear Search"></i>
+            </div>
+            <button class="index-btn" style="background:#e67e22; color:white; padding: 6px 20px; font-size: 13px; min-height: auto; height: 40px; flex-shrink: 0;" onclick="resetServiceHelpFiles()"><i class="fa-solid fa-arrows-rotate"></i> <b>REFRESH</b></button>
+        </div>
+        <div id="shfResultCount" style="text-align: center; font-weight: bold; font-size: 13px; color: #2c3e50; margin-top: 10px;">Showing 165 of 165 Help Files</div>
+    </div>
+
+    <div class="table-responsive" style="margin-top: 0; max-height: 65vh;">
+        <table style="width: 100%; border-collapse: collapse; border: 2px solid #000;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; background: #005088; color: white; font-weight: bold; padding: 10px; width: 6ch; text-align: center; position: sticky; top: 0; z-index: 2;">Sl No</th>
+                    <th style="border: 1px solid #000; background: #005088; color: white; font-weight: bold; padding: 10px; width: auto; text-align: left; position: sticky; top: 0; z-index: 2;">Help File Name</th>
+                    <th style="border: 1px solid #000; background: #005088; color: white; font-weight: bold; padding: 10px; width: 24ch; text-align: center; position: sticky; top: 0; z-index: 2;">Category</th>
+                    <th style="border: 1px solid #000; background: #005088; color: white; font-weight: bold; padding: 10px; width: 13ch; text-align: center; position: sticky; top: 0; z-index: 2;">Download</th>
+                </tr>
+            </thead>
+            <tbody id="shfTableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
 
 
 
