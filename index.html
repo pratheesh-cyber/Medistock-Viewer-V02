@@ -46,7 +46,8 @@
     display: flex; align-items: center; justify-content: center;
 }
 .btn-3d:active { box-shadow: 0 2px #2a65a3; transform: translateY(4px); }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #e2e8f0; margin: 0; padding: 0; color: #333; }
+        
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #e2e8f0; margin: 0; padding: 0; color: #333; overscroll-behavior-y: none; }
         #homePage { display: block; width: 95%; max-width: 1350px; min-height: 900px; background-color: #f3f0df; margin: 20px auto; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); padding: 40px; position: relative; }
         .home-header { text-align: center; border-bottom: 4px solid #005088; padding-bottom: 5px; margin-bottom: 10px; }
         .home-header h1 { 
@@ -1323,6 +1324,94 @@
                 padding: 6px 8px !important;
                 margin: 0 !important;
             }
+
+            
+            #mainIndentPanelOuterRow {
+                flex-direction: column !important;
+            }
+            #mainIndentPanelOuterRow > button {
+                width: 100% !important;
+                box-sizing: border-box !important;
+                flex-shrink: 0 !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 8px !important;
+                height: auto !important;
+                min-height: 34px !important;
+                padding: 8px 10px !important;
+                margin: 6px 0 !important;
+            }
+            #mainIndentPanelOuterRow > button span {
+                font-size: 13px !important;
+                line-height: 1.2 !important;
+                white-space: nowrap !important;
+            }
+            #mainIndentPanelColumn {
+                width: 100% !important;
+                flex: none !important;
+            }
+            #mainIndentPanelInnerRow {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            #mainIndentPanelInnerRow > .input-wrapper {
+                width: 100% !important;
+                flex: none !important;
+            }
+            #mainIndentPanelInnerRow > button.btn-confirm {
+                width: 100% !important;
+                margin-top: 6px !important;
+            }
+
+            
+            #indentPrepMainRow {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            #indentPrepMainRow > div {
+                flex-shrink: 0 !important;
+                min-width: 480px !important;
+            }
+
+            
+            #indentAtItemPage .table-responsive,
+            #indentAtPagePage .table-responsive,
+            #indentHistoryPage .table-responsive {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            #indentItemTable, #pageNoTable, .hist-dynamic-table {
+                width: max-content !important;
+                min-width: 100% !important;
+            }
+
+            
+            #mainRackDetailsPrintArea, #mainRackDetailsTableBody {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            .rack-inner-content {
+                margin: 0 !important;
+            }
+
+            
+            #preIndentFilterRow {
+                flex-direction: column !important;
+            }
+            #preIndentFilterRow > .input-wrapper {
+                width: 100% !important;
+                flex: none !important;
+            }
+            #preIndentSearchRow {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            #preIndentSearchRow > .input-wrapper {
+                width: 100% !important;
+                flex: none !important;
+                min-width: 0 !important;
+            }
         }
 
         
@@ -1384,7 +1473,7 @@
             <img src="logo.jpg" alt="Medistock Logo" class="login-logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer:
 Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
             
@@ -1810,9 +1899,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <i class="fa-solid fa-headset"></i><b>HELP DESK</b>
     </button>
     
-    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { showServiceHelpFilesPage(); }">
+    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { alert('ഈ വിൻഡോ കൂടുതൽ മെച്ചപ്പെടുത്തുന്ന പ്രവർത്തനം നടന്നുകൊണ്ടിരിക്കുന്നതിനാൽ തല്‍ക്കാലം ലഭിക്കുന്നതല്ല.'); }">
         <i class="fa-solid fa-book-medical" style="font-size: 22px; margin-bottom: -5px;"></i>
-        <b>SERVICE HELP FILES<br>DR MANESH KUMAR E</b>
+        <b>SERVICE HELP FILES<br>YYYYY</b>
     </button>
     
     <button class="btn-large bg-dark" onclick="if(checkMandatoryHomeInputs()) { showIndentGenPage(); }">
@@ -2034,7 +2123,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <div class="no-print" style="display: flex; gap: 15px; width: 100%; margin-bottom: 20px; align-items: stretch;">
 
         <div class="soothing-box" style="flex: 1; width: calc(50% - 7.5px); background-color: #f4f6f7; border: 2px solid #bdc3c7; border-radius: 8px; padding: 20px 15px; margin: 0; display: flex; flex-direction: column; gap: 20px; justify-content: center; box-sizing: border-box;">
-            <div style="display: flex; gap: 10px; width: 100%;">
+            <div id="preIndentFilterRow" style="display: flex; gap: 10px; width: 100%;">
                 <div class="input-wrapper" style="flex: 1;">
                     <label style="font-weight: bold; color: #2c3e50; font-size: 12px; margin-bottom: 3px; display: block;">Select Fund Type</label>
                     <input list="fund-list-filter" id="preIndentFundSelect" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL PROJECT MEDICINES'; renderPreIndentSummaryTable(); }" onchange="renderPreIndentSummaryTable()" oninput="renderPreIndentSummaryTable()" style="height: 38px; border: 2px solid #34495e; width: 100%; box-sizing: border-box;">
@@ -3778,7 +3867,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
 </div>
 
-        <div style="display: flex; gap: 20px; align-items: stretch;">
+        <div id="indentPrepMainRow" style="display: flex; gap: 20px; align-items: stretch;">
             
 <div style="flex: 7; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px;">
                <div class="soothing-box box-orange-light" style="display: flex; flex-direction: column; justify-content: space-between; height: 230px;"> 
@@ -4336,8 +4425,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <button class="nav-btn" style="margin-bottom: 0; background: #1e8449; padding: 6px 12px; font-size: 13px;" onclick="confirmDownloadSampleExcel()" title="Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നതിനുള്ള EXCEL സാമ്പിൾ ഡാറ്റ Download ചെയ്യാൻ"><i class="fa-solid fa-file-excel"></i> DOWNLOAD  SAMPLE EXCEL FILE</button>
         
         
-        <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
         
+        <button class="nav-btn" style="margin-bottom: 0; background: #d35400; padding: 6px 12px; font-size: 13px;" onclick="alert('ഈ വിൻഡോ കൂടുതൽ മെച്ചപ്പെടുത്തുന്ന പ്രവർത്തനം നടന്നുകൊണ്ടിരിക്കുന്നതിനാൽ തല്‍ക്കാലം ലഭിക്കുന്നതല്ല.')"><i class="fa-solid fa-file-invoice-dollar"></i> CHARGE LIST GENERATOR</button>
+
         <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> REGISTER LABEL GENERATOR</button>
         
         <button class="nav-btn" style="margin-bottom: 0; background: #27ae60; padding: 6px 12px; font-size: 13px;" onclick="exportDataToJSON()"><i class="fa-solid fa-file-export"></i> EXPORT - DATA</button>
@@ -4345,6 +4435,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <button class="nav-btn" style="margin-bottom: 0; background: #e74c3c; padding: 6px 12px; font-size: 13px;" onclick="confirmImportData()"><i class="fa-solid fa-file-import"></i> IMPORT - DATA</button>
       </div>
       <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px;" onclick="showHelpDeskPage()"><i class="fa-solid fa-headset"></i> HELP DESK</button>
+
         
         <button id="medistockLocalBackupBtn" class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="medistockEnableLocalAutoBackup()" title="ഓപ്പൺ ആയിരിക്കുന്ന സിസ്റ്റത്തിലെ Downloads ഫോൾഡറിൽ &quot;Medistock back-up.json&quot; എന്ന പേരിൽ, ഓരോ 5 മിനിറ്റിലും, തനിയെ ബാക്കപ്പ് എടുക്കാൻ">📁 Local Auto-Backup സജീവമാക്കുക</button>
         
@@ -4880,7 +4973,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <h1 style="font-size: 28px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">DOWNLOAD SAMPLE DATA</h1>
         <p style="font-size: 17px; font-weight: bold; max-width: 850px; line-height: 1.7; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #2980b9; text-align: left;">
             ഇത് Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള സാമ്പിൾ ഡാറ്റ Download ചെയ്യുന്നതിനുള്ള ബട്ടൺ ആണ്. ഇത് ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നതിന് മാത്രം ഉപയോഗിക്കുക. ഈ ബട്ടൺ ഉപയോഗിച്ചാൽ SAMPLE DATA DOWNLOAD ആകും. ഈ പേജിലെ IMPORT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഈ SAMPLE DATA Software ൽ ചേർക്കാൻ സാധിക്കും.<br><br>
-            പഠിച്ച് കഴിഞ്ഞിട്ട് HOME പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
+            പഠിച്ച് കഴിഞ്ഞിട്ട് MORE DETAILS പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
             <span style="color: #f1c40f; display: block; text-align: center; font-size: 19px;">ഇതുമായി മുന്നോട്ട് പോകാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?</span>
         </p>
         <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
@@ -4899,7 +4992,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <h1 style="font-size: 28px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">DOWNLOAD SAMPLE EXCEL FILE</h1>
         <p style="font-size: 17px; font-weight: bold; max-width: 850px; line-height: 1.7; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #1e8449; text-align: left;">
             ഇത് Software ആദ്യമായി പ്രവർത്തിച്ച് പഠിക്കുന്നവർക്ക് പരീക്ഷണം നടത്തുന്നതിനുള്ള EXCEL സാമ്പിൾ ഡാറ്റ Download ചെയ്യുന്നതിനുള്ള ബട്ടൺ ആണ്. ഇത് ആദ്യമായി Software പ്രവർത്തിച്ച് പഠിക്കുന്നതിന് മാത്രം ഉപയോഗിക്കുക. ഈ ബട്ടൺ ഉപയോഗിച്ചാൽ EXCEL SAMPLE DATA DOWNLOAD ആകും.പിന്നീട് "INVOICE DATA EXTRACTION" പേജിലെ Import From Excel എന്ന ബോക്സിൽ Choose Excel Sheet എന്ന ബട്ടൺ ഉപയോഗിച്ച് ഈ SAMPLE DATA Software ൽ ലോഡ് ചെയ്യാൻ സാധിക്കും ശേഷം ഇതേ ബോക്സിലെ SCAN EXCEL SHEET ഉപയോഗിച്ചാൽ Software ൽ ചേർക്കാൻ സാധിക്കും.<br><br>
-            പഠിച്ച് കഴിഞ്ഞിട്ട് HOME പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
+            പഠിച്ച് കഴിഞ്ഞിട്ട് MORE DETAILS പേജിലെ RESET ALL CURRENT DATA എന്ന ബട്ടൺ ഉപയോഗിച്ചാൽ നിങ്ങൾക്ക് സ്വന്തം ഡാറ്റ ചേർക്കാൻ സാധിക്കും വിധം Software ലെ പഴയ ഡാറ്റകൾ മുഴുവൻ delete ആകും.<br><br>
             കൂടുതൽ അറിയാൻ HAND BOOK 23-29 പേജുകൾ വായിക്കുക എന്നിട്ടും സംശയം വന്നാൽ HELP DESK<br><br>
             <span style="color: #f1c40f; display: block; text-align: center; font-size: 19px;">ഇതുമായി മുന്നോട്ട് പോകാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?</span>
         </p>
