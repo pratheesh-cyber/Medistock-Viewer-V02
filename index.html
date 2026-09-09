@@ -1206,6 +1206,10 @@
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
             }
+            
+            .entry-scroll {
+                overflow-x: hidden !important;
+            }
 
             
             #stockCustomFundOuterRow,
@@ -1251,7 +1255,8 @@
         @media (max-width: 768px) {
             
             html, body {
-                overflow-x: hidden;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
                 max-width: 100%;
             }
 
@@ -1412,6 +1417,29 @@
                 flex: none !important;
                 min-width: 0 !important;
             }
+
+            
+            #excelColumnDeletePanel {
+                padding: 8px 6px !important;
+            }
+            #excelColumnDeletePanel .details-btn {
+                flex: 0 1 47% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                height: auto !important;
+                min-height: 46px !important;
+                padding: 6px 4px !important;
+                font-size: 11px !important;
+                line-height: 1.25 !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+                overflow: visible !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+            }
         }
 
         
@@ -1473,7 +1501,7 @@
             <img src="logo.jpg" alt="Medistock Logo" class="login-logo" style="max-width: 120px; height: auto; margin-bottom: 20px; border-radius: 8px;">
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer:
+            <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
 Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
             
@@ -1755,6 +1783,21 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             <button id="subStockNoBtn" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">NO, CHANGE</button>
         </div>
     </div>
+    
+    <div id="indentArrangePageNoWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(44, 62, 80, 0.96); z-index:10080; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); overflow-y:auto; padding: 20px; box-sizing: border-box;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 80px; margin-bottom: 15px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+        <h1 style="font-size: 32px; font-weight: 900; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">ശ്രദ്ധിക്കുക !</h1>
+        <div style="font-size: 17px; font-weight: bold; max-width: 900px; line-height: 1.7; margin-bottom: 30px; background: rgba(0,0,0,0.3); padding: 20px 25px; border-radius: 10px; border: 2px dashed #f1c40f; text-align: left;">
+            <p style="margin-top:0;">നിങ്ങൾ INDENT ചെയ്യുന്നതിന് ഉള്ള മരുന്നുകളുടെ പേരുകൾ PAGE No ക്രമത്തിൽ അറേൻജ് ചെയ്യാൻ പോവുകയാണ്. നമ്മുടെ മരുന്നുകൾ നമുക്ക് പെട്ടെന്ന് INDENT ചെയ്യുന്നതിന് തിരഞ്ഞെടുക്കാൻ സാധിക്കുന്നത്, ഒരേ വിഭാഗത്തിലുള്ള മരുന്നുകൾ ഒന്നിച്ച് വരുമ്പോൾ ആണ്. അതുകൊണ്ട് Medistock Viewer Recommend ചെയ്യുന്നത്: ഈ ഭാഗത്ത് "Medicine Item" ക്രമത്തിൽ കണ്ടുകൊണ്ട് INDENT ചെയ്യുന്നതിന് ഉള്ള മരുന്നുകൾ സെലക്റ്റ് ചെയ്ത് INDENT GENERATE ചെയ്യുകയും, ശേഷം 2 തരത്തിൽ ലഭിക്കുന്ന INDENT ഷീറ്റുകളിൽ, "Medicine Item" ക്രമത്തിൽ ലഭിക്കുന്നത് PRINT എടുത്ത് MAIN STORE ൽ നിന്നും മരുന്നെടുക്കുന്നതിനും SUB STOCK ൽ ചേർക്കുന്നതിനും ഈ ഷീറ്റ് ഉപയോഗിക്കുക. "Main Stock Page No" ക്രമത്തിൽ ലഭിക്കുന്നത് സ്ക്രീനിൽ കണ്ട് കൊണ്ടോ PRINT എടുത്തോ MAIN STOCK രജിസ്റ്ററിൽ രേഖപ്പെടുത്തലുകൾ നടത്തുകയും ചെയ്യുന്നതിനാണ്. ഇതാണ് INDENT ചെയ്യുന്നതിന് സമയം ലാഭിക്കുന്നതിനുള്ള ഏറ്റവും മികച്ച മാർഗ്ഗം.</p>
+            <p>SUB STOCK ൽ പുതിയതായി ചേർക്കപ്പെട്ട മരുന്നുകളുടെ മാത്രം RACK DETAILS ലഭിക്കുന്നതിന് SUB STOCK INDEX ൽ നിന്നും "DETAILS OF MEDICINES LAST ADDED TO OP SUB STOCK" എന്ന ബട്ടൺ ഉപയോഗിക്കുക.</p>
+            <p style="margin-bottom:0;">"MEDICINE ARRANGE @" എന്ന ബോക്സിൽ "Main Stock Page No" എന്നത് സെലക്റ്റ് ചെയ്യാൻ ഉദ്ദേശിക്കുന്നുണ്ടോ?</p>
+        </div>
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+            <button id="indentArrangePageNoYesBtn" onclick="confirmIndentArrangePageNo()" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">YES, CONTINUE</button>
+            <button id="indentArrangePageNoNoBtn" onclick="cancelIndentArrangePageNo()" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.2s;">NO, CANCEL</button>
+        </div>
+    </div>
+
     <div id="editAlertModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#e67e22; color:white; padding:30px; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.4); z-index:10005; text-align:center; font-weight:bold; font-size:18px;">
         <h3 style="margin-top:0; color:#fff;">Editing Mode Active</h3>
         Row is ready to edit!<br>You can select items from the Dropdown list.<br><br>Please use the <span style="background:#27ae60; padding:4px 8px; border-radius:4px;">Update</span> button to save and exit editing.
@@ -1908,7 +1951,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <i class="fa-solid fa-boxes-stacked"></i>
         <div style="text-align: center; width: 100%;">
             <b style="font-size: 15px;">INDENT MAKERS</b><br>
-            <span style="font-size: 14px; font-weight: bold;">(Developed by Ramakrishnan K)</span>
+            <span style="font-size: 14px; font-weight: bold;">(By Ramakrishnan K & Sumesh T K)</span>
         </div>
     </button>
 </div>
@@ -3396,7 +3439,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         
         <div id="excelImportTopGrid" class="no-print" style="display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 15px; margin-bottom: 20px; width: 100%; align-items: stretch;">
 
-            <div style="grid-column: 1; grid-row: 1; border: 2px dashed #e74c3c; background: #fdf2e9; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; align-items: stretch; box-sizing: border-box;">
+            <div id="excelColumnDeletePanel" style="grid-column: 1; grid-row: 1; border: 2px dashed #e74c3c; background: #fdf2e9; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; align-items: stretch; box-sizing: border-box;">
                 <div style="font-size: 13px; font-weight: 900; color: #c0392b; margin-bottom: 6px; text-transform: uppercase; text-align: center;">Column-wise Delete Panel</div>
                 <div style="display: flex; gap: 2mm; justify-content: center; flex-wrap: wrap;">
                     <button class="details-btn" style="border-color: #e74c3c; color: #c0392b; font-weight: bold; flex: 1; min-width: 90px;" onclick="confirmClearExcelColumn('med', 'Name of Medicine')">Name of Medicine</button>
@@ -3871,7 +3914,24 @@ Medistock Viewer is an independently developed Medicine Management Software and 
             
 <div style="flex: 7; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px;">
                <div class="soothing-box box-orange-light" style="display: flex; flex-direction: column; justify-content: space-between; height: 230px;"> 
-    <h3 class="box-title" style="margin-bottom: 5px;">INDENT PANEL</h3>
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px;">
+        <div class="input-wrapper" style="width: 170px; gap: 2px; flex-shrink: 0;">
+            <label style="font-size: 11px;">MEDICINE ARRANGE @</label>
+            <select id="indPrepArrangeBy" class="index-input" style="padding: 0 5px;" onchange="handleIndPrepArrangeChange(this);">
+                <option value="Medicine Item" selected>Medicine Item</option>
+                <option value="Main Stock Page No">Main Stock Page No</option>
+            </select>
+        </div>
+        <h3 class="box-title" style="margin: 0; flex: 1; text-align: center;">INDENT PANEL</h3>
+        <div class="input-wrapper" style="width: 170px; gap: 2px; flex-shrink: 0;">
+            <label style="font-size: 11px;">LANGUAGE DISPLAY</label>
+            <select id="indPrepLanguageDisplay" class="index-input" style="padding: 0 5px;" onchange="if(typeof window.renderIndentLeftTable === 'function') window.renderIndentLeftTable();">
+                <option value="English" selected>English</option>
+                <option value="Malayalam">Malayalam</option>
+            </select>
+        </div>
+    </div>
     
     <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 5px;">
         <div class="input-wrapper" style="width: 130px; gap: 2px;">
