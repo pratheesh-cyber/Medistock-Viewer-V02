@@ -733,8 +733,6 @@
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             -webkit-column-break-inside: avoid !important;
-            display: block !important;
-            width: 100% !important;
             margin: 0 !important; 
             border: none !important;
         }
@@ -770,6 +768,9 @@
 @media print {
     .rack-pdf-item {
         border: none !important;
+        
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 }
 
@@ -841,6 +842,42 @@
 }
 .hide-rack-item {
     border: none !important;
+}
+
+#mainRackDetailsTableBody.rack-layout-single {
+    display: block;
+    width: 100%;
+}
+#mainRackDetailsTableBody.rack-layout-single > .rack-pdf-item {
+    display: block;
+    width: 100%;
+    clear: both;
+}
+
+#mainRackDetailsTableBody.rack-layout-compact {
+    display: block;
+    margin: 0;
+}
+
+#mainRackDetailsTableBody.rack-layout-compact::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+#mainRackDetailsTableBody.rack-layout-compact > .rack-pdf-item {
+    display: block;
+    float: left;
+    width: auto;
+    max-width: 100%;
+    clear: none;
+    margin: 0 0.2cm 0 0;
+}
+
+#mainRackDetailsTableBody.rack-layout-compact.rack-page-width-portrait {
+    width: 19cm;
+}
+#mainRackDetailsTableBody.rack-layout-compact.rack-page-width-landscape {
+    width: 27.7cm;
 }
 
 @media print {
@@ -1201,10 +1238,12 @@
                 box-sizing: border-box !important;
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
+                touch-action: pan-x pan-y;
             }
             .entry-container {
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
+                touch-action: pan-x pan-y;
             }
             
             .entry-scroll {
@@ -1240,6 +1279,22 @@
             }
 
             
+            #stockPage .entry-scroll,
+            #excelImportPage .entry-scroll,
+            #stockPage .stock-body-row-wrapper,
+            #excelImportPage .xl-body-row-wrapper {
+                width: max-content !important;
+                min-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            #stockPage .entry-grid-layout {
+                grid-template-columns: 50px 160px 200px 120px 80px 70px 70px 80px 120px !important;
+            }
+            #excelImportPage .entry-grid-layout {
+                grid-template-columns: 50px 160px 200px 120px 80px 70px 70px 80px !important;
+            }
+
+            
             #excelImportTopGrid .input-group,
             #excelImportTopGrid button {
                 flex-shrink: 1 !important;
@@ -1258,6 +1313,14 @@
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 max-width: 100%;
+            }
+
+            
+            html, body,
+            .master-container,
+            .entry-container,
+            .index-page-wrapper {
+                touch-action: pan-x pan-y;
             }
 
             
@@ -1909,8 +1972,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
           </tr>
           <tfoot>
               <tr>
-                  <td colspan="3" style="background-color: #8a2be2; color: hsl(62, 95%, 49%); text-align: center; font-weight: bold; font-size: 12px; padding: 0px 0; letter-spacing: 0px; border: none !important;">
-                      Designed  &  Developed  by  Pratheesh M P
+                  <td colspan="3" style="background-color: #8a2be2; color: hsl(62, 95%, 49%); text-align: center; font-weight: bold; font-size: 14px; padding: 0px 0; letter-spacing: 0px; border: none !important;">
+                      Designed <img src="data:image/png;base64,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" alt="&amp;" title="&amp;" style="height: 2.3em; width: auto; vertical-align: middle; margin: 0 4px; display: inline-block;"> Developed  by  Pratheesh M P
                   </td>
               </tr>
           </tfoot>
@@ -5824,18 +5887,21 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 <div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
                     <label style="font-size: 11px; font-weight: bold; color: #2c3e50;">Font Size</label>
                     <select id="rackFontSize" class="index-input" style="height: 35px; width: 65px; cursor: pointer; padding: 0 5px; text-align: center; font-weight: bold; font-size: 13px;" onchange="renderMainRackDetailsTable();">
-                        <option value="10">10</option><option value="12">12</option><option value="14">14</option>
-                        <option value="16">16</option><option value="18">18</option><option value="20">20</option>
-                        <option value="22">22</option><option value="24">24</option><option value="26">26</option>
-                        <option value="28">28</option>
                         
-                        <option value="30">30</option><option value="31">31</option><option value="32">32</option>
-                        <option value="33">33</option><option value="34">34</option><option value="35">35</option>
-                        <option value="36">36</option><option value="37">37</option><option value="38" selected>38</option>
-                        <option value="39">39</option><option value="40">40</option><option value="41">41</option>
-                        <option value="42">42</option><option value="43">43</option><option value="44">44</option>
-                        <option value="45">45</option><option value="46">46</option><option value="47">47</option>
-                        <option value="48">48</option><option value="49">49</option><option value="50">50</option>
+                        <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                        <option value="16" selected>16</option><option value="17">17</option><option value="18">18</option>
+                        <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+                        <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                        <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+                        <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                        <option value="31">31</option><option value="32">32</option><option value="33">33</option>
+                        <option value="34">34</option><option value="35">35</option><option value="36">36</option>
+                        <option value="37">37</option><option value="38">38</option><option value="39">39</option>
+                        <option value="40">40</option><option value="41">41</option><option value="42">42</option>
+                        <option value="43">43</option><option value="44">44</option><option value="45">45</option>
+                        <option value="46">46</option><option value="47">47</option><option value="48">48</option>
+                        <option value="49">49</option><option value="50">50</option>
                         
                         <option value="52">52</option><option value="54">54</option><option value="56">56</option>
                         <option value="58">58</option><option value="60">60</option><option value="62">62</option>
@@ -5864,13 +5930,21 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     </select>
                 </div>
 
-                <div class="input-wrapper" style="flex: 1; min-width: 150px; gap: 2px;">
-                    <label style="font-size: 11px;">Filter Applied</label>
-                    <div class="dynamic-green-yellow-box" style="height: 35px !important; min-height: 35px; max-height: 35px; padding: 0; box-sizing: border-box; border: 1px solid #a5d6a7; flex-direction: row; margin: 0; justify-content: center; align-items: center; border-radius: 8px; width: 100%;">
-                        <span id="mainRackProjectLabel" style="font-family: inherit; font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 5px; line-height: 1;">ALL PROJECT MEDICINES</span>
-                    </div>
-                </div>
                 
+                <div class="input-wrapper" style="flex: 1; min-width: 150px; gap: 2px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #2c3e50;">MEDICINE BOX LAYOUT</label>
+                    <select id="mainRackBoxLayoutSelect" class="index-input" style="height: 35px; width: 100%; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="renderMainRackDetailsTable();">
+                        <option value="single">Single Box per Row</option>
+                        <option value="compact" selected>Compact Auto-Fit</option>
+                    </select>
+                </div>
+
+                
+                <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
+                    <button type="button" id="rackBoldToggleBtn" data-active="false" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #7f8c8d; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #616a6b; transition: all 0.15s;" onclick="window.toggleRackBoldItalic('bold')"><i class="fa-solid fa-bold"></i> Bold OFF</button>
+                    <button type="button" id="rackItalicToggleBtn" data-active="false" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #7f8c8d; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #616a6b; transition: all 0.15s;" onclick="window.toggleRackBoldItalic('italic')"><i class="fa-solid fa-italic"></i> Italic OFF</button>
+                </div>
+
             </div>
             
             <div style="display: flex; gap: 8px; align-items: stretch; justify-content: space-between; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px dashed #3498db; flex-wrap: wrap;">
@@ -5883,11 +5957,12 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 <div style="border: 1px solid #8e44ad; border-radius: 6px; padding: 5px 10px; display: flex; flex-direction: column; align-items: center; background: #fdf4ff;">
                     <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-bottom: 4px; text-transform: uppercase; text-align: center;">DISPLAY COLUMNS</span>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; font-size: 13px; font-weight: bold; color: black;">
+                        
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackExp" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Exp.Dt</label>
                         <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackBat" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Batch</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackFund" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Fund</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackRac" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Rack</label>
-                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackQty" checked style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Qty</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackFund" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Fund</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackRac" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Rack</label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;"><input type="checkbox" id="chkRackQty" style="margin:0; width:15px; height:15px; cursor: pointer;" onchange="window.renderMainRackDetailsTable()"> Qty</label>
                     </div>
                 </div>
 
@@ -5935,9 +6010,10 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
                 <div style="flex: 0 1 100px; min-width: 90px; border: 1px solid #6c3483; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f4ecf7;">
                     <span style="font-size: 11px; font-weight: bold; color: #6c3483; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Page Layout</span>
-                    <select id="rackPageOrientationSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;">
-                        <option value="landscape">Landscape</option>
-                        <option value="portrait" selected>Portrait</option>
+                    <select id="rackPageOrientationSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="renderMainRackDetailsTable();">
+                        
+                        <option value="landscape" selected>Landscape</option>
+                        <option value="portrait">Portrait</option>
                     </select>
                 </div>
 
@@ -5949,7 +6025,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
 
         <div id="mainRackDetailsPrintArea" style="background: white; padding: 10px; color: black;">
-            <div id="mainRackDetailsTableBody" style="display: block; width: 100%;"></div>
+            
+            <div id="mainRackDetailsTableBody" class="rack-layout-compact rack-page-width-portrait"></div>
         </div>
     </div>
 
