@@ -1248,18 +1248,19 @@
     <style>
         
         @media (max-width: 1024px) {
+            
             .master-container {
                 min-width: unset !important;
                 width: 100% !important;
                 box-sizing: border-box !important;
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
-                touch-action: pan-x pan-y;
+                touch-action: auto;
             }
             .entry-container {
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch;
-                touch-action: pan-x pan-y;
+                touch-action: auto;
             }
             
             .entry-scroll {
@@ -6082,7 +6083,8 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
 
                 <div style="flex: 0 1 150px; min-width: 110px; border: 1px solid #2c3e50; border-radius: 6px; padding: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f1f2f6;">
-                    <span style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Border Style</span>
+                    
+                    <span style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; text-align: center;">Standard Border Style</span>
                     <select id="rackBorderStyleSelect" class="index-input" style="height: 25px; width: 100%; cursor: pointer; font-size: 13px; font-weight: bold; padding: 0 5px;" onchange="window.renderMainRackDetailsTable()">
                         <option value="style1">Style 1: Simple Solid</option>
                         <option value="style2">Style 2: Double Line</option>
