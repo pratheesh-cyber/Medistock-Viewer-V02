@@ -1160,6 +1160,18 @@
         }
 
         
+        #importExtractedCprLoader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 10000000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
         #smartScannerPage #loadingOverlay {
             display: none;
             position: fixed;
@@ -1188,6 +1200,10 @@
         .cpr-image-wrap { position: relative; width: 92%; max-width: 900px; margin: 0 auto 20px auto; }
         .cpr-progress-overlay { position: absolute; top: 81%; left: 50%; transform: translateX(-50%); width: 52%; height: 5%; min-height: 18px; background: #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
         .cpr-progress-fill { width: 0%; height: 100%; background: #27ae60; text-align: center; color: white; font-weight: bold; line-height: 1.6; font-size: 0.85em; transition: width 0.4s; white-space: nowrap; }
+        
+        .cpr-text-cover { position: absolute; top: calc(73% - 0.5cm); left: 0; width: 100%; height: calc(7% + 0.5cm); min-height: 20px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .cpr-wait-text { font-weight: bold; color: #2c3e50; text-align: center; white-space: nowrap; font-size: 0.85em; }
+        .cpr-wait-dots { display: inline-block; min-width: 3.2em; text-align: left; }
         #smartScannerPage .progress-container { width: 40%; background-color: #ecf0f1; border-radius: 10px; margin-top: 25px; overflow: hidden; border: 2px solid #bdc3c7; }
         #smartScannerPage .progress-bar { height: 25px; width: 0%; background-color: #27ae60; text-align: center; line-height: 25px; color: white; font-weight: bold; transition: width 0.4s ease; }
 
@@ -2007,9 +2023,9 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <i class="fa-solid fa-headset"></i><b>HELP DESK</b>
     </button>
     
-    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { alert('ഈ വിൻഡോ കൂടുതൽ മെച്ചപ്പെടുത്തുന്ന പ്രവർത്തനം നടന്നുകൊണ്ടിരിക്കുന്നതിനാൽ തല്‍ക്കാലം ലഭിക്കുന്നതല്ല.'); }">
+    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { window.open('https://ism.kerala.gov.in/eng/index.php#', '_blank'); }">
         <i class="fa-solid fa-book-medical" style="font-size: 22px; margin-bottom: -5px;"></i>
-        <b>SERVICE HELP FILES<br>YYYYY</b>
+        <b>go to<br>ISM WEBSITE</b>
     </button>
     
     <button class="btn-large bg-dark" onclick="if(checkMandatoryHomeInputs()) { showIndentGenPage(); }">
@@ -2466,7 +2482,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
             <div class="soothing-box box-blue no-print" style="display: flex; gap: 8px; align-items: flex-end; padding: 10px 15px; margin-bottom: 0; flex-wrap: wrap; border-radius: 8px;">
                 
-                <div class="input-wrapper" style="flex: 1; min-width: 120px;">
+                <div class="input-wrapper" style="flex: 1; min-width: 100px;">
                     <label>Search Medicine</label>
                     <div style="position: relative; width: 100%;">
                         <input type="text" id="detailsSearch" oninput="renderDetailsTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
@@ -2484,9 +2500,14 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <input list="fund-list-filter" id="detailsFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES';" onchange="renderDetailsTable()" oninput="renderDetailsTable()">
                 </div>
 
+                <div class="input-wrapper" style="width: 16ch;">
+                    <label>Medicine Type</label>
+                    <input list="medicine-type-list" id="detailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderDetailsTable()" oninput="renderDetailsTable()">
+                </div>
+
                 <div class="input-wrapper" style="gap: 2px;">
                     <label>&nbsp;</label>
-                    <button onclick="resetMainStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                    <button onclick="resetMainStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
@@ -2593,7 +2614,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <div id="opPdfContentArea">
             <div class="soothing-box box-purple no-print" style="display: flex; gap: 8px; align-items: flex-end; padding: 10px 15px; margin-bottom: 0; flex-wrap: wrap; border-radius: 8px;">
                 
-                <div class="input-wrapper" style="flex: 1; min-width: 120px;">
+                <div class="input-wrapper" style="flex: 1; min-width: 100px;">
                     <label>Search Medicine</label>
                     <div style="position: relative; width: 100%;">
                         <input type="text" id="opDetailsSearch" oninput="renderOpDetailsTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
@@ -2611,9 +2632,14 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <input list="fund-list-filter" id="opDetailsFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES';" onchange="renderOpDetailsTable()" oninput="renderOpDetailsTable()">
                 </div>
 
+                <div class="input-wrapper" style="width: 16ch;">
+                    <label>Medicine Type</label>
+                    <input list="medicine-type-list" id="opDetailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderOpDetailsTable()" oninput="renderOpDetailsTable()">
+                </div>
+
                 <div class="input-wrapper" style="gap: 2px;">
                     <label>&nbsp;</label>
-                    <button onclick="resetOpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                    <button onclick="resetOpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
@@ -2852,7 +2878,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <div id="ipPdfContentArea">
             <div class="soothing-box box-red no-print" style="display: flex; gap: 8px; align-items: flex-end; padding: 10px 15px; margin-bottom: 0; flex-wrap: wrap; border-radius: 8px;">
                 
-                <div class="input-wrapper" style="flex: 1; min-width: 120px;">
+                <div class="input-wrapper" style="flex: 1; min-width: 100px;">
                     <label>Search Medicine</label>
                     <div style="position: relative; width: 100%;">
                         <input type="text" id="ipDetailsSearch" oninput="renderIpDetailsTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
@@ -2870,9 +2896,14 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <input list="fund-list-filter" id="ipDetailsFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES';" onchange="renderIpDetailsTable()" oninput="renderIpDetailsTable()">
                 </div>
 
+                <div class="input-wrapper" style="width: 16ch;">
+                    <label>Medicine Type</label>
+                    <input list="medicine-type-list" id="ipDetailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderIpDetailsTable()" oninput="renderIpDetailsTable()">
+                </div>
+
                 <div class="input-wrapper" style="gap: 2px;">
                     <label>&nbsp;</label>
-                    <button onclick="resetIpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                    <button onclick="resetIpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
@@ -3626,6 +3657,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 <div id="xlPdfCprLoader">
     <div class="cpr-image-wrap">
         <img id="xlPdfCprImage" class="cpr-infographic-img" alt="CPR Steps">
+        <div class="cpr-text-cover"><span class="cpr-wait-text">ദയവായി കാത്തിരിക്കുക<span class="cpr-wait-dots"></span>&nbsp;&nbsp;&nbsp;വിവരങ്ങൾ ശേഖരിക്കുന്നു<span class="cpr-wait-dots"></span></span></div>
         <div class="cpr-progress-overlay">
             <div id="xlPdfCprProgress" class="cpr-progress-fill">0%</div>
         </div>
@@ -3633,6 +3665,18 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <div id="xlPdfCprRetryStatus" style="position:absolute; left:0; right:0; bottom:6%; text-align:center; font-size:0.8em; font-weight:700; color:#b7472a; text-shadow:0 1px 2px rgba(255,255,255,0.8);"></div>
     </div>
 </div>
+
+<div id="importExtractedCprLoader">
+    <div class="cpr-image-wrap">
+        <img id="importExtractedCprImage" class="cpr-infographic-img" alt="CPR Steps">
+        <div class="cpr-text-cover"><span class="cpr-wait-text">ദയവായി കാത്തിരിക്കുക<span class="cpr-wait-dots"></span>&nbsp;&nbsp;&nbsp;വിവരങ്ങൾ ശേഖരിക്കുന്നു<span class="cpr-wait-dots"></span></span></div>
+        <div class="cpr-progress-overlay">
+            <div id="importExtractedCprProgress" class="cpr-progress-fill">0%</div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -3648,6 +3692,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 <div id="cprLoader">
     <div class="cpr-image-wrap">
         <img id="cprImage" class="cpr-infographic-img" alt="CPR Steps">
+        <div class="cpr-text-cover"><span class="cpr-wait-text">ദയവായി കാത്തിരിക്കുക<span class="cpr-wait-dots"></span>&nbsp;&nbsp;&nbsp;വിവരങ്ങൾ ശേഖരിക്കുന്നു<span class="cpr-wait-dots"></span></span></div>
         <div class="cpr-progress-overlay">
             <div id="cprProgress" class="cpr-progress-fill">0%</div>
         </div>
@@ -3787,7 +3832,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1px; margin-bottom: 1px; width: 100%;">
     <button class="index-btn bg-dark" onclick="showHomePage()" style="padding: 5px 7px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
     <button class="index-btn" data-medistock-gate="always" onclick="openMainStockDetails()" style="padding: 5px 7px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #f39c12; color: white; cursor: pointer;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
-    <button class="index-btn" data-medistock-gate="always" onclick="openLastAddedMedicines()" style="padding: 5px 7px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #7f8c8d; color: white; cursor: pointer;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Last Added Medicines</b></button>
+    <button class="index-btn" data-medistock-gate="always" onclick="openLastAddedMedicines()" style="padding: 5px 7px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #f1c40f; color: #000; cursor: pointer;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Last Added Medicines</b></button>
     <button class="index-btn" onclick="showExcelImportPage()" style="padding: 5px 7px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #218c74; color: white; cursor: pointer;"><i class="fa-solid fa-file-excel"></i> <b>INVOICE DATA EXTRACTION</b></button>
     
     
@@ -4533,10 +4578,30 @@ Medistock Viewer is an independently developed Medicine Management Software and 
     <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 2px; font-size: 35px; text-transform: uppercase;">MORE DETAILS</h1>
     
     
-    <div class="no-print" style="display: flex; justify-content: center; margin-bottom: 10px;">
+    <div class="no-print" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px;">
         <button class="nav-btn" style="margin-bottom: 0; background: #c0392b; padding: 8px 24px; font-size: 14px;" onclick="confirmResetAllData()">
             <i class="fa-solid fa-trash-can" style="font-size: 16px; margin-right: 6px;"></i>RESET ALL CURRENT DATA
         </button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #2c3e50; padding: 8px 24px; font-size: 14px;" onclick="medistockShowDeveloperModeModal()">
+            <i class="fa-solid fa-code" style="font-size: 16px; margin-right: 6px;"></i>Developer Mode
+        </button>
+    </div>
+
+    
+    <div id="medistockDeveloperModeOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:99999999; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;">
+        <div style="background:#ffffff; border-radius:10px; padding:26px 28px; max-width:92%; width:440px; box-shadow:0 10px 35px rgba(0,0,0,0.35); text-align:center;">
+            <h2 style="margin:0 0 14px 0; color:#c0392b; font-size:19px; font-weight:900;">Developer Access Only</h2>
+            <p style="margin:0 0 18px 0; font-size:14px; line-height:1.55; color:#333;">This section is intended for authorized software development and maintenance purposes.<br>Please enter the developer password to continue.</p>
+            <div style="text-align:left; margin-bottom:18px;">
+                <label for="medistockDeveloperModePasswordInput" style="display:block; font-size:13px; font-weight:700; color:#222; margin-bottom:6px;">Developer Password</label>
+                <input type="password" id="medistockDeveloperModePasswordInput" placeholder="Enter Password" autocomplete="off" style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:14px; border:1px solid #bbb; border-radius:6px;" onkeydown="if(event.key==='Enter'){ event.preventDefault(); medistockContinueDeveloperMode(); }">
+                <div id="medistockDeveloperModeErrorMsg" style="display:none; color:#c0392b; font-size:13px; font-weight:700; margin-top:8px;">❌ Incorrect password. Please try again.</div>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button class="nav-btn" style="margin-bottom:0; background:#7f8c8d; padding:8px 26px; font-size:14px;" onclick="medistockCancelDeveloperMode()">Cancel</button>
+                <button class="nav-btn" style="margin-bottom:0; background:#27ae60; padding:8px 26px; font-size:14px;" onclick="medistockContinueDeveloperMode()">Continue</button>
+            </div>
+        </div>
     </div>
 
     
@@ -5562,6 +5627,11 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <option value="ALL MEDICINE"><option value="EXPIRED"><option value="BELOW 2 MONTH"><option value="BELOW 3 MONTH"><option value="BELOW 6 MONTH">
     </datalist>
 
+    
+    <datalist id="medicine-type-list">
+        <option value="All Type"><option value="Schedule-E"><option value="Narcotic"><option value="Narcotic+Schedule-E">
+    </datalist>
+
     <datalist id="arrange-list">
         <option value="MEDICINE ARRANGE @ EXP. DATE"><option value="MEDICINE ARRANGE @ MEDICINE ITEM"><option value="MEDICINE ARRANGE @ PROJECT"><option value="MEDICINE ARRANGE @ PAGE No">
     </datalist>
@@ -5852,7 +5922,12 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </div>
 
         <div class="soothing-box box-blue no-print" style="margin-bottom: 20px; padding: 15px;">
-            <h3 class="box-title" style="text-transform: uppercase; margin-bottom: 12px;">RACK DETAILS CONFIGURATION</h3>
+            
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                <button type="button" id="rackBoldToggleBtn" data-active="true" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #1e8449; transition: all 0.15s; flex-shrink: 0;" onclick="window.toggleRackBoldItalic('bold')"><i class="fa-solid fa-bold"></i> Bold ON</button>
+                <h3 class="box-title" style="text-transform: uppercase; margin: 0; text-align: center; flex: 1;">RACK DETAILS CONFIGURATION</h3>
+                <button type="button" id="rackItalicToggleBtn" data-active="false" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #7f8c8d; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #616a6b; transition: all 0.15s; flex-shrink: 0;" onclick="window.toggleRackBoldItalic('italic')"><i class="fa-solid fa-italic"></i> Italic OFF</button>
+            </div>
             
             <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 15px; flex-wrap: wrap; width: 100%;">
                 
@@ -5942,9 +6017,25 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
 
                 
-                <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-                    <button type="button" id="rackBoldToggleBtn" data-active="true" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #1e8449; transition: all 0.15s;" onclick="window.toggleRackBoldItalic('bold')"><i class="fa-solid fa-bold"></i> Bold ON</button>
-                    <button type="button" id="rackItalicToggleBtn" data-active="false" style="padding: 0 10px; height: 35px; font-size: 12px; min-height: auto; background: #7f8c8d; color: white; border: none; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px #616a6b; transition: all 0.15s;" onclick="window.toggleRackBoldItalic('italic')"><i class="fa-solid fa-italic"></i> Italic OFF</button>
+                <div class="input-wrapper" style="flex: 1; min-width: 170px; gap: 2px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #2c3e50;">SCHEDULE MEDICINE BORDER</label>
+                    <select id="rackScheduleMedBorderSelect" class="index-input" style="height: 35px; width: 100%; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="renderMainRackDetailsTable();">
+                        <option value="common">Common Style</option>
+                        <option value="style1">Style 1: Simple Solid</option>
+                        <option value="style2">Style 2: Double Line</option>
+                        <option value="style3">Style 3: Dashed</option>
+                        <option value="style4">Style 4: Dotted</option>
+                        <option value="style5">Style 5: Rounded</option>
+                        <option value="style6" selected>Style 6: Thick Left</option>
+                        <option value="style7">Style 7: Shadow Box</option>
+                        <option value="style8">Style 8: Inset</option>
+                        <option value="style9">Style 9: Outset</option>
+                        <option value="style10">Style 10: Two-Tone</option>
+                        <option value="style11">Style 11: 3 Line</option>
+                        <option value="style12">Style 12: Thin 3 Line</option>
+                        <option value="borderless">Borderless (No Lines)</option>
+                        <option value="noOuterBorder">No Outer Border (Thin Inner Lines)</option>
+                    </select>
                 </div>
 
             </div>
