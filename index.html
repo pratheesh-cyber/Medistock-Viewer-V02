@@ -47,6 +47,10 @@
 }
 .btn-3d:active { box-shadow: 0 2px #2a65a3; transform: translateY(4px); }
         
+        html {
+            
+            overscroll-behavior-y: none;
+        }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #e2e8f0; margin: 0; padding: 0; color: #333; overscroll-behavior-y: none; }
         #homePage { display: block; width: 95%; max-width: 1350px; min-height: 900px; background-color: #f3f0df; margin: 20px auto; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); padding: 40px; position: relative; }
         .home-header { text-align: center; border-bottom: 4px solid #005088; padding-bottom: 5px; margin-bottom: 10px; }
@@ -1584,7 +1588,7 @@
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
             <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
-Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
+ :Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
             
             <div style="margin-top: 4px; margin-bottom: 4px; display: flex; flex-direction: column; align-items: center;">
@@ -2216,6 +2220,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <button class="index-btn" onclick="printPerfectPDF_PreIndent()" style="background: #27ae60; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-print"></i> PRINT / PERFECT PDF</button>
         <button class="index-btn" onclick="generateQuickPDF_PreIndent()" style="background: #c0392b; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-file-pdf"></i> GENERATE QUICK PDF</button>
         <button class="index-btn" onclick="openMainStockDetails()" style="background: #2980b9; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-boxes-stacked"></i> GO TO MAIN STOCK</button>
+        <button class="index-btn" onclick="openOpSubStockDetails()" style="background: #16a085; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;" title="OP SUB STOCK WINDOW-ലേക്ക് പോകാൻ"><i class="fa-solid fa-hospital"></i> GO TO OP SUB STOCK</button>
     </div>
 
     <div style="background-color: black; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
@@ -2226,20 +2231,58 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Weekly Kashayam<br>Requirement (in ml)</label>
-                <input type="number" id="weeklyKashayamReq" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none;">
+                <input type="number" id="weeklyKashayamReq" oninput="calculateKashayamDays(); handleKashayamReqInput(); if(typeof syncOpSubWeeklyReqMirror === 'function') syncOpSubWeeklyReqMirror();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Total M.S Balance<br>KC (in gm)</label>
-                <input type="text" id="totalMsKc" readonly style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none;">
+                <input type="text" id="totalMsKc" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none; box-sizing: border-box;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Total M.S Balance<br>KSC (in gm)</label>
-                <input type="text" id="totalMsKsc" readonly style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none;">
+                <input type="text" id="totalMsKsc" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none; box-sizing: border-box;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Depatrment Main Stock Kashaya Choornam<br>Stock Coverage Days</label>
-                <div id="kashayamResultContainer" style="background: yellow; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: black;">
+                <div id="kashayamResultContainer" style="background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: black; box-sizing: border-box;">
                     Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">" "</span> &nbsp; Days
+                </div>
+            </div>
+        </div>
+
+        
+        <div style="margin-top: 18px; padding-top: 15px; border-top: 2px dashed #7f8c8d;">
+            
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto auto auto auto; gap: 12px; align-items: end; min-width: 0; overflow-x: auto;">
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Name of KC /KSC<br>@ OP SUB STOCK</label>
+                    <input list="opSubKcKscList" id="opSubKcKscSelect" size="1" value="ALL OP SUB STOCK KC/KSC" oninput="handleOpSubKcKscSelect()" onchange="handleOpSubKcKscSelect()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL OP SUB STOCK KC/KSC'; handleOpSubKcKscSelect(); }" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                    <datalist id="opSubKcKscList"></datalist>
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">QTY<br>in s.s</label>
+                    <input type="text" id="opSubQtySS" size="1" readonly value="NA" onblur="handleOpSubQtyEdit(this)" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: calc(4ch + 10px); max-width: 100%; margin: 0 auto; display: block; padding: 8px 5px; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
+                    <input type="text" id="opSubWeeklyReqMirror" size="1" readonly style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KC (in gm)</label>
+                    <input type="text" id="totalSsKc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KSC (in gm)</label>
+                    <input type="text" id="totalSsKsc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Dept.Sub Stock Kashaya Choornam<br>Stock Coverage Days</label>
+                    <div id="opSubKashayamResultContainer" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; color: black; box-sizing: border-box;">
+                        Available for : &nbsp; <span style="font-size: 17px; font-weight: 900;">" "</span> &nbsp; Days
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">DATS TO EXPIRY</label>
+                    <div id="opSubDaysToExpiry" class="status-cell" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; font-size: 15px; color: black; box-sizing: border-box;">NA</div>
                 </div>
             </div>
         </div>
@@ -2502,7 +2545,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
 
                 <div class="input-wrapper" style="width: 16ch;">
-                    <label>Medicine Type</label>
+                    <label>Special Type</label>
                     <input list="medicine-type-list" id="detailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderDetailsTable()" oninput="renderDetailsTable()">
                 </div>
 
@@ -2520,7 +2563,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
                 <div class="input-wrapper" style="width: 33ch;">
                     <label>MEDICINE ARRANGE @</label>
-                    <input list="arrange-list" id="detailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyDetailsSort()" oninput="applyDetailsSort()">
+                    <input list="arrange-list-rack" id="detailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyDetailsSort()" oninput="applyDetailsSort()">
                 </div>
 
                 <div class="input-wrapper" style="width: 23ch;">
@@ -2581,16 +2624,17 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
     
     <div style="flex-basis: 100%; width: 0; height: 0; margin: 0; padding: 0;" aria-hidden="true"></div>
-    <button class="index-btn bg-orange" onclick="openMainStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
-    <button class="index-btn bg-blue-main" onclick="openIpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-bed-pulse"></i> <b>go to IP SUB STOCK</b></button>
-    <button class="index-btn bg-orange4" onclick="openRackForLastAddedOP()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-layer-group"></i> <b>Rack Details of Last Added Medicines</b></button>
+    <button class="index-btn bg-orange" onclick="openMainStockDetails()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
+    <button class="index-btn bg-blue-main" onclick="openIpSubStockDetails()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-bed-pulse"></i> <b>go to IP SUB STOCK</b></button>
+    <button class="index-btn bg-orange4" onclick="openRackForLastAddedOP()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-layer-group"></i> <b>Rack Details of Last Added</b></button>
 
-    <button class="index-btn bg-maroon" onclick="confirmOpRemoveEmpty()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: white;"><i class="fa-solid fa-eraser"></i> <b>Remove Empty Qty Item</b></button>
-    <button class="index-btn bg-maroon" onclick="confirmOpDeleteSelected()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
-    <button class="index-btn bg-red" onclick="confirmOpDeleteExpired()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
-    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
-    <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
-    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
+    <button class="index-btn bg-maroon" onclick="confirmOpRemoveEmpty()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: white;"><i class="fa-solid fa-eraser"></i> <b>Remove Empty Qty Item</b></button>
+    <button class="index-btn bg-maroon" onclick="confirmOpDeleteSelected()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
+    <button class="index-btn bg-red" onclick="confirmOpDeleteExpired()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
+    <button class="index-btn bg-dark" onclick="showPreIndentSummaryPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="PRE-INDENT STOCK SUMMARY പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-clipboard-list"></i> <b>Pree-Indent Summary</b></button>
+    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+    <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
+    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 </div>
 
 <div class="no-print">
@@ -2634,7 +2678,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
 
                 <div class="input-wrapper" style="width: 16ch;">
-                    <label>Medicine Type</label>
+                    <label>Special Type</label>
                     <input list="medicine-type-list" id="opDetailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderOpDetailsTable()" oninput="renderOpDetailsTable()">
                 </div>
 
@@ -2652,7 +2696,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
                 <div class="input-wrapper" style="width: 33ch;">
                     <label>MEDICINE ARRANGE @</label>
-                    <input list="arrange-list" id="opDetailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyOpDetailsSort()" oninput="applyOpDetailsSort()">
+                    <input list="arrange-list-rack" id="opDetailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyOpDetailsSort()" oninput="applyOpDetailsSort()">
                 </div>
 
                 <div class="input-wrapper" style="width: 23ch;">
@@ -2898,7 +2942,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                 </div>
 
                 <div class="input-wrapper" style="width: 16ch;">
-                    <label>Medicine Type</label>
+                    <label>Special Type</label>
                     <input list="medicine-type-list" id="ipDetailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderIpDetailsTable()" oninput="renderIpDetailsTable()">
                 </div>
 
@@ -2916,7 +2960,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
                 <div class="input-wrapper" style="width: 33ch;">
                     <label>MEDICINE ARRANGE @</label>
-                    <input list="arrange-list" id="ipDetailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyIpDetailsSort()" oninput="applyIpDetailsSort()">
+                    <input list="arrange-list-rack" id="ipDetailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyIpDetailsSort()" oninput="applyIpDetailsSort()">
                 </div>
 
                 <div class="input-wrapper" style="width: 23ch;">
@@ -4704,6 +4748,16 @@ Medistock Viewer is an independently developed Medicine Management Software and 
         </button>
     </td>
 </tr>
+<tr>
+    <td>ഔഷധങ്ങളുടെ RACK NO മാതൃക</td>
+    <td></td>
+    <td style="text-align: center;">
+        <button class="dl-pdf-btn dl-orange" onclick="window.location.href='https://drive.google.com/uc?export=download&id=1FMV3FYLWB535ewl1dRO4JB1WDJmdoBJ_'">
+            <i class="fa-solid fa-download"></i> DOWNLOAD PDF
+        </button>
+    </td>
+</tr>
+                <tr>
                     <td>സബ് സ്റ്റോക്ക് രജിസ്റ്റർ (PM) മാതൃക-1</td>
                     <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/uc?export=download&id=1aaEXzV52Yuh6HFHGJJU12quuW3hRPQtf', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                     <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/uc?export=download&id=1KYz64IOB14bFz7uzR3lEclLu50UU3TB_', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
@@ -4750,7 +4804,7 @@ Medistock Viewer is an independently developed Medicine Management Software and 
                     <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/uc?export=download&id=1PaD90WPSjLVjLHbcqv0w5n7Efds2isxj', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
                 <tr>
-                    <td>ആദ്യം ഔഷധങ്ങളുടെ ഇൻവോയ്സിന്റെ പുറകുവശത്ത് എഴുതേണ്ട സർട്ടിഫിക്കറ്റ് മാതൃക</td>
+                    <td>ഔഷധങ്ങളുടെ ഇൻവോയ്സിന്റെ പുറകുവശത്ത് എഴുതേണ്ട സർട്ടിഫിക്കറ്റ് മാതൃക</td>
                     <td></td>
                     <td style="text-align: center;"><button class="dl-pdf-btn dl-blue" onclick="window.open('https://drive.google.com/uc?export=download&id=1UeUEdPt4E5PnMD-q5LYwu1S_Zrs79TV4', '_blank')"><i class="fa-solid fa-download"></i> DOWNLOAD PDF</button></td>
                 </tr>
@@ -5635,6 +5689,11 @@ Medistock Viewer is an independently developed Medicine Management Software and 
 
     <datalist id="arrange-list">
         <option value="MEDICINE ARRANGE @ EXP. DATE"><option value="MEDICINE ARRANGE @ MEDICINE ITEM"><option value="MEDICINE ARRANGE @ PROJECT"><option value="MEDICINE ARRANGE @ PAGE No">
+    </datalist>
+
+    
+    <datalist id="arrange-list-rack">
+        <option value="MEDICINE ARRANGE @ EXP. DATE"><option value="MEDICINE ARRANGE @ MEDICINE ITEM"><option value="MEDICINE ARRANGE @ PROJECT"><option value="MEDICINE ARRANGE @ PAGE No"><option value="MEDICINE ARRANGE @ Rack No">
     </datalist>
     
     <datalist id="op-arrange-list">
