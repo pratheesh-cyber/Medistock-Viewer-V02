@@ -1364,16 +1364,20 @@
             }
 
             
-            #opSubKcKscGridRow {
+            
+            #kashayamDualGridRow {
                 grid-template-columns: 1fr !important;
                 overflow-x: visible !important;
+                row-gap: 10px !important;
             }
-            #opSubKcKscGridRow label {
+            #kashayamDualGridRow label {
                 white-space: normal !important;
             }
-            #opSubKcKscGridRow input,
-            #opSubKcKscGridRow #opSubKashayamResultContainer,
-            #opSubKcKscGridRow #opSubDaysToExpiry {
+            #kashayamDualGridRow input,
+            #kashayamDualGridRow #kashayamResultContainer,
+            #kashayamDualGridRow #msDaysToExpiry,
+            #kashayamDualGridRow #opSubKashayamResultContainer,
+            #kashayamDualGridRow #opSubDaysToExpiry {
                 width: 100% !important;
                 white-space: normal !important;
             }
@@ -2244,62 +2248,89 @@
         <p style="text-align: center; font-size: 14px; font-family: 'Anek Malayalam', sans-serif; font-weight: 500; color: rgb(232, 248, 20); margin-top: 0; margin-bottom: 15px;">
             കഷായം തയ്യാറാക്കുന്നതിനായി ഡിപ്പാർട്ട്മെന്റ് കഷായചൂർണ്ണം എത്ര ദിവസത്തേക്ക് ഉള്ള സ്റ്റോക്ക് ഉണ്ടന്ന് അറിയാൻ Weekly Requirement കോളത്തിൽ ആഴ്ചയിൽ ആവശ്യമായ കഷായത്തിന്റെ അളവ് രേഖപ്പെടുത്തുക
         </p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
-            <div style="text-align: center;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Weekly Kashayam<br>Requirement (in ml)</label>
-                <input type="number" id="weeklyKashayamReq" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none;">
-            </div>
-            <div style="text-align: center;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Total M.S Balance<br>KC (in gm)</label>
-                <input type="text" id="totalMsKc" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none; box-sizing: border-box;">
-            </div>
-            <div style="text-align: center;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Total M.S Balance<br>KSC (in gm)</label>
-                <input type="text" id="totalMsKsc" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 16px; color: black; outline: none; box-sizing: border-box;">
-            </div>
-            <div style="text-align: center;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Depatrment Main Stock Kashaya Choornam<br>Stock Coverage Days</label>
-                <div id="kashayamResultContainer" style="background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: black; box-sizing: border-box;">
-                    Available for : &nbsp; <span style="font-size: 18px; font-weight: 900;">" "</span> &nbsp; Days
-                </div>
-            </div>
-        </div>
-
         
-        <div style="margin-top: 18px; padding-top: 15px; border-top: 2px dashed #7f8c8d;">
+        <p style="text-align: center; font-size: 14px; font-family: 'Anek Malayalam', sans-serif; font-weight: 500; color: rgb(232, 248, 20); margin-top: 0; margin-bottom: 15px;">
+            Yellow ബോക്സുകൾ മാത്രമേ സെലക്റ്റ് സാധ്യമാകൂ. Select Name of KC /KSC @ MAIN STOCK എന്ന ബോക്സിൽ Dept.KC Main Stock [KC-D]-ലെ ഓരോ മരുന്നുകളും Drop Down വഴി സെലക്റ്റ് ചെയ്ത് പരിശോധിക്കാം. അത് പോലെ താഴത്തെ ബോക്സിൽ Dept.KC സബ് സ്റ്റോക്കിലെ [KC-D]-ലെ ഓരോ മരുന്നുകളും Drop Down വഴി സെലക്റ്റ് ചെയ്ത് പരിശോധിക്കാം.) QTY in S.S -ബോക്സിൽ Sub Stock-ലെ ഓരോ Item Balace Qty കൊടുക്കുക
+        </p>
+        
+        <div id="kashayamDualGridRow" style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto auto auto auto; column-gap: 12px; row-gap: 0; align-items: end; min-width: 0; overflow-x: auto;">
+
             
-            <div id="opSubKcKscGridRow" style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto auto auto auto; gap: 12px; align-items: end; min-width: 0; overflow-x: auto;">
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Select Name of KC /KSC @ OP SUB STOCK<br><span style="font-weight: normal; font-size: 11px;">(Select &amp; View OP Sub Stock&ndash;KC-D Fund Medicines)</span></label>
-                    <input list="opSubKcKscList" id="opSubKcKscSelect" size="1" value="ALL OP SUB STOCK KC/KSC" oninput="handleOpSubKcKscSelect()" onchange="handleOpSubKcKscSelect()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL OP SUB STOCK KC/KSC'; handleOpSubKcKscSelect(); }" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
-                    <datalist id="opSubKcKscList"></datalist>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Select Name of KC /KSC @ MAIN STOCK<br><span style="font-weight: normal; font-size: 11px;">(Select &amp; View Main Stock&ndash;KC-D Fund Medicines)</span></label>
+                
+                <div style="position: relative; width: 100%;">
+                    <input list="msKcKscList" id="msKcKscSelect" size="1" value="ALL MAIN STOCK KC + KSC" oninput="handleMsKcKscSelect()" onchange="handleMsKcKscSelect()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL MAIN STOCK KC + KSC'; handleMsKcKscSelect(); }" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; padding: 0 18px; font-size: 14px; color: black; outline: none; box-sizing: border-box; cursor: pointer;">
+                    <span aria-hidden="true" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 10px; line-height: 1; color: #000;">&#9660;</span>
                 </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">QTY<br>in s.s</label>
-                    <input type="text" id="opSubQtySS" size="1" readonly value="NA" onblur="handleOpSubQtyEdit(this)" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: calc(4ch + 10px); max-width: 100%; margin: 0 auto; display: block; padding: 8px 5px; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                <datalist id="msKcKscList"></datalist>
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">QTY<br>in M.S</label>
+                
+                <input type="text" id="msQtyMS" size="1" readonly tabindex="-1" value="NA" style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: calc(4ch + 10px); max-width: 100%; margin: 0 auto; display: block; padding: 8px 5px; font-size: 14px; color: black; outline: none; box-sizing: border-box; cursor: default; user-select: none; -webkit-user-select: none; pointer-events: none;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
+                <input type="number" id="weeklyKashayamReq" size="1" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="&#3349;&#3373;&#3390;&#3375; &#3437;&#3379;&#3381;&#3405; ml-&#3451; &#3342;&#3444;&#3393;&#3364;&#3393;&#3349;" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total M.S Balance<br>KC (in gm)</label>
+                <input type="text" id="totalMsKc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total M.S Balance<br>KSC (in gm)</label>
+                <input type="text" id="totalMsKsc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Dept. Main Stock Kashaya Choornam<br>Stock Coverage Days</label>
+                <div id="kashayamResultContainer" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; color: black; box-sizing: border-box;">
+                    Available for : &nbsp; <span style="font-size: 17px; font-weight: 900;">" "</span> &nbsp; Days
                 </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
-                    <input type="number" id="opSubWeeklyReqMirror" size="1" oninput="calculateOpSubKashayamDays(); handleOpSubKashayamReqInput();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">DATS TO EXPIRY</label>
+                <div id="msDaysToExpiry" class="status-cell" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; font-size: 15px; color: black; box-sizing: border-box;">NA</div>
+            </div>
+
+            
+            <div style="grid-column: 1 / -1; border-top: 2px dashed #7f8c8d; margin-top: 18px; margin-bottom: 15px;"></div>
+
+            
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Select Name of KC /KSC @ OP SUB STOCK<br><span style="font-weight: normal; font-size: 11px;">(Select &amp; View OP Sub Stock&ndash;KC-D Fund Medicines)</span></label>
+                
+                <div style="position: relative; width: 100%;">
+                    <input list="opSubKcKscList" id="opSubKcKscSelect" size="1" value="ALL OP SUB STOCK KC + KSC" oninput="handleOpSubKcKscSelect()" onchange="handleOpSubKcKscSelect()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL OP SUB STOCK KC + KSC'; handleOpSubKcKscSelect(); }" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; padding: 0 18px; font-size: 14px; color: black; outline: none; box-sizing: border-box; cursor: pointer;">
+                    <span aria-hidden="true" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 10px; line-height: 1; color: #000;">&#9660;</span>
                 </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KC (in gm)</label>
-                    <input type="text" id="totalSsKc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+                <datalist id="opSubKcKscList"></datalist>
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">QTY<br>in S.S</label>
+                <input type="text" id="opSubQtySS" size="1" readonly value="NA" onblur="handleOpSubQtyEdit(this)" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: calc(4ch + 10px); max-width: 100%; margin: 0 auto; display: block; padding: 8px 5px; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
+                <input type="number" id="opSubWeeklyReqMirror" size="1" oninput="calculateOpSubKashayamDays(); handleOpSubKashayamReqInput();" placeholder="&#3349;&#3373;&#3390;&#3375; &#3437;&#3379;&#3381;&#3405; ml-&#3451; &#3342;&#3444;&#3393;&#3364;&#3393;&#3349;" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KC (in gm)</label>
+                <input type="text" id="totalSsKc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KSC (in gm)</label>
+                <input type="text" id="totalSsKsc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Dept.Sub Stock Kashaya Choornam<br>Stock Coverage Days</label>
+                <div id="opSubKashayamResultContainer" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; color: black; box-sizing: border-box;">
+                    Available for : &nbsp; <span style="font-size: 17px; font-weight: 900;">" "</span> &nbsp; Days
                 </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KSC (in gm)</label>
-                    <input type="text" id="totalSsKsc" size="1" readonly style="background: white; border: 1px solid #bdc3c7; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none; box-sizing: border-box;">
-                </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Dept.Sub Stock Kashaya Choornam<br>Stock Coverage Days</label>
-                    <div id="opSubKashayamResultContainer" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; color: black; box-sizing: border-box;">
-                        Available for : &nbsp; <span style="font-size: 17px; font-weight: 900;">" "</span> &nbsp; Days
-                    </div>
-                </div>
-                <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">DATS TO EXPIRY</label>
-                    <div id="opSubDaysToExpiry" class="status-cell" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; font-size: 15px; color: black; box-sizing: border-box;">NA</div>
-                </div>
+            </div>
+            <div style="text-align: center;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">DATS TO EXPIRY</label>
+                <div id="opSubDaysToExpiry" class="status-cell" style="white-space: nowrap; overflow: hidden; background: white; border: 1px solid #bdc3c7; height: 35px; font-size: 15px; color: black; box-sizing: border-box;">NA</div>
             </div>
         </div>
     </div>
@@ -2648,7 +2679,7 @@
     <button class="index-btn bg-maroon" onclick="confirmOpDeleteSelected()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
     <button class="index-btn bg-red" onclick="confirmOpDeleteExpired()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
     <button class="index-btn bg-dark" onclick="showPreIndentSummaryPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="PRE-INDENT STOCK SUMMARY പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-clipboard-list"></i> <b>Pree-Indent Summary</b></button>
-    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button> 
     <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
     <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
 </div>
@@ -2700,7 +2731,7 @@
 
                 <div class="input-wrapper" style="gap: 2px;">
                     <label>&nbsp;</label>
-                    <button onclick="resetOpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                    <button onclick="resetOpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';"> 
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
@@ -2964,7 +2995,7 @@
 
                 <div class="input-wrapper" style="gap: 2px;">
                     <label>&nbsp;</label>
-                    <button onclick="resetIpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                    <button onclick="resetIpStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';"> 
                         <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                 </div>
@@ -4130,12 +4161,8 @@
     
     <div style="display: flex; gap: 10px; align-items: flex-end;">
         
-        <div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
-            <label>&nbsp;</label>
-            <button onclick="resetIndentPanelFilters()" style="height: 40px; background: black; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
-                <i class="fa-solid fa-arrows-rotate"></i> Refresh
-            </button>
-        </div>
+        
+        <button id="toggleSelectedIndentBtn" class="btn-regular" style="height: 40px; background: #e67e22; white-space: nowrap; padding: 0 15px; flex-shrink: 0;" onclick="handleIndentButtonClick()">Medicines Selected for Indent</button>
 
         <div class="input-wrapper" style="flex: 1; min-width: 150px; gap: 2px;">
             <label>Search Medicine</label>
@@ -4145,14 +4172,20 @@
             </div>
         </div>
 
-        <button id="toggleSelectedIndentBtn" class="btn-regular" style="height: 40px; background: #e67e22; white-space: nowrap; padding: 0 15px; flex-shrink: 0;" onclick="handleIndentButtonClick()">Medicines Selected for Indent</button>
+        <div class="input-wrapper" style="gap: 2px; flex-shrink: 0;">
+            <label>&nbsp;</label>
+            <button onclick="resetIndentPanelFilters()" style="height: 40px; background: black; color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh
+            </button>
+        </div>
 
         <div class="input-wrapper" style="width: 160px; gap: 2px; flex-shrink: 0;">
             <label>Search by Item</label>
             <input list="details-item-list" id="indLeftItem" class="index-input" value="ALL MEDICINE" onchange="let s=document.getElementById('indLeftSearch'); s.value=''; s.dispatchEvent(new Event('input')); if(typeof checkIndentFilters === 'function') checkIndentFilters(); renderIndentLeftTable();" oninput="let s=document.getElementById('indLeftSearch'); s.value=''; s.dispatchEvent(new Event('input')); if(typeof checkIndentFilters === 'function') checkIndentFilters(); renderIndentLeftTable();" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL MEDICINE'; if(typeof checkIndentFilters === 'function') checkIndentFilters(); renderIndentLeftTable(); }">
         </div>
         
-        <button class="btn-confirm" onclick="openIndentDateModal()" style="width: auto; padding: 0 20px; height: 40px; white-space: nowrap; flex-shrink: 0;">GENERATE</button>
+        
+        <button class="btn-confirm" onclick="medistockGenerateIndentClick()" style="width: auto; padding: 0 20px; height: 40px; white-space: nowrap; flex-shrink: 0;">GENERATE</button>
     </div>
 </div>
               
