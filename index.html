@@ -246,7 +246,8 @@
             #sampleExcelWarningModal, #scannerInfoModal1, #copyPromptPasswordModal,
             #scannerInfoModal2, #scannerInfoPdfDownloadedModal, #pdfScannerInfoModal1,
             #importWarningModal, #addIndexWarningModal, #medistockFundWarningModal,
-            #dataEntryMethodsModal, #expiryWarningModal, #printOrientationConfirmModal {
+            #dataEntryMethodsModal, #expiryWarningModal, #printOrientationConfirmModal,
+            #medistockMobileScrollNoticeModal {
                 overflow-y: auto !important;
                 align-items: safe center !important;
                 padding-top: 16px !important;
@@ -1363,6 +1364,21 @@
             }
 
             
+            #opSubKcKscGridRow {
+                grid-template-columns: 1fr !important;
+                overflow-x: visible !important;
+            }
+            #opSubKcKscGridRow label {
+                white-space: normal !important;
+            }
+            #opSubKcKscGridRow input,
+            #opSubKcKscGridRow #opSubKashayamResultContainer,
+            #opSubKcKscGridRow #opSubDaysToExpiry {
+                width: 100% !important;
+                white-space: normal !important;
+            }
+
+            
             .logo-box {
                 position: static !important;
                 width: 90px !important;
@@ -2104,7 +2120,7 @@
             </div>
             <div class="input-wrapper">
                 <label>MEDICINE ARRANGE @</label>
-                <input list="arrange-list" id="mainArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateMainDynamicText()" oninput="updateMainDynamicText()">
+                <input list="arrange-list-rack" id="mainArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateMainDynamicText()" oninput="updateMainDynamicText()">
             </div>
             <div class="input-wrapper">
                 <label>MEDICINE SEARCH BY INVOICE No/ID</label>
@@ -2231,7 +2247,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Weekly Kashayam<br>Requirement (in ml)</label>
-                <input type="number" id="weeklyKashayamReq" oninput="calculateKashayamDays(); handleKashayamReqInput(); if(typeof syncOpSubWeeklyReqMirror === 'function') syncOpSubWeeklyReqMirror();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none;">
+                <input type="number" id="weeklyKashayamReq" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 15px; color: black; outline: none;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; color: white;">Total M.S Balance<br>KC (in gm)</label>
@@ -2252,9 +2268,9 @@
         
         <div style="margin-top: 18px; padding-top: 15px; border-top: 2px dashed #7f8c8d;">
             
-            <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto auto auto auto; gap: 12px; align-items: end; min-width: 0; overflow-x: auto;">
+            <div id="opSubKcKscGridRow" style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto auto auto auto; gap: 12px; align-items: end; min-width: 0; overflow-x: auto;">
                 <div style="text-align: center;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Name of KC /KSC<br>@ OP SUB STOCK</label>
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Select Name of KC /KSC @ OP SUB STOCK<br><span style="font-weight: normal; font-size: 11px;">(Select &amp; View OP Sub Stock&ndash;KC-D Fund Medicines)</span></label>
                     <input list="opSubKcKscList" id="opSubKcKscSelect" size="1" value="ALL OP SUB STOCK KC/KSC" oninput="handleOpSubKcKscSelect()" onchange="handleOpSubKcKscSelect()" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') { this.value='ALL OP SUB STOCK KC/KSC'; handleOpSubKcKscSelect(); }" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
                     <datalist id="opSubKcKscList"></datalist>
                 </div>
@@ -2264,7 +2280,7 @@
                 </div>
                 <div style="text-align: center;">
                     <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
-                    <input type="text" id="opSubWeeklyReqMirror" size="1" readonly style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                    <input type="number" id="opSubWeeklyReqMirror" size="1" oninput="calculateOpSubKashayamDays(); handleOpSubKashayamReqInput();" placeholder="കഷായ അളവ് ml-ൽ എഴുതുക" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
                 </div>
                 <div style="text-align: center;">
                     <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KC (in gm)</label>
@@ -3377,7 +3393,7 @@
                </div>
                <div class="input-wrapper">
                   <label>MEDICINE ARRANGE @</label>
-                  <input list="arrange-list" id="opArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateOpDynamicText()" oninput="updateOpDynamicText()">
+                  <input list="arrange-list-rack" id="opArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateOpDynamicText()" oninput="updateOpDynamicText()">
               </div>
                <div class="input-wrapper">
                    <label>MEDICINE SEARCH BY INVOICE No/ID</label>
@@ -3491,7 +3507,7 @@
               </div>
                <div class="input-wrapper">
                   <label>MEDICINE ARRANGE @</label>
-                  <input list="arrange-list" id="ipArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateIpDynamicText()" oninput="updateIpDynamicText()">
+                  <input list="arrange-list-rack" id="ipArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="updateIpDynamicText()" oninput="updateIpDynamicText()">
               </div>
                <div class="input-wrapper">
                   <label>MEDICINE SEARCH BY INDENT No</label>
@@ -5180,6 +5196,17 @@
 
 
 
+<div id="medistockMobileScrollNoticeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(20, 30, 48, 0.95); z-index:10058; align-items:center; justify-content:center; text-align:center; color:white; backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;">
+    <div style="max-height: 92vh; overflow-y: auto; width: 100%; max-width: 480px; margin: auto; background: rgba(255,255,255,0.06); border: 2px solid rgba(241,196,15,0.5); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); padding: 28px 24px;">
+        <i class="fa-solid fa-arrows-up-down-left-right" style="font-size: 48px; margin-bottom: 14px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
+        <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6);">ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ രണ്ടു വിരലുകൾ ഒരേ സമയം ഉപയോഗിച്ച് SCROLL ചെയ്താൽ മാത്രമേ SCROLL ഫോണിൽ പ്രവർത്തിക്കുകയുള്ളു.</p>
+        <button onclick="closeMedistockMobileScrollNoticeModal();" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 40px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
+    </div>
+</div>
+
+
+
+
 <div id="medistockFirstTimeGuideModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:linear-gradient(160deg, rgba(21,67,96,0.97), rgba(20,90,110,0.97)); z-index:10057; align-items:center; justify-content:center; text-align:center; color:white; backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;">
     
     <div style="max-height: 92vh; width: 100%; max-width: 900px; display: flex; flex-direction: column; margin: auto; background: rgba(255,255,255,0.06); border: 2px solid rgba(241,196,15,0.5); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); overflow: hidden;">
@@ -5687,8 +5714,9 @@
         <option value="All Type"><option value="Schedule-E"><option value="Narcotic"><option value="Narcotic+Schedule-E">
     </datalist>
 
+    
     <datalist id="arrange-list">
-        <option value="MEDICINE ARRANGE @ EXP. DATE"><option value="MEDICINE ARRANGE @ MEDICINE ITEM"><option value="MEDICINE ARRANGE @ PROJECT"><option value="MEDICINE ARRANGE @ PAGE No">
+        <option value="MEDICINE ARRANGE @ EXP. DATE"><option value="MEDICINE ARRANGE @ MEDICINE ITEM"><option value="MEDICINE ARRANGE @ PROJECT"><option value="MEDICINE ARRANGE @ PAGE No"><option value="MEDICINE ARRANGE @ Rack No">
     </datalist>
 
     
