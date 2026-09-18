@@ -2272,7 +2272,8 @@
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
-                <input type="number" id="weeklyKashayamReq" size="1" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="&#3349;&#3373;&#3390;&#3375; &#3437;&#3379;&#3381;&#3405; ml-&#3451; &#3342;&#3444;&#3393;&#3364;&#3393;&#3349;" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                
+                <input type="number" id="weeklyKashayamReq" size="1" oninput="calculateKashayamDays(); handleKashayamReqInput();" placeholder="Type in ml" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total M.S Balance<br>KC (in gm)</label>
@@ -2312,7 +2313,8 @@
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Weekly Kashayam<br>Requirement (in ml)</label>
-                <input type="number" id="opSubWeeklyReqMirror" size="1" oninput="calculateOpSubKashayamDays(); handleOpSubKashayamReqInput();" placeholder="&#3349;&#3373;&#3390;&#3375; &#3437;&#3379;&#3381;&#3405; ml-&#3451; &#3342;&#3444;&#3393;&#3364;&#3393;&#3349;" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
+                
+                <input type="number" id="opSubWeeklyReqMirror" size="1" oninput="calculateOpSubKashayamDays(); handleOpSubKashayamReqInput();" placeholder="Type in ml" style="background: yellow; border: none; font-weight: bold; text-align: center; height: 35px; width: 100%; font-size: 14px; color: black; outline: none; box-sizing: border-box;">
             </div>
             <div style="text-align: center;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px; color: white; white-space: nowrap;">Total S.S Balance<br>KC (in gm)</label>
@@ -4629,13 +4631,22 @@
 <div id="printOpeningStockTemplatePage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
         <div class="no-print">
             <div class="top-btn-row">
-                <button class="details-btn" onclick="showHomePage()"><i class="fa-solid fa-house"></i> Home</button>
-                <button class="details-btn" onclick="showMainStockIndex()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-                <button class="details-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> PRINT</button>
-                <button class="details-btn" onclick="alert('PDF Generate ഫീച്ചർ നിർമ്മാണത്തിലാണ്')"><i class="fa-solid fa-file-pdf"></i> GENERATE PDF</button>
-<button class="index-btn bg-orange" onclick="openOpSubStockDetails()" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; color: black;"><i class="fa-solid fa-prescription-bottle-medical"></i> <b>go to OP SUB STOCK</b></button>                <button class="details-btn" onclick="showIpSubStockIndex()">go to IP Sub Stock</button>
-                <button class="details-btn" onclick="openMainStockDetails()">go to Main Stock</button>
-                <button class="details-btn" style="background:#34495e; color:white; font-size:13px;" onclick="showMainStockIndex()">go to Main Stock Index</button>
+                
+                <button class="details-btn" onclick="showHomePage()" style="background:#e67e22; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;"><i class="fa-solid fa-house"></i> <b>Home</b></button>
+                <button class="details-btn" onclick="showMainStockIndex()" style="background:#7f8c8d; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i> <b>Back</b></button>
+                <span class="no-print" style="display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:bold; color:#2c3e50;">
+                    <i class="fa-solid fa-file-lines"></i> Page Layout:
+                    <select id="openingTemplateOrientationSelect" style="height:32px; cursor:pointer; font-size:13px; font-weight:bold; padding:0 6px; border:1px solid #bbb; border-radius:5px;" title="Print / PDF എടുക്കേണ്ട പേജിന്റെ ക്രമീകരണം">
+                        <option value="portrait" selected>Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </span>
+                <button class="details-btn" onclick="printPerfectPDF_OpeningTemplate()" style="background:#2980b9; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;" title="പെർഫക്ട് വെക്റ്റർ PDF തയ്യാറാക്കി Print ചെയ്യാൻ"><i class="fa-solid fa-print"></i> <b>PRINT / PERFECT PDF</b></button>
+                <button class="details-btn" onclick="generateQuickPDF_OpeningTemplate()" style="background:#c0392b; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;" title="PDF ഫയൽ ഉടനെ Download ചെയ്യാൻ"><i class="fa-solid fa-file-pdf"></i> <b>GENERATE QUICK PDF</b></button>
+                <button class="details-btn" onclick="openOpSubStockDetails()" style="background:#f1c40f; color:#000000; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;"><i class="fa-solid fa-prescription-bottle-medical"></i> <b>go to OP SUB STOCK</b></button>
+                <button class="details-btn" onclick="openIpSubStockDetails()" style="background:#8e44ad; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;"><i class="fa-solid fa-bed-pulse"></i> <b>go to IP Sub Stock</b></button>
+                <button class="details-btn" onclick="openMainStockDetails()" style="background:#16a085; color:#ffffff; padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.18); cursor: pointer;"><i class="fa-solid fa-pills"></i> <b>go to Main Stock</b></button>
+                
             </div>
         </div>
 
@@ -4643,7 +4654,7 @@
             <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 20px; font-size: 35px;">PRINT EMPTY FORMAT</h1>
             
             <div class="table-responsive" style="max-height: none; overflow: visible;">
-                <table style="border: 2px solid #000; width: 100%; border-collapse: collapse; text-align: center;">
+                <table id="printOpeningTemplateTable" style="border: 2px solid #000; width: 100%; border-collapse: collapse; text-align: center;">
                     <thead>
                         <tr>
                             <th style="border: 1px solid #000; background: #00b050; color: white; width: 4ch;">Sl No</th>
@@ -5232,7 +5243,7 @@
 <div id="medistockMobileScrollNoticeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(20, 30, 48, 0.95); z-index:10058; align-items:center; justify-content:center; text-align:center; color:white; backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;">
     <div style="max-height: 92vh; overflow-y: auto; width: 100%; max-width: 480px; margin: auto; background: rgba(255,255,255,0.06); border: 2px solid rgba(241,196,15,0.5); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); padding: 28px 24px;">
         <i class="fa-solid fa-arrows-up-down-left-right" style="font-size: 48px; margin-bottom: 14px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
-        <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6);">ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ രണ്ടു വിരലുകൾ ഒരേ സമയം ഉപയോഗിച്ച് SCROLL ചെയ്താൽ മാത്രമേ SCROLL ഫോണിൽ പ്രവർത്തിക്കുകയുള്ളു.</p>
+        <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6);">ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ, ഒരേ സമയം രണ്ടു വിരലുകൾ ഉപയോഗിച്ച് SCROLL ചെയ്താൽ മാത്രമേ മുകളിലോട്ടും താഴോട്ടുമുള്ള SCROLL ഫോണിൽ പ്രവർത്തിക്കുകയുള്ളു.വശങ്ങളിലേക്ക് ഒരു വിരൽ ഉപയോഗിച്ച് SCROLL സാധ്യമാണ്. </p>
         <button onclick="closeMedistockMobileScrollNoticeModal();" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 40px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
     </div>
 </div>
@@ -6435,6 +6446,12 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
 
 
 
