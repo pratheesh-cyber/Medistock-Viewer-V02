@@ -4329,7 +4329,7 @@
 </div>
           <div class="no-print" style="text-align: center; width: 100%; margin: 15px 0; box-sizing: border-box;">
     <label style="font-weight: bold; cursor: pointer; font-size: 16px; color: black; display: inline-flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px 20px; border-radius: 30px; border: 1.5px solid #bdc3c7; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        <input type="checkbox" id="chkIndentMalayalamItem" checked onchange="toggleIndentLanguage()" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;"> 
+        <input type="checkbox" id="chkIndentMalayalamItem" checked onchange="toggleIndentLanguage(this)" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;"> 
         <span>ഔഷധങ്ങളുടെ പേരുകൾ മലയാളത്തിൽ ലഭിക്കുന്നതിന് ടിക്ക് ബോക്സിൽ ടിക്ക് ചെയ്യുക. ഇംഗ്ലീഷിൽ വേണ്ടവർ ടിക്ക് ഇല്ലാതെ ഉപയോഗിക്കുക!</span>
     </label>
 </div>
@@ -4446,6 +4446,13 @@
     </div>
   
 <h1 class="no-print" style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 5px; font-size: 35px;">INDENT HISTORY</h1>        
+        
+        <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
+            <label style="font-weight: bold; cursor: pointer; font-size: 16px; color: black; display: inline-flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px 20px; border-radius: 30px; border: 1.5px solid #bdc3c7; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <input type="checkbox" id="chkIndentMalayalamHistory" checked onchange="toggleIndentLanguage(this)" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;">
+                <span>ഔഷധങ്ങളുടെ പേരുകൾ മലയാളത്തിൽ ലഭിക്കുന്നതിന് ടിക്ക് ബോക്സിൽ ടിക്ക് ചെയ്യുക. ഇംഗ്ലീഷിൽ വേണ്ടവർ ടിക്ക് ഇല്ലാതെ ഉപയോഗിക്കുക!</span>
+            </label>
+        </div>
         <style>@import url('https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@500&display=swap');</style>
         <div class="no-print" style="font-family: 'Anek Malayalam', sans-serif; font-weight: 500; font-size: 12px; color: red; text-align: center; margin-bottom: 15px; letter-spacing: 0.5px;">
             ഈ പേജിലെ മുഴുവൻ ഫങ്ഷനുകളും അറിയുന്നതിന് Hand Book വായിച്ചതിന് ശേഷം മാത്രം ഉപയോഗിക്കുക. Page No.<br> INDENT HISTORY-ൽ എത്ര Indent സൂക്ഷിക്കണമെന്ന് Show Recent Indents എന്ന ബോക്സ് വഴി നമുക്ക് തിരഞ്ഞടുക്കാം (എണ്ണം കൂടുന്നതനുസരിച്ച് Open ആകാൻ 2-6 Second താമസിക്കും) അവരവരുടെ ഉപയോഗം അനുസരിച്ച് തിരഞ്ഞടുക്കുക.
@@ -4565,10 +4572,18 @@
         <button class="rack-btn">Rack Indent</button>
         <button class="rack-btn" onclick="showMainStockIndex()">Main Stock</button>
         <button class="rack-btn">Delete</button>
-        <button class="rack-btn">Delete</button>
+    <button class="rack-btn">Delete</button>
     </div>
 </div>
         
+        </div>
+
+        
+        <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
+            <label style="font-weight: bold; cursor: pointer; font-size: 16px; color: black; display: inline-flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px 20px; border-radius: 30px; border: 1.5px solid #bdc3c7; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <input type="checkbox" id="chkIndentMalayalamPage" checked onchange="toggleIndentLanguage(this)" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;">
+                <span>ഔഷധങ്ങളുടെ പേരുകൾ മലയാളത്തിൽ ലഭിക്കുന്നതിന് ടിക്ക് ബോക്സിൽ ടിക്ക് ചെയ്യുക. ഇംഗ്ലീഷിൽ വേണ്ടവർ ടിക്ക് ഇല്ലാതെ ഉപയോഗിക്കുക!</span>
+            </label>
         </div>
 
         <div class="indent-outer-box" style="border: 2px solid #000; padding: 15px; background: #fff;">
