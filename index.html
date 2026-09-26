@@ -184,7 +184,7 @@
         .table-responsive { overflow-x: auto; overflow-y: auto; width: 100%; white-space: nowrap; margin-top: 0; max-height: 60vh; }
         table { width: 100%; border-collapse: collapse; background: white; margin-top: 0; }
         th { background: #34495e; color: white; padding: 0px !important; text-align: center; font-size: 14px !important; font-weight: bold; vertical-align: middle; border: 1px solid #2c3e50; position: sticky; top: 0; z-index: 10; height: 25px;}
-        #detailsTableBody td, #openingTableBody td, #openingNewRowsBody td, #tableBody td, #opDetailsTableBody td, #ipDetailsTableBody td, #indLeftTableBody td, #indRightTableBody td { border: 1px solid #e2e8f0; padding: 0px 0px !important; font-size: 14px !important; font-weight: bold; text-align: center; height: auto; line-height: 1 !important; box-sizing: border-box; color: #000; }
+        #detailsTableBody td, #openingTableBody td, #openingNewRowsBody td, #tableBody td, #opDetailsTableBody td, #ipDetailsTableBody td, #campDetailsTableBody td, #indLeftTableBody td, #indRightTableBody td { border: 1px solid #e2e8f0; padding: 0px 0px !important; font-size: 14px !important; font-weight: bold; text-align: center; height: auto; line-height: 1 !important; box-sizing: border-box; color: #000; }
         .table-left-bold th { text-align: left; }
         .table-left-bold td { text-align: left; font-weight: bold; }
         .action-icons { cursor: pointer; font-size: 14px; margin: 0 5px; color: #e74c3c; transition: 0.2s;}
@@ -678,6 +678,7 @@
         #lastAddedTableBody td,
         #opDetailsTableBody td, 
         #ipDetailsTableBody td, 
+        #campDetailsTableBody td,
         #opChargeListTableBody td, 
         #ipChargeListTableBody td {
             font-weight: bold !important;
@@ -1579,6 +1580,7 @@
             
             #detailsTableBody td, #openingTableBody td, #openingNewRowsBody td,
             #tableBody td, #opDetailsTableBody td, #ipDetailsTableBody td,
+            #campDetailsTableBody td,
             #indLeftTableBody td, #indRightTableBody td {
                 font-size: 15px !important;
                 padding: 4px 3px !important;
@@ -2854,12 +2856,206 @@
         </div>
     </div>
 
+
+    
+    <div id="medicalCampStockPage" class="index-page-wrapper full-width-wrapper">
+        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">MEDICAL CAMP STOCK WINDOW</h1>
+
+        <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
+    <button class="index-btn bg-dark" onclick="goBackFromMedicalCampStock()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+    <button class="index-btn bg-orange" onclick="showHomePage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+    <button class="index-btn bg-green" onclick="openRackForSelectedCamp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-check-square"></i> <b>Rack Details of Selected</b></button>
+    <button class="index-btn bg-blue-main" onclick="openCurrentViewRackCamp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-eye"></i> <b>Current View Rack Details</b></button>
+    <button class="index-btn bg-blue-light" onclick="printPerfectPDF_CampDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-print"></i> <b>PRINT / PERFECT PDF</b></button>
+    <button class="index-btn bg-red-main" onclick="generateQuickPDF_CampDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-file-pdf"></i> <b>GENERATE QUICK PDF</b></button>
+    <button id="campViewSelectedBtn" class="index-btn bg-orange3" onclick="toggleViewSelectedCamp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-filter"></i> <b>View Selected</b></button>
+    <button class="index-btn bg-blue-light2" onclick="openLastAddedCampStock()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> <b>Last Added Medicines</b></button> 
+    <button class="index-btn bg-orange" onclick="openA4MedicineListCamp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-list-ul"></i> <b>CAMP MEDICINE LIST</b></button>
+
+    <div style="flex-basis: 100%; width: 0; height: 0; margin: 0; padding: 0;" aria-hidden="true"></div>
+    <button class="index-btn bg-orange" onclick="openMainStockDetails()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: black;"><i class="fa-solid fa-box"></i> <b>go to MAIN STOCK</b></button>
+    <button class="index-btn bg-blue-light2" onclick="openOpSubStockDetails()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-hospital"></i> <b>go to OP SUB STOCK</b></button>
+    <button class="index-btn bg-blue-main" onclick="openIpSubStockDetails()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-bed-pulse"></i> <b>go to IP SUB STOCK</b></button>
+    <button class="index-btn bg-green" onclick="openRackForLastAddedCamp()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-boxes-stacked"></i> <b>Rack Details of Last Added</b></button>
+
+
+    <button class="index-btn bg-maroon" onclick="confirmCampRemoveEmpty()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color: white;"><i class="fa-solid fa-eraser"></i> <b>Remove Empty Qty Item</b></button>
+    <button class="index-btn bg-maroon" onclick="confirmCampDeleteSelected()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-trash-can"></i> <b>Delete Selected</b></button>
+    <button class="index-btn bg-red" onclick="confirmCampDeleteExpired()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-calendar-xmark"></i> <b>Delete Expired</b></button>
+    <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button> 
+    <button class="index-btn" onclick="medistockUndoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #d35400; color: white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock / Medical Camp Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
+    <button class="index-btn" onclick="medistockRedoLastAction()" style="padding: 6px 5px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background: #16a085; color: white;" title="UNDO ബട്ടൺ ഉപയോഗിച്ച് Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> <b>REDO</b></button>
+</div>
+
+<div class="no-print">
+    <div class="soothing-box box-yellow-light" style="padding: 15px; margin-bottom: 20px; border-color: #f6ad55; text-align: center;">
+        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 5px;">Column-wise Edit Panel Buttons:</span>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'cat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
+            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('camp', 'name')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
+            <button class="index-btn bg-orange3" onclick="enableColumnEdit('camp', 'bat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button> 
+            <button class="index-btn bg-green" onclick="enableColumnEdit('camp', 'exp')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
+            <button class="index-btn bg-red-main" onclick="enableColumnEdit('camp', 'qty')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
+            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('camp', 'pag')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
+            <button class="index-btn bg-orange" onclick="enableColumnEdit('camp', 'fund')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
+            <button class="index-btn bg-red-light" onclick="enableColumnEdit('camp', 'rac')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'invdate')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'inv')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
+            <button class="index-btn" style="background:#04f368; padding: 6px 30px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('camp')">Update</button>
+        </div>
+    </div>
+</div>
+
+        <div id="campPdfContentArea">
+            <div class="soothing-box box-purple no-print" style="display: flex; gap: 8px; align-items: flex-end; padding: 10px 15px; margin-bottom: 0; flex-wrap: wrap; border-radius: 8px;">
+                
+                <div class="input-wrapper" style="flex: 1; min-width: 100px;">
+                    <label>Search Medicine</label>
+                    <div style="position: relative; width: 100%;">
+                        <input type="text" id="campDetailsSearch" oninput="renderCampDetailsTable()" class="index-input" placeholder="Search anything in table..." style="padding-right: 30px; width: 100%; box-sizing: border-box;">
+                        <i class="fa-solid fa-circle-xmark" style="position: absolute; right: 10px; top: 12px; color: #e74c3c; cursor: pointer; font-size: 16px;" onclick="document.getElementById('campDetailsSearch').value=''; renderCampDetailsTable();"></i>
+                    </div>
+                </div>
+
+                <div class="input-wrapper" style="width: 19ch;">
+                    <label>Select status</label>
+                    <input list="status-list" id="campDetailsStatusInput" class="index-input" value="ALL MEDICINE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL MEDICINE';" onchange="renderCampDetailsTable()" oninput="renderCampDetailsTable()">
+                </div>
+
+                <div class="input-wrapper" style="width: 25ch;">
+                    <label>Select Fund Type</label>
+                    <input list="fund-list-filter" id="campDetailsFundInput" class="index-input" value="ALL PROJECT MEDICINES" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL PROJECT MEDICINES';" onchange="renderCampDetailsTable()" oninput="renderCampDetailsTable()">
+                </div>
+
+                <div class="input-wrapper" style="width: 16ch;">
+                    <label>Special Type</label>
+                    <input list="medicine-type-list" id="campDetailsMedTypeInput" class="index-input" value="All Type" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='All Type';" onchange="renderCampDetailsTable()" oninput="renderCampDetailsTable()">
+                </div>
+
+                <div class="input-wrapper" style="gap: 2px;">
+                    <label>&nbsp;</label>
+                    <button onclick="resetCampStockFilters()" style="height: 38px; background: black; color: white; border: none; padding: 0 8px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 3px #555; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; transition: 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='none';" onmouseup="this.style.transform='none'; this.style.boxShadow='0 3px #555';"> 
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="input-wrapper" style="width: 18ch;">
+                    <label>Search by Item</label>
+                    <input list="details-item-list" id="campDetailsItemInput" class="index-input" value="ALL MEDICINE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL MEDICINE';" onchange="renderCampDetailsTable()" oninput="renderCampDetailsTable()">
+                </div>
+
+                <div class="input-wrapper" style="width: 33ch;">
+                    <label>MEDICINE ARRANGE @</label>
+                    <input list="arrange-list-rack" id="campDetailsArrangeInput" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='MEDICINE ARRANGE @ EXP. DATE';" onchange="applyCampDetailsSort()" oninput="applyCampDetailsSort()">
+                </div>
+
+                <div class="input-wrapper" style="width: 23ch;">
+                    <label>SEARCH BY INVOICE No/ID</label>
+                    <input list="camp-invoice-list" id="campDetailsInvoiceInput" class="index-input" value="ALL INVOICE No/ID" onclick="this.value=''" onfocus="this.value=''" onblur="if(this.value=='') this.value='ALL INVOICE No/ID';" onchange="renderCampDetailsTable()" oninput="renderCampDetailsTable()">
+                </div>
+
+            </div>
+
+            <h2 id="campDetailsPageTitle" style="text-align: center; color: #c53030; line-height: 1.2; margin-top: 5px; margin-bottom: 0; text-transform: uppercase;">
+               <div style="font-size: 20px;">DETAILS OF MEDICAL CAMP MEDICINES</div>
+               <div id="campDpTitle2" style="font-size: 18px;">ALL PROJECT MEDICINES</div>
+               <div id="campDpTitle3" style="font-size: 16px;">MEDICINE ARRANGE @ EXP. DATE</div>
+           </h2>
+
+            <div class="table-responsive" style="margin-top: 0;">
+              <table id="campDetailsTable">
+    <thead>
+        <tr>
+            <th style="width: 3ch;" class="no-print"><input type="checkbox" onchange="toggleSelectAllCamp(this)"></th>
+            <th style="width: 4ch;">SI No</th>
+            <th style="width: 17ch;">Medicine item</th>
+            <th style="width: auto;">NAME OF MEDICINE</th>
+            <th style="width: 12ch;">Batch No</th>
+            <th style="width: 9ch;">Exp.Dt.</th>
+            <th style="width: 9ch;">Qty</th>
+            <th style="width: 4ch;">Page No</th>
+            <th style="width: 8ch;">Days left</th> 
+            <th style="width: 17ch;">STATUS</th>
+            <th style="width: 7ch;">Fund</th>
+            <th style="width: 8ch;">Rack No</th>
+            <th style="width: 10ch;">Indent Dt.</th>
+            <th style="width: 15ch;" class="no-print">Indent No/ID No</th>
+            <th style="width: 6ch;" class="no-print">Act</th>
+        </tr>
+    </thead>
+    <tbody id="campDetailsTableBody"></tbody>
+</table>
+          </div>
+            
+            <div id="campPrintFooter" class="print-only-footer"></div>
+            <div id="campDeleteSelectedModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(192, 57, 43, 0.95); z-index:10060; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px);">
+    <i class="fa-solid fa-trash-can" style="font-size: 100px; margin-bottom: 20px; color: #f1c40f;"></i>
+    <h1 style="font-size: 45px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase;">ഉറപ്പാണോ ?</h1>
+    <p style="font-size: 24px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #f1c40f;">
+        നിങ്ങൾ സെലക്ട് ചെയ്ത മരുന്നുകൾ Medical Camp Stock-ൽ നിന്നും പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യാൻ പോവുകയാണ്. ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?
+    </p>
+    <div style="display: flex; gap: 30px;">
+        <button onclick="executeCampDeleteSelected()" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">YES, DELETE</button>
+        <button onclick="document.getElementById('campDeleteSelectedModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">NO, CANCEL</button>
+    </div>
+</div>
+
+<div id="campDeleteExpiredModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(192, 57, 43, 0.95); z-index:10060; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px);">
+    <i class="fa-solid fa-calendar-xmark" style="font-size: 100px; margin-bottom: 20px; color: #f1c40f;"></i>
+    <h1 style="font-size: 45px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase;">ഉറപ്പാണോ ?</h1>
+    <p style="font-size: 24px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #f1c40f;">
+        Medical Camp Stock-ൽ കാലാവധി കഴിഞ്ഞ (EXPIRED) മുഴുവൻ മരുന്നുകളും ഒറ്റയടിക്ക് ഡിലീറ്റ് ചെയ്യാൻ പോവുകയാണ്. ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?
+    </p>
+    <div style="display: flex; gap: 30px;">
+        <button onclick="executeCampDeleteExpired()" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">YES, DELETE</button>
+        <button onclick="document.getElementById('campDeleteExpiredModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">NO, CANCEL</button>
+    </div>
+</div>
+
+<div id="campRemoveEmptyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(192, 57, 43, 0.95); z-index:10060; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px);">
+    <i class="fa-solid fa-eraser" style="font-size: 100px; margin-bottom: 20px; color: #f1c40f;"></i>
+    <h1 style="font-size: 45px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase;">ഉറപ്പാണോ ?</h1>
+    <p style="font-size: 24px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #f1c40f;">
+        Medical Camp Stock-ൽ Qty കോളത്തിൽ സ്റ്റോക്ക് ഇല്ലാത്ത (Empty/0) എല്ലാ വരികളും പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യാൻ പോവുകയാണ്. ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?
+    </p>
+    <div style="display: flex; gap: 30px;">
+        <button onclick="executeCampRemoveEmpty()" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">YES, REMOVE</button>
+        <button onclick="document.getElementById('campRemoveEmptyModal').style.display='none'" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">NO, CANCEL</button>
+    </div>
+</div>
+
+<div id="campDetailsPrintMasterArea" style="display: none; background: white; padding: 10px; color: black;">
+    <h2 id="campPrintTitleLine1" style="text-align: center; color: #c53030; font-size: 20px; font-weight: 900; margin: 0; text-transform: uppercase;">DETAILS OF MEDICAL CAMP MEDICINES</h2>
+    <h3 id="campPrintTitleLine2" style="text-align: center; font-size: 18px; font-weight: bold; margin: 5px 0;"></h3>
+    <h4 id="campPrintTitleLine3" style="text-align: center; font-size: 16px; font-weight: bold; margin: 0 0 20px 0;"></h4>
+    <table id="campPrintTable" style="width: 100%; border-collapse: collapse; border: 2px solid #000; background-color: white;">
+        <thead>
+            <tr style="font-size: 13px !important; font-weight: bold; background-color: black !important; color: white !important;">
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 4ch;">SI No</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 15ch;">Medicine item</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: left; width: auto;">NAME OF MEDICINE</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 12ch;">Batch No</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Exp.Dt.</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Qty</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 6ch;">Page No</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 8ch;">Days left</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 14ch;">STATUS</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 7ch;">Fund</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 8ch;">Rack No</th>
+            </tr>
+        </thead>
+        <tbody id="campDetailsPrintTableBody" style="font-weight: bold;"></tbody>
+    </table>
+</div>
+        </div>
+    </div>
+
     
     <div id="a4MedicineListPage" class="index-page-wrapper full-width-wrapper">
-        <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">OP MEDICINE LIST</h1>
+        <h1 id="a4MedListPageTitle" style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">OP MEDICINE LIST</h1>
 
         <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; width: 100%;">
-            <button class="index-btn bg-dark" onclick="openOpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+            <button class="index-btn bg-dark" onclick="a4GoBackFromMedicineList()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
             <button class="index-btn bg-orange" onclick="showHomePage()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
             <button class="index-btn bg-red-main" onclick="confirmBeforeDownloadA4MedicineListPDF()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; color:black;"><i class="fa-solid fa-file-pdf"></i> <b>DOWNLOAD PDF/PRINT</b></button>
             <button class="index-btn bg-green" id="a4MoveModeBtn" onclick="a4ToggleMoveMode()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px;" title="ഈ ബട്ടൺ ഓൺ ചെയ്ത ശേഷം ഏതെങ്കിലും MEDICINE ITEM ബോക്സ് മൌസിലെ ലെഫ്റ്റ് ബട്ടൺ ഉപയോഗിച്ച് ഡ്രാഗ് ചെയ്ത് സ്ഥാനം മാറ്റാം"><i class="fa-solid fa-arrows-up-down-left-right"></i> <b>move Mode ON</b></button>
@@ -4168,6 +4364,8 @@
             <select id="indSubStock" class="index-input" style="padding: 0 5px;">
                 <option value="Sub Stock OP">OP SUB STOCK</option>
                 <option value="Sub Stock IP">IP SUB STOCK</option>
+                
+                <option value="Medical Camp Stock">MEDICAL CAMP STOCK</option>
             </select>
         </div>
         <div class="input-wrapper" style="width: 180px; gap: 2px;">
@@ -4294,10 +4492,12 @@
     <button type="button" style="background:#2c3e50; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showHomePage()">🏠 HOME</button>
     <button type="button" style="background:#8e44ad; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
     <button type="button" style="background:#27ae60; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
-    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 go to MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
+    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 MAIN STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 IP SUB STOCK</button>
+    
+    <button type="button" style="background:#00838f; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMedicalCampStockPage()">⛺ M.C STOCK</button>
     <button type="button" style="background:#16a085; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()">🎧 HELP DESK</button>
     <button type="button" class="index-btn" onclick="medistockUndoLastAction()" style="padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px; background:#d35400; color:white;" title="Main Stock / Sub Stock OP / Sub Stock IP / Opening Stock എന്നിവയിൽ അവസാനം വരുത്തിയ Add/Edit/Delete മാറ്റം Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> <b>UNDO</b></button>
@@ -4541,10 +4741,12 @@
     <button type="button" style="background:#8e44ad; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
     <button type="button" style="background:#2980b9; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
 
-    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 go to MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
+    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 MAIN STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 IP SUB STOCK</button>
+    
+    <button type="button" style="background:#00838f; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMedicalCampStockPage()">⛺ M.C STOCK</button>
     <button type="button" style="background:#16a085; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtPagePage')">🖨 PRINT / PERFECT PDF</button>
     
     <button type="button" style="background:#7f8c8d; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;"onclick="showHelpDeskPage()" >🎧 HELP DESK</button>
@@ -4581,7 +4783,7 @@
         
         <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
             <label style="font-weight: bold; cursor: pointer; font-size: 16px; color: black; display: inline-flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px 20px; border-radius: 30px; border: 1.5px solid #bdc3c7; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <input type="checkbox" id="chkIndentMalayalamPage" checked onchange="toggleIndentLanguage(this)" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;">
+                <input type="checkbox" id="chkIndentMalayalamPage" checked onchange="toggleIndentLanguage(this)" style="width: 20px !important; height: 20px !important; transform: scale(1.1) !important; cursor: pointer; accent-color: #2c3e50; margin: 0;"> 
                 <span>ഔഷധങ്ങളുടെ പേരുകൾ മലയാളത്തിൽ ലഭിക്കുന്നതിന് ടിക്ക് ബോക്സിൽ ടിക്ക് ചെയ്യുക. ഇംഗ്ലീഷിൽ വേണ്ടവർ ടിക്ക് ഇല്ലാതെ ഉപയോഗിക്കുക!</span>
             </label>
         </div>
@@ -4719,6 +4921,10 @@
         </button>
         <button class="nav-btn" style="margin-bottom: 0; background: #2c3e50; padding: 8px 24px; font-size: 14px;" onclick="medistockShowDeveloperModeModal()">
             <i class="fa-solid fa-code" style="font-size: 16px; margin-right: 6px;"></i>Developer Mode
+        </button>
+        
+        <button class="nav-btn" style="margin-bottom: 0; background: #00838f; padding: 8px 24px; font-size: 14px;" onclick="showMedicalCampStockPage()">
+            <i class="fa-solid fa-tents" style="font-size: 16px; margin-right: 6px;"></i>go to MEDICAL CAMP STOCK
         </button>
     </div>
 
@@ -5774,11 +5980,66 @@
             </div>
         </div>
     </div>
+
+    
+    <div id="lastAddedCampStockPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
+        <div class="no-print">
+            <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
+            <button class="index-btn bg-dark" onclick="goBackFromLastAdded()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+            <button class="index-btn bg-orange" onclick="showHomePage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+            <button class="index-btn bg-green" onclick="openRackForSelectedLastAdded('CAMP')" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-check-square"></i> <b>Rack Details of Selected</b></button>
+            <button class="index-btn bg-blue-main" onclick="openCurrentViewRackLastAdded('CAMP')" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-eye"></i> <b>Current View Rack Details</b></button>
+            <button class="index-btn bg-blue-light" onclick="openMainStockDetails()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-box"></i> <b>go to Main Stock</b></button>
+            <button class="index-btn bg-orange" onclick="openOpSubStockDetails()" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; color: black;"><i class="fa-solid fa-prescription-bottle-medical"></i> <b>go to OP SUB STOCK</b></button>
+            <button class="index-btn bg-orange3" onclick="openIpSubStockDetails()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-bed-pulse"></i> <b>go to Ip Sub Stock</b></button>
+            <button class="index-btn bg-blue-light2" onclick="showMedicalCampStockPage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-tents"></i> <b>go to CAMP STOCK</b></button>
+            <button class="index-btn bg-dark" onclick="showHelpDeskPage()" style="padding: 6px 15px; font-size: 13px; min-height: auto; height: 32px;"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+        </div>
+        </div>
+
+        <div style="border: 2px solid #000; padding: 20px; background: #fff;">
+            <h1 style="text-align: center; color: #005088; font-weight: 900; margin-bottom: 20px; font-size: 35px;">Details of Last Added Medicines to Medical Camp Stock</h1>
+
+            <div class="soothing-box box-blue" style="border: 2px solid #3498db; padding: 15px; margin-bottom: 20px;">
+                <h3 style="text-align: center; margin-top: 0; color: #c53030; font-size: 20px;">LAST ADDED MEDICINE DETAILS</h3>
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; font-weight: bold; font-size: 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="masterCheckCamp" onclick="toggleAllLastAdded(this, 'row-check-camp')" style="width: 30px; height: 30px; cursor: pointer; margin: 0; accent-color: #e74c3c;">
+                        <label for="masterCheckCamp" style="cursor: pointer; color: #e74c3c; margin-right: 14px; font-weight: 650;">SELECT/DESELECT ALL</label>
+                        LAST ADDED INDENT No: <span id="lastAddCampInvNo" style="color: blue;"></span>
+                    </div>
+                    <div>LAST ADDED INDENT DATE: <span id="lastAddCampInvDate" style="color: blue;"></span></div>
+                    <div>LAST ADDED DATE: <span id="lastAddCampDate" style="color: blue;"></span></div>
+                    <div>LAST ADDED TIME: <span id="lastAddCampTime" style="color: blue;"></span></div>
+                </div>
+            </div> <h2 style="text-align: center; margin: 10px 0 20px 0; font-size: 22px; font-weight: 900;">DETAILS OF MEDICINES LAST ADDED TO MEDICAL CAMP STOCK</h2>
+            <div class="table-responsive" style="margin-top: 0;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center; border: 2px solid #000;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #000; background: #d9e1f2; width: 4ch;"></th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 4ch;">SI No</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 15ch;">MEDICINE ITEM</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: auto;">NAME OF MEDICINE</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 10ch;">BATCH</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 9ch;">EXP.Date</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 8ch;">QTY</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 5ch;">PAG No</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 6ch;">FUND</th>
+                            <th style="border: 1px solid #000; background: #d9e1f2; color: black; font-weight: bold; padding: 8px; width: 8ch;">RACK No</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lastAddedCampTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <datalist id="category-list"></datalist>
     <datalist id="medicine-list"></datalist>
     <datalist id="fund-list"></datalist>
     <datalist id="ind-right-fund-list"></datalist>
-<datalist id="stock-type-list"><option value="MAIN STOCK"><option value="SUB STOCK OP"><option value="SUB STOCK IP"></datalist>    
+<datalist id="stock-type-list"><option value="MAIN STOCK"><option value="SUB STOCK OP"><option value="SUB STOCK IP"><option value="MEDICAL CAMP STOCK"></datalist>    
     <datalist id="status-list">
         <option value="ALL MEDICINE"><option value="EXPIRED"><option value="BELOW 2 MONTH"><option value="BELOW 3 MONTH"><option value="BELOW 6 MONTH">
     </datalist>
@@ -5804,6 +6065,7 @@
 
     <datalist id="main-invoice-list"></datalist>
     <datalist id="op-invoice-list"></datalist>
+    <datalist id="camp-invoice-list"></datalist>
     <datalist id="ip-invoice-list"></datalist>
     <datalist id="ip-indent-list"></datalist>
 
@@ -6290,7 +6552,6 @@
 
 
 
-</script>
 
 <div id="inlineSmartPopup" class="no-print" style="display:none; position: fixed; top: 15vh; right: 20px; width: 45vw; height: 80vh; background: white; border: 4px solid #8e44ad; border-radius: 12px; box-shadow: -5px 10px 30px rgba(0,0,0,0.4); z-index: 999999; flex-direction: column;">
        <div style="background: #8e44ad; color: white; padding: 12px 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0;">
@@ -6478,6 +6739,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 
