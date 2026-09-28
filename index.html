@@ -983,7 +983,12 @@
     
     #stockPage .stock-second-btn-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1px; margin-bottom: 1px; width: 100%; }
     #stockPage .stock-second-btn-row button { padding: 5px 10px; font-size: 13px; height: 32px; border: none; border-radius: 10px; cursor: pointer; color: white; }
-    </style>
+    
+
+.hdg-editing { display: block !important; width: fit-content; min-width: 32ch; max-width: 100%; margin: 3px auto !important; padding: 1px 10px; box-sizing: border-box;
+  background: #fff3cd !important; border: 2px solid #e67e22 !important; border-radius: 6px; outline: none; cursor: text; white-space: pre-wrap; }
+.hdg-editing:focus { box-shadow: 0 0 0 3px rgba(230,126,34,.35); }
+</style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
     <style>
@@ -2505,21 +2510,22 @@
 
         <div class="no-print">
     <div class="soothing-box box-yellow-light2" style="padding: 15px; margin-bottom: 20px; border-color: #f6ad55; text-align: center;">
-        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;">
             
-            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 5px;">Column-wise Edit Panel Buttons:</span>
+            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 2px; white-space: nowrap;">Column-wise Edit Panel:</span>
             
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('main', 'cat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button>
-            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('main', 'name')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
-            <button class="index-btn bg-orange3" onclick="enableColumnEdit('main', 'bat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button> 
-            <button class="index-btn bg-green" onclick="enableColumnEdit('main', 'exp')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
-            <button class="index-btn bg-red-main" onclick="enableColumnEdit('main', 'qty')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
-            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('main', 'pag')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button>
-            <button class="index-btn bg-orange" onclick="enableColumnEdit('main', 'fund')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
-            <button class="index-btn bg-red-light" onclick="enableColumnEdit('main', 'rac')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('main', 'invdate')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice Dt.</button>
-            <button class="index-btn bg-orange4" onclick="enableColumnEdit('main', 'inv')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button>
-            <button class="index-btn" style="background:#35f804; padding: 6px 30px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('main')">Update</button>
+            <button class="index-btn bg-blue-light2" id="mainHeadingEditBtn" onclick="enableHeadingEdit('main')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Heading</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('main', 'cat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button>
+            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('main', 'name')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
+            <button class="index-btn bg-orange3" onclick="enableColumnEdit('main', 'bat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button> 
+            <button class="index-btn bg-green" onclick="enableColumnEdit('main', 'exp')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
+            <button class="index-btn bg-red-main" onclick="enableColumnEdit('main', 'qty')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
+            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('main', 'pag')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button>
+            <button class="index-btn bg-orange" onclick="enableColumnEdit('main', 'fund')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
+            <button class="index-btn bg-red-light" onclick="enableColumnEdit('main', 'rac')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('main', 'invdate')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice Dt.</button>
+            <button class="index-btn bg-orange4" onclick="enableColumnEdit('main', 'inv')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button>
+            <button class="index-btn" style="background:#35f804; padding: 6px 18px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('main')">Update</button>
             
         </div>
     </div>
@@ -2631,7 +2637,7 @@
             </div>
 
             <h2 id="detailsPageTitle" style="text-align: center; color: #c53030; line-height: 1.2; margin-top: 5px; margin-bottom: 0; text-transform: uppercase;">
-               <div style="font-size: 20px;">DETAILS OF MAIN STOCK MEDICINES</div>
+               <div id="dpTitle1" style="font-size: 20px;">DETAILS OF MAIN STOCK MEDICINES</div>
                <div id="dpTitle2" style="font-size: 18px;">ALL PROJECT MEDICINES</div>
                <div id="dpTitle3" style="font-size: 16px;">MEDICINE ARRANGE @ EXP. DATE</div>
            </h2>
@@ -2696,19 +2702,20 @@
 
 <div class="no-print">
     <div class="soothing-box box-yellow-light" style="padding: 15px; margin-bottom: 20px; border-color: #f6ad55; text-align: center;">
-        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap;">
-            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 5px;">Column-wise Edit Panel Buttons:</span>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'cat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
-            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('op', 'name')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
-            <button class="index-btn bg-orange3" onclick="enableColumnEdit('op', 'bat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button>
-            <button class="index-btn bg-green" onclick="enableColumnEdit('op', 'exp')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
-            <button class="index-btn bg-red-main" onclick="enableColumnEdit('op', 'qty')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
-            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('op', 'pag')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
-            <button class="index-btn bg-orange" onclick="enableColumnEdit('op', 'fund')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
-            <button class="index-btn bg-red-light" onclick="enableColumnEdit('op', 'rac')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'invdate')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'inv')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
-            <button class="index-btn" style="background:#04f368; padding: 6px 30px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('op')">Update</button>
+        <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 2px; white-space: nowrap;">Column-wise Edit Panel:</span>
+            <button class="index-btn bg-blue-light2" id="opHeadingEditBtn" onclick="enableHeadingEdit('op')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Heading</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'cat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
+            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('op', 'name')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
+            <button class="index-btn bg-orange3" onclick="enableColumnEdit('op', 'bat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button>
+            <button class="index-btn bg-green" onclick="enableColumnEdit('op', 'exp')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
+            <button class="index-btn bg-red-main" onclick="enableColumnEdit('op', 'qty')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
+            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('op', 'pag')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
+            <button class="index-btn bg-orange" onclick="enableColumnEdit('op', 'fund')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
+            <button class="index-btn bg-red-light" onclick="enableColumnEdit('op', 'rac')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'invdate')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('op', 'inv')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
+            <button class="index-btn" style="background:#04f368; padding: 6px 18px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('op')">Update</button>
         </div>
     </div>
 </div>
@@ -2764,7 +2771,7 @@
             </div>
 
             <h2 id="opDetailsPageTitle" style="text-align: center; color: #c53030; line-height: 1.2; margin-top: 5px; margin-bottom: 0; text-transform: uppercase;">
-               <div style="font-size: 20px;">DETAILS OF OP SUB STOCK MEDICINES</div>
+               <div id="opDpTitle1" style="font-size: 20px;">DETAILS OF OP SUB STOCK MEDICINES</div>
                <div id="opDpTitle2" style="font-size: 18px;">ALL PROJECT MEDICINES</div>
                <div id="opDpTitle3" style="font-size: 16px;">MEDICINE ARRANGE @ EXP. DATE</div>
            </h2>
@@ -2890,19 +2897,20 @@
 
 <div class="no-print">
     <div class="soothing-box box-yellow-light" style="padding: 15px; margin-bottom: 20px; border-color: #f6ad55; text-align: center;">
-        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap;">
-            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 5px;">Column-wise Edit Panel Buttons:</span>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'cat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
-            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('camp', 'name')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
-            <button class="index-btn bg-orange3" onclick="enableColumnEdit('camp', 'bat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button> 
-            <button class="index-btn bg-green" onclick="enableColumnEdit('camp', 'exp')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
-            <button class="index-btn bg-red-main" onclick="enableColumnEdit('camp', 'qty')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
-            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('camp', 'pag')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
-            <button class="index-btn bg-orange" onclick="enableColumnEdit('camp', 'fund')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
-            <button class="index-btn bg-red-light" onclick="enableColumnEdit('camp', 'rac')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'invdate')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'inv')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
-            <button class="index-btn" style="background:#04f368; padding: 6px 30px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('camp')">Update</button>
+        <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 2px; white-space: nowrap;">Column-wise Edit Panel:</span>
+            <button class="index-btn bg-blue-light2" id="campHeadingEditBtn" onclick="enableHeadingEdit('camp')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Heading</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'cat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
+            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('camp', 'name')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
+            <button class="index-btn bg-orange3" onclick="enableColumnEdit('camp', 'bat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button> 
+            <button class="index-btn bg-green" onclick="enableColumnEdit('camp', 'exp')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
+            <button class="index-btn bg-red-main" onclick="enableColumnEdit('camp', 'qty')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
+            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('camp', 'pag')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
+            <button class="index-btn bg-orange" onclick="enableColumnEdit('camp', 'fund')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
+            <button class="index-btn bg-red-light" onclick="enableColumnEdit('camp', 'rac')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'invdate')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('camp', 'inv')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
+            <button class="index-btn" style="background:#04f368; padding: 6px 18px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('camp')">Update</button>
         </div>
     </div>
 </div>
@@ -2958,7 +2966,7 @@
             </div>
 
             <h2 id="campDetailsPageTitle" style="text-align: center; color: #c53030; line-height: 1.2; margin-top: 5px; margin-bottom: 0; text-transform: uppercase;">
-               <div style="font-size: 20px;">DETAILS OF MEDICAL CAMP MEDICINES</div>
+               <div id="campDpTitle1" style="font-size: 20px;">DETAILS OF MEDICAL CAMP MEDICINES</div>
                <div id="campDpTitle2" style="font-size: 18px;">ALL PROJECT MEDICINES</div>
                <div id="campDpTitle3" style="font-size: 16px;">MEDICINE ARRANGE @ EXP. DATE</div>
            </h2>
@@ -3154,19 +3162,20 @@
 
 <div class="no-print">
     <div class="soothing-box box-yellow-light" style="padding: 15px; margin-bottom: 20px; border-color: #f6ad55; text-align: center;">
-        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap;">
-            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 5px;">Column-wise Edit Panel Buttons:</span>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'cat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
-            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('ip', 'name')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
-            <button class="index-btn bg-orange3" onclick="enableColumnEdit('ip', 'bat')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button>
-            <button class="index-btn bg-green" onclick="enableColumnEdit('ip', 'exp')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
-            <button class="index-btn bg-red-main" onclick="enableColumnEdit('ip', 'qty')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
-            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('ip', 'pag')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
-            <button class="index-btn bg-orange" onclick="enableColumnEdit('ip', 'fund')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
-            <button class="index-btn bg-red-light" onclick="enableColumnEdit('ip', 'rac')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'invdate')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
-            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'inv')" style="padding: 6px 15px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
-            <button class="index-btn" style="background:#00ff00; padding: 6px 30px; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('ip')">Update</button>
+        <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <span style="font-weight: 900; color: #d35400; font-size: 14px; margin-right: 2px; white-space: nowrap;">Column-wise Edit Panel:</span>
+            <button class="index-btn bg-blue-light2" id="ipHeadingEditBtn" onclick="enableHeadingEdit('ip')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Heading</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'cat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Medicine item</button> 
+            <button class="index-btn bg-blue-main" onclick="enableColumnEdit('ip', 'name')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Name of Medicine</button>
+            <button class="index-btn bg-orange3" onclick="enableColumnEdit('ip', 'bat')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Batch No</button>
+            <button class="index-btn bg-green" onclick="enableColumnEdit('ip', 'exp')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Exp.Dt.</button>
+            <button class="index-btn bg-red-main" onclick="enableColumnEdit('ip', 'qty')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Qty</button>
+            <button class="index-btn bg-blue-light" onclick="enableColumnEdit('ip', 'pag')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Page No</button> 
+            <button class="index-btn bg-orange" onclick="enableColumnEdit('ip', 'fund')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Fund</button>
+            <button class="index-btn bg-red-light" onclick="enableColumnEdit('ip', 'rac')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Rack No</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'invdate')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Indent Dt.</button>
+            <button class="index-btn bg-dark" onclick="enableColumnEdit('ip', 'inv')" style="padding: 6px 9px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;">Invoice No/ID</button> 
+            <button class="index-btn" style="background:#00ff00; padding: 6px 18px; white-space: nowrap; font-size: 13px; height: 32px; border: none; border-radius: 10px; font-weight: 900 !important; color: black !important;" onclick="updateColumnEdits('ip')">Update</button>
         </div>
     </div>
 </div>
@@ -3222,7 +3231,7 @@
             </div>
 
             <h2 id="ipDetailsPageTitle" style="text-align: center; color: #c53030; line-height: 1.2; margin-top: 5px; margin-bottom: 0; text-transform: uppercase;">
-               <div style="font-size: 20px;">DETAILS OF IP SUB STOCK MEDICINES</div>
+               <div id="ipDpTitle1" style="font-size: 20px;">DETAILS OF IP SUB STOCK MEDICINES</div>
                <div id="ipDpTitle2" style="font-size: 18px;">ALL PROJECT MEDICINES</div>
                <div id="ipDpTitle3" style="font-size: 16px;">MEDICINE ARRANGE @ EXP. DATE</div>
            </h2>
@@ -4303,17 +4312,21 @@
     </button>
     
     <button class="index-btn bg-orange3" onclick="openMainStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; color: black; border-radius: 16px;">
-        <i class="fa-solid fa-boxes-stacked"></i> <b>go to MAIN STOCK</b>
+        <i class="fa-solid fa-boxes-stacked"></i> <b>MAIN STOCK</b>
     </button>
     
     <button class="index-btn bg-orange" onclick="openOpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; color: black; border-radius: 16px;">
-        <i class="fa-solid fa-prescription-bottle-medical"></i> <b>go to OP SUB STOCK</b>
+        <i class="fa-solid fa-prescription-bottle-medical"></i> <b>OP SUB STOCK</b>
     </button>
     
     <button class="index-btn bg-red-main" onclick="openIpSubStockDetails()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; color: black; border-radius: 16px;">
-        <i class="fa-solid fa-bed-pulse"></i> <b>go to IP SUB STOCK</b>
+        <i class="fa-solid fa-bed-pulse"></i> <b>IP SUB STOCK</b>
     </button>
     
+    
+    <button class="index-btn" onclick="openDraftIndentPrintConfirm()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; color: white; border-radius: 16px; background: #16a085;">
+        <i class="fa-solid fa-print"></i> <b>PRINT/PDF of DRAFT-INDENT</b>
+    </button>
     <button class="index-btn bg-red-light" onclick="openModal()" style="padding: 6px 10px; font-size: 13px; height: 32px; border: none; color: white; border-radius: 16px;">
         <i class="fa-solid fa-magnifying-glass"></i> <b>To get project name & code</b>
     </button>
@@ -4325,6 +4338,42 @@
     <button id="indentTestRestoreBtn" class="nav-btn" style="margin-bottom: 0; background: #8e44ad; padding: 6px 12px; font-size: 13px; height: 32px;" onclick="medistockTestDriveRestoreNow('indentTestRestoreBtn')" title="Google Drive-ൽ നിന്നും ഇപ്പോൾ തന്നെ ഡാറ്റ Restore ചെയ്ത് ഫലം ഉടനെ കാണിക്കും">⬇️ Google Drive Restore ചെയ്യുക</button>
 
 </div>
+
+    
+    <div id="draftIndentPrintConfirmModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:999999; align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:12px; padding:30px 25px; max-width:380px; width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <div style="font-size:34px; color:#f39c12; margin-bottom:10px;"><i class="fa-solid fa-file-circle-question"></i></div>
+            <div id="draftIndentPrintConfirmMsg" style="font-size:15px; color:#2c3e50; font-weight:bold; margin-bottom:22px; line-height:1.5;">നിലവിൽ തിരഞ്ഞെടുത്ത മരുന്നുകൾ മാത്രമായി Print / PDF വരണമോ?</div>
+            <div style="display:flex; gap:14px; justify-content:center;">
+                <button onclick="draftIndentPrintConfirmYes()" style="background:#27ae60; color:white; border:none; padding:10px 26px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">YES</button>
+                <button onclick="draftIndentPrintConfirmNo()" style="background:#c0392b; color:white; border:none; padding:10px 26px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">NO</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="draftIndentPrintMasterArea" style="display: none; background: white; padding: 10px; color: black;">
+        <h2 id="draftIndentPrintTitleLine1" style="text-align: center; color: #000; font-size: 20px; font-weight: 900; margin: 0; text-transform: uppercase;">DRAFT INDENT</h2>
+        <h3 id="draftIndentPrintTitleLine2" style="text-align: center; font-size: 16px; font-weight: bold; margin: 5px 0 15px 0;"></h3>
+
+        <table id="draftIndentPrintTable" style="width: 100%; border-collapse: collapse; border: 2px solid #000; background-color: white;">
+            <thead>
+                <tr style="font-size: 13px !important; font-weight: bold; background-color: black !important; color: white !important;">
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 4ch;">SI No</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 15ch;">Medicine item</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: left; width: auto;">NAME OF MEDICINE</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Total Qty</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Qty in M.S</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Qty Indent</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 6ch;">Page No</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 8ch;">Days left</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 9ch;">Exp.Dt.</th>
+                    <th style="border: 1px solid #000; padding: 6px; text-align: center; width: 14ch;">STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="draftIndentPrintTableBody" style="font-weight: bold;"></tbody>
+        </table>
+    </div>
 
         <div id="indentPrepMainRow" style="display: flex; gap: 20px; align-items: stretch;">
             
@@ -4405,6 +4454,9 @@
     </div>
 </div>
               
+
+
+
 
                <div class="table-responsive" style="max-height: 50vh;">
                   <table>
@@ -6743,6 +6795,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 
 
