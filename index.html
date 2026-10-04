@@ -4624,9 +4624,9 @@
     <button type="button" style="background:#8e44ad; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
     <button type="button" style="background:#27ae60; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
     <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 OP SUB STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openOpSubStockDetails();">🏥 OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 IP SUB STOCK</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openIpSubStockDetails();">🏨 IP SUB STOCK</button>
     
     <button type="button" style="background:#00838f; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMedicalCampStockPage()">⛺ M.C STOCK</button>
     <button type="button" style="background:#16a085; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtItemPage')">🖨 PRINT / PERFECT PDF</button>
@@ -4763,11 +4763,11 @@
         
         <button type="button" style="background:#27ae60; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Page No</button>
         
-        <button type="button" style="background:#f39c12; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMainStockIndex()">📦 go to MAIN STOCK</button>
+        <button type="button" style="background:#f39c12; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 go to MAIN STOCK</button>
         
-        <button type="button" style="background:#00bcd4; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 go to OP SUB STOCK</button>
+        <button type="button" style="background:#00bcd4; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openOpSubStockDetails();">🏥 go to OP SUB STOCK</button>
         
-        <button type="button" style="background:#c0392b; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentHistoryPage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 go to IP SUB STOCK</button>
+        <button type="button" style="background:#c0392b; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openIpSubStockDetails();">🏨 go to IP SUB STOCK</button>
         
         <button type="button" style="background:#16a085; color:white; padding:10px 15px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentHistoryPage')">🖨 PRINT / PERFECT PDF</button>
         
@@ -4872,10 +4872,10 @@
     <button type="button" style="background:#8e44ad; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showIndentHistory()">🕒 INDENT HISTORY</button>
     <button type="button" style="background:#2980b9; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('indentAtItemPage').style.display='block'; window.scrollTo(0,0);">🔄 INDENT @ Medicine Item</button>
 
-    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="OpenMainStockDetails()">📦 MAIN STOCK</button>
-    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('opSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏥 OP SUB STOCK</button>
+    <button type="button" style="background:#f39c12; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openMainStockDetails()">📦 MAIN STOCK</button>
+    <button type="button" style="background:#00bcd4; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openOpSubStockDetails();">🏥 OP SUB STOCK</button>
 
-<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="document.getElementById('indentAtItemPage').style.display='none'; document.getElementById('indentAtPagePage').style.display='none'; document.getElementById('ipSubStockDetailsPage').style.display='block'; window.scrollTo(0,0);">🏨 IP SUB STOCK</button>
+<button type="button" style="background:#c0392b; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="openIpSubStockDetails();">🏨 IP SUB STOCK</button>
     
     <button type="button" style="background:#00838f; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="showMedicalCampStockPage()">⛺ M.C STOCK</button>
     <button type="button" style="background:#16a085; color:white; padding:6px 6px; border-radius:5px; border:none; font-weight:bold; cursor:pointer; margin:3px;" onclick="executeIndentPrint('indentAtPagePage')">🖨 PRINT / PERFECT PDF</button>
