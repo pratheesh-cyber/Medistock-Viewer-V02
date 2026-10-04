@@ -6242,10 +6242,10 @@
                 </div>
                 <div class="input-wrapper" style="width: 40ch; gap: 2px;">
     <label>MEDICINE ARRANGE @</label>
-    <input list="arrange-list" id="mainChargeArrangeSelect" class="index-input" value="MEDICINE ARRANGE @ EXP. DATE" 
+    <input list="arrange-list" id="mainChargeArrangeSelect" class="index-input" value="MEDICINE ARRANGE @ PROJECT" 
         onclick="this.value=''" 
         onfocus="this.value=''" 
-        onblur="if(this.value=='') { this.value='MEDICINE ARRANGE @ EXP. DATE'; if(typeof updateMainChargeProjectLabel === 'function') updateMainChargeProjectLabel(); renderMainChargeListTable(); }" 
+        onblur="if(this.value=='') { this.value='MEDICINE ARRANGE @ PROJECT'; if(typeof updateMainChargeProjectLabel === 'function') updateMainChargeProjectLabel(); renderMainChargeListTable(); }" 
         onchange="if(typeof updateMainChargeProjectLabel === 'function') updateMainChargeProjectLabel(); renderMainChargeListTable();" 
         oninput="if(typeof updateMainChargeProjectLabel === 'function') updateMainChargeProjectLabel(); if(typeof renderMainChargeListTableDebounced === 'function') renderMainChargeListTableDebounced(); else renderMainChargeListTable();">
 </div>
