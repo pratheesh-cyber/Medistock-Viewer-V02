@@ -1533,6 +1533,96 @@
             }
 
             
+            #indentPrepMainRow > div:first-child {
+                flex: 0 0 100% !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                padding: 12px 10px !important;
+            }
+            #indentPrepMainRow > div:first-child .table-responsive {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            #indPanelBox {
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
+                gap: 12px !important;
+                justify-content: flex-start !important;
+            }
+            #indPanelRow1,
+            #indPanelRow2,
+            #indPanelRow3 {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 10px !important;
+                margin-bottom: 0 !important;
+                width: 100% !important;
+            }
+            
+            #indPanelRow1 > h3.box-title {
+                order: -1;
+                flex: none !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+            #indPanelRow1 > .input-wrapper,
+            #indPanelRow2 > .input-wrapper,
+            #indPanelRow3 > .input-wrapper {
+                width: 100% !important;
+                min-width: 0 !important;
+                flex: none !important;
+                box-sizing: border-box !important;
+            }
+            #indPanelRow1 select,
+            #indPanelRow2 select,
+            #indPanelRow2 input.index-input,
+            #indPanelRow3 input.index-input {
+                width: 100% !important;
+                min-width: 0 !important;
+                height: 42px !important;
+                font-size: 15px !important;
+                box-sizing: border-box !important;
+            }
+            #indPanelRow1 > .input-wrapper label,
+            #indPanelRow2 > .input-wrapper label,
+            #indPanelRow3 > .input-wrapper label {
+                font-size: 12px !important;
+                white-space: normal !important;
+            }
+            #indPanelRow2 .dynamic-green-yellow-box {
+                height: auto !important;
+                min-height: 42px !important;
+                max-height: none !important;
+            }
+            #indPanelRow2 #indLeftProjName {
+                white-space: normal !important;
+                text-align: center !important;
+                padding: 6px 8px !important;
+                line-height: 1.25 !important;
+            }
+            
+            #indPanelRow3 > button,
+            #indPanelRow3 > .input-wrapper > button {
+                width: 100% !important;
+                min-height: 44px !important;
+                height: auto !important;
+                font-size: 15px !important;
+                white-space: normal !important;
+                box-sizing: border-box !important;
+                flex-shrink: 0 !important;
+            }
+            
+            #indPanelRow3 > .input-wrapper:has(> button) > label {
+                display: none !important;
+            }
+            #indPanelRow3 > .input-wrapper > div {
+                width: 100% !important;
+            }
+
+            
             #excelColumnDeletePanel {
                 padding: 8px 6px !important;
             }
@@ -2456,7 +2546,7 @@
                 <select id="companySoftwareSelect" class="index-input" style="height: 38px; border: 2px solid #8e44ad; font-weight: bold; cursor: pointer; color: black; width: 100%; box-sizing: border-box; text-align: center;">
                     <option value="https://indentmaker.rubundroid.com/">1. OUSHADHI INDENT MAKER</option>
                     <option value="https://keralasree.github.io/order/">2. KERALASREE INDENT MAKER</option>
-                    <option value="https://www.sumteck.in/p/smart-indent-maker-multi-supplier.html">3. AYURDHARA, PATTIAM, KERALASREE INDENT MAKER</option>
+                    <option value="https://indent.sumteck.in/">3. AYURDHARA, PATTIAM, KERALASREE INDENT MAKER</option>
                 </select>
             </div>
             
@@ -2474,17 +2564,18 @@
             <thead>
                 <tr style="background-color: #00b050; color: black; font-size: 14px;">
                     <th style="border: 1px solid black; padding: 10px;">SI No</th>
-                    <th style="border: 1px solid black; padding: 10px;">Medicine Item</th>
+                    <th class="pi-col-item" data-short="Med.Item" style="border: 1px solid black; padding: 10px;">Medicine Item</th>
                     <th style="border: 1px solid black; padding: 10px; text-align: center; width: 340px; min-width: 340px; max-width: 340px;">Name of Medicine</th>
                     <th style="border: 1px solid black; padding: 10px;">Total Qty</th>
                     <th style="border: 1px solid black; padding: 10px;">Qty</th>
-                    <th style="border: 1px solid black; padding: 10px;">Fund</th>
-                    <th style="border: 1px solid black; padding: 10px;">Exp.Dt</th>
-                    <th style="border: 1px solid black; padding: 10px;">Days Left</th>
+                    <th class="pi-col-fund" style="border: 1px solid black; padding: 10px;">Fund</th>
+                    <th class="pi-col-exp" style="border: 1px solid black; padding: 10px;">Exp.Dt</th>
+                    <th class="pi-col-days" style="border: 1px solid black; padding: 10px;">Days Left</th>
                     <th style="border: 1px solid black; padding: 10px;">Batch No</th>
                     <th style="border: 1px solid black; padding: 10px;">Status</th>
                     <th style="border: 1px solid black; padding: 10px;">Rack No</th>
                     <th style="border: 1px solid black; padding: 10px;">Invoice Dt.</th>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center; white-space: normal; line-height: 1.15; box-sizing: content-box; width: calc(4ch + 8px); min-width: calc(4ch + 8px); max-width: calc(4ch + 8px);">Page<br>No</th>
                     <th style="border: 1px solid black; padding: 10px; width: 100%;">Invoice No/ID</th>
                 </tr>
             </thead>
@@ -2492,6 +2583,47 @@
         </table>
     </div>
 </div>
+
+<style id="preIndentColumnWidthStyle">
+
+#preIndentSummaryPage table { table-layout: auto; }
+
+
+#preIndentSummaryPage th.pi-col-fund,
+#preIndentSummaryPage td.pi-col-fund {
+    box-sizing: content-box !important;
+    width: 4ch !important; min-width: 4ch !important; max-width: 4ch !important;
+    padding-left: 5px !important; padding-right: 5px !important;
+    white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important;
+}
+
+#preIndentSummaryPage th.pi-col-exp,
+#preIndentSummaryPage td.pi-col-exp {
+    box-sizing: content-box !important;
+    width: 7ch !important; min-width: 7ch !important; max-width: 7ch !important;
+    padding-left: 5px !important; padding-right: 5px !important;
+    white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important;
+}
+
+#preIndentSummaryPage th.pi-col-item,
+#preIndentSummaryPage td.pi-col-item {
+    box-sizing: content-box !important;
+    width: 1% !important;
+    padding-left: 5px !important; padding-right: 5px !important;
+    white-space: nowrap !important; overflow: hidden !important; text-overflow: clip !important;
+    font-size: 0 !important;               
+}
+#preIndentSummaryPage th.pi-col-item::after,
+#preIndentSummaryPage td.pi-col-item::after {
+    content: attr(data-short);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#preIndentSummaryPage td.pi-col-days { text-align: left !important; }
+
+#preIndentSummaryPage thead th:last-child { width: 100% !important; }
+</style>
 <div id="indentedMedicinesMainPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
     <div class="no-print">
         <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; width: 100%;">
@@ -4456,9 +4588,9 @@
         <div id="indentPrepMainRow" style="display: flex; gap: 20px; align-items: stretch;">
             
 <div style="flex: 7; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px;">
-               <div class="soothing-box box-orange-light" style="display: flex; flex-direction: column; justify-content: space-between; height: 230px;"> 
+               <div id="indPanelBox" class="soothing-box box-orange-light" style="display: flex; flex-direction: column; justify-content: space-between; height: 230px;"> 
     
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px;">
+    <div id="indPanelRow1" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px;">
         <div class="input-wrapper" style="width: 170px; gap: 2px; flex-shrink: 0;">
             <label style="font-size: 11px;">MEDICINE ARRANGE @</label>
             <select id="indPrepArrangeBy" class="index-input" style="padding: 0 5px;" onchange="handleIndPrepArrangeChange(this);">
@@ -4476,7 +4608,7 @@
         </div>
     </div>
     
-    <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 5px;">
+    <div id="indPanelRow2" style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 5px;">
         <div class="input-wrapper" style="width: 130px; gap: 2px;">
             <label>Select Fund Type</label>
             <input list="fund-list" id="indLeftFund" class="index-input" onclick="this.value=''" onfocus="this.value=''">
@@ -4502,7 +4634,7 @@
         </div>
     </div>
     
-    <div style="display: flex; gap: 10px; align-items: flex-end;">
+    <div id="indPanelRow3" style="display: flex; gap: 10px; align-items: flex-end;">
         
         
         <button id="toggleSelectedIndentBtn" class="btn-regular" style="height: 40px; background: #e67e22; white-space: nowrap; padding: 0 15px; flex-shrink: 0;" onclick="handleIndentButtonClick()">Medicines Selected for Indent</button>
@@ -6698,13 +6830,51 @@
 
 
 
-<div id="inlineSmartPopup" class="no-print" style="display:none; position: fixed; top: 15vh; right: 20px; width: 45vw; height: 80vh; background: white; border: 4px solid #8e44ad; border-radius: 12px; box-shadow: -5px 10px 30px rgba(0,0,0,0.4); z-index: 999999; flex-direction: column;">
-       <div style="background: #8e44ad; color: white; padding: 12px 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0;">
-           <span style="font-size: 16px;"><i class="fa-solid fa-up-right-from-square"></i> Indent Maker Panel</span>
-           <button onclick="document.getElementById('inlineSmartPopup').style.display='none';" style="background: #e74c3c; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;">X CLOSE</button>
-       </div>
-       <iframe id="inlineIframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 0 0 8px 8px;"></iframe>
+<style>
+    
+    #inlineSmartPopup {
+        display: none; position: fixed; top: 0; right: 0; bottom: auto;
+        width: 45vw; height: 100vh; height: 100dvh;
+        background: white; border: 4px solid #8e44ad; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;
+        border-radius: 12px 0 0 12px; box-shadow: -5px 0 30px rgba(0,0,0,0.4);
+        z-index: 999999; flex-direction: column; box-sizing: border-box; overflow: hidden;
+        transition: width 0.25s ease, left 0.25s ease;
+    }
+    #inlineSmartPopup .ism-header {
+        background: #8e44ad; color: white; padding: 10px 12px; font-weight: bold;
+        display: flex; justify-content: space-between; align-items: center; gap: 8px; flex: 0 0 auto;
+    }
+    #inlineSmartPopup .ism-title { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #inlineSmartPopup .ism-actions { display: flex; gap: 6px; align-items: center; }
+    #inlineSmartPopup .ism-btn {
+        border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold;
+        font-size: 14px; padding: 5px 10px; line-height: 1.2; font-family: inherit;
+    }
+    #inlineSmartPopup .ism-btn-min { background: #f39c12; }
+    #inlineSmartPopup .ism-btn-restore { background: #27ae60; display: none; }
+    #inlineSmartPopup .ism-btn-close { background: #e74c3c; }
+    #inlineSmartPopup .ism-btn:hover { filter: brightness(1.12); }
+    #inlineSmartPopup iframe#inlineIframe { flex: 1 1 auto; width: 100%; min-height: 0; border: none; background: white; }
+    
+    #inlineSmartPopup.ism-minimized { border-radius: 0; }
+    #inlineSmartPopup.ism-minimized .ism-title { display: none; }
+    #inlineSmartPopup.ism-minimized .ism-header { justify-content: center; padding: 8px 4px; }
+    #inlineSmartPopup.ism-minimized .ism-btn-min { display: none; }
+    #inlineSmartPopup.ism-minimized .ism-btn-restore { display: inline-block; }
+    @media (max-width: 900px) { #inlineSmartPopup:not(.ism-minimized) { width: 100vw; border-radius: 0; } }
+</style>
+<div id="inlineSmartPopup" class="no-print">
+    <div class="ism-header">
+        <span class="ism-title"><i class="fa-solid fa-up-right-from-square"></i> Indent Maker Panel</span>
+        <span class="ism-actions">
+            <button type="button" class="ism-btn ism-btn-min" onclick="smartPopupMinimize()" title="Minimize (വലത് വശത്തേക്ക് ചുരുക്കുക)">&#8212; MIN</button>
+            <button type="button" class="ism-btn ism-btn-restore" onclick="smartPopupRestore()" title="Restore (പഴയ വീതിയിലേക്ക്)">&#10064;</button>
+            <button type="button" class="ism-btn ism-btn-close" onclick="smartPopupClose()" title="Close">X CLOSE</button>
+        </span>
     </div>
+    <iframe id="inlineIframe" src=""></iframe>
+</div>
+
     
 
 
