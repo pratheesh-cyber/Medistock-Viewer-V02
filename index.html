@@ -24,6 +24,12 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    
+    <style>
+        html.compact-90 { zoom: 0.9; }
+        @media print { html.compact-90 { zoom: 1 !important; } }
+    </style>
+    
     <meta name="description" content="Medistock Viewer V.02: ആയുർവേദ ഡിസ്പെൻസറികൾക്കും ആശുപത്രികൾക്കുമായി തയ്യാറാക്കിയ മികച്ച ഫാർമസി സ്റ്റോക്ക് മാനേജ്മെന്റ് സോഫ്റ്റ്‌വെയർ. മരുന്നുകളുടെ കാലാവധി (Expiry Date) കൃത്യമായി ട്രാക്ക് ചെയ്യാനും, സ്മാർട്ട് സ്കാനിംഗ് വഴി ഡാറ്റ എൻട്രി എളുപ്പമാക്കാനും, ഇൻഡന്റുകൾ വേഗത്തിൽ തയ്യാറാക്കാനും, OP/IP സബ് സ്റ്റോക്കുകൾ നിയന്ത്രിക്കാനും ഈ ടൂൾ സഹായിക്കുന്നു.">
     <title>Medistock Viewer V.02</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -245,7 +251,7 @@
             #a4NoSelectionWarningModal, #ipDeleteSelectedModal, #ipDeleteExpiredModal,
             #ipRemoveEmptyModal, #ipA4NoSelectionWarningModal, #medistockImageLimitWarningModal,
             #medistockBackupReminderModal, #medistockFirstTimeGuideModal, #sampleDataWarningModal,
-            #sampleExcelWarningModal, #scannerInfoModal1, #copyPromptPasswordModal,
+            #sampleExcelWarningModal, #scannerInfoModal1,
             #scannerInfoModal2, #scannerInfoPdfDownloadedModal, #pdfScannerInfoModal1,
             #importWarningModal, #addIndexWarningModal, #medistockFundWarningModal,
             #dataEntryMethodsModal, #expiryWarningModal, #printOrientationConfirmModal,
@@ -3331,6 +3337,188 @@
     </div>
 
     
+
+<style>
+#handoverChargeListPage h1.hcl-title { text-align:center; color:#005088; font-weight:700; margin:2px 0 10px; font-size:20px; }
+#handoverChargeListPage input[type="checkbox"] { transform:none; width:20px; height:20px; margin:0; cursor:pointer; }
+#handoverChargeListPage .hcl-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px 14px; }
+#handoverChargeListPage .hcl-grid label { font-size:13px; font-weight:700; color:#16274a; }
+#handoverChargeListPage .hcl-sec.hcl-center { text-align:center; display:flex; justify-content:center; align-items:center; gap:10px; }
+#handoverChargeListPage .hcl-acctbox { margin-top:16px; padding:12px 14px 14px; border:2px solid #e5b8b0; border-radius:12px; background:rgba(255,255,255,.55); }
+#handoverChargeListPage .hcl-acctbox .hcl-sec { margin-top:0; }
+#handoverChargeListPage .hcl-acctchk { width:20px; height:20px; accent-color:#c0392b; cursor:pointer; margin:0; flex:none; }
+#handoverChargeListPage .hcl-acctlbl { cursor:pointer; user-select:none; -webkit-user-select:none; }
+#handoverChargeListPage .hcl-acctbox .hcl-grid { transition:opacity .2s; }
+#handoverChargeListPage .hcl-acctbox.hcl-off .hcl-grid { opacity:.45; }
+#handoverChargeListPage .hcl-acctnote { text-align:center; font-size:12px; color:#7f5539; margin:-2px 0 10px; font-weight:600; }
+#handoverChargeListPage .hcl-acctbox.hcl-off .hcl-acctnote { color:#c0392b; }
+#handoverChargeListPage .hcl-dwrap { position:relative; display:flex; align-items:center; width:100%; }
+#handoverChargeListPage .hcl-dwrap .hcl-date { padding-right:40px; width:100%; box-sizing:border-box; }
+#handoverChargeListPage .hcl-dwrap .hcl-date.hcl-bad { border-color:#e74c3c !important; background:#fdecea; }
+#handoverChargeListPage .hcl-dwrap .hcl-cal { position:absolute; right:4px; top:50%; transform:translateY(-50%); border:none; background:transparent; cursor:pointer; font-size:18px; line-height:1; padding:4px 6px; }
+#handoverChargeListPage .hcl-dwrap .hcl-datepick { position:absolute; right:0; bottom:0; width:1px; height:1px; opacity:0; pointer-events:none; border:0; padding:0; }
+#handoverChargeListPage .hcl-sec { font-weight:900; color:#c0392b; font-size:14px; margin:4px 0 8px; border-bottom:2px dashed #e5b8b0; padding-bottom:3px; }
+#handoverChargeListPage .hcl-wrap { max-height:68vh; overflow:auto; border:2px solid #16274a; border-radius:8px; background:#fff; -webkit-overflow-scrolling:touch; }
+#handoverChargeListPage table.hcl-table { border-collapse:collapse; width:100%; min-width:700px; table-layout:fixed; background:#fff; }
+#handoverChargeListPage .hcl-table th, #handoverChargeListPage .hcl-table td { border:1px solid #333; padding:2px 4px; font-size:13px; text-align:center; vertical-align:middle; }
+#handoverChargeListPage .hcl-table thead th { position:sticky; top:0; z-index:3; background:#16274a; color:#fff; padding:8px 4px; }
+#handoverChargeListPage .hcl-table td.hcl-name { text-align:left; font-weight:600; min-width:260px; }
+#handoverChargeListPage .hcl-table tbody tr:nth-child(even) { background:#f4f8fc; }
+#handoverChargeListPage .hcl-table tbody tr.hcl-filled { background:#eafaf1; }
+#handoverChargeListPage .hcl-cell, #handoverChargeListPage .hcl-nameinp { width:100%; box-sizing:border-box; height:28px; border:1px solid transparent; background:transparent; text-align:center; font-weight:700; font-size:13px; border-radius:4px; padding:0 3px; }
+#handoverChargeListPage .hcl-nameinp { text-align:left; border-color:#e67e22; background:#fff8ec; }
+#handoverChargeListPage .hcl-cell:hover { border-color:#b7c4d4; }
+#handoverChargeListPage .hcl-cell:focus, #handoverChargeListPage .hcl-nameinp:focus { outline:none; border-color:#2980b9; background:#fffbe6; }
+#handoverChargeListPage .hcl-newbox { border:2px dashed #27ae60; background:#f1fbf4; border-radius:10px; padding:12px; margin-bottom:14px; }
+#handoverChargeListPage .hcl-newgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px; margin:10px 0; }
+#handoverChargeListPage .hcl-newgrid input { width:100%; box-sizing:border-box; height:36px; border:1px solid #9bb; border-radius:6px; padding:0 10px; font-weight:700; }
+#handoverChargeListPage .hcl-count { font-size:13px; font-weight:700; color:#16274a; margin:6px 2px; }
+#handoverChargeListPage .hcl-table th { box-sizing:border-box; }
+#handoverChargeListPage .hcl-table thead th { font-size:13px; font-weight:800; line-height:1.15; white-space:nowrap; padding:6px 2px; }
+#handoverChargeListPage .hcl-table thead th.hcl-th-name { white-space:normal; }
+#handoverChargeListPage .hcl-table td { padding:2px 2px; font-weight:700; color:#000; }
+#handoverChargeListPage .hcl-table td.hcl-name { padding:2px 6px; font-weight:800; font-size:13.5px; overflow-wrap:anywhere; }
+#handoverChargeListPage .hcl-table .hcl-cell { padding:0 2px; font-weight:800; color:#000; font-size:14px; }
+#handoverChargeListPage .hcl-table .hcl-cell[readonly] { background:#e3ebf5; border-color:#c3d0e0; color:#0b3d6b; cursor:default; }
+#handoverChargeListPage .hcl-table .hcl-cell[readonly] { pointer-events:none; user-select:none; -webkit-user-select:none; }
+#handoverChargeListPage .hcl-table .hcl-cell.hcl-flash { animation:hclFlash 1s ease; }
+@keyframes hclFlash { 0% { background:#ffe08a; } 100% { background:transparent; } }
+#handoverChargeListPage .hcl-ur[disabled] { opacity:.4; cursor:not-allowed; box-shadow:none; }
+
+#handoverChargeListPage .hcl-row2 { grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px 14px; min-width:0; }
+#handoverChargeListPage .hcl-row2 .hcl-ono { flex:1 1 200px; min-width:0; }
+#handoverChargeListPage .hcl-row2 .hcl-w { flex:0 0 165px; width:165px; min-width:0; }
+#handoverChargeListPage .hcl-row2 .hcl-cat { flex:0 0 235px; width:235px; min-width:0; }
+#handoverChargeListPage .hcl-row2 select, #handoverChargeListPage .hcl-row2 .hcl-dwrap, #handoverChargeListPage .hcl-row2 .hcl-date { width:100%; box-sizing:border-box; }
+@media (max-width:700px) {
+  #handoverChargeListPage .hcl-row2 .hcl-ono { flex:1 1 100%; }
+  #handoverChargeListPage .hcl-row2 .hcl-w { flex:1 1 calc(33% - 14px); width:auto; min-width:120px; }
+  #handoverChargeListPage .hcl-row2 .hcl-cat { flex:1 1 100%; width:auto; }
+}
+#handoverChargeListPage .hcl-table .hcl-th-cat { white-space:normal; }
+#handoverChargeListPage #hcl_acctBox .hcl-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
+@media (max-width:900px) { #handoverChargeListPage #hcl_acctBox .hcl-grid { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); } }
+#handoverChargeListPage .hcl-minfont { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 10px; border-radius:10px; background:rgba(255,255,255,.75); border:1px solid #b7c4d4; font-size:13px; font-weight:700; color:#16274a; box-sizing:border-box; }
+#handoverChargeListPage .hcl-minfont select { height:24px; font-size:13px; font-weight:700; border:1px solid #9bb; border-radius:6px; background:#fff; padding:0 4px; }
+#handoverChargeListPage .hcl-table td.hcl-catc { font-size:12px; font-weight:700; color:#16274a; padding:2px 4px; }
+#handoverChargeListPage .hcl-catsel { width:100%; box-sizing:border-box; height:28px; font-size:12px; font-weight:700; border:1px solid #e67e22; background:#fff8ec; border-radius:4px; }
+#handoverChargeListPage .hcl-newgrid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+#handoverChargeListPage .hcl-newrow { display:flex; flex-direction:column; gap:5px; border:1px solid transparent; border-radius:8px; padding:3px; min-width:0; }
+#handoverChargeListPage .hcl-newrow input { width:100%; min-width:0; }
+#handoverChargeListPage .hcl-newrow select { width:100%; height:36px; border:1px solid #9bb; border-radius:6px; font-weight:700; box-sizing:border-box; }
+@media (max-width:1000px) { #handoverChargeListPage .hcl-newgrid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:560px) { #handoverChargeListPage .hcl-newgrid { grid-template-columns:minmax(0,1fr); } }
+#handoverChargeListPage .hcl-newrow.hcl-miss { border-color:#e74c3c; background:#fdecea; }
+</style>
+
+<div id="handoverChargeListPage" class="index-page-wrapper full-width-wrapper" style="display:none;">
+  <h1 class="hcl-title">CHARGE LIST</h1>
+
+  <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:16px; width:100%;">
+    <button class="index-btn bg-dark" onclick="goBackFromHandoverChargeList()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
+    <button class="index-btn bg-orange" onclick="showHomePage()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
+    <button class="index-btn bg-blue-light" onclick="medistockPageOrientPrintConfirm(function(o){ hclOutput(o,true); })" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-print"></i> <b>PRINT</b></button>
+    <button class="index-btn bg-red-main" onclick="medistockPageOrientPrintConfirm(function(o){ hclOutput(o,false); })" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-file-pdf"></i> <b>PDF</b></button>
+    <button id="hclBackupBtn" class="index-btn" onclick="hclDriveBackup()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px; background:#2980b9; color:white;" title="ഇപ്പോൾ തന്നെ ഒരു Backup Google Drive-ലേക്ക് അയച്ച് ഫലം ഉടനെ കാണിക്കും">☁️ <b>Google Drive Backup ചെയ്യുക</b></button>
+    <button id="hclTestRestoreBtn" class="index-btn" onclick="medistockTestDriveRestoreNow('hclTestRestoreBtn')" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px; background:#8e44ad; color:white;" title="Google Drive-ൽ നിന്നും ഇപ്പോൾ തന്നെ ഡാറ്റ Restore ചെയ്ത് ഫലം ഉടനെ കാണിക്കും">⬇️ <b>Google Drive Restore ചെയ്യുക</b></button>
+    <button id="hclSignInAgainBtn" class="index-btn" onclick="medistockSignInAgain('hclSignInAgainBtn')" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px; background:#2c3e50; color:white;" title="Google Login ചെയ്ത് ഏകദേശം 1 മണിക്കൂർ കഴിഞ്ഞാൽ access_token കാലഹരണപ്പെടുന്നത് കാരണം Google Drive Backup മാത്രം നിലച്ചേക്കാം. ഈ ബട്ടൺ അമർത്തി വീണ്ടും Sign In ചെയ്താൽ Backup തടസ്സമില്ലാതെ തുടരും"><i class="fa-solid fa-right-to-bracket"></i> <b>SIGN IN AGAIN</b></button>
+    <button class="index-btn bg-dark" onclick="hclOpenHelpDesk()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
+    <label class="hcl-minfont" for="hcl_minFont" title="PRINT / PDF ഒരു പേജിൽ ഒതുങ്ങാൻ അക്ഷരവലിപ്പം തനിയെ കുറയ്ക്കുമ്പോൾ, ഈ വലിപ്പത്തിൽ താഴെ പോകില്ല">Minimum Auto-Fit Font Size
+      <select id="hcl_minFont"><option value="9.5">9.5</option><option value="9" selected>9</option><option value="8.5">8.5</option><option value="8">8</option></select></label>
+  </div>
+
+  <div class="soothing-box box-yellow-light no-print">
+    <div class="hcl-sec hcl-center">DETAILS OF CHARGE HANDOVER</div>
+    <div class="hcl-grid">
+      <div class="input-wrapper" style="gap:4px;"><label>Name of Officer handing over charge</label><input type="text" id="hcl_giverName" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Designation (handing over)</label><input type="text" id="hcl_giverDesig" class="index-input" autocomplete="off" placeholder="e.g. Medical Officer"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Name of Officer taking over charge</label><input type="text" id="hcl_takerName" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Designation (taking over)</label><input type="text" id="hcl_takerDesig" class="index-input" autocomplete="off" placeholder="e.g. Medical Officer"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Name of Institution</label><input type="text" id="hcl_instName" class="index-input" autocomplete="off" placeholder="Taken from HOME page if empty"></div>
+      <div class="hcl-row2"><div class="input-wrapper hcl-ono" style="gap:4px;"><label>Order No.</label><input type="text" id="hcl_orderNo" class="index-input" autocomplete="off" placeholder="e.g. ABCD/1598/2025-Z1 Of ABC DGH DFG"></div>
+      <div class="input-wrapper hcl-w" style="gap:4px;"><label>Order Date (optional)</label><div class="hcl-dwrap"><input type="text" id="hcl_orderDate" class="index-input hcl-date" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off"><button type="button" class="hcl-cal" data-for="hcl_orderDate" tabindex="-1" title="Calendar">📅</button><input type="date" id="hcl_orderDate_pick" class="hcl-datepick" tabindex="-1" aria-hidden="true"></div></div>
+      <div class="input-wrapper hcl-w" style="gap:4px;"><label>Date of Charge Handover</label><div class="hcl-dwrap"><input type="text" id="hcl_handDate" class="index-input hcl-date" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off"><button type="button" class="hcl-cal" data-for="hcl_handDate" tabindex="-1" title="Calendar">📅</button><input type="date" id="hcl_handDate_pick" class="hcl-datepick" tabindex="-1" aria-hidden="true"></div></div>
+      <div class="input-wrapper hcl-w" style="gap:4px;"><label>Session</label>
+        <select id="hcl_session" class="index-input"><option value="AN">AN (Afternoon)</option><option value="FN">FN (Forenoon)</option></select></div>
+      <div class="input-wrapper hcl-cat" style="gap:4px;"><label>REGISTER CATEGORY</label>
+        <select id="hcl_regCat" class="index-input"><option value="All Registers">All Registers</option><option value="Medical Officer" selected>Medical Officer</option><option value="Pharmacist">Pharmacist</option><option value="Nurse">Nurse</option></select></div>
+      </div>
+    </div>
+    <div class="hcl-acctbox" id="hcl_acctBox">
+    <div class="hcl-sec hcl-center"><input type="checkbox" id="hcl_acctInclude" class="hcl-acctchk" checked><label for="hcl_acctInclude" class="hcl-acctlbl">ACCOUNT DETAILS</label></div>
+    <div class="hcl-acctnote" id="hcl_acctNote">ടിക്ക് ഉള്ളപ്പോൾ ഈ വിവരങ്ങൾ PRINT / PDF-ൽ ഉൾപ്പെടും</div>
+    <div class="hcl-grid">
+      <div class="input-wrapper" style="gap:4px;"><label>Amount in Account (Rs.)</label><input type="text" inputmode="decimal" id="hcl_acctAmt" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Cash in Hand (Rs.)</label><input type="text" inputmode="decimal" id="hcl_cashAmt" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Cheque Book No.</label><input type="text" id="hcl_chequeNo" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Balance Cheque Leaves</label><input type="text" inputmode="numeric" id="hcl_chequeLeaves" class="index-input" autocomplete="off"></div>
+      <div class="input-wrapper" style="gap:4px;"><label>Permanent Advance (Rs.)</label><input type="text" inputmode="decimal" id="hcl_permAdv" class="index-input" autocomplete="off" placeholder="10"></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="soothing-box box-yellow-light no-print" style="padding:14px;">
+    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;">
+      <div class="no-print" style="display:flex; gap:8px;">
+        <button id="hcl_undoBtn" class="btn-regular hcl-ur" style="background:#d35400; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclUndo()" disabled title="ഈ പേജിലെ പട്ടികയിൽ വരുത്തിയ അവസാനത്തെ മാറ്റം (ബോക്സിലെ ഡാറ്റ / ഇനം ചേർക്കൽ / ഡിലീറ്റ് / പേര് മാറ്റം) Undo ചെയ്യാൻ"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+        <button id="hcl_redoBtn" class="btn-regular hcl-ur" style="background:#16a085; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclRedo()" disabled title="Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> Redo</button>
+      </div>
+
+      <div class="input-wrapper" style="flex:1; min-width:220px; gap:4px;">
+        <label style="font-size:13px; font-weight:700;">Search Article</label>
+        <div style="position:relative; width:100%;">
+          <input type="text" id="hcl_search" class="index-input" placeholder="Search article..." autocomplete="off" style="padding-right:30px;">
+          <i class="fa-solid fa-circle-xmark" style="position:absolute; right:10px; top:12px; color:#e74c3c; cursor:pointer; font-size:16px;" onclick="hclClearSearch()"></i>
+        </div>
+      </div>
+      <div class="input-wrapper" style="width:200px; gap:4px;">
+        <label style="font-size:13px; font-weight:700;">Show</label>
+        <select id="hcl_filter" class="index-input"><option value="ALL">ALL ARTICLES</option><option value="FILLED">ENTERED ONLY</option></select>
+      </div>
+      <button onclick="hclRefresh()" style="height:38px; background:black; color:white; border:none; padding:0 14px; border-radius:6px; font-weight:bold; cursor:pointer; box-shadow:0 3px #555; display:flex; align-items:center; gap:6px; font-size:14px;"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; background:rgba(255,255,255,0.6); padding:10px 12px; border-radius:8px; border:2px dashed #f6ad55; align-items:flex-end;">
+        <button class="btn-regular" style="background:#27ae60; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclOpenNew()">ADD Article</button>
+        <button class="btn-regular" style="background:#3498db; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclCommitNew()">Update</button>
+        <button class="btn-regular" style="background:#e74c3c; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclRemoveSelected()">Remove selected</button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button id="hcl_editBtn" class="btn-regular" style="background:#8e44ad; height:38px; box-sizing:border-box; padding:0 18px;" onclick="hclToggleEdit()"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+        <button id="hcl_cancelEditBtn" class="btn-regular" style="display:none; background:#7f8c8d; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclCancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="hcl_newBox" class="hcl-newbox no-print" style="display:none;">
+    <b style="color:#1e8449;">NEW ARTICLES</b> <span style="font-size:12px; color:#555;">— പുതിയ ഇനങ്ങളുടെ പേരും (Name of article) category-യും രണ്ടും നൽകിയ ശേഷം മുകളിലെ "Update" ബട്ടൺ അമർത്തുക. (ആൽഫബറ്റിക് ക്രമത്തിൽ പട്ടികയിൽ ചേരും)</span>
+    <div id="hcl_newGrid" class="hcl-newgrid"></div>
+    <button class="btn-regular" style="background:#16a085; padding:6px 14px;" onclick="hclMoreNewRows()">+ 4 more rows</button>
+    <button class="btn-regular" style="background:#7f8c8d; padding:6px 14px;" onclick="hclCloseNew()">Close</button>
+  </div>
+
+  <div class="hcl-count no-print" id="hcl_count"></div>
+  <div class="hcl-wrap">
+    <table class="hcl-table" id="hcl_table">
+      <thead>
+        <tr>
+          <th style="width:34px;" class="no-print"><input type="checkbox" id="hcl_selAll" title="Select / Deselect all shown"></th>
+          <th style="width:44px;">SI No</th>
+          <th class="hcl-th-name">Name of article</th>
+          <th class="hcl-th-cat" style="width:120px;">REGISTER<br>CATEGORY</th>
+          <th class="hcl-th-actual" style="width:50px;">Actual<br>Stock</th>
+          <th style="width:44px;">New</th>
+          <th style="width:44px;">Old</th>
+          <th class="hcl-th-use" style="width:38px;">In<br>Use</th>
+          <th style="width:56px;">Deficite</th>
+          <th style="width:170px;">Remarks</th>
+        </tr>
+      </thead>
+      <tbody id="hcl_tbody"></tbody>
+    </table>
+  </div>
+  <div style="height:30px;"></div>
+</div>
+
+
     <div id="ipSubStockDetailsPage" class="index-page-wrapper full-width-wrapper">
         <h1 style="text-align: center; color: #005088; font-weight: 700; margin-top: 2px; margin-bottom: 2px; font-size: 20px;">IP SUB STOCK WINDOW</h1>
 
@@ -3671,7 +3859,7 @@
         <div style="display: flex; gap: 10px; background: rgba(255,255,255,0.6); padding: 10px 15px; border-radius: 8px; border: 2px dashed #f6ad55; align-items: flex-end;">
             <button class="btn-regular" style="background:#27ae60; height: 38px; box-sizing: border-box;" onclick="confirmAddOpeningRows()">ADD Medicines to index</button>
             <button class="btn-regular" style="background:#3498db; height: 38px; box-sizing: border-box;" onclick="updateOpeningIndex()">Update index</button>
-            <button class="btn-regular" style="background:#e74c3c; height: 38px; box-sizing: border-box;" onclick="confirmDeleteSelected('opening')">Remove selected</button>
+            <button class="btn-regular" style="background:#e74c3c; height: 38px; box-sizing: border-box;" onclick="confirmDeleteSelectedOpening()">Remove selected</button>
         </div>
     </div>
 </div>
@@ -4038,7 +4226,7 @@
             
             <button class="nav-btn" style="margin-bottom: 0; padding: 6px 10px; background: #218c74;" onclick="copyGeminiApiKeyLink()"><i class="fa-solid fa-key"></i> API-Key Link Copy</button>
             <button class="nav-btn" style="margin-bottom: 0; padding: 6px 10px; background: #e67e22;" onclick="openPdfScanner()"><i class="fa-solid fa-file-pdf"></i> PDF Scanner</button>
-            <button class="nav-btn" style="margin-bottom: 0; padding: 6px 10px; background: #16a085;" onclick="requestCopyPromptPassword()"><i class="fa-solid fa-copy"></i> Copy Prompt</button>
+            <button class="nav-btn" style="margin-bottom: 0; padding: 6px 10px; background: #16a085;" onclick="copyPdfScannerPrompt()"><i class="fa-solid fa-copy"></i> Copy Prompt</button>
             
             <button class="nav-btn" style="margin-bottom: 0; padding: 6px 10px; background: #6c3483;" onclick="showMoreDetailsPage()"><i class="fa-solid fa-circle-info"></i> MORE DETAILS WINDOW</button>
             
@@ -5220,7 +5408,7 @@
         
         
         
-        <button class="nav-btn" style="margin-bottom: 0; background: #d35400; padding: 6px 12px; font-size: 13px;" onclick="alert('ഈ വിൻഡോ കൂടുതൽ മെച്ചപ്പെടുത്തുന്ന പ്രവർത്തനം നടന്നുകൊണ്ടിരിക്കുന്നതിനാൽ തല്‍ക്കാലം ലഭിക്കുന്നതല്ല.')"><i class="fa-solid fa-file-invoice-dollar"></i> CHARGE LIST GENERATOR</button>
+        <button class="nav-btn" style="margin-bottom: 0; background: #d35400; padding: 6px 12px; font-size: 13px;" onclick="showHandoverChargeListPage()"><i class="fa-solid fa-file-invoice-dollar"></i> CHARGE LIST GENERATOR</button>
 
         <button class="nav-btn" style="margin-bottom: 0; background: #16a085; padding: 6px 12px; font-size: 13px;" onclick="showBookLabelGeneratorPage()"><i class="fa-solid fa-tags"></i> REGISTER LABEL GENERATOR</button>
         
@@ -5969,21 +6157,6 @@
 
 
 
-
-
-
-<div id="copyPromptPasswordModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:100015; align-items:center; justify-content:center; padding: 20px; box-sizing: border-box;">
-    <div style="background:white; color:#2c3e50; max-width: 420px; width:100%; border-radius:14px; padding: 28px 26px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
-        <i class="fa-solid fa-lock" style="font-size: 40px; color:#c0392b; margin-bottom: 12px;"></i>
-        <p style="font-size:15px; font-weight:bold; line-height:1.6; margin: 0 0 18px 0;">തൽക്കാലം ഡെവലപ്പർ ഈ ഫങ്ഷൻ PASSWORD വഴി നിയന്ത്രിച്ചിരിക്കുന്നു. PASSWORD അറിയില്ലെങ്കിൽ WhatsApp വഴി ഡെവലപ്പറുമായി ബന്ധപ്പെടുക.</p>
-        <input type="password" id="copyPromptPasswordInput" placeholder="PASSWORD" onkeydown="handleCopyPromptPasswordKeydown(event)" style="width:100%; box-sizing:border-box; padding:10px 12px; border:2px solid #bdc3c7; border-radius:8px; font-size:16px; text-align:center; margin-bottom: 10px;" maxlength="20">
-        <div id="copyPromptPasswordError" style="display:none; color:#c0392b; font-weight:bold; font-size:13px; margin-bottom: 10px;">തെറ്റായ PASSWORD. വീണ്ടും ശ്രമിക്കുക.</div>
-        <div style="display:flex; gap:12px; justify-content:center; margin-top: 6px;">
-            <button onclick="verifyCopyPromptPassword()" style="background:#27ae60; color:white; border:none; padding:10px 30px; border-radius:8px; font-weight:900; font-size:15px; cursor:pointer;">OK</button>
-            <button onclick="closeCopyPromptPasswordModal()" style="background:#7f8c8d; color:white; border:none; padding:10px 30px; border-radius:8px; font-weight:900; font-size:15px; cursor:pointer;">CANCEL</button>
-        </div>
-    </div>
-</div>
 
 <div id="scannerInfoModal2" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(20, 60, 90, 0.96); z-index:100011; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box; overflow-y: auto;">
     <div style="max-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto;">
@@ -7080,6 +7253,24 @@
 
 
 
+
+
+
+
+
+
+
+<div id="openingDeleteSelectedModal" role="alertdialog" aria-modal="true" aria-labelledby="openingDeleteSelectedTitle" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(192, 57, 43, 0.95); z-index:10070; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:white; backdrop-filter: blur(5px); padding:20px; box-sizing:border-box;">
+    <i class="fa-solid fa-trash-can" style="font-size: 100px; margin-bottom: 20px; color: #f1c40f;"></i>
+    <h1 id="openingDeleteSelectedTitle" style="font-size: 45px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase;">ശ്രദ്ധിക്കുക !</h1>
+    <p style="font-size: 24px; font-weight: bold; max-width: 800px; line-height: 1.6; margin-bottom: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 2px dashed #f1c40f;">
+        തിരഞ്ഞെടുത്ത <span id="openingDeleteSelectedCount" style="color:#f1c40f; font-size: 30px;">0</span> മരുന്നുകൾ MAIN STOCK INDEX പേജിൽ നിന്ന് ശാശ്വതമായി ഡിലീറ്റ് ചെയ്യപ്പെടും. ഡിലീറ്റ് ചെയ്യണമെന്ന് ഉറപ്പാണോ?
+    </p>
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+        <button type="button" onclick="executeDeleteSelectedOpening()" style="background: #e74c3c; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">YES, DELETE</button>
+        <button type="button" id="openingDeleteSelectedNoBtn" onclick="closeOpeningDeleteSelectedModal()" style="background: #27ae60; color: white; border: 4px solid white; padding: 15px 40px; border-radius: 12px; font-size: 22px; font-weight: 900; cursor: pointer; transition: 0.2s;">NO, CANCEL</button>
+    </div>
+</div>
 
 
 
