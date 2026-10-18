@@ -558,9 +558,9 @@
             color: #000;
             pointer-events: none;
         }
-        .a4-print-footer .a4-footer-left { opacity: 0.5; }
-        .a4-print-footer .a4-footer-center { text-align: center; flex: 1; opacity: 0.5; }
-        .a4-print-footer .a4-footer-right { text-align: right; }
+        .a4-print-footer .a4-footer-left { opacity: 0.09; }
+        .a4-print-footer .a4-footer-center { text-align: center; flex: 1; opacity: 0.09; }
+        .a4-print-footer .a4-footer-right { text-align: right; opacity: 0.09; }
 
         
         .sumteck-modal-container { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10050; text-align: center; max-width: 500px; width: 90%; border: 2px solid #3498db; }
@@ -803,7 +803,7 @@
         z-index: 9999;
     }
     .medistock-fixed-footer .left-footer {
-        opacity: 0.10; 
+        opacity: 0.09; 
         color: #000000;
     }
     .medistock-fixed-footer .right-footer {
@@ -921,7 +921,7 @@
     }
     
     .main-details-fixed-footer .left-footer {
-        opacity: 0.06 !important;
+        opacity: 0.09 !important;
     }
     
     .main-details-fixed-footer .center-footer {
@@ -2108,6 +2108,75 @@
     </div>
     
 
+    
+<style>
+    #dnbOverlay { display: none; position: fixed; inset: 0; z-index: 2147483000; box-sizing: border-box;
+        padding: 18px; align-items: center; justify-content: center; overflow: auto;
+        background: radial-gradient(circle at 20% 15%, rgba(41,128,185,.88), rgba(10,25,60,.94) 70%);
+        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    #dnbOverlay.dnb-open { display: flex; animation: dnbFade .25s ease-out; }
+    #dnbOverlay * { box-sizing: border-box; }
+    .dnb-card { width: min(940px, 100%); max-height: 94vh; display: flex; flex-direction: column; overflow: hidden;
+        background: linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%); border-radius: 24px;
+        box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 4px rgba(255,255,255,.25);
+        animation: dnbPop .35s cubic-bezier(.2,.9,.3,1.2); }
+    .dnb-head { position: relative; display: flex; align-items: center; gap: 16px; padding: 20px 64px 20px 24px; color: #fff;
+        background: linear-gradient(120deg, #0b3d91 0%, #1976d2 55%, #12b886 100%); }
+    .dnb-icon { flex: 0 0 auto; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,.2); box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
+    .dnb-icon svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .dnb-badge { display: inline-block; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; padding: 3px 10px; border-radius: 20px;
+        background: rgba(255,255,255,.22); margin-bottom: 4px; }
+    .dnb-title { margin: 0; font-size: clamp(18px, 3.2vw, 28px); line-height: 1.25; font-weight: 800; letter-spacing: .5px; }
+    .dnb-x { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border: none; border-radius: 50%; cursor: pointer;
+        font-size: 20px; line-height: 1; color: #fff; background: rgba(255,255,255,.22); transition: background .15s, transform .15s; }
+    .dnb-x:hover { background: rgba(231,76,60,.9); transform: rotate(90deg); }
+    .dnb-body { padding: 22px 28px 8px; overflow-y: auto; color: #1f2d3d; font-size: clamp(15px, 1.7vw, 18px); line-height: 1.9; }
+    .dnb-hello { margin: 0 0 12px; font-size: 1.15em; font-weight: 800; color: #0b3d91; }
+    .dnb-call { margin: 0 0 14px; padding: 14px 18px; border-radius: 14px; border-left: 6px solid #f39c12;
+        background: linear-gradient(90deg, #fff4d6, #fffaf0); font-weight: 600; }
+    .dnb-p { margin: 0 0 12px; padding-left: 16px; border-left: 4px solid #cfe3fb; text-align: justify; }
+    .dnb-call b, .dnb-p b { color: #c0392b; }
+    .dnb-foot { padding: 14px 24px 22px; display: flex; justify-content: center; }
+    .dnb-ok { min-width: 190px; padding: 13px 34px; border: none; border-radius: 40px; cursor: pointer; font-size: 18px; font-weight: 800;
+        letter-spacing: 1px; color: #fff; background: linear-gradient(120deg, #0b3d91, #1976d2); box-shadow: 0 6px 0 #07285f, 0 10px 22px rgba(0,0,0,.3);
+        transition: transform .1s, box-shadow .1s; }
+    .dnb-ok:hover { filter: brightness(1.1); }
+    .dnb-ok:active { transform: translateY(4px); box-shadow: 0 2px 0 #07285f; }
+    .dnb-ok:focus-visible, .dnb-x:focus-visible { outline: 3px solid #f1c40f; outline-offset: 3px; }
+    @keyframes dnbFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes dnbPop { from { opacity: 0; transform: translateY(24px) scale(.94); } to { opacity: 1; transform: none; } }
+    @media (max-width: 600px) {
+        #dnbOverlay { padding: 8px; }
+        .dnb-head { padding: 14px 54px 14px 14px; gap: 10px; }
+        .dnb-icon { width: 44px; height: 44px; } .dnb-icon svg { width: 24px; height: 24px; }
+        .dnb-body { padding: 16px 16px 4px; line-height: 1.8; } .dnb-p { text-align: left; padding-left: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { #dnbOverlay.dnb-open, .dnb-card { animation: none; } }
+    @media print { #dnbOverlay { display: none !important; } }
+</style>
+
+<div id="dnbOverlay" role="dialog" aria-modal="true" aria-labelledby="dnbTitle">
+    <div class="dnb-card">
+        <div class="dnb-head">
+            <div class="dnb-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>
+            </div>
+            <div>
+                <span class="dnb-badge">PDF DOWNLOAD</span>
+                <h2 class="dnb-title" id="dnbTitle"></h2>
+            </div>
+            <button type="button" class="dnb-x" id="dnbCloseX" aria-label="Close" onclick="closeDownloadNoticeBox()">&#10005;</button>
+        </div>
+        <div class="dnb-body" id="dnbBody"></div>
+        <div class="dnb-foot">
+            <button type="button" class="dnb-ok" id="dnbOk" onclick="closeDownloadNoticeBox()">OK</button>
+        </div>
+    </div>
+</div>
+
+
+
     <div id="projectModal">
         <button class="modal-close" onclick="closeModal()">X</button>
         <h3 style="text-align:center; color:#005088; margin-top:0;">PROJECT NAME & CODE</h3>
@@ -2220,7 +2289,7 @@
         <i class="fa-solid fa-headset"></i><b>HELP DESK</b>
     </button>
     
-    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/uc?export=download&id=1j1r_B_CWIZm5MNP8cBwbvb4ned4SOs9p', '_blank'); }">
+    <button class="btn-large bg-red-light" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/uc?export=download&id=1j1r_B_CWIZm5MNP8cBwbvb4ned4SOs9p', '_blank'); showDownloadNoticeBox('pharmacyHelp'); }">
         <i class="fa-solid fa-book-medical" style="font-size: 22px; margin-bottom: -5px;"></i>
         <b>PHARMACY HELP FILE</b>
     </button>
@@ -2237,7 +2306,7 @@
 
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px;">
     <button class="btn-3d" style="background: #497ff4; box-shadow: 0 6px #08027d;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.rubundroid.com/', '_blank'); }">rubundroid.com</button>
-    <button class="btn-3d" style="background: #d2f205; box-shadow: 0 6px #4f9702;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/uc?export=download&id=1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX', '_blank'); }">MEDISTOCK VIEWER - HAND BOOK</button>
+    <button class="btn-3d" style="background: #d2f205; box-shadow: 0 6px #4f9702;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/uc?export=download&id=1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX', '_blank'); showDownloadNoticeBox('handbook'); }">MEDISTOCK VIEWER - HAND BOOK</button>
     <button class="btn-3d" style="background: #f53bd3; box-shadow: 0 6px #6e015e;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://ism.kerala.gov.in/eng/index.php#', '_blank'); }">go to ISM WEBSITE</button>
     <button class="btn-3d" style="background: #4ff319; box-shadow: 0 6px #144802;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.sumteck.in/', '_blank'); }">sumteck.in</button>
 </div>
@@ -3316,8 +3385,8 @@
                 
                 <div id="a4MedListFooter" class="a4-print-footer">
                     <span class="a4-footer-left">Medistock Viewer V.02</span>
-                    <span class="a4-footer-center">antsworld.in</span>
-                    <span class="a4-footer-right" id="a4FooterDateText">Generated On: --/--/----</span>
+                    <span class="a4-footer-center"></span>
+                    <span class="a4-footer-right" id="a4FooterDateText">antsworld.in</span>
                 </div>
             </div>
         </div>
@@ -3373,6 +3442,21 @@
 #handoverChargeListPage .hcl-newgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px; margin:10px 0; }
 #handoverChargeListPage .hcl-newgrid input { width:100%; box-sizing:border-box; height:36px; border:1px solid #9bb; border-radius:6px; padding:0 10px; font-weight:700; }
 #handoverChargeListPage .hcl-count { font-size:13px; font-weight:700; color:#16274a; margin:6px 2px; }
+
+#handoverChargeListPage .hcl-countrow { position:relative; min-height:52px; margin:calc(1mm - 25px) 0 2px; }   
+#handoverChargeListPage #hcl_newBox:not([style*="display:none"]):not([style*="display: none"]) + .hcl-countrow { margin-top:calc(1mm - 14px); }   
+#handoverChargeListPage .hcl-countrow .hcl-count { display:inline-block; margin:0 2px; padding-top:15px; line-height:20px; vertical-align:top; }
+#handoverChargeListPage .hcl-dm { display:none; position:absolute; top:0; left:0; height:50px; box-sizing:border-box; border:2px solid #c0392b; border-radius:10px; background:linear-gradient(180deg,#fff6f4,#fdebe8); box-shadow:0 2px 6px rgba(192,57,43,.2); }
+#handoverChargeListPage .hcl-dm.hcl-dm-on { display:block; }
+#handoverChargeListPage .hcl-dm-title { position:absolute; top:-2px; left:50%; transform:translateX(-50%); padding:0 14px; font-size:11px; font-weight:900; letter-spacing:.4px; line-height:16px; color:#fff; background:#c0392b; border-radius:0 0 10px 10px; white-space:nowrap; pointer-events:none; }   
+#handoverChargeListPage .hcl-dm-btn { position:absolute; top:18px; left:0; width:30px; height:25px; padding:0; margin:0; transform:translateX(-50%); display:flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:#e74c3c; color:#fff; font-size:13px; cursor:pointer; box-shadow:0 2px 0 #a93226; transition:background .12s, transform .12s; }
+#handoverChargeListPage .hcl-dm-btn.hcl-dm-all { background:#922b21; box-shadow:0 2px 0 #641e16; }
+#handoverChargeListPage .hcl-dm-btn:hover { background:#c0392b; transform:translateX(-50%) scale(1.1); }
+#handoverChargeListPage .hcl-dm-btn:active { transform:translateX(-50%) translateY(1px); box-shadow:none; }
+#handoverChargeListPage .hcl-dm-btn:focus-visible { outline:3px solid #f1c40f; outline-offset:1px; }
+#handoverChargeListPage .hcl-countrow.hcl-dm-below { min-height:80px; }
+#handoverChargeListPage .hcl-countrow.hcl-dm-below .hcl-count { display:block; padding-top:4px; }
+#handoverChargeListPage .hcl-countrow.hcl-dm-below .hcl-dm { top:28px; }
 #handoverChargeListPage .hcl-table th { box-sizing:border-box; }
 #handoverChargeListPage .hcl-table thead th { font-size:13px; font-weight:800; line-height:1.15; white-space:nowrap; padding:6px 2px; }
 #handoverChargeListPage .hcl-table thead th.hcl-th-name { white-space:normal; }
@@ -3495,7 +3579,19 @@
     <button class="btn-regular" style="background:#7f8c8d; padding:6px 14px;" onclick="hclCloseNew()">Close</button>
   </div>
 
-  <div class="hcl-count no-print" id="hcl_count"></div>
+  <div class="hcl-countrow no-print" id="hcl_countrow">
+    <div class="hcl-count no-print" id="hcl_count"></div>
+    
+    <div class="hcl-dm" id="hcl_dm" role="group" aria-label="Data Management">
+      <span class="hcl-dm-title">Data Management</span>
+      <button type="button" class="hcl-dm-btn hcl-dm-all" onclick="hclClearData('all')" title="Actual Stock: തിരഞ്ഞെടുത്ത category-യിൽ നൽകിയ എല്ലാ ഡാറ്റയും (New, Old, In Use, Deficite, Remarks) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete all entered data of the selected category"><i class="fa-solid fa-trash-can"></i></button>
+      <button type="button" class="hcl-dm-btn" onclick="hclClearData('nw')" title="New: ഈ കോളത്തിലെ ഡാറ്റ (തിരഞ്ഞെടുത്ത category) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete New column data"><i class="fa-solid fa-trash-can"></i></button>
+      <button type="button" class="hcl-dm-btn" onclick="hclClearData('old')" title="Old: ഈ കോളത്തിലെ ഡാറ്റ (തിരഞ്ഞെടുത്ത category) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete Old column data"><i class="fa-solid fa-trash-can"></i></button>
+      <button type="button" class="hcl-dm-btn" onclick="hclClearData('use')" title="In Use: ഈ കോളത്തിലെ ഡാറ്റ (തിരഞ്ഞെടുത്ത category) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete In Use column data"><i class="fa-solid fa-trash-can"></i></button>
+      <button type="button" class="hcl-dm-btn" onclick="hclClearData('def')" title="Deficite: ഈ കോളത്തിലെ ഡാറ്റ (തിരഞ്ഞെടുത്ത category) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete Deficite column data"><i class="fa-solid fa-trash-can"></i></button>
+      <button type="button" class="hcl-dm-btn" onclick="hclClearData('rem')" title="Remarks: ഈ കോളത്തിലെ ഡാറ്റ (തിരഞ്ഞെടുത്ത category) ഡിലീറ്റ് ചെയ്യുക" aria-label="Delete Remarks column data"><i class="fa-solid fa-trash-can"></i></button>
+    </div>
+  </div>
   <div class="hcl-wrap">
     <table class="hcl-table" id="hcl_table">
       <thead>
@@ -3763,8 +3859,8 @@
                 
                 <div id="ipA4MedListFooter" class="a4-print-footer">
                     <span class="a4-footer-left">Medistock Viewer V.02</span>
-                    <span class="a4-footer-center">antsworld.in</span>
-                    <span class="a4-footer-right" id="ipA4FooterDateText">Generated On: --/--/----</span>
+                    <span class="a4-footer-center"></span>
+                    <span class="a4-footer-right" id="ipA4FooterDateText">antsworld.in</span>
                 </div>
             </div>
         </div>
@@ -7087,6 +7183,8 @@
             <button onclick="medistockCloseFundWarningAndFocusFund()" style="background: #27ae60; color: white; border: 3px solid white; padding: 10px 45px; border-radius: 10px; font-size: 20px; font-weight: 900; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
         </div>
     </div>
+
+
 
 
 
