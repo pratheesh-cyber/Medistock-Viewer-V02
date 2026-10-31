@@ -1780,7 +1780,7 @@
 
             <h1 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-size: 28px;">Medistock Viewer V.02</h1>
             <p style="color: #7f8c8d; margin-bottom: 30px; font-size: 15px; line-height: 1.5;"> Disclaimer
- : Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
+ :Medistock Viewer is an independently developed Medicine Management Software and  is  not  affiliated  with  or  endorsed  by  any  Government  department  or  organization.  Anyone  interested  in  using  this  software  is welcome to sign in and explore its features.</p>
             
             
             <div style="margin-top: 4px; margin-bottom: 4px; display: flex; flex-direction: column; align-items: center;">
@@ -7579,6 +7579,137 @@
     .indent-sig-col.indent-sig-lower { padding-top: 1.5em; }
     .indent-sig-mid { flex: 1 1 auto; align-self: flex-end; text-align: center; line-height: 1.5; }
 </style>
+
+
+
+
+
+
+
+
+
+<style>
+#mpgOverlay { display:none; position:fixed; inset:0; z-index:2147483000; background:rgba(15,23,42,0.94); overflow-y:auto; -webkit-overflow-scrolling:touch; font-family:inherit; }
+#mpgOverlay.mpg-open { display:flex; align-items:flex-start; justify-content:center; }
+#mpgOverlay .mpg-wrap { width:100%; max-width:760px; box-sizing:border-box; padding:24px 16px 32px; margin:auto; }
+#mpgOverlay .mpg-card { background:#fff; border-radius:16px; border:4px solid #c0392b; box-shadow:0 20px 60px rgba(0,0,0,.55); padding:22px 20px 20px; text-align:center; }
+#mpgOverlay .mpg-title { color:#c0392b; font-weight:900; font-size:26px; line-height:1.35; margin:0 0 8px; }
+#mpgOverlay .mpg-msg { color:#c0392b; font-weight:900; font-size:19px; line-height:1.6; margin:0 0 16px; }
+#mpgOverlay .mpg-msg q { quotes:none; background:#fdecea; padding:1px 7px; border-radius:6px; border:1px dashed #c0392b; white-space:nowrap; }
+#mpgOverlay .mpg-stage { position:relative; width:100%; max-width:600px; height:312px; margin:0 auto 6px; background:#e9eef5; border-radius:12px; overflow:hidden; border:1px solid #b8c2d0; text-align:left; }
+#mpgOverlay .mpg-bar { position:absolute; left:0; right:0; top:0; height:56px; background:#f3d6da; }
+#mpgOverlay .mpg-url { position:absolute; left:10px; right:10px; top:9px; height:38px; background:#fff; border-radius:19px; box-shadow:inset 0 0 0 1px #d8b9bf; display:flex; align-items:center; padding:0 12px; font-size:13px; color:#555; font-weight:700; overflow:hidden; white-space:nowrap; }
+#mpgOverlay .mpg-url span { overflow:hidden; text-overflow:ellipsis; padding-right:110px; }
+#mpgOverlay .mpg-ico { position:absolute; top:13px; width:30px; height:30px; border-radius:50%; background:#d7c2c6; display:flex; align-items:center; justify-content:center; }
+#mpgOverlay .mpg-ico svg { width:20px; height:20px; }
+#mpgOverlay .mpg-ico-block { right:62px; animation:mpgIcon 14s infinite; }
+#mpgOverlay .mpg-ico-block::after { content:""; position:absolute; inset:-5px; border-radius:50%; border:3px solid #e74c3c; opacity:0; animation:mpgRing 14s infinite; }
+#mpgOverlay .mpg-ico-a { right:100px; background:transparent; } #mpgOverlay .mpg-ico-b { right:24px; background:transparent; }
+#mpgOverlay .mpg-pop { position:absolute; top:62px; right:8px; width:262px; background:#fff3f6; border-radius:14px; box-shadow:0 8px 28px rgba(0,0,0,.35); padding:12px 14px 12px; box-sizing:border-box; opacity:0; transform:translateY(-8px) scale(.96); transform-origin:top right; animation:mpgPop 14s infinite; }
+#mpgOverlay .mpg-pop h4 { margin:0 0 6px; font-size:15px; color:#222; font-weight:800; }
+#mpgOverlay .mpg-pop .mpg-lnk { color:#b0223a; font-size:11px; text-decoration:underline; margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#mpgOverlay .mpg-opt { display:flex; align-items:center; gap:8px; font-size:11.5px; color:#333; margin:7px 0; line-height:1.25; }
+#mpgOverlay .mpg-rad { flex:0 0 16px; width:16px; height:16px; border-radius:50%; border:2px solid #7a5c63; position:relative; box-sizing:border-box; }
+#mpgOverlay .mpg-rad i { position:absolute; inset:2px; border-radius:50%; background:#8b3a4e; opacity:0; }
+#mpgOverlay .mpg-rad-allow i { animation:mpgOn 14s infinite; }
+#mpgOverlay .mpg-rad-block i { opacity:1; animation:mpgOff 14s infinite; }
+#mpgOverlay .mpg-done { display:inline-block; float:right; margin-top:4px; background:#8b3a4e; color:#fff; font-weight:800; font-size:12px; padding:6px 18px; border-radius:18px; animation:mpgDone 14s infinite; }
+#mpgOverlay .mpg-cur { position:absolute; width:26px; height:26px; z-index:5; top:230px; right:330px; animation:mpgCur 14s infinite; filter:drop-shadow(0 2px 2px rgba(0,0,0,.45)); }
+#mpgOverlay .mpg-ok { position:absolute; left:50%; bottom:16px; transform:translateX(-50%); background:#27ae60; color:#fff; font-weight:900; font-size:14px; padding:8px 16px; border-radius:20px; opacity:0; white-space:nowrap; animation:mpgOk 14s infinite; }
+#mpgOverlay .mpg-cap { position:relative; height:46px; max-width:600px; margin:0 auto 8px; }
+#mpgOverlay .mpg-cap span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:#1a5276; opacity:0; }
+#mpgOverlay .mpg-cap .c1 { animation:mpgC1 14s infinite; } #mpgOverlay .mpg-cap .c2 { animation:mpgC2 14s infinite; }
+#mpgOverlay .mpg-cap .c3 { animation:mpgC3 14s infinite; } #mpgOverlay .mpg-cap .c4 { animation:mpgC4 14s infinite; }
+#mpgOverlay ol { text-align:left; max-width:600px; margin:6px auto 14px; padding-left:26px; color:#2c3e50; font-size:14px; line-height:1.7; font-weight:700; }
+#mpgOverlay .mpg-note { font-size:12px; color:#7f8c8d; font-weight:700; margin:0 0 14px; }
+#mpgOverlay .mpg-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+#mpgOverlay .mpg-btns button { cursor:pointer; border:none; border-radius:10px; font-weight:900; font-size:16px; padding:12px 28px; color:#fff; }
+#mpgOverlay .mpg-retry { background:#27ae60; box-shadow:0 5px #1e8449; } #mpgOverlay .mpg-close { background:#7f8c8d; box-shadow:0 5px #616a6b; }
+
+@keyframes mpgCur { 0%{top:230px;right:330px;} 9%{top:26px;right:55px;} 14%{top:26px;right:55px;} 30%{top:131px;right:226px;} 38%{top:131px;right:226px;} 50%{top:194px;right:35px;} 56%{top:194px;right:35px;} 70%{top:194px;right:35px;opacity:0;} 71%{top:230px;right:330px;opacity:0;} 73%{top:230px;right:330px;opacity:1;} 100%{top:230px;right:330px;} }
+@keyframes mpgIcon { 0%,9%{transform:scale(1);} 11%{transform:scale(.82);} 13%,100%{transform:scale(1);} }
+@keyframes mpgRing { 0%{opacity:.95;transform:scale(.8);} 8%{opacity:0;transform:scale(1.5);} 9%,100%{opacity:0;} }
+@keyframes mpgPop { 0%,13%{opacity:0;transform:translateY(-8px) scale(.96);} 16%,54%{opacity:1;transform:none;} 58%,100%{opacity:0;transform:translateY(-8px) scale(.96);} }
+@keyframes mpgOn { 0%,32%{opacity:0;} 34%,100%{opacity:1;} }
+@keyframes mpgOff { 0%,32%{opacity:1;} 34%,100%{opacity:0;} }
+@keyframes mpgDone { 0%,50%{transform:scale(1);box-shadow:none;} 52%{transform:scale(.9);} 54%,100%{transform:scale(1);} }
+@keyframes mpgOk { 0%,58%{opacity:0;} 62%,92%{opacity:1;} 98%,100%{opacity:0;} }
+@keyframes mpgC1 { 0%{opacity:0;} 2%,13%{opacity:1;} 15%,100%{opacity:0;} }
+@keyframes mpgC2 { 0%,15%{opacity:0;} 17%,34%{opacity:1;} 36%,100%{opacity:0;} }
+@keyframes mpgC3 { 0%,36%{opacity:0;} 38%,55%{opacity:1;} 57%,100%{opacity:0;} }
+@keyframes mpgC4 { 0%,58%{opacity:0;} 60%,95%{opacity:1;} 98%,100%{opacity:0;} }
+@media (max-width:520px) {
+  #mpgOverlay .mpg-title { font-size:21px; } #mpgOverlay .mpg-msg { font-size:16px; }
+  #mpgOverlay .mpg-stage { height:300px; } #mpgOverlay .mpg-pop { width:236px; } #mpgOverlay .mpg-cap span { font-size:14px; }
+  #mpgOverlay .mpg-ico-a, #mpgOverlay .mpg-ico-b { display:none; } #mpgOverlay .mpg-ico-block { right:14px; }
+  @keyframes mpgCur { 0%{top:230px;right:250px;} 9%{top:26px;right:7px;} 14%{top:26px;right:7px;} 30%{top:131px;right:200px;} 38%{top:131px;right:200px;} 50%{top:194px;right:28px;} 56%{top:194px;right:28px;} 70%{top:194px;right:28px;opacity:0;} 71%{top:230px;right:250px;opacity:0;} 73%{top:230px;right:250px;opacity:1;} 100%{top:230px;right:250px;} }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mpgOverlay .mpg-stage *, #mpgOverlay .mpg-cap span { animation:none !important; }
+  #mpgOverlay .mpg-pop { opacity:1; transform:none; } #mpgOverlay .mpg-cur, #mpgOverlay .mpg-ok { display:none; }
+  #mpgOverlay .mpg-rad-allow i { opacity:1; } #mpgOverlay .mpg-rad-block i { opacity:0; } #mpgOverlay .mpg-cap { display:none; }
+}
+#mpgBanner { display:none; position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:2147482000; max-width:min(680px, calc(100vw - 24px)); background:#fff3cd; color:#7d4a00; border:2px solid #e67e22; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.3); padding:10px 14px; font-size:13px; font-weight:800; line-height:1.5; align-items:center; gap:10px; }
+#mpgBanner.mpg-open { display:flex; }
+#mpgBanner button { cursor:pointer; border:none; border-radius:8px; font-weight:900; font-size:12px; padding:7px 12px; white-space:nowrap; }
+#mpgBanner .mpg-b-how { background:#e67e22; color:#fff; } #mpgBanner .mpg-b-x { background:transparent; color:#7d4a00; font-size:16px; padding:2px 8px; }
+
+#mpgBanner .mpg-b-renew { background:#e67e22; color:#fff; }
+#mpgBanner.mpg-renew .mpg-b-how { display:none; }
+#mpgBanner:not(.mpg-renew) .mpg-b-renew { display:none; }
+</style>
+
+<div id="mpgOverlay" class="no-print" role="dialog" aria-modal="true" aria-labelledby="mpgTitle">
+  <div class="mpg-wrap">
+    <div class="mpg-card">
+      <h2 class="mpg-title" id="mpgTitle">⚠️ ബ്രൗസർ Pop-up ബ്ലോക്ക് ചെയ്തു.</h2>
+      <p class="mpg-msg">അഡ്രസ് ബാറിലെ <q>ബ്ലോക്ക് ഐക്കൺ</q> അമർത്തി <q>'Always allow pop-ups'</q> തിരഞ്ഞെടുത്ത് <q>Done</q> അമർത്തിയ ശേഷം വീണ്ടും ശ്രമിക്കുക.</p>
+
+      <div class="mpg-stage" aria-hidden="true">
+        <div class="mpg-bar"></div>
+        <div class="mpg-url"><span id="mpgHostText">https://…</span></div>
+        <div class="mpg-ico mpg-ico-a"><svg viewBox="0 0 24 24" fill="none" stroke="#6b5a5e" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></div>
+        <div class="mpg-ico mpg-ico-block" title="Pop-ups blocked">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5c4349" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="15" height="12" rx="2"/><path d="M3 9h15"/><path d="M15 15l6 6M21 15l-6 6" stroke="#c0392b" stroke-width="2.4"/></svg>
+        </div>
+        <div class="mpg-ico mpg-ico-b"><svg viewBox="0 0 24 24" fill="none" stroke="#6b5a5e" stroke-width="2"><path d="M12 4l2.5 5.5 6 .7-4.4 4.1 1.2 5.9L12 17.3 6.7 20.2l1.2-5.9L3.5 10.2l6-.7z"/></svg></div>
+        <div class="mpg-pop">
+          <h4>Pop-ups blocked:</h4>
+          <div class="mpg-lnk">• accounts.google.com/o/oauth2/…</div>
+          <div class="mpg-opt"><span class="mpg-rad mpg-rad-allow"><i></i></span><span>Always allow pop-ups and redirects from <b id="mpgHostText2">this site</b></span></div>
+          <div class="mpg-opt"><span class="mpg-rad mpg-rad-block"><i></i></span><span>Continue blocking</span></div>
+          <span class="mpg-done">Done</span><div style="clear:both"></div>
+        </div>
+        <svg class="mpg-cur" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.2-3.4-6.6L4 19z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        <div class="mpg-ok">✔ ഇനി ലോഗിൻ വീണ്ടും ശ്രമിക്കാം</div>
+      </div>
+      <div class="mpg-cap" aria-hidden="true">
+        <span class="c1">1️⃣ അഡ്രസ് ബാറിൽ വലത് വശത്തെ ഈ ബ്ലോക്ക് ഐക്കൺ അമർത്തുക</span>
+        <span class="c2">2️⃣ "Always allow pop-ups" തിരഞ്ഞെടുക്കുക</span>
+        <span class="c3">3️⃣ "Done" അമർത്തുക</span>
+        <span class="c4">4️⃣ താഴെയുള്ള "വീണ്ടും ശ്രമിക്കുക" അമർത്തുക</span>
+      </div>
+      <ol>
+        <li>അഡ്രസ് ബാറിന്റെ വലത് അറ്റത്ത്, ചുവന്ന ✕ ഉള്ള ചെറിയ വിൻഡോ ഐക്കൺ (<b>Pop-ups blocked</b>) അമർത്തുക.</li>
+        <li><b>"Always allow pop-ups and redirects from …"</b> തിരഞ്ഞെടുക്കുക.</li>
+        <li><b>Done</b> അമർത്തുക. തുടർന്ന് ഇവിടെ <b>"വീണ്ടും ശ്രമിക്കുക"</b> അമർത്തുക.</li>
+      </ol>
+      <p class="mpg-note">ℹ️ Chrome-ൽ ഇങ്ങനെയാണ് കാണുക. Edge / Firefox / Safari-ൽ ഐക്കൺ അല്പം വ്യത്യസ്തമായി തോന്നാം — അഡ്രസ് ബാറിലെ pop-up / ബ്ലോക്ക് ഐക്കൺ നോക്കുക. മൊബൈലിൽ ബ്രൗസർ മെനു (⋮) → Site settings → Pop-ups and redirects → Allow.</p>
+      <div class="mpg-btns">
+        <button type="button" class="mpg-retry" id="mpgRetryBtn">🔄 വീണ്ടും ശ്രമിക്കുക</button>
+        <button type="button" class="mpg-close" id="mpgCloseBtn">അടയ്ക്കുക</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="mpgBanner" class="no-print" role="alert">
+  <span id="mpgBannerText">⚠️ Google Drive കണക്ഷൻ പുതുക്കാൻ കഴിഞ്ഞില്ല (Pop-up ബ്ലോക്ക് ആയി). ബാക്കപ്പ് നിലയ്ക്കാതിരിക്കാൻ പരിഹരിക്കുക.</span>
+  <button type="button" class="mpg-b-renew" id="mpgBannerRenew">🔑 ഇപ്പോൾ പുതുക്കുക</button>
+  <button type="button" class="mpg-b-how" id="mpgBannerHow">എങ്ങനെ?</button>
+  <button type="button" class="mpg-b-x" id="mpgBannerX" title="അടയ്ക്കുക">✕</button>
+</div>
+
 
 
 <script src="app.obfuscated.js"></script>
