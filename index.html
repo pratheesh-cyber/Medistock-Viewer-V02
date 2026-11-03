@@ -1345,10 +1345,17 @@
         
         @media (max-width: 768px) {
             
-            html, body {
+            
+            html {
                 overflow-x: auto;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+                height: auto;
+            }
+            body {
+                overflow: visible;
+                overscroll-behavior-y: auto;
                 max-width: 100%;
                 height: auto;
             }
@@ -3487,6 +3494,10 @@
   #handoverChargeListPage .hcl-row2 .hcl-w { flex:1 1 calc(33% - 14px); width:auto; min-width:120px; }
   #handoverChargeListPage .hcl-row2 .hcl-cat { flex:1 1 100%; width:auto; }
 }
+
+@media (max-width:700px) {
+  #handoverChargeListPage .hcl-searchwrap { order:99; flex:1 1 100%; width:100%; min-width:0; }
+}
 #handoverChargeListPage .hcl-table .hcl-th-cat { white-space:normal; }
 #handoverChargeListPage #hcl_acctBox .hcl-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
 @media (max-width:900px) { #handoverChargeListPage #hcl_acctBox .hcl-grid { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); } }
@@ -3556,7 +3567,7 @@
         <button id="hcl_redoBtn" class="btn-regular hcl-ur" style="background:#16a085; height:38px; box-sizing:border-box; padding:0 14px;" onclick="hclRedo()" disabled title="Undo ചെയ്തത് തിരികെ (Redo) വരുത്താൻ"><i class="fa-solid fa-rotate-right"></i> Redo</button>
       </div>
 
-      <div class="input-wrapper" style="flex:1; min-width:220px; gap:4px;">
+      <div class="input-wrapper hcl-searchwrap" style="flex:1; min-width:220px; gap:4px;">
         <label style="font-size:13px; font-weight:700;">Search Article</label>
         <div style="position:relative; width:100%;">
           <input type="text" id="hcl_search" class="index-input" placeholder="Search article..." autocomplete="off" style="padding-right:30px;">
