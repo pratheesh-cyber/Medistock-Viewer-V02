@@ -3517,6 +3517,11 @@
 <div id="handoverChargeListPage" class="index-page-wrapper full-width-wrapper" style="display:none;">
   <h1 class="hcl-title">CHARGE LIST</h1>
 
+  <!-- പുതുതായി ചേർത്ത നിർദ്ദേശങ്ങൾ - സെൻ്റർ അലൈൻമെൻ്റും വലിപ്പം 12px-ഉം -->
+  <div class="no-print" style="text-align: center; font-family: 'Anek Malayalam', sans-serif; font-weight: 500; font-size: 12px; margin-bottom: 12px; line-height: 1.6; padding: 0 15px; color: #555;">
+    "New, Old, In Use, Deficite" എന്നീ കോളങ്ങളിൽ ഏതിലെങ്കിലും ഡാറ്റ വരുന്ന രജിസ്റ്ററുകൾ മാത്രമേ Pdf/Print-ൽ വരൂ. പട്ടികയിൽ നിലവിൽ ഇല്ലാത്ത രജിസ്റ്റർ ADD Article എന്ന ബട്ടൺ ഉപയോഗിച്ച് ചേർക്കാവുന്നതാണ്. രേഖപ്പെടുത്തുന്ന ഡാറ്റകൾ തനിയെ സേവ് ചെയ്യപ്പെടുന്നതാണ്. മാറ്റം വരുത്തേണ്ടവ മാത്രം പിന്നീട് എപ്പോൾ വേണമെങ്കിലും Edit ചെയ്ത് മാറ്റം വരുത്താവുന്നതാണ്. പട്ടികയിൽ നൽകിയിരിക്കുന്ന ടിക്ക് ബോക്സുകൾ- ടിക്ക് ചെയ്തവ സ്ഥിരമായി Delete ചെയ്യുന്നതിന് മാത്രമാണ്.
+  </div>
+
   <div class="no-print" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:16px; width:100%;">
     <button class="index-btn bg-dark" onclick="goBackFromHandoverChargeList()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-arrow-left"></i> <b>BACK</b></button>
     <button class="index-btn bg-orange" onclick="showHomePage()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;"><i class="fa-solid fa-house"></i> <b>HOME</b></button>
@@ -3527,7 +3532,8 @@
     <button id="hclSignInAgainBtn" class="index-btn" onclick="medistockSignInAgain('hclSignInAgainBtn')" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px; background:#2c3e50; color:white;" title="Google Login ചെയ്ത് ഏകദേശം 1 മണിക്കൂർ കഴിഞ്ഞാൽ access_token കാലഹരണപ്പെടുന്നത് കാരണം Google Drive Backup മാത്രം നിലച്ചേക്കാം. ഈ ബട്ടൺ അമർത്തി വീണ്ടും Sign In ചെയ്താൽ Backup തടസ്സമില്ലാതെ തുടരും"><i class="fa-solid fa-right-to-bracket"></i> <b>SIGN IN AGAIN</b></button>
     <button class="index-btn bg-dark" onclick="hclOpenHelpDesk()" style="padding:6px 12px; font-size:13px; height:32px; border:none; border-radius:10px;" title="HELP DESK പേജിലേക്ക് പോകാൻ"><i class="fa-solid fa-headset"></i> <b>HELP DESK</b></button>
     <label class="hcl-minfont" for="hcl_minFont" title="PRINT / PDF ഒരു പേജിൽ ഒതുങ്ങാൻ അക്ഷരവലിപ്പം തനിയെ കുറയ്ക്കുമ്പോൾ, ഈ വലിപ്പത്തിൽ താഴെ പോകില്ല">Minimum Auto-Fit Font Size
-      <select id="hcl_minFont"><option value="9.5">9.5</option><option value="9" selected>9</option><option value="8.5">8.5</option><option value="8">8</option></select></label>
+      <select id="hcl_minFont"><option value="9.5">9.5</option><option value="9" selected>9</option><option value="8.5">8.5</option><option value="8">8</option></select>
+    </label>
   </div>
 
   <div class="soothing-box box-yellow-light no-print">
@@ -6105,8 +6111,8 @@
     <div style="max-height: 92vh; overflow-y: auto; width: 100%; max-width: 480px; margin: auto; background: rgba(255,255,255,0.06); border: 2px solid rgba(241,196,15,0.5); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); padding: 28px 24px; box-sizing: border-box;">
         <i class="fa-solid fa-arrows-up-down-left-right" style="font-size: 48px; margin-bottom: 14px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
         <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6); word-break: break-word; overflow-wrap: break-word;">
-            ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ, ഒരേ സമയം രണ്ടു വിരലുകൾ ഉപയോഗിച്ച് SCROLL ചെയ്താൽ മാത്രമേ മുകളിലോട്ടും താഴോട്ടുമുള്ള SCROLL ഫോണിൽ പ്രവർത്തിക്കുകയുള്ളു.<br><br>
-            വശങ്ങളിലേക്ക് ഒരു വിരൽ ഉപയോഗിച്ച് SCROLL സാധ്യമാണ്.
+            ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ, സ്ക്രീൻ ചെറുതായതിനാൽ വലിയ സ്ക്രീനുള്ള ലാപ്പ്ടോപ്പ്, സെസ്ക്ക്ടോപ്പ് മുതലായവയിൽ ഫുൾ സ്ക്രീനിൽ കാണുന്നത്, ഫോണിൽ Left/Right/Up/Down ദിശകളിലേക്ക്  സ്ക്രോൾ ചെയ്ത് കാണേണ്ടി വരുന്നതാണ്.<br><br>
+            ഇതിനാൽ  ഫോണിൽ,വലിയ സിസ്റ്റത്തിൽ ചെയ്യുന്ന സ്പീഡിൽ ചെയ്യാൻ സാധിക്കാതെ വരുന്നതിൽ സ്പീഡിൽ ചെയ്യുന്നതിന് വലിയ സ്ക്രീനുള്ള സിസ്റ്റത്തിൽ ഉപയോഗിക്കുന്നതാണ് ഉത്തമം.
         </p>
         <button onclick="closeMedistockMobileScrollNoticeModal();" style="background: #f1c40f; color: #16274a; border: 3px solid white; padding: 12px 40px; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">OK</button>
     </div>
