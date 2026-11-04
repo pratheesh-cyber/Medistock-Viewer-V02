@@ -2318,11 +2318,24 @@
 </div>
 
 
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px;">
-    <button class="btn-3d" style="background: #497ff4; box-shadow: 0 6px #08027d;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.rubundroid.com/', '_blank'); }">rubundroid.com</button>
+
+<style>
+    #homeLinkRow { display: grid; gap: 14px; margin-top: 20px;
+        grid-template-columns: minmax(calc(15ch + 22px), 0.7fr) repeat(3, minmax(0, 1fr)) minmax(calc(15ch + 22px), 0.7fr); }
+    #homeLinkRow .btn-3d { min-width: 0; padding: 0 8px; font-size: 12.5px; line-height: 1.15; text-align: center; }
+    #homeLinkRow .hl-small { white-space: nowrap; }
+    #homeLinkRow .btn-3d i { flex: 0 0 auto; margin-right: 6px !important; }
+    @media (max-width: 768px) {
+        #homeLinkRow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        #homeLinkRow .btn-3d { height: auto; min-height: 42px; padding: 6px 8px; }
+    }
+</style>
+<div id="homeLinkRow">
+    <button class="btn-3d hl-small" style="background: #497ff4; box-shadow: 0 6px #08027d;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.rubundroid.com/', '_blank'); }">rubundroid.com</button>
+    <button class="btn-3d" style="background: #f5a623; box-shadow: 0 6px #8a5a00;" onclick="if(checkMandatoryHomeInputs()) { showDownloadNoticeBox('indentHandbook', function () { window.open('https://drive.google.com/uc?export=download&id=1f9UJmbc6QfEPzFuDSXVuqKa9LhRiHW_X', '_blank'); }); }"><i class="fa-solid fa-book" style="margin-right: 8px;"></i> INDENT MAKER - HAND BOOK</button>
     <button class="btn-3d" style="background: #d2f205; box-shadow: 0 6px #4f9702;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://drive.google.com/uc?export=download&id=1lXRPm-EClA5KpR-GSHqsWEQFhu0UwsUX', '_blank'); showDownloadNoticeBox('handbook'); }"><i class="fa-solid fa-book" style="margin-right: 8px;"></i> MEDISTOCK VIEWER - HAND BOOK</button>
     <button class="btn-3d" style="background: #f53bd3; box-shadow: 0 6px #6e015e;" onclick="if(checkMandatoryHomeInputs()) { showDownloadNoticeBox('registerLabel', function () { showBookLabelGeneratorPage(); }); }"><i class="fa-solid fa-tags" style="margin-right: 8px;"></i> REGISTER LABEL GENERATOR</button>
-    <button class="btn-3d" style="background: #4ff319; box-shadow: 0 6px #144802;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.sumteck.in/', '_blank'); }">sumteck.in</button>
+    <button class="btn-3d hl-small" style="background: #4ff319; box-shadow: 0 6px #144802;" onclick="if(checkMandatoryHomeInputs()) { window.open('https://www.sumteck.in/', '_blank'); }">sumteck.in</button>
 </div>
 
 
@@ -3517,7 +3530,7 @@
 <div id="handoverChargeListPage" class="index-page-wrapper full-width-wrapper" style="display:none;">
   <h1 class="hcl-title">CHARGE LIST</h1>
 
-  <!-- പുതുതായി ചേർത്ത നിർദ്ദേശങ്ങൾ - സെൻ്റർ അലൈൻമെൻ്റും വലിപ്പം 12px-ഉം -->
+  
   <div class="no-print" style="text-align: center; font-family: 'Anek Malayalam', sans-serif; font-weight: 500; font-size: 12px; margin-bottom: 12px; line-height: 1.6; padding: 0 15px; color: #555;">
     "New, Old, In Use, Deficite" എന്നീ കോളങ്ങളിൽ ഏതിലെങ്കിലും ഡാറ്റ വരുന്ന രജിസ്റ്ററുകൾ മാത്രമേ Pdf/Print-ൽ വരൂ. പട്ടികയിൽ നിലവിൽ ഇല്ലാത്ത രജിസ്റ്റർ ADD Article എന്ന ബട്ടൺ ഉപയോഗിച്ച് ചേർക്കാവുന്നതാണ്. രേഖപ്പെടുത്തുന്ന ഡാറ്റകൾ തനിയെ സേവ് ചെയ്യപ്പെടുന്നതാണ്. മാറ്റം വരുത്തേണ്ടവ മാത്രം പിന്നീട് എപ്പോൾ വേണമെങ്കിലും Edit ചെയ്ത് മാറ്റം വരുത്താവുന്നതാണ്. പട്ടികയിൽ നൽകിയിരിക്കുന്ന ടിക്ക് ബോക്സുകൾ- ടിക്ക് ചെയ്തവ സ്ഥിരമായി Delete ചെയ്യുന്നതിന് മാത്രമാണ്.
   </div>
@@ -6110,7 +6123,7 @@
 <div id="medistockMobileScrollNoticeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(20, 30, 48, 0.95); z-index:10058; align-items:center; justify-content:center; text-align:center; color:white; backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;">
     <div style="max-height: 92vh; overflow-y: auto; width: 100%; max-width: 480px; margin: auto; background: rgba(255,255,255,0.06); border: 2px solid rgba(241,196,15,0.5); border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); padding: 28px 24px; box-sizing: border-box;">
         <i class="fa-solid fa-arrows-up-down-left-right" style="font-size: 48px; margin-bottom: 14px; color: #f1c40f; text-shadow: 0 0 30px rgba(0,0,0,0.8);"></i>
-        <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6); word-break: break-word; overflow-wrap: break-word;">
+  <p style="font-size: 16px; font-weight: bold; line-height: 1.7; margin: 0 0 22px; background: rgba(0,0,0,0.28); padding: 16px; border-radius: 10px; border: 2px dashed rgba(241,196,15,0.6); word-break: break-word; overflow-wrap: break-word;">
             ഫോണിൽ ഉപയോഗിക്കുമ്പോൾ, സ്ക്രീൻ ചെറുതായതിനാൽ വലിയ സ്ക്രീനുള്ള ലാപ്പ്ടോപ്പ്, സെസ്ക്ക്ടോപ്പ് മുതലായവയിൽ ഫുൾ സ്ക്രീനിൽ കാണുന്നത്, ഫോണിൽ Left/Right/Up/Down ദിശകളിലേക്ക്  സ്ക്രോൾ ചെയ്ത് കാണേണ്ടി വരുന്നതാണ്.<br><br>
             ഇതിനാൽ  ഫോണിൽ,വലിയ സിസ്റ്റത്തിൽ ചെയ്യുന്ന സ്പീഡിൽ ചെയ്യാൻ സാധിക്കാതെ വരുന്നതിനാൽ സ്പീഡിൽ ചെയ്യുന്നതിന് വലിയ സ്ക്രീനുള്ള സിസ്റ്റത്തിൽ ഉപയോഗിക്കുന്നതാണ് ഉത്തമം.
         </p>
