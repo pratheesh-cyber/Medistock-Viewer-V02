@@ -1019,6 +1019,17 @@
   background: #fff3cd !important; border: 2px solid #e67e22 !important; border-radius: 6px; outline: none; cursor: text; white-space: pre-wrap; }
 .hdg-editing:focus { box-shadow: 0 0 0 3px rgba(230,126,34,.35); }
 </style>
+
+
+<style id="phoneSearchBoxesToBottomStyle">
+@media screen and (max-width: 768px) {
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2) {
+        order: 1;
+    }
+}
+</style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
     <style>
@@ -1800,6 +1811,103 @@
     justify-content: center;
 }
 </style>
+
+    <style id="phoneModalFix">
+    
+    @media (max-width: 768px) {
+        #projectModal {
+            position: fixed !important;
+            top: 50% !important; left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            box-sizing: border-box !important;
+            width: calc(100vw - 24px) !important;
+            max-width: 500px !important;
+            max-height: calc(100vh - 40px) !important;
+            max-height: calc(100dvh - 40px) !important;
+            padding: 0 12px 14px !important;
+            overflow: auto !important;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-x pan-y;
+        }
+        #projectModal .modal-close {
+            position: sticky; top: 8px; right: 0;
+            float: right; z-index: 5;
+            min-width: 44px; min-height: 36px;
+            margin: 8px 0 4px 8px;
+            font-size: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        }
+        #projectModal h3 {
+            clear: none;
+            margin: 0 !important;
+            padding: 14px 0 10px;
+            font-size: 18px;
+        }
+        #projectModal table {
+            width: 100% !important;
+            min-width: 100%;
+            table-layout: auto;
+            clear: both;
+        }
+        #projectModal th, #projectModal td {
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: normal;
+            text-align: left;
+            padding: 6px 8px !important;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        #projectModal th { padding: 8px !important; text-align: center; }
+        #projectModal td:first-child, #projectModal th:first-child {
+            white-space: nowrap; min-width: 64px;
+        }
+
+        
+        #errorMessage,
+        #editAlertModal,
+        .sumteck-modal-container,
+        .custom-confirm-modal,
+        #medistockGlobalAlertWindow {
+            position: fixed !important;
+            top: 50% !important; left: 50% !important;
+            right: auto !important; bottom: auto !important;
+            transform: translate(-50%, -50%) !important;
+            box-sizing: border-box !important;
+            width: calc(100vw - 32px) !important;
+            max-width: 500px !important;
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+            margin: 0 !important;
+        }
+        #errorMessage, #editAlertModal { padding: 22px 18px !important; font-size: 16px !important; }
+        
+        div[style*="position:fixed; bottom:20px; left:20px"] {
+            left: 50% !important; right: auto !important;
+            transform: translateX(-50%) !important;
+            max-width: calc(100vw - 24px) !important;
+            box-sizing: border-box;
+            text-align: center; justify-content: center;
+        }
+    }
+    </style>
+
+    <style id="phoneSmartPopupBtnFix">
+    
+    @media (max-width: 768px) {
+        #preIndentSummaryPage button[onclick="openSmartPopUp()"] {
+            height: auto !important;
+            min-height: 38px;
+            padding: 10px 12px !important;
+            line-height: 1.35 !important;
+            white-space: normal !important;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        #preIndentSummaryPage button[onclick="openSmartPopUp()"] i { flex: 0 0 auto; }
+    }
+    </style>
 </head>
 <body>
     <div id="loginStartPage" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f5f6fa; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -5928,6 +6036,20 @@
                 <label style="font-size: 11px; font-weight: bold; color: #2c3e50;">Fill Colour</label>
                 <select id="blgFillColor" class="index-input" style="height: 35px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.renderBookLabelPreview()">
                     <option value="none" selected>None</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
                     <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
                     <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
                     <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
@@ -6999,6 +7121,20 @@
                 <label for="rackFillColor" style="font-size: 13px; font-weight: 900; color: #8B0000; white-space: nowrap;"><b>FILL COLOUR</b></label>
                 <select id="rackFillColor" class="index-input" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="renderMainRackDetailsTable();">
                     <option value="none" selected>None</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
                     <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
                     <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
                     <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
