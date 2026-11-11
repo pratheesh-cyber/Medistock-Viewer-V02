@@ -1025,40 +1025,80 @@
 
 @media screen and (max-width: 768px) {
     
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(3),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(3),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(3) {
+        order: 1;
+        flex: 1 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(5) {
+        order: 2;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(4),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(4),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(4) {
+        order: 3;
+        flex: 12 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) {
-        order: 1;
-        flex: 17 1 0 !important;
+        order: 4;
+        flex: 15 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(6),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(6),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(6) {
+        order: 5;
+        flex: 1 1 0 !important;
         width: auto !important;
         min-width: 0 !important;
     }
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) {
-        order: 2;
-        flex: 13 1 0 !important;
+        order: 6;
+        flex: 1 1 0 !important;
         width: auto !important;
         min-width: 0 !important;
     }
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input,
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input,
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input {
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(7) {
+        order: 7;
+        flex: 1 1 100% !important;
         width: 100% !important;
         min-width: 0 !important;
-        box-sizing: border-box;
     }
     
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(1) {
-        order: 3;
+        order: 8;
         flex: 1 1 100% !important;
         width: 100% !important;
         min-width: 0 !important;
+    }
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper > .index-input,
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper > .index-input,
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper > .index-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
     }
 }
 </style>
@@ -7965,5 +8005,4 @@
 
 
 <script src="app.obfuscated.js"></script>
-</body>
 </html>
