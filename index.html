@@ -1022,11 +1022,43 @@
 
 
 <style id="phoneSearchBoxesToBottomStyle">
+
 @media screen and (max-width: 768px) {
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2),
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2),
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(-n+2) {
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) {
         order: 1;
+        flex: 17 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) {
+        order: 2;
+        flex: 13 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) > .index-input,
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input,
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input,
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) > .index-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(1) {
+        order: 3;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
     }
 }
 </style>
@@ -1776,7 +1808,7 @@
     font-variant-ligatures: common-ligatures contextual;
     text-rendering: optimizeLegibility;
 }
-/* MEDICAL CAMP MEDICINE LIST - HEADING BOX (എല്ലാ ബോക്സുകൾക്കും മുകളിൽ, എഡിറ്റ്/മൂവ് ഫങ്ഷനുകൾ ബാധകം) */
+
 #a4MedListBoxesContainer .a4-cat-box.a4-heading-box,
 #ipA4MedListBoxesContainer .a4-cat-box.a4-heading-box {
     display: block;
@@ -2641,8 +2673,8 @@
         <button class="index-btn" onclick="goBackFromPreIndent()" style="background: #7f8c8d; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-arrow-left"></i> BACK</button>
         <button class="index-btn" onclick="showIndentGenPage()" style="background: #8e44ad; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-user-gear"></i> INDENT MAKERS </button>
         <button class="index-btn" onclick="showHelpDeskPage()" style="background: #e67e22; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-headset"></i> HELP DESK</button>
-        <button class="index-btn" onclick="printPerfectPDF_PreIndent()" style="background: #27ae60; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-print"></i> PRINT / PERFECT PDF</button>
-        <button class="index-btn" onclick="generateQuickPDF_PreIndent()" style="background: #c0392b; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-file-pdf"></i> GENERATE QUICK PDF</button>
+        <button class="index-btn" onclick="medistockPreIndentPrintConfirm()" style="background: #27ae60; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-print"></i> PRINT / PERFECT PDF</button>
+        <button class="index-btn" onclick="medistockPreIndentPrintConfirm(generateQuickPDF_PreIndent)" style="background: #c0392b; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-file-pdf"></i> GENERATE QUICK PDF</button>
         <button class="index-btn" onclick="openMainStockDetails()" style="background: #2980b9; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;"><i class="fa-solid fa-boxes-stacked"></i> GO TO MAIN STOCK</button>
         <button class="index-btn" onclick="openOpSubStockDetails()" style="background: #16a085; color: white; padding: 8px 15px; border: none; font-size: 13px; font-weight: bold;" title="OP SUB STOCK WINDOW-ലേക്ക് പോകാൻ"><i class="fa-solid fa-hospital"></i> GO TO OP SUB STOCK</button>
     </div>
@@ -2805,11 +2837,11 @@
                     <th class="pi-col-fund" style="border: 1px solid black; padding: 10px;">Fund</th>
                     <th class="pi-col-exp" style="border: 1px solid black; padding: 10px;">Exp.Dt</th>
                     <th class="pi-col-days" style="border: 1px solid black; padding: 10px;">Days Left</th>
-                    <th style="border: 1px solid black; padding: 10px;">Batch No</th>
+                    <th class="pi-col-batch" style="border: 1px solid black; padding: 10px;">Batch No</th>
                     <th style="border: 1px solid black; padding: 10px;">Status</th>
-                    <th style="border: 1px solid black; padding: 10px;">Rack No</th>
-                    <th style="border: 1px solid black; padding: 10px;">Invoice Dt.</th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center; white-space: normal; line-height: 1.15; box-sizing: content-box; width: calc(4ch + 8px); min-width: calc(4ch + 8px); max-width: calc(4ch + 8px);">Page<br>No</th>
+                    <th class="pi-col-page" style="border: 1px solid black; padding: 10px; text-align: center; white-space: normal; line-height: 1.15; box-sizing: content-box; width: calc(4ch + 8px); min-width: calc(4ch + 8px); max-width: calc(4ch + 8px);">Page<br>No</th>
+                    <th class="pi-col-invdt" style="border: 1px solid black; padding: 10px;">Invoice Dt.</th>
+                    <th class="pi-col-rack" style="border: 1px solid black; padding: 10px;">Rack No</th>
                     <th style="border: 1px solid black; padding: 10px; width: 100%;">Invoice No/ID</th>
                 </tr>
             </thead>
@@ -4595,9 +4627,39 @@
 
         </div>
 
-        <div class="master-container" style="background: #fff; padding: 2px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-    <div style="text-align: center; color: #e67e22; font-weight: bold; margin-bottom: 1px; font-size: 10px;">
+        <style id="xlInvBoxStyle">
+
+#excelImportPage .xl-inv-row { display: flex; align-items: center; gap: 8px; }
+#excelImportPage .xl-inv-row #xlInvTextLine { flex: 1 1 auto; min-width: 0; }
+#excelImportPage .xl-inv-box { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; }
+#excelImportPage .xl-inv-box label { font-size: 11px; font-weight: bold; color: #2c3e50; white-space: nowrap; margin: 0; }
+#excelImportPage .xl-inv-box input { height: 26px; font-size: 13px; font-weight: bold; color: #0b3d91; text-align: center; border: 1.5px solid #3498db; border-radius: 6px; padding: 0 6px; background: #f4f9ff; box-sizing: border-box; }
+#excelImportPage .xl-inv-left input { width: 17ch; }
+#excelImportPage .xl-inv-right input { width: 13ch; }
+#excelImportPage .xl-inv-box input:focus { outline: none; border-color: #e67e22; background: #fff; }
+
+@media (max-width: 768px) {
+    #excelImportPage .xl-inv-row { flex-wrap: wrap; }
+    #excelImportPage .xl-inv-row #xlInvTextLine { order: 3; flex: 1 1 100%; }
+    #excelImportPage .xl-inv-left { order: 1; flex: 1 1 0; }
+    #excelImportPage .xl-inv-right { order: 2; flex: 1 1 0; }
+    #excelImportPage .xl-inv-box input { flex: 1 1 auto; width: 100%; min-width: 0; }
+}
+</style>
+<div class="master-container" style="background: #fff; padding: 2px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    
+    <div id="xlInvRow" class="xl-inv-row">
+        <div class="xl-inv-box xl-inv-left">
+            <label for="xlInvNoBox">Invoice No</label>
+            <input type="text" id="xlInvNoBox" autocomplete="off" maxlength="40" placeholder="Invoice No" title="അവസാനം scan ചെയ്ത Invoice-ലെ Invoice No (തിരുത്താം)">
+        </div>
+    <div id="xlInvTextLine" style="text-align: center; color: #e67e22; font-weight: bold; margin-bottom: 1px; font-size: 10px;">
         ഈ വിൻഡോയുടെ പ്രവർത്തനം കൃത്യമായി മനസിലാക്കുന്നതിനും ഏറ്റവും എളുപ്പം ചെയ്യുന്നതിന് HAND BOOK കൃത്യമായി വായിക്കുക.എന്നിട്ടും സംശയം വന്നാൽ HELP DESK സഹായം തേടുക!
+    </div>
+        <div class="xl-inv-box xl-inv-right">
+            <label for="xlInvDateBox">Date</label>
+            <input type="text" id="xlInvDateBox" autocomplete="off" maxlength="12" placeholder="DD/MM/YYYY" title="അവസാനം scan ചെയ്ത Invoice-ലെ Date (തിരുത്താം) - DD/MM/YYYY" onblur="validateInvoiceDate(this)">
+        </div>
     </div>
 </div>
             <div class="entry-container">
@@ -7898,6 +7960,7 @@
   <button type="button" class="mpg-b-how" id="mpgBannerHow">എങ്ങനെ?</button>
   <button type="button" class="mpg-b-x" id="mpgBannerX" title="അടയ്ക്കുക">✕</button>
 </div>
+
 
 
 
