@@ -1024,75 +1024,105 @@
 <style id="phoneSearchBoxesToBottomStyle">
 
 @media screen and (max-width: 768px) {
+    #mainStockDetailsPage #pdfContentArea > .soothing-box,
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box,
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: flex-end !important;
+        gap: 8px !important;
+        box-sizing: border-box;
+    }
     
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(3),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(3),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(3) {
         order: 1;
-        flex: 1 1 0 !important;
-        width: auto !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
         min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(5) {
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(7) {
         order: 2;
-        flex: 0 0 auto !important;
-        width: auto !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
         min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) {
+        order: 3;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(4),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(4),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(4) {
-        order: 3;
-        flex: 12 1 0 !important;
-        width: auto !important;
-        min-width: 0 !important;
-    }
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) {
         order: 4;
-        flex: 15 1 0 !important;
-        width: auto !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
         min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(6),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(6),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(6) {
         order: 5;
-        flex: 1 1 0 !important;
-        width: auto !important;
-        min-width: 0 !important;
-    }
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(2),
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(2) {
-        order: 6;
-        flex: 1 1 0 !important;
-        width: auto !important;
-        min-width: 0 !important;
-    }
-    
-    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
-    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(7),
-    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(7) {
-        order: 7;
-        flex: 1 1 100% !important;
+        flex: 0 0 100% !important;
         width: 100% !important;
         min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(8),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(8) {
+        order: 6;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(1),
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(1) {
-        order: 8;
-        flex: 1 1 100% !important;
-        width: 100% !important;
+        order: 7;
+        flex: 1 1 0 !important;
+        width: auto !important;
         min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(5),
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(5) {
+        order: 8;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        margin-left: auto;
+        min-width: 0 !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
     #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper > .index-input,
     #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper > .index-input,
     #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper > .index-input {
@@ -1100,6 +1130,15 @@
         min-width: 0 !important;
         box-sizing: border-box;
     }
+    
+    #mainStockDetailsPage #pdfContentArea > .soothing-box > .input-wrapper:nth-child(5) > button,
+    #opSubStockDetailsPage #opPdfContentArea > .soothing-box > .input-wrapper:nth-child(5) > button,
+    #ipSubStockDetailsPage #ipPdfContentArea > .soothing-box > .input-wrapper:nth-child(5) > button {
+        white-space: nowrap;
+        padding: 0 14px !important;
+    }
+    
+    #medistockBackupReminderModal { display: none !important; }
 }
 </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -8004,5 +8043,30 @@
 
 
 
+
+<style id="boxStylePanelCSS">
+.bsp-panel { background:#fff8e1; border:2px solid #e67e22; border-radius:10px; padding:10px 12px; margin:0 0 12px 0; box-sizing:border-box; }
+.bsp-title { text-align:center; font-weight:900; color:#a04000; letter-spacing:1px; font-size:14px; text-transform:uppercase; }
+.bsp-hint { text-align:center; font-size:11px; font-weight:bold; color:#7f3b00; margin:2px 0 8px 0; }
+.bsp-row { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-end; justify-content:center; }
+.bsp-field { display:flex; flex-direction:column; gap:3px; background:#fff; border:1px solid #e0b36a; border-radius:8px; padding:4px 8px; font-size:11px; font-weight:bold; color:#2c3e50; }
+.bsp-field label.bsp-use { display:flex; align-items:center; gap:4px; cursor:pointer; white-space:nowrap; }
+.bsp-field input[type=color] { width:70px; height:28px; padding:0; border:1px solid #888; border-radius:4px; cursor:pointer; background:#fff; }
+.bsp-field select { height:28px; font-weight:bold; cursor:pointer; }
+.bsp-btn { height:32px; border:none; border-radius:8px; padding:0 12px; font-size:12px; font-weight:900; color:#fff; cursor:pointer; }
+.bsp-hl-shift { background:#d6eaf8; color:#1b4f72; padding:1px 6px; border-radius:4px; border:1px solid #5dade2; }
+.bsp-hl-ctrl { background:#e8daef; color:#6c3483; padding:1px 6px; border-radius:4px; border:1px solid #af7ac5; }
+.bsp-status { text-align:center; font-size:12px; font-weight:900; color:#c0392b; margin-top:6px; min-height:16px; }
+.bsp-sel .rack-inner-content, .bsp-sel .book-label-inner-content { outline:4px dashed #e67e22; outline-offset:-3px; }
+#mainRackDetailsTableBody .rack-inner-content, #bookLabelTableBody .book-label-inner-content { cursor:pointer; }
+@media screen and (max-width: 768px) {
+    .bsp-panel { display:none !important; }
+    .bsp-sel .rack-inner-content, .bsp-sel .book-label-inner-content { outline:none !important; }
+}
+@media print { .bsp-panel { display:none !important; } .bsp-sel .rack-inner-content, .bsp-sel .book-label-inner-content { outline:none !important; } }
+</style>
+
+
 <script src="app.obfuscated.js"></script>
+</body>
 </html>
