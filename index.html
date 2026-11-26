@@ -2919,7 +2919,7 @@
                     <th class="pi-col-batch" style="border: 1px solid black; padding: 10px;">Batch No</th>
                     <th style="border: 1px solid black; padding: 10px;">Status</th>
                     <th class="pi-col-page" style="border: 1px solid black; padding: 10px; text-align: center; white-space: normal; line-height: 1.15; box-sizing: content-box; width: calc(4ch + 8px); min-width: calc(4ch + 8px); max-width: calc(4ch + 8px);">Page<br>No</th>
-                    <th class="pi-col-invdt" style="border: 1px solid black; padding: 10px;">Invoice Dt.</th>
+                    <th class="pi-col-invdt pi-col-draft" style="border: 1px solid black; padding: 10px;">Draft Qty Indent<br>to Sub Stock</th>
                     <th class="pi-col-rack" style="border: 1px solid black; padding: 10px;">Rack No</th>
                     <th style="border: 1px solid black; padding: 10px; width: 100%;">Invoice No/ID</th>
                 </tr>
@@ -2968,6 +2968,21 @@
 #preIndentSummaryPage td.pi-col-days { text-align: left !important; }
 
 #preIndentSummaryPage thead th:last-child { width: 100% !important; }
+
+#preIndentSummaryPage th.pi-col-draft,
+#preIndentSummaryPage td.pi-col-draft {
+    box-sizing: content-box !important;
+    width: 17ch !important; min-width: 17ch !important; max-width: 17ch !important;
+    padding-left: 5px !important; padding-right: 5px !important;
+    white-space: nowrap !important; line-height: 1.2 !important;
+}
+#preIndentSummaryPage td.pi-col-draft { padding-top: 4px !important; padding-bottom: 4px !important; }
+#preIndentSummaryPage input.pi-draft-qty {
+    width: 100%; max-width: 11ch; box-sizing: border-box; height: 26px; padding: 2px;
+    text-align: center; font-weight: bold; color: #000; background: #fff;
+    border: 1px solid #f39c12; border-radius: 3px;
+}
+#preIndentSummaryPage input.pi-draft-qty:disabled { background: #eee; border-color: #bbb; cursor: not-allowed; }
 </style>
 <div id="indentedMedicinesMainPage" class="index-page-wrapper full-width-wrapper" style="display:none; max-width: 98%;">
     <div class="no-print">
@@ -3626,18 +3641,69 @@
             <button class="index-btn" onclick="window.a4FormatBold()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#2c3e50; color:white;" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റ് Bold ആക്കാൻ"><i class="fa-solid fa-bold"></i> <b>Bold</b></button>
             <button class="index-btn" onclick="window.a4FormatItalic()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#2c3e50; color:white;" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റ് Italic ആക്കാൻ"><i class="fa-solid fa-italic"></i> <b>Italic</b></button>
             <button class="index-btn" onclick="window.a4FormatSelectAll()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#16a085; color:white;" title="ഈ പേജിലുള്ള മുഴുവൻ ടെക്സ്റ്റും സെലക്ട് ചെയ്യാൻ"><i class="fa-solid fa-object-group"></i> <b>Select All</b></button>
+            <button class="index-btn" onclick="window.a4FormatSelectAllHeadings()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#117a65; color:white;" title="ഈ പേജിലെ ഗുളിക, അരിഷ്ടാസവം, സിറപ്പ്, ലേഹ്യം, ഭസ്മം തുടങ്ങിയ ഹെഡിങ്ങുകൾ മാത്രം സെലക്ട് ചെയ്യാൻ (ശേഷം Font Colour / Bold / Italic / Font Size ഉപയോഗിക്കാം)"><i class="fa-solid fa-heading"></i> <b>Select All Headings</b></button>
             <button class="index-btn" onclick="window.a4FormatDeselectAll()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#c0392b; color:white;" title="സെലക്ഷൻ ഒഴിവാക്കാൻ"><i class="fa-solid fa-object-ungroup"></i> <b>Deselect All</b></button>
             <select id="a4FontSizeSelect" class="a4-format-select" onchange="window.a4FormatFontSize(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Size മാറ്റാൻ">
                 <option value="">Font Size</option>
             </select>
-            <select id="a4FontColorSelect" class="a4-format-select" onchange="window.a4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ">
+            <select id="a4FontColorSelect" class="index-input" data-a4-populated="true" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.a4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ (None = ഡിഫോൾട്ട് നിറം)">
                 <option value="">Font Colour</option>
+                    <option value="none">None</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
+                    <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
+                    <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
+                    <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
+                    <option value="rgba(231,76,60,0.25)" style="background:rgba(231,76,60,0.25); color:#000;">Red 25%</option>
+                    <option value="rgba(230,126,34,1)" style="background:rgba(230,126,34,1); color:#000;">Orange 100%</option>
+                    <option value="rgba(230,126,34,0.75)" style="background:rgba(230,126,34,0.75); color:#000;">Orange 75%</option>
+                    <option value="rgba(230,126,34,0.5)" style="background:rgba(230,126,34,0.5); color:#000;">Orange 50%</option>
+                    <option value="rgba(230,126,34,0.25)" style="background:rgba(230,126,34,0.25); color:#000;">Orange 25%</option>
+                    <option value="rgba(241,196,15,1)" style="background:rgba(241,196,15,1); color:#000;">Yellow 100%</option>
+                    <option value="rgba(241,196,15,0.75)" style="background:rgba(241,196,15,0.75); color:#000;">Yellow 75%</option>
+                    <option value="rgba(241,196,15,0.5)" style="background:rgba(241,196,15,0.5); color:#000;">Yellow 50%</option>
+                    <option value="rgba(241,196,15,0.25)" style="background:rgba(241,196,15,0.25); color:#000;">Yellow 25%</option>
+                    <option value="rgba(39,174,96,1)" style="background:rgba(39,174,96,1); color:#fff;">Green 100%</option>
+                    <option value="rgba(39,174,96,0.75)" style="background:rgba(39,174,96,0.75); color:#000;">Green 75%</option>
+                    <option value="rgba(39,174,96,0.5)" style="background:rgba(39,174,96,0.5); color:#000;">Green 50%</option>
+                    <option value="rgba(39,174,96,0.25)" style="background:rgba(39,174,96,0.25); color:#000;">Green 25%</option>
+                    <option value="rgba(41,128,185,1)" style="background:rgba(41,128,185,1); color:#fff;">Blue 100%</option>
+                    <option value="rgba(41,128,185,0.75)" style="background:rgba(41,128,185,0.75); color:#000;">Blue 75%</option>
+                    <option value="rgba(41,128,185,0.5)" style="background:rgba(41,128,185,0.5); color:#000;">Blue 50%</option>
+                    <option value="rgba(41,128,185,0.25)" style="background:rgba(41,128,185,0.25); color:#000;">Blue 25%</option>
+                    <option value="rgba(142,68,173,1)" style="background:rgba(142,68,173,1); color:#fff;">Purple 100%</option>
+                    <option value="rgba(142,68,173,0.75)" style="background:rgba(142,68,173,0.75); color:#000;">Purple 75%</option>
+                    <option value="rgba(142,68,173,0.5)" style="background:rgba(142,68,173,0.5); color:#000;">Purple 50%</option>
+                    <option value="rgba(142,68,173,0.25)" style="background:rgba(142,68,173,0.25); color:#000;">Purple 25%</option>
+                    <option value="rgba(255,20,147,1)" style="background:rgba(255,20,147,1); color:#fff;">Pink 100%</option>
+                    <option value="rgba(255,20,147,0.75)" style="background:rgba(255,20,147,0.75); color:#000;">Pink 75%</option>
+                    <option value="rgba(255,20,147,0.5)" style="background:rgba(255,20,147,0.5); color:#000;">Pink 50%</option>
+                    <option value="rgba(255,20,147,0.25)" style="background:rgba(255,20,147,0.25); color:#000;">Pink 25%</option>
             </select>
+            <div class="bsp-field" id="a4LetterSpacingField">
+                <label class="bsp-use" for="a4LetterSpacingInput"><span class="bsp-va">VA</span> Letter Spacing</label>
+                <input type="text" class="bsp-track" id="a4LetterSpacingInput" list="a4LetterSpacingList" value="0" inputmode="numeric" autocomplete="off" title="Letter Spacing (in thousandths of an em): അക്ഷരങ്ങൾ തമ്മിലുള്ള അകലം. 0 = ഡിഫോൾട്ട്; കൂട്ടാൻ പോസിറ്റീവ്, കുറയ്ക്കാൻ നെഗറ്റീവ് സംഖ്യ. ടെക്സ്റ്റ് / ഹെഡിങ്ങുകൾ സെലക്ട് ചെയ്ത ശേഷം ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുകയോ ടൈപ്പ് ചെയ്ത് Enter അമർത്തുകയോ ചെയ്യുക.">
+                <datalist id="a4LetterSpacingList"><option value="-100"><option value="-95"><option value="-90"><option value="-85"><option value="-80"><option value="-75"><option value="-70"><option value="-65"><option value="-60"><option value="-55"><option value="-50"><option value="-45"><option value="-40"><option value="-35"><option value="-30"><option value="-25"><option value="-20"><option value="-15"><option value="-10"><option value="-5"><option value="0"><option value="5"><option value="10"><option value="15"><option value="20"><option value="25"><option value="30"><option value="35"><option value="40"><option value="45"><option value="50"><option value="55"><option value="60"><option value="65"><option value="70"><option value="75"><option value="80"><option value="85"><option value="90"><option value="95"><option value="100"></datalist>
+            </div>
+            <button class="index-btn" id="a4UndoBtn" onclick="window.a4Undo()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#34495e; color:white;" title="ഈ പേജിൽ ഏറ്റവും ഒടുവിൽ വരുത്തിയ മാറ്റം തിരികെ ആക്കാൻ"><i class="fa-solid fa-rotate-left"></i> <b>Undo</b></button>
+            <button class="index-btn" id="a4RedoBtn" onclick="window.a4Redo()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#34495e; color:white;" title="Undo ചെയ്ത മാറ്റം വീണ്ടും ബാധകമാക്കാൻ"><i class="fa-solid fa-rotate-right"></i> <b>Redo</b></button>
         </div>
 
         
         <div class="no-print" style="text-align: center; width: 100%; margin: 0 0 8px 0;">
-            <span id="a4HandbookHintText" style="color: red; font-size: 10px; font-weight: bold;">OP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക</span>
+            <span id="a4HandbookHintText" style="color: red; font-size: 10px; font-weight: bold;">OP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക. Hand Book Page No.104</span>
         </div>
 
         <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
@@ -4110,18 +4176,69 @@
             <button class="index-btn" onclick="window.ipA4FormatBold()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#2c3e50; color:white;" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റ് Bold ആക്കാൻ"><i class="fa-solid fa-bold"></i> <b>Bold</b></button>
             <button class="index-btn" onclick="window.ipA4FormatItalic()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#2c3e50; color:white;" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റ് Italic ആക്കാൻ"><i class="fa-solid fa-italic"></i> <b>Italic</b></button>
             <button class="index-btn" onclick="window.ipA4FormatSelectAll()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#16a085; color:white;" title="ഈ പേജിലുള്ള മുഴുവൻ ടെക്സ്റ്റും സെലക്ട് ചെയ്യാൻ"><i class="fa-solid fa-object-group"></i> <b>Select All</b></button>
+            <button class="index-btn" onclick="window.ipA4FormatSelectAllHeadings()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#117a65; color:white;" title="ഈ പേജിലെ ഗുളിക, അരിഷ്ടാസവം, സിറപ്പ്, ലേഹ്യം, ഭസ്മം തുടങ്ങിയ ഹെഡിങ്ങുകൾ മാത്രം സെലക്ട് ചെയ്യാൻ (ശേഷം Font Colour / Bold / Italic / Font Size ഉപയോഗിക്കാം)"><i class="fa-solid fa-heading"></i> <b>Select All Headings</b></button>
             <button class="index-btn" onclick="window.ipA4FormatDeselectAll()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#c0392b; color:white;" title="സെലക്ഷൻ ഒഴിവാക്കാൻ"><i class="fa-solid fa-object-ungroup"></i> <b>Deselect All</b></button>
             <select id="ipA4FontSizeSelect" class="a4-format-select" onchange="window.ipA4FormatFontSize(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Size മാറ്റാൻ">
                 <option value="">Font Size</option>
             </select>
-            <select id="ipA4FontColorSelect" class="a4-format-select" onchange="window.ipA4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ">
+            <select id="ipA4FontColorSelect" class="index-input" data-a4-populated="true" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.ipA4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ (None = ഡിഫോൾട്ട് നിറം)">
                 <option value="">Font Colour</option>
+                    <option value="none">None</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
+                    <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
+                    <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
+                    <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
+                    <option value="rgba(231,76,60,0.25)" style="background:rgba(231,76,60,0.25); color:#000;">Red 25%</option>
+                    <option value="rgba(230,126,34,1)" style="background:rgba(230,126,34,1); color:#000;">Orange 100%</option>
+                    <option value="rgba(230,126,34,0.75)" style="background:rgba(230,126,34,0.75); color:#000;">Orange 75%</option>
+                    <option value="rgba(230,126,34,0.5)" style="background:rgba(230,126,34,0.5); color:#000;">Orange 50%</option>
+                    <option value="rgba(230,126,34,0.25)" style="background:rgba(230,126,34,0.25); color:#000;">Orange 25%</option>
+                    <option value="rgba(241,196,15,1)" style="background:rgba(241,196,15,1); color:#000;">Yellow 100%</option>
+                    <option value="rgba(241,196,15,0.75)" style="background:rgba(241,196,15,0.75); color:#000;">Yellow 75%</option>
+                    <option value="rgba(241,196,15,0.5)" style="background:rgba(241,196,15,0.5); color:#000;">Yellow 50%</option>
+                    <option value="rgba(241,196,15,0.25)" style="background:rgba(241,196,15,0.25); color:#000;">Yellow 25%</option>
+                    <option value="rgba(39,174,96,1)" style="background:rgba(39,174,96,1); color:#fff;">Green 100%</option>
+                    <option value="rgba(39,174,96,0.75)" style="background:rgba(39,174,96,0.75); color:#000;">Green 75%</option>
+                    <option value="rgba(39,174,96,0.5)" style="background:rgba(39,174,96,0.5); color:#000;">Green 50%</option>
+                    <option value="rgba(39,174,96,0.25)" style="background:rgba(39,174,96,0.25); color:#000;">Green 25%</option>
+                    <option value="rgba(41,128,185,1)" style="background:rgba(41,128,185,1); color:#fff;">Blue 100%</option>
+                    <option value="rgba(41,128,185,0.75)" style="background:rgba(41,128,185,0.75); color:#000;">Blue 75%</option>
+                    <option value="rgba(41,128,185,0.5)" style="background:rgba(41,128,185,0.5); color:#000;">Blue 50%</option>
+                    <option value="rgba(41,128,185,0.25)" style="background:rgba(41,128,185,0.25); color:#000;">Blue 25%</option>
+                    <option value="rgba(142,68,173,1)" style="background:rgba(142,68,173,1); color:#fff;">Purple 100%</option>
+                    <option value="rgba(142,68,173,0.75)" style="background:rgba(142,68,173,0.75); color:#000;">Purple 75%</option>
+                    <option value="rgba(142,68,173,0.5)" style="background:rgba(142,68,173,0.5); color:#000;">Purple 50%</option>
+                    <option value="rgba(142,68,173,0.25)" style="background:rgba(142,68,173,0.25); color:#000;">Purple 25%</option>
+                    <option value="rgba(255,20,147,1)" style="background:rgba(255,20,147,1); color:#fff;">Pink 100%</option>
+                    <option value="rgba(255,20,147,0.75)" style="background:rgba(255,20,147,0.75); color:#000;">Pink 75%</option>
+                    <option value="rgba(255,20,147,0.5)" style="background:rgba(255,20,147,0.5); color:#000;">Pink 50%</option>
+                    <option value="rgba(255,20,147,0.25)" style="background:rgba(255,20,147,0.25); color:#000;">Pink 25%</option>
             </select>
+            <div class="bsp-field" id="ipA4LetterSpacingField">
+                <label class="bsp-use" for="ipA4LetterSpacingInput"><span class="bsp-va">VA</span> Letter Spacing</label>
+                <input type="text" class="bsp-track" id="ipA4LetterSpacingInput" list="ipA4LetterSpacingList" value="0" inputmode="numeric" autocomplete="off" title="Letter Spacing (in thousandths of an em): അക്ഷരങ്ങൾ തമ്മിലുള്ള അകലം. 0 = ഡിഫോൾട്ട്; കൂട്ടാൻ പോസിറ്റീവ്, കുറയ്ക്കാൻ നെഗറ്റീവ് സംഖ്യ. ടെക്സ്റ്റ് / ഹെഡിങ്ങുകൾ സെലക്ട് ചെയ്ത ശേഷം ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കുകയോ ടൈപ്പ് ചെയ്ത് Enter അമർത്തുകയോ ചെയ്യുക.">
+                <datalist id="ipA4LetterSpacingList"><option value="-100"><option value="-95"><option value="-90"><option value="-85"><option value="-80"><option value="-75"><option value="-70"><option value="-65"><option value="-60"><option value="-55"><option value="-50"><option value="-45"><option value="-40"><option value="-35"><option value="-30"><option value="-25"><option value="-20"><option value="-15"><option value="-10"><option value="-5"><option value="0"><option value="5"><option value="10"><option value="15"><option value="20"><option value="25"><option value="30"><option value="35"><option value="40"><option value="45"><option value="50"><option value="55"><option value="60"><option value="65"><option value="70"><option value="75"><option value="80"><option value="85"><option value="90"><option value="95"><option value="100"></datalist>
+            </div>
+            <button class="index-btn" id="ipA4UndoBtn" onclick="window.ipA4Undo()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#34495e; color:white;" title="ഈ പേജിൽ ഏറ്റവും ഒടുവിൽ വരുത്തിയ മാറ്റം തിരികെ ആക്കാൻ"><i class="fa-solid fa-rotate-left"></i> <b>Undo</b></button>
+            <button class="index-btn" id="ipA4RedoBtn" onclick="window.ipA4Redo()" style="padding: 6px 14px; font-size: 13px; height: 32px; border: none; border-radius: 10px; background:#34495e; color:white;" title="Undo ചെയ്ത മാറ്റം വീണ്ടും ബാധകമാക്കാൻ"><i class="fa-solid fa-rotate-right"></i> <b>Redo</b></button>
         </div>
 
         
         <div class="no-print" style="text-align: center; width: 100%; margin: 0 0 8px 0;">
-            <span style="color: red; font-size: 10px; font-weight: bold;">IP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക</span>
+            <span style="color: red; font-size: 10px; font-weight: bold;">IP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക. Hand Book Page No.104</span>
         </div>
 
         <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
@@ -5122,6 +5239,11 @@
         
         
         <h1 style="text-align: center; color: #005088; font-weight: 900; margin-top: 2px; margin-bottom: 15px; font-size: 20px;">INDENT PREPARATION WINDOW</h1>
+
+        
+        <div class="no-print" id="indentPrepHelpNote" style="font-family: 'Anek Malayalam', sans-serif; font-size: 14px; line-height: 1.7; color: #1f2d3d; text-align: justify; margin: 0 auto 15px auto; padding: 8px 14px; max-width: 100%; box-sizing: border-box; background: #f4f9ff; border-left: 4px solid #005088; border-radius: 6px;">
+            SUB STOCK-ലേക്ക് Indent ചെയ്യുന്നതിനുള്ള മരുന്നുകൾ സെലക്റ്റ് ചെയ്യുന്നതിന് ഒന്നിലധികം പ്രോജക്റ്റുകൾ വിശകലനം ചെയ്ത് Indent ചെയ്യുന്നവർക്ക് PRE-INDENT STOCK SUMMARY എന്ന പേജിലെ "Draft Qty Indent to Sub Stock" എന്ന കോളത്തിൽ മുഴുവൻ പ്രോജക്റ്റുകളിലേയും മരുന്നുകൾ Medicine Item ക്രമത്തിൽ കണ്ട് അവയിൽ ആദ്യം കാലാവധി തീരുന്നത് മനസിലാക്കി ഒന്നിലധികം പ്രോജക്റ്റുകളുടെ "Qty Indent" സെലക്റ്റ് ചെയ്യാൻ സാധിക്കുന്നതാണ്. ഇങ്ങനെ സെലക്റ്റ് ചെയ്തിട്ട് ഈ വിൻഡോയിൽ അതാത് പ്രോജക്റ്റുകൾ സെലക്റ്റ് ചെയ്താൽ PRE-INDENT STOCK SUMMARY എന്ന പേജിൽ സെലക്റ്റ് ചെയ്തവ "Qty Indent" കോളത്തിൽ കാണാവുന്നതാണ്. (ആവശ്യമായ മാറ്റങ്ങൾ വേണ്ടവർക്ക് മാറ്റങ്ങൾ ഈ പേജിൽ വരുത്താവുന്നതാണ്). ഇങ്ങനെ മുമ്പ് സെലക്റ്റ് ചെയ്ത Qty ഉപയോഗിച്ച് ഓരോ പ്രോജക്റ്റുകളിലേയും Indent തയ്യാറാക്കാവുന്നതാണ്. <b style="white-space: nowrap;">Hand Book Page No.57</b>
+        </div>
 
         
         <div class="no-print" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
@@ -7324,7 +7446,7 @@
         </div>
 
         <div class="no-print" style="text-align: center; color: red; font-size: 12px; font-weight: bold; margin-top: -12px; margin-bottom: 15px;">
-            ഏതെങ്കിലും മരുന്നുകളുടെ Rack Details ഒന്നിലധികം എണ്ണം വേണമെങ്കിൽ, അവയുടെ നേരേയുള്ള സെലക്ഷൻ ബോക്സിൽ ആ സംഖ്യ സെലക്റ്റ് ചെയ്യണം.Print/Pdf ൽ നിന്നും ഒഴിവാക്കണമെങ്കിൽ സെലക്ഷൻ ബോക്സിൽ "0" സെലക്റ്റ് ചെയ്യണം. മരുന്നുബോക്സുകളിൽ,ഒന്നിലധികം മരുന്നുകൾ ഉള്ളപ്പോൾ അവയുടെ ലേബൽ ഒന്നിച്ച് ചെറിയ സൈസിൽ ഒട്ടിക്കുന്നതിന് "PAPER" എന്ന ബോക്സിൽ "A5" സെലക്റ്റ് ചെയ്യുക.
+            ഏതെങ്കിലും മരുന്നുകളുടെ Rack Details ഒന്നിലധികം എണ്ണം വേണമെങ്കിൽ, അവയുടെ നേരേയുള്ള സെലക്ഷൻ ബോക്സിൽ ആ സംഖ്യ സെലക്റ്റ് ചെയ്യണം.Print/Pdf ൽ നിന്നും ഒഴിവാക്കണമെങ്കിൽ സെലക്ഷൻ ബോക്സിൽ "0" സെലക്റ്റ് ചെയ്യണം. മരുന്നുബോക്സുകളിൽ,ഒന്നിലധികം മരുന്നുകൾ ഉള്ളപ്പോൾ അവയുടെ ലേബൽ ഒന്നിച്ച് ചെറിയ സൈസിൽ ഒട്ടിക്കുന്നതിന് "PAPER" എന്ന ബോക്സിൽ "A5" സെലക്റ്റ് ചെയ്യുക. കൂടുതൽ അറിയുന്നതിന് Hand Book No.90
         </div>
 
         <div class="soothing-box box-blue no-print" style="margin-bottom: 20px; padding: 15px;">
@@ -7762,6 +7884,8 @@
 
 
 
+
+
 <div id="printOrientationConfirmModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:999999; align-items:center; justify-content:center;">
     <div style="background:white; border-radius:12px; padding:30px 25px; max-width:380px; width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
         <div style="font-size:34px; color:#f39c12; margin-bottom:10px;"><i class="fa-solid fa-file-circle-question"></i></div>
@@ -8087,6 +8211,23 @@
 
 
 
+
+
+
+<style id="a4ListHeadingUndoPersistStyle">
+    .a4-hsel {
+        outline: 2px solid #e67e22 !important;
+        outline-offset: -2px;
+        box-shadow: inset 0 0 0 100px rgba(230, 126, 34, 0.22) !important;
+    }
+    @media print {
+        .a4-hsel { outline: none !important; box-shadow: none !important; }
+    }
+    .a4-format-toolbar button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+</style>
 
 
 <script src="app.obfuscated.js"></script>
