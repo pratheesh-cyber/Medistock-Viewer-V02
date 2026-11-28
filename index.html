@@ -3651,6 +3651,53 @@
             <select id="a4FontSizeSelect" class="a4-format-select" onchange="window.a4FormatFontSize(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Size മാറ്റാൻ">
                 <option value="">Font Size</option>
             </select>
+            <select id="a4BorderColorSelect" class="index-input" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.a4SetBorderColour(this.value)" title="ഈ പേജിലെ ബോർഡറുകളുടെ നിറം മാറ്റാൻ (None = ബോർഡറുകൾ View / Print / PDF-ൽ കാണില്ല)">
+                <option value="">Border Colour</option>
+                    <option value="none">None</option>
+                    <option value="default" style="background:#000000; color:#fff;">Black (Default)</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
+                    <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
+                    <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
+                    <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
+                    <option value="rgba(231,76,60,0.25)" style="background:rgba(231,76,60,0.25); color:#000;">Red 25%</option>
+                    <option value="rgba(230,126,34,1)" style="background:rgba(230,126,34,1); color:#000;">Orange 100%</option>
+                    <option value="rgba(230,126,34,0.75)" style="background:rgba(230,126,34,0.75); color:#000;">Orange 75%</option>
+                    <option value="rgba(230,126,34,0.5)" style="background:rgba(230,126,34,0.5); color:#000;">Orange 50%</option>
+                    <option value="rgba(230,126,34,0.25)" style="background:rgba(230,126,34,0.25); color:#000;">Orange 25%</option>
+                    <option value="rgba(241,196,15,1)" style="background:rgba(241,196,15,1); color:#000;">Yellow 100%</option>
+                    <option value="rgba(241,196,15,0.75)" style="background:rgba(241,196,15,0.75); color:#000;">Yellow 75%</option>
+                    <option value="rgba(241,196,15,0.5)" style="background:rgba(241,196,15,0.5); color:#000;">Yellow 50%</option>
+                    <option value="rgba(241,196,15,0.25)" style="background:rgba(241,196,15,0.25); color:#000;">Yellow 25%</option>
+                    <option value="rgba(39,174,96,1)" style="background:rgba(39,174,96,1); color:#fff;">Green 100%</option>
+                    <option value="rgba(39,174,96,0.75)" style="background:rgba(39,174,96,0.75); color:#000;">Green 75%</option>
+                    <option value="rgba(39,174,96,0.5)" style="background:rgba(39,174,96,0.5); color:#000;">Green 50%</option>
+                    <option value="rgba(39,174,96,0.25)" style="background:rgba(39,174,96,0.25); color:#000;">Green 25%</option>
+                    <option value="rgba(41,128,185,1)" style="background:rgba(41,128,185,1); color:#fff;">Blue 100%</option>
+                    <option value="rgba(41,128,185,0.75)" style="background:rgba(41,128,185,0.75); color:#000;">Blue 75%</option>
+                    <option value="rgba(41,128,185,0.5)" style="background:rgba(41,128,185,0.5); color:#000;">Blue 50%</option>
+                    <option value="rgba(41,128,185,0.25)" style="background:rgba(41,128,185,0.25); color:#000;">Blue 25%</option>
+                    <option value="rgba(142,68,173,1)" style="background:rgba(142,68,173,1); color:#fff;">Purple 100%</option>
+                    <option value="rgba(142,68,173,0.75)" style="background:rgba(142,68,173,0.75); color:#000;">Purple 75%</option>
+                    <option value="rgba(142,68,173,0.5)" style="background:rgba(142,68,173,0.5); color:#000;">Purple 50%</option>
+                    <option value="rgba(142,68,173,0.25)" style="background:rgba(142,68,173,0.25); color:#000;">Purple 25%</option>
+                    <option value="rgba(255,20,147,1)" style="background:rgba(255,20,147,1); color:#fff;">Pink 100%</option>
+                    <option value="rgba(255,20,147,0.75)" style="background:rgba(255,20,147,0.75); color:#000;">Pink 75%</option>
+                    <option value="rgba(255,20,147,0.5)" style="background:rgba(255,20,147,0.5); color:#000;">Pink 50%</option>
+                    <option value="rgba(255,20,147,0.25)" style="background:rgba(255,20,147,0.25); color:#000;">Pink 25%</option>
+            </select>
             <select id="a4FontColorSelect" class="index-input" data-a4-populated="true" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.a4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ (None = ഡിഫോൾട്ട് നിറം)">
                 <option value="">Font Colour</option>
                     <option value="none">None</option>
@@ -3708,7 +3755,7 @@
 
         
         <div class="no-print" style="text-align: center; width: 100%; margin: 0 0 8px 0;">
-            <span id="a4HandbookHintText" style="color: red; font-size: 10px; font-weight: bold;">OP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക. Hand Book Page No.104</span>
+            <span id="a4HandbookHintText" style="color: red; font-family: 'Anek Malayalam', 'MedAnekMal', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.7;">അക്ഷരങ്ങളുടെ വലുപ്പം കൂട്ടേണ്ടവർ, <span class="a4-hint-hl">Select All</span> എന്ന ബട്ടൺ ഉപയോഗിച്ച് എല്ലാ മരുന്നുകളും സെലക്റ്റ് ചെയ്ത ശേഷം "<span class="a4-hint-hl">Font Size</span>" കൂട്ടുക. ബോർഡറുകൾ ഒഴിവാക്കണമെന്ന് ഉള്ളവർ, "<span class="a4-hint-hl">Border Colour</span>" എന്ന Drop down ബോക്സിൽ "<span class="a4-hint-hl">None</span>" സെലക്റ്റ് ചെയ്യുക. OP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ് വായിക്കുക. <span class="a4-hint-hl">Hand Book Page No.104</span></span>
         </div>
 
         <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
@@ -4186,6 +4233,53 @@
             <select id="ipA4FontSizeSelect" class="a4-format-select" onchange="window.ipA4FormatFontSize(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Size മാറ്റാൻ">
                 <option value="">Font Size</option>
             </select>
+            <select id="ipA4BorderColorSelect" class="index-input" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.ipA4SetBorderColour(this.value)" title="ഈ പേജിലെ ബോർഡറുകളുടെ നിറം മാറ്റാൻ (None = ബോർഡറുകൾ View / Print / PDF-ൽ കാണില്ല)">
+                <option value="">Border Colour</option>
+                    <option value="none">None</option>
+                    <option value="default" style="background:#000000; color:#fff;">Black (Default)</option>
+                    <option value="#DCEEFF" style="background:#DCEEFF; color:#000;">Soft Sky Blue</option>
+                    <option value="#DDF4E5" style="background:#DDF4E5; color:#000;">Mint Green</option>
+                    <option value="#FFF2B8" style="background:#FFF2B8; color:#000;">Warm Ivory</option>
+                    <option value="#FFE2CC" style="background:#FFE2CC; color:#000;">Peach Cream</option>
+                    <option value="#E9E0FF" style="background:#E9E0FF; color:#000;">Soft Lavender</option>
+                    <option value="#FCE1E8" style="background:#FCE1E8; color:#000;">Blush Pink</option>
+                    <option value="#D9F3F2" style="background:#D9F3F2; color:#000;">Aqua Mist</option>
+                    <option value="#E9EDF2" style="background:#E9EDF2; color:#000;">Cool Light Gray</option>
+                    <option value="#CFE8F8" style="background:#CFE8F8; color:#000;">Powder Blue</option>
+                    <option value="#EAF3C8" style="background:#EAF3C8; color:#000;">Light Pistachio</option>
+                    <option value="#FADBD3" style="background:#FADBD3; color:#000;">Coral Tint</option>
+                    <option value="#E0E5FF" style="background:#E0E5FF; color:#000;">Periwinkle</option>
+                    <option value="#F3E6D0" style="background:#F3E6D0; color:#000;">Warm Sand</option>
+                    <option value="#D5ECE8" style="background:#D5ECE8; color:#000;">Pale Teal</option>
+                    <option value="rgba(231,76,60,1)" style="background:rgba(231,76,60,1); color:#fff;">Red 100%</option>
+                    <option value="rgba(231,76,60,0.75)" style="background:rgba(231,76,60,0.75); color:#000;">Red 75%</option>
+                    <option value="rgba(231,76,60,0.5)" style="background:rgba(231,76,60,0.5); color:#000;">Red 50%</option>
+                    <option value="rgba(231,76,60,0.25)" style="background:rgba(231,76,60,0.25); color:#000;">Red 25%</option>
+                    <option value="rgba(230,126,34,1)" style="background:rgba(230,126,34,1); color:#000;">Orange 100%</option>
+                    <option value="rgba(230,126,34,0.75)" style="background:rgba(230,126,34,0.75); color:#000;">Orange 75%</option>
+                    <option value="rgba(230,126,34,0.5)" style="background:rgba(230,126,34,0.5); color:#000;">Orange 50%</option>
+                    <option value="rgba(230,126,34,0.25)" style="background:rgba(230,126,34,0.25); color:#000;">Orange 25%</option>
+                    <option value="rgba(241,196,15,1)" style="background:rgba(241,196,15,1); color:#000;">Yellow 100%</option>
+                    <option value="rgba(241,196,15,0.75)" style="background:rgba(241,196,15,0.75); color:#000;">Yellow 75%</option>
+                    <option value="rgba(241,196,15,0.5)" style="background:rgba(241,196,15,0.5); color:#000;">Yellow 50%</option>
+                    <option value="rgba(241,196,15,0.25)" style="background:rgba(241,196,15,0.25); color:#000;">Yellow 25%</option>
+                    <option value="rgba(39,174,96,1)" style="background:rgba(39,174,96,1); color:#fff;">Green 100%</option>
+                    <option value="rgba(39,174,96,0.75)" style="background:rgba(39,174,96,0.75); color:#000;">Green 75%</option>
+                    <option value="rgba(39,174,96,0.5)" style="background:rgba(39,174,96,0.5); color:#000;">Green 50%</option>
+                    <option value="rgba(39,174,96,0.25)" style="background:rgba(39,174,96,0.25); color:#000;">Green 25%</option>
+                    <option value="rgba(41,128,185,1)" style="background:rgba(41,128,185,1); color:#fff;">Blue 100%</option>
+                    <option value="rgba(41,128,185,0.75)" style="background:rgba(41,128,185,0.75); color:#000;">Blue 75%</option>
+                    <option value="rgba(41,128,185,0.5)" style="background:rgba(41,128,185,0.5); color:#000;">Blue 50%</option>
+                    <option value="rgba(41,128,185,0.25)" style="background:rgba(41,128,185,0.25); color:#000;">Blue 25%</option>
+                    <option value="rgba(142,68,173,1)" style="background:rgba(142,68,173,1); color:#fff;">Purple 100%</option>
+                    <option value="rgba(142,68,173,0.75)" style="background:rgba(142,68,173,0.75); color:#000;">Purple 75%</option>
+                    <option value="rgba(142,68,173,0.5)" style="background:rgba(142,68,173,0.5); color:#000;">Purple 50%</option>
+                    <option value="rgba(142,68,173,0.25)" style="background:rgba(142,68,173,0.25); color:#000;">Purple 25%</option>
+                    <option value="rgba(255,20,147,1)" style="background:rgba(255,20,147,1); color:#fff;">Pink 100%</option>
+                    <option value="rgba(255,20,147,0.75)" style="background:rgba(255,20,147,0.75); color:#000;">Pink 75%</option>
+                    <option value="rgba(255,20,147,0.5)" style="background:rgba(255,20,147,0.5); color:#000;">Pink 50%</option>
+                    <option value="rgba(255,20,147,0.25)" style="background:rgba(255,20,147,0.25); color:#000;">Pink 25%</option>
+            </select>
             <select id="ipA4FontColorSelect" class="index-input" data-a4-populated="true" style="height: 32px; width: 130px; cursor: pointer; padding: 0 5px; font-weight: bold; font-size: 12px;" onchange="window.ipA4FormatFontColor(this.value); this.value='';" title="സെലക്ട് ചെയ്ത ടെക്സ്റ്റിന്റെ Font Colour മാറ്റാൻ (None = ഡിഫോൾട്ട് നിറം)">
                 <option value="">Font Colour</option>
                     <option value="none">None</option>
@@ -4243,7 +4337,7 @@
 
         
         <div class="no-print" style="text-align: center; width: 100%; margin: 0 0 8px 0;">
-            <span style="color: red; font-size: 10px; font-weight: bold;">IP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ്  വായിക്കുക. Hand Book Page No.104</span>
+            <span id="ipA4HandbookHintText" style="color: red; font-family: 'Anek Malayalam', 'MedAnekMal', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.7;">അക്ഷരങ്ങളുടെ വലുപ്പം കൂട്ടേണ്ടവർ, <span class="a4-hint-hl">Select All</span> എന്ന ബട്ടൺ ഉപയോഗിച്ച് എല്ലാ മരുന്നുകളും സെലക്റ്റ് ചെയ്ത ശേഷം "<span class="a4-hint-hl">Font Size</span>" കൂട്ടുക. ബോർഡറുകൾ ഒഴിവാക്കണമെന്ന് ഉള്ളവർ, "<span class="a4-hint-hl">Border Colour</span>" എന്ന Drop down ബോക്സിൽ "<span class="a4-hint-hl">None</span>" സെലക്റ്റ് ചെയ്യുക. IP ലിസ്റ്റിന്റെ എല്ലാ ഫങ്ഷനും മനസിലാകാൻ HAND BOOK പേജ് വായിക്കുക. <span class="a4-hint-hl">Hand Book Page No.104</span></span>
         </div>
 
         <div class="no-print" style="text-align: center; width: 100%; margin: 5px 0 15px 0; box-sizing: border-box;">
@@ -8224,6 +8318,69 @@
     .a4-format-toolbar button:disabled {
         opacity: 0.45;
         cursor: not-allowed;
+    }
+</style>
+
+
+
+
+<style id="a4EnhanceStyle">
+    
+    #a4MedListSheet, #ipA4MedListSheet { border-color: var(--a4-frame-color, #999); }
+    #a4MedListSheet .a4-cat-box, #ipA4MedListSheet .a4-cat-box { border-color: var(--a4-border-color, #000) !important; }
+    #a4MedListSheet .a4-cat-title, #ipA4MedListSheet .a4-cat-title { border-bottom-color: var(--a4-border-color, #000) !important; }
+    #a4MedListSheet .a4-cat-table td, #ipA4MedListSheet .a4-cat-table td { border-bottom-color: var(--a4-border-color, #000) !important; }
+    #a4MedListSheet .a4-cat-table th, #ipA4MedListSheet .a4-cat-table th {
+        border-top-color: var(--a4-border-color, #2c3e50) !important;
+        border-right-color: var(--a4-border-color, #2c3e50) !important;
+        border-left-color: var(--a4-border-color, #2c3e50) !important;
+        border-bottom-color: var(--a4-border-color, #000) !important;
+    }
+    #a4MedListSheet .a4-cat-table td.a4-blank-col, #ipA4MedListSheet .a4-cat-table td.a4-blank-col,
+    #a4MedListSheet .a4-cat-table th.a4-blank-col, #ipA4MedListSheet .a4-cat-table th.a4-blank-col {
+        border-left-color: var(--a4-border-color, #000) !important;
+    }
+    
+    #a4MedListBoxesContainer.a4-force-wrap .a4-name-col, #ipA4MedListBoxesContainer.a4-force-wrap .a4-name-col,
+    #a4MedListBoxesContainer.a4-force-wrap .a4-cat-title, #ipA4MedListBoxesContainer.a4-force-wrap .a4-cat-title,
+    #a4MedListBoxesContainer.a4-force-wrap .a4-cat-table th, #ipA4MedListBoxesContainer.a4-force-wrap .a4-cat-table th {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        white-space: normal !important;
+    }
+    
+    #a4MedListSheet.a4-move-mode-sheet .a4-cat-box, #ipA4MedListSheet.a4-move-mode-sheet .a4-cat-box {
+        touch-action: none;
+        cursor: move;
+    }
+    body.a4-drag-active, body.a4-drag-active * {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        cursor: grabbing !important;
+    }
+    .a4-overflow-warn {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: #b45309;
+        margin: -4px 0 10px 0;
+    }
+    
+    .a4-hint-hl {
+        background: #fff176;
+        color: #b71c1c;
+        font-weight: 700;
+        padding: 0 5px;
+        margin: 0 1px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 1px rgba(183, 28, 28, 0.25);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+    }
+    
+    #a4BorderColorSelect[data-a4-swatch], #ipA4BorderColorSelect[data-a4-swatch] {
+        box-shadow: inset 7px 0 0 var(--a4-swatch, transparent);
+        padding-left: 12px !important;
     }
 </style>
 
